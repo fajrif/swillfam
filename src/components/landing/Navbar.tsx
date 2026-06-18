@@ -1,40 +1,55 @@
-export function Navbar() {
+import Link from "next/link";
+
+type NavbarProps = {
+  active?: "features" | "contact";
+};
+
+export function Navbar({ active }: NavbarProps = {}) {
   return (
     <nav
       id="navbar"
-      className="fixed top-0 w-full z-50 glass-refraction border-b-2 border-brand-black/10 transition-transform duration-300"
+      className="fixed top-0 w-full z-50 bg-brand-bg flex items-center justify-between border-b-2 border-brand-black h-20 px-4 sm:px-6 lg:px-12 transition-transform duration-300"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2 group flex-shrink-0" rel="nofollow">
-          <span className="font-display text-sm tracking-widest uppercase text-brand-black group-hover:scale-105 transition-transform duration-300">
-            Laci POS
-          </span>
-        </a>
+      <Link href="/" className="h-10 block flex-shrink-0">
+        <img src="/logo-laci-pos.png" alt="Laci POS" className="h-full object-contain" />
+      </Link>
 
-        <div className="hidden md:flex items-center gap-8 text-sm font-bold tracking-widest uppercase">
-          <a href="#why-laci" className="text-zinc-500 hover:text-brand-black transition-colors" rel="nofollow">
-            Features
-          </a>
-          <a href="#infrastructure" className="text-zinc-500 hover:text-brand-black transition-colors" rel="nofollow">
-            Infrastructure
-          </a>
-          <a href="#pricing" className="text-zinc-500 hover:text-brand-black transition-colors" rel="nofollow">
-            Segments
-          </a>
-        </div>
+      <div className="hidden lg:flex items-center gap-8 font-display text-xs font-bold uppercase tracking-widest">
+        <Link
+          href="/features"
+          className={
+            active === "features"
+              ? "text-brand-orange border-b-2 border-brand-orange pb-1"
+              : "hover:text-brand-orange transition-colors"
+          }
+        >
+          Features
+        </Link>
+        <Link href="/#infrastructure" className="hover:text-brand-orange transition-colors">
+          Infrastructure
+        </Link>
+        <Link href="/#pricing" className="hover:text-brand-orange transition-colors">
+          Pricing
+        </Link>
+        <Link
+          href="/contact"
+          className={
+            active === "contact"
+              ? "text-brand-orange border-b-2 border-brand-orange pb-1"
+              : "hover:text-brand-orange transition-colors"
+          }
+        >
+          Contact
+        </Link>
+      </div>
 
-        <div className="flex items-center gap-4">
-          <a href="#" className="hidden md:flex text-sm font-bold uppercase tracking-widest hover-underline pb-1" rel="nofollow">
-            Client Login
-          </a>
-          <a
-            href="#pricing"
-            className="h-10 px-6 flex items-center justify-center rounded-sm bg-brand-black text-white font-bold text-xs uppercase tracking-widest hover:bg-brand-orange hover:scale-[0.98] transition-all"
-            rel="nofollow"
-          >
-            Deploy Now
-          </a>
-        </div>
+      <div className="flex items-center gap-4">
+        <Link
+          href="/#pricing"
+          className="bg-brand-lime text-brand-black border-2 border-brand-black font-display font-bold text-xs uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+        >
+          Get Demo
+        </Link>
       </div>
     </nav>
   );

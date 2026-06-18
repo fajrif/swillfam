@@ -8,7 +8,7 @@ export function Cta() {
           Start Ringing.
         </h2>
         <div className="h-1 w-20 bg-brand-orange mx-auto mb-8" />
-        <p className="text-zinc-600 font-medium text-lg mb-10 max-w-lg mx-auto">
+        <p className="text-zinc-600 font-base text-lg mb-10 max-w-lg mx-auto">
           Transform your retail checkout or bistro counter into a high-throughput engine within
           minutes. No proprietary hardware required.
         </p>

@@ -15,6 +15,9 @@
   --animate-marquee: marquee 25s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
 
+  --shadow-brutal: 4px 4px 0px 0px #111111;
+  --shadow-brutal-lg: 8px 8px 0px 0px #111111;
+
   @keyframes marquee {
     0% {
       transform: translateX(0%);
@@ -103,4 +106,147 @@ body {
 
 .shadow-premium {
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+}
+
+/* Legal document typography (/terms, /privacy) */
+.legal-doc h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-brand-black);
+  scroll-margin-top: 120px;
+}
+
+.legal-doc h2:first-child {
+  margin-top: 0;
+}
+
+.legal-doc h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.legal-doc p {
+  margin-bottom: 1.5rem;
+  color: #3f3f46;
+  line-height: 1.8;
+  font-size: 1.125rem;
+}
+
+.legal-doc ul {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: #3f3f46;
+}
+
+.legal-doc li {
+  margin-bottom: 0.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.legal-doc li::before {
+  content: "■";
+  position: absolute;
+  left: -1.5rem;
+  color: var(--color-brand-lime);
+  font-size: 0.8em;
+  top: 0.2rem;
+  -webkit-text-stroke: 1px var(--color-brand-black);
+}
+
+.toc-link {
+  transition: all 0.2s ease;
+}
+.toc-link:hover {
+  transform: translateX(8px);
+  color: var(--color-brand-orange);
+}
+.toc-link.active {
+  color: var(--color-brand-black);
+  font-weight: 700;
+}
+.toc-link.active::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-brand-lime);
+  border: 1px solid var(--color-brand-black);
+}
+
+/* /features page */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(17, 17, 17, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 17, 17, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.brutal-card {
+  transition:
+    transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.2s ease;
+}
+.brutal-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #111111;
+}
+.brutal-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px #111111;
+}
+
+.brutal-img {
+  filter: contrast(1.1) saturate(0.8) sepia(0.1);
+  mix-blend-mode: multiply;
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    top: 5%;
+  }
+  50% {
+    top: 95%;
+  }
+}
+
+@keyframes data-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fade-in-label {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }

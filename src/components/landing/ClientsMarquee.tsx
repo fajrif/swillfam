@@ -9,20 +9,28 @@ const CLIENTS = [
 
 function MarqueeRow() {
   return (
-    <span className="text-zinc-500 font-display text-xl uppercase tracking-widest mx-4 flex items-center gap-8">
+    <span className="font-display text-2xl uppercase tracking-wider font-bold px-8 flex items-center">
+      Trusting Laci POS:
       {CLIENTS.map((name, i) => (
-        <span key={i} className="flex items-center gap-8">
+        <span key={i} className="flex items-center">
+          <span
+            className={
+              "mx-6 text-3xl leading-none " + (i % 2 === 0 ? "text-brand-orange" : "text-white/20")
+            }
+          >
+            *
+          </span>
           {name}
-          <span className={i % 2 === 0 ? "text-brand-lime" : "text-brand-orange"}>●</span>
         </span>
       ))}
+      <span className="mx-6 text-3xl leading-none text-brand-orange">*</span>
     </span>
   );
 }
 
 export function ClientsMarquee() {
   return (
-    <section className="py-6 bg-brand-black border-y-2 border-brand-black overflow-hidden flex items-center">
+    <section className="border-t-2 border-b-2 border-brand-black bg-brand-black text-brand-lime py-4 overflow-hidden flex items-center">
       <div className="w-full relative flex overflow-x-hidden">
         <div className="w-full flex items-center whitespace-nowrap animate-marquee">
           <MarqueeRow />

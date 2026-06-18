@@ -1,7 +1,7 @@
 const TIERS = [
   {
     name: "Basic",
-    price: "$49",
+    price: "Rp.299K",
     description: "Single terminal operators requiring core logic.",
     cta: "Select Basic",
     features: ["1 Register Terminal", "Shared Cloud DB", "5,000 SKUs Max", "Email Support"],
@@ -9,7 +9,7 @@ const TIERS = [
   },
   {
     name: "Plus",
-    price: "$129",
+    price: "Rp.499K",
     description: "Multi-terminal environments requiring deep analytics.",
     cta: "Scale With Plus",
     features: [
@@ -22,7 +22,7 @@ const TIERS = [
   },
   {
     name: "Business",
-    price: "$499",
+    price: "Rp.999K",
     description: "Total enterprise control with single-tenant isolation.",
     cta: "Request Instance",
     features: [
@@ -42,7 +42,7 @@ export function Pricing() {
         <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tighter text-brand-black mb-4">
           Choose Your Vector.
         </h2>
-        <p className="text-zinc-500 font-medium">
+        <p className="text-zinc-500 font-base">
           Clear, structured segments capable of pushing high volume.
         </p>
       </div>
@@ -74,7 +74,7 @@ export function Pricing() {
               {tier.name}
             </h3>
             <div className="mb-6">
-              <span className="text-4xl font-display font-medium">{tier.price}</span>
+              <span className="text-4xl font-display font-base">{tier.price}</span>
               <span
                 className={
                   "font-bold uppercase text-xs tracking-widest ml-1 " +
@@ -90,7 +90,7 @@ export function Pricing() {
             </div>
             <p
               className={
-                "text-sm font-medium mb-8 h-10 " +
+                "text-sm font-base mb-8 h-10 " +
                 (tier.variant === "highlight"
                   ? "text-zinc-700"
                   : tier.variant === "dark"
@@ -115,7 +115,7 @@ export function Pricing() {
 
             <ul
               className={
-                "space-y-3 text-sm font-medium " +
+                "space-y-3 text-sm font-base " +
                 (tier.variant === "dark"
                   ? "text-zinc-300"
                   : tier.variant === "highlight"

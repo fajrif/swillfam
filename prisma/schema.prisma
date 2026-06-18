@@ -12,23 +12,65 @@ datasource db {
   provider = "postgresql"
 }
 
-// Public-site contact/inquiry inbox. Feeds the client/contract registry described
-// in PLAN.md ("New repo (planned, not built): laci-site").
-model Inquiry {
-  id          String   @id @default(uuid())
-  businessName String
-  contactName String
-  email       String
-  phone       String?
-  packageInterest String? // Basic | Plus | Business
-  message     String?
-  status      InquiryStatus @default(NEW)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum Package {
+  BASIC
+  PLUS
+  BUSINESS
 }
 
 enum InquiryStatus {
   NEW
   CONTACTED
   CLOSED
+}
+
+enum RenewalStatus {
+  ACTIVE
+  CANCELLED
+}
+
+// Public-site contact/inquiry inbox. Feeds the client/contract registry described
+// in PLAN.md ("New repo (planned, not built): laci-site").
+model Inquiry {
+  id              String        @id @default(uuid())
+  businessName    String
+  contactName     String
+  email           String
+  phone           String?
+  packageInterest Package?
+  expectedUsers   Int?
+  message         String?
+  status          InquiryStatus @default(NEW)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+// Internal admin accounts for /admin. No public signup — see prisma/seed-admin.ts.
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Internal client/contract registry (PLAN.md). Holds license/contract/contact + server
+// metadata ONLY — never plaintext POS passwords or real access secrets (those belong in a vault).
+model ClientContract {
+  id            String        @id @default(uuid())
+  businessName  String
+  contactName   String
+  contactEmail  String
+  contactPhone  String?
+  serverDomain  String
+  serverAddress String?
+  package       Package
+  userCount     Int?
+  contractStart DateTime
+  contractEnd   DateTime
+  renewalStatus RenewalStatus @default(ACTIVE)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }

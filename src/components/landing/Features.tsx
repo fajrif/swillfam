@@ -10,7 +10,7 @@ export function Features() {
             Functional &<br />
             Unforgiving.
           </h2>
-          <p className="text-zinc-500 font-medium max-w-sm">
+          <p className="text-zinc-500 font-base max-w-sm">
             We stripped away the bloat. Laci POS focuses entirely on raw transaction speed,
             inventory logic, and absolute uptime.
           </p>
@@ -35,7 +35,7 @@ export function Features() {
             <h3 className="font-display text-xl uppercase tracking-tight text-brand-black mb-2">
               Zero-Latency Register
             </h3>
-            <p className="text-zinc-500 font-medium max-w-md">
+            <p className="text-zinc-500 font-base max-w-md">
               Ring customers instantly. No loading spinners, no web-request bottlenecks. Pre-cached
               catalogs mean it processes as fast as you can tap.
             </p>
@@ -53,7 +53,7 @@ export function Features() {
             <h3 className="font-display text-xl uppercase tracking-tight text-white mb-2">
               Atomic Inventory
             </h3>
-            <p className="text-zinc-400 font-medium text-sm">
+            <p className="text-zinc-400 font-base text-sm">
               Every sale automatically updates massive catalogs without database locking. Highly
               granular stock levels, globally synced.
             </p>
@@ -69,14 +69,14 @@ export function Features() {
             <span className="w-2 h-2 bg-white/50 rounded-full" />
           </div>
 
-          <div className="w-12 h-12 bg-black/20 text-white rounded flex items-center md:items-end justify-center mb-12">
+          <div className="w-12 h-12 bg-black/20 text-white rounded flex items-center justify-center mb-12">
             <i className="ph-bold ph-wifi-slash text-2xl" />
           </div>
           <div>
             <h3 className="font-display text-xl uppercase tracking-tight text-white mb-2">
               Offline Resilience
             </h3>
-            <p className="text-white/80 font-medium text-sm">
+            <p className="text-white/80 font-base text-sm">
               Internet down? Laci stores transactions aggressively on local memory and syncs back
               when uplink drops back in.
             </p>
@@ -102,7 +102,7 @@ export function Features() {
             <h3 className="font-display text-xl uppercase tracking-tight text-brand-black mb-2">
               Macro-Level Analytics
             </h3>
-            <p className="text-zinc-500 font-medium max-w-sm">
+            <p className="text-zinc-500 font-base max-w-sm">
               Aggregated metrics, shift analysis, and real-time dashboarding. Generate CSVs instantly
               to interface with existing accounting software.
             </p>
