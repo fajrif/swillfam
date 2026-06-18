@@ -46,7 +46,7 @@ export function Navbar({ active }: NavbarProps = {}) {
       <div className="flex items-center gap-4">
         <Link
           href="/#pricing"
-          className="bg-brand-lime text-brand-black border-2 border-brand-black font-display font-bold text-xs uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+          className="bg-brand-lime text-brand-black border-2 border-brand-black font-display font-bold text-xs uppercase tracking-widest px-3 md:px-6 py-3 shadow-[4px_4px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
         >
           Get Demo
         </Link>

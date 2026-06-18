@@ -67,7 +67,7 @@ export default function FeaturesPage() {
               { icon: "ph-bold ph-caret-right text-brand-orange", label: "Native Purchase Order generation" },
             ]}
             visual={<InventoryVisual />}
-            visualBgClassName="bg-zinc-900"
+            visualBgClassName="bg-zinc-900 hidden md:block"
             reversed
             variant="dark"
           />
@@ -112,7 +112,7 @@ export default function FeaturesPage() {
               { icon: "ph-bold ph-eye text-brand-black", label: "Chronological cryptographic action logs" },
             ]}
             visual={<ReportingVisual />}
-            visualBgClassName="bg-zinc-200"
+            visualBgClassName="bg-zinc-200 hidden md:block"
             reversed
             variant="light"
           />

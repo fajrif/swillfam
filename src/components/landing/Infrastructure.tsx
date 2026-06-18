@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Infrastructure() {
   return (
     <section
@@ -8,17 +10,17 @@ export function Infrastructure() {
         <img
           src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80"
           alt="Server infrastructure"
-          className="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale"
+          className="w-full h-full object-cover opacity-50 mix-blend-luminosity grayscale"
         />
         <div className="absolute inset-0 bg-brand-black/80" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-24 relative z-10 flex flex-col lg:flex-row items-center gap-16">
-        <div className="flex-1 reveal-element">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-24 relative z-10 flex flex-col lg:flex-row lg:items-center gap-16">
+        <div className="w-full flex-1 min-w-0 reveal-element">
           <span className="inline-block border-2 border-brand-lime text-brand-lime px-3 py-1 font-display text-[10px] font-bold uppercase tracking-widest mb-6 shadow-[2px_2px_0px_#C5F82A]">
             Infrastructure
           </span>
-          <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tighter mb-8 leading-[0.9]">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl uppercase tracking-tighter mb-8 leading-[0.9]">
             Dedicated.
             <br />
             Isolated.
@@ -30,6 +32,12 @@ export function Infrastructure() {
             tier spins up a single-tenant instance guaranteeing compute power during peak Friday
             rushes.
           </p>
+          <Link
+            href="/features"
+            className="w-full sm:w-auto brutal-card bg-brand-lime text-brand-black border-2 border-brand-black font-display font-bold text-sm uppercase tracking-widest px-8 md:px-12 py-5 shadow-brutal flex items-center justify-center gap-3 mb-4 block md:hidden"
+          >
+            Review Features <i className="ph-bold ph-arrow-right text-lg" />
+          </Link>
           <div className="grid grid-cols-2 gap-6 border-l-2 border-brand-lime pl-6">
             <div>
               <div className="font-display text-2xl font-bold text-white mb-1">99.99%</div>
@@ -43,7 +51,7 @@ export function Infrastructure() {
         </div>
 
         <div
-          className="flex-1 w-full max-w-lg lg:ml-auto reveal-element"
+          className="flex-1 min-w-0 w-full max-w-lg lg:ml-auto animate-float reveal-element"
           style={{ transitionDelay: "200ms" }}
         >
           <div className="border-2 border-zinc-700 bg-[#0A0A0A] shadow-[8px_8px_0px_rgba(197,248,42,0.2)] flex flex-col h-80">
@@ -55,25 +63,26 @@ export function Infrastructure() {
             </div>
             <div className="p-4 font-mono text-xs sm:text-sm text-brand-lime leading-loose overflow-hidden">
               <p className="text-zinc-500 mb-2">Connecting to Laci Mainframe...</p>
-              {`> RUN deployment_protocol.sh
-> ALLOCATING DEDICATED CPU CORES... `}
+              {`> RUN deployment_protocol.sh...`}
               <span className="text-white">[OK]</span>
-              {`
-> MOUNTING NVME STORAGE... `}
+              <br/>
+              {`> ALLOCATING DEDICATED CPU CORES...`}
               <span className="text-white">[OK]</span>
-              {`
-> SYNCING SSL DOMAINS... `}
+              <br/>
+              {`> MOUNTING NVME STORAGE...`}
               <span className="text-white">[OK]</span>
-              {`
-> WARMING CACHE REGISTERS... `}
+              <br/>
+              {`> SYNCING SSL DOMAINS...`}
               <span className="text-white">[OK]</span>
-              <br />
+              <br/>
+              {`> WARMING CACHE REGISTERS...`}
+              <span className="text-white">[OK]</span>
               <br />
               {`> STATUS: `}
               <span className="bg-brand-lime text-brand-black px-1 font-bold">
                 SYSTEM ONLINE. READY FOR TRAFFIC.
               </span>
-              <span className="block mt-2 text-white animate-pulse">_</span>
+              <span className="block text-white animate-pulse">_</span>
             </div>
           </div>
         </div>

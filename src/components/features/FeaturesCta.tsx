@@ -8,7 +8,7 @@ export function FeaturesCta() {
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10 reveal-element">
-        <h2 className="font-display text-4xl md:text-6xl uppercase tracking-tighter mb-8 font-bold text-white">
+        <h2 className="font-display text-3xl md:text-6xl uppercase tracking-tighter mb-8 font-bold text-white">
           Ready to Upgrade
           <br />
           Your Counter?
