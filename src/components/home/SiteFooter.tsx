@@ -23,7 +23,6 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
   ],
 ];
 
-// Phosphor brand glyphs (web font loaded globally in the root layout)
 const SOCIALS = [
   { icon: "ph-instagram-logo", label: "Instagram" },
   { icon: "ph-facebook-logo", label: "Facebook" },
@@ -39,14 +38,10 @@ export function SiteFooter() {
     <footer className="border-t border-sf-border/60 bg-sf-deep">
       {/* Newsletter */}
       <Container className="flex flex-col items-center gap-6 py-16 text-center">
-        <Image
-          src="/home/footer-signature.png"
-          alt="SwillFam"
-          width={269}
-          height={118}
-          className="h-16 w-auto"
-        />
         <h2 className="font-syne text-[clamp(1.75rem,4vw,48px)] text-white">Stay in the Loop!</h2>
+        <p className="max-w-[480px] font-inter text-sm leading-relaxed text-white/60">
+          Sign up to get our notifications so you won&rsquo;t miss any events or happenings!
+        </p>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -66,6 +61,17 @@ export function SiteFooter() {
             Subscribe
           </Button>
         </form>
+      </Container>
+
+      {/* Swillfam signature — decorative separator */}
+      <Container className="flex justify-center border-t border-sf-border/40 py-10">
+        <Image
+          src="/home/footer-signature.png"
+          alt="SwillFam"
+          width={269}
+          height={118}
+          className="h-20 w-auto"
+        />
       </Container>
 
       {/* Link + contact grid */}
