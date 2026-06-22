@@ -28,7 +28,7 @@ export function Infrastructure() {
             <span className="text-brand-orange">Uncompromised.</span>
           </h2>
           <p className="text-zinc-300 font-base text-lg max-w-md mb-8 leading-relaxed">
-            We don&apos;t pool your database with a thousand other coffee shops. The Laci Business
+            We don&apos;t pool your database with a thousand other coffee shops. The Swillfam Business
             tier spins up a single-tenant instance guaranteeing compute power during peak Friday
             rushes.
           </p>
@@ -59,10 +59,10 @@ export function Infrastructure() {
               <div className="w-3 h-3 bg-red-500 border border-zinc-900 rounded-full" />
               <div className="w-3 h-3 bg-yellow-500 border border-zinc-900 rounded-full" />
               <div className="w-3 h-3 bg-brand-lime border border-zinc-900 rounded-full" />
-              <span className="ml-auto font-mono text-[10px] text-zinc-500">root@laci-instance-091</span>
+              <span className="ml-auto font-mono text-[10px] text-zinc-500">root@swillfam-instance-091</span>
             </div>
             <div className="p-4 font-mono text-xs sm:text-sm text-brand-lime leading-loose overflow-hidden">
-              <p className="text-zinc-500 mb-2">Connecting to Laci Mainframe...</p>
+              <p className="text-zinc-500 mb-2">Connecting to Swillfam Mainframe...</p>
               {`> RUN deployment_protocol.sh...`}
               <span className="text-white">[OK]</span>
               <br/>

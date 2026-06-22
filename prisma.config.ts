@@ -8,9 +8,9 @@ export default defineConfig({
   migrations: {
     path: "prisma/migrations",
   },
-  // Migrations use the direct (non-pooled) Supabase connection; the running app
-  // uses the pooled DATABASE_URL via the driver adapter in src/lib/prisma.ts.
+  // Plain PostgreSQL: the CLI (migrate/generate) and the running app share a single
+  // DATABASE_URL (the app reaches it via the driver adapter in src/lib/prisma.ts).
   datasource: {
-    url: process.env["DIRECT_URL"],
+    url: process.env["DATABASE_URL"],
   },
 });

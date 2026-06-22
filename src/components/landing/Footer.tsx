@@ -4,10 +4,10 @@ export function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-4">
           <span className="font-display text-sm tracking-widest uppercase text-white">
-            Laci*POS
+            Swillfam
           </span>
           <span className="text-xs uppercase tracking-widest font-bold font-display">
-            &copy; {new Date().getFullYear()} PT. Laci Pos Indonesia.
+            &copy; {new Date().getFullYear()} Swillfam.
           </span>
         </div>
 

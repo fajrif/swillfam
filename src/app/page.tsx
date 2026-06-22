@@ -1,27 +1,35 @@
-import { Navbar } from "@/components/landing/Navbar";
-import { Hero } from "@/components/landing/Hero";
-import { ClientsMarquee } from "@/components/landing/ClientsMarquee";
-import { Features } from "@/components/landing/Features";
-import { Infrastructure } from "@/components/landing/Infrastructure";
-import { Pricing } from "@/components/landing/Pricing";
-import { Cta } from "@/components/landing/Cta";
-import { Footer } from "@/components/landing/Footer";
-import { ScrollEffects } from "@/components/landing/ScrollEffects";
+import type { Metadata } from "next";
+import { SiteHeader } from "@/components/home/SiteHeader";
+import { Hero } from "@/components/home/Hero";
+import { ExploreCategory } from "@/components/home/ExploreCategory";
+import { UpcomingEvents } from "@/components/home/UpcomingEvents";
+import { Experience } from "@/components/home/Experience";
+import { TrustedCrowd } from "@/components/home/TrustedCrowd";
+import { GuidesJournals } from "@/components/home/GuidesJournals";
+import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
+import { SiteFooter } from "@/components/home/SiteFooter";
+
+export const metadata: Metadata = {
+  title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
+  description:
+    "SwillFam connects people with the city's best venues, events, and stories — from casual nights out to curated social experiences and exclusive gatherings.",
+};
 
 export default function Home() {
   return (
-    <>
-      <ScrollEffects />
-      <Navbar />
-      <main className="pt-20">
+    <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
+      {/* Header overlays the hero */}
+      <div className="relative">
+        <SiteHeader />
         <Hero />
-        <ClientsMarquee />
-        <Features />
-        <Infrastructure />
-        <Pricing />
-        <Cta />
-      </main>
-      <Footer />
-    </>
+      </div>
+      <ExploreCategory />
+      <UpcomingEvents />
+      <Experience />
+      <TrustedCrowd />
+      <GuidesJournals />
+      <ExclusiveRecap />
+      <SiteFooter />
+    </main>
   );
 }

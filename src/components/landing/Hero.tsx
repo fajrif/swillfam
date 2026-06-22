@@ -6,7 +6,7 @@ export function Hero() {
           <div className="inline-flex items-center border-2 border-brand-black bg-white px-3 py-1 mb-8 shadow-[4px_4px_0px_#111111]">
             <div className="w-2 h-2 bg-brand-orange mr-2 animate-pulse" />
             <span className="font-display font-bold text-[10px] uppercase tracking-widest">
-              Laci Core v3.0 Live
+              Swillfam Core v3.0 Live
             </span>
           </div>
 

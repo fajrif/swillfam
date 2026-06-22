@@ -10,7 +10,7 @@ const CLIENTS = [
 function MarqueeRow() {
   return (
     <span className="font-display text-2xl uppercase tracking-wider font-bold px-8 flex items-center">
-      Trusting Laci POS:
+      Trusting Swillfam:
       {CLIENTS.map((name, i) => (
         <span key={i} className="flex items-center">
           <span

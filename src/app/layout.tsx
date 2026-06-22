@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Michroma, Outfit } from "next/font/google";
+import { Michroma, Outfit, Syne, Archivo, Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -15,8 +15,28 @@ const outfit = Outfit({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
+// SwillFam public site type system (Figma "SwillFam - Home"):
+// Syne = display/headings/nav, Archivo = button + label, Inter = body (Acumin substitute) + legal.
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
+
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+});
+
 export const metadata: Metadata = {
-  title: "Laci POS | The Definitive Point of Sale Architecture",
+  title: "Swillfam | The Definitive Point of Sale Architecture",
   description:
     "The highest-performance operational terminal built for scale. Zero-latency register, atomic inventory, offline resilience and macro-level analytics for cafes, minimarkets and boutiques.",
 };
@@ -29,7 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${michroma.variable} ${outfit.variable}`}
+      className={`scroll-smooth ${michroma.variable} ${outfit.variable} ${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
       <body className="font-body antialiased selection:bg-brand-lime selection:text-brand-black">
         <Script

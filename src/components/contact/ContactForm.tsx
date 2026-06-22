@@ -19,9 +19,8 @@ export function ContactForm() {
             We&apos;ve got your message.
           </h2>
           <p className="text-brand-black/70 font-medium">
-            Thanks for reaching out — our sales team will review your details and contact you
-            within one business day to help you pick the right package and get your business set
-            up on Laci POS.
+            Thanks for reaching out — the Swillfam team will review your message and get back to you
+            as soon as we can.
           </p>
         </div>
       </section>
@@ -38,50 +37,21 @@ export function ContactForm() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="Business name" name="businessName" required />
-          <Field label="Contact name" name="contactName" required />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Full name" name="fullName" required />
           <Field label="Email" name="email" type="email" required />
-          <Field label="Phone" name="phone" type="tel" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="packageInterest" className="block text-sm font-medium text-brand-black mb-1">
-              Preferred package
-            </label>
-            <select
-              id="packageInterest"
-              name="packageInterest"
-              defaultValue="BASIC"
-              required
-              className="w-full border border-brand-black/20 bg-zinc-200 px-3 py-2 text-sm"
-            >
-              <option value="BASIC">Basic</option>
-              <option value="PLUS">Plus</option>
-              <option value="BUSINESS">Business</option>
-            </select>
-          </div>
-          <Field
-            label="Expected number of users"
-            name="expectedUsers"
-            type="number"
-            min={1}
-            defaultValue={1}
-            required
-          />
-        </div>
+        <Field label="Subject" name="subject" required />
 
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-brand-black mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-brand-black mb-1">
             Message
           </label>
           <textarea
-            id="message"
-            name="message"
-            rows={4}
+            id="description"
+            name="description"
+            rows={5}
+            required
             className="w-full border border-brand-black/20 bg-zinc-200 px-3 py-2 text-sm"
           />
         </div>
@@ -93,7 +63,7 @@ export function ContactForm() {
           disabled={pending}
           className="bg-brand-lime text-brand-black border-2 border-brand-black font-display font-bold text-xs uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_#111111] hover:shadow-[2px_2px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-60"
         >
-          {pending ? "Sending…" : "Send Inquiry"}
+          {pending ? "Sending…" : "Send Message"}
         </button>
       </form>
     </section>
@@ -105,15 +75,11 @@ function Field({
   name,
   type = "text",
   required,
-  min,
-  defaultValue,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
-  min?: number;
-  defaultValue?: string | number;
 }) {
   return (
     <div>
@@ -124,8 +90,6 @@ function Field({
         id={name}
         name={name}
         type={type}
-        min={min}
-        defaultValue={defaultValue}
         required={required}
         className="w-full border border-brand-black/20 bg-zinc-200 px-3 py-2 text-sm"
       />

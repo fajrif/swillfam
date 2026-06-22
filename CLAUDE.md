@@ -1,106 +1,158 @@
-# CLAUDE.md — laci-landing
+# CLAUDE.md
 
-Public marketing site for Laci POS (the `laci-site` repo described in the repo-root `PLAN.md`,
-Phase 5 / Milestone 2.4 doc-lag notes). Not part of the single-tenant product apps
-(`laci-backend`/`laci-admin`/`laci-pos`) — this is a standalone Next.js project with its own
-database, deployed separately. See the repo-root `CLAUDE.md` for how this fits the wider monorepo.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project
+
+**Swillfam** — a content-managed site for a company that owns entertainment venues
+(restaurants/bars/clubs). It publishes venues, events, promotions, talents, articles, merchandise,
+careers, and galleries/videos. Two sections share one Next.js app and one database:
+
+- **Public section** (`src/app/page.tsx` + `src/app/{contact,features,privacy,terms}`) — the
+  marketing/landing site. **Note:** the landing/legal pages are still the original brutalist
+  marketing layout with only literal brand-name swaps applied; the real public consumer pages
+  (venue listing, event calendar, blog, etc.) that render the CMS data are **not built yet** — a
+  future pass. If you see stale "Laci"/POS wording in landing/legal copy, it's leftover marketing
+  text from the fork this repo started as, not a live concept.
+- **Admin section** (`src/app/admin`) — internal CRUD for every model, plain zinc utilitarian UI,
+  deliberately distinct from the public site.
 
 ## Stack
 
-- **Next.js 16** (App Router, TypeScript, Tailwind v4) — `src/app/`.
-- **Prisma 7** ORM against **Supabase** Postgres. Prisma 7 moved connection config out of
-  `schema.prisma`: the datasource URL lives in `prisma.config.ts` (used by the CLI for
-  `migrate`/`generate`, pointed at `DIRECT_URL`), and `PrismaClient` requires a driver adapter —
-  see `src/lib/prisma.ts` (`@prisma/adapter-pg`, pointed at the pooled `DATABASE_URL`).
-- `src/lib/supabase.ts` exposes the Supabase JS client (anon key) for any client-side/storage use
-  beyond what Prisma covers.
+- **Next.js 16** App Router, **React 19**, **TypeScript**, **Tailwind v4**. React Compiler is on
+  (`reactCompiler: true` in `next.config.ts`).
+- **Prisma 7** against **plain PostgreSQL**. Prisma 7 specifics that bite if forgotten:
+  - Generator is `prisma-client` (not `prisma-client-js`); the client is generated to
+    `src/generated/prisma` and imported as `@/generated/prisma/client` (gitignored — regenerate
+    after schema edits).
+  - `schema.prisma`'s `datasource` has **no inline url**. The CLI reads the URL from
+    `prisma.config.ts` (`DATABASE_URL`); the running app needs a **driver adapter** — see
+    `src/lib/prisma.ts` (`@prisma/adapter-pg` on the same `DATABASE_URL`).
+- **Tiptap** (`@tiptap/react` + `starter-kit` + `pm`) for rich-text fields. **bcryptjs** + **jose**
+  for auth. No Supabase.
 
-## Structure
+## Frontend Rules
 
-- `src/app/page.tsx` — assembles the landing page from `src/components/landing/*` sections
-  (Navbar, Hero, ClientsMarquee, Features, Infrastructure, Pricing, Cta, Footer). `Navbar`, `Hero`,
-  `ClientsMarquee`, and `Infrastructure` come from the AIDesigner "Landing Page 2" canvas (sharper
-  brutalist shadows, Unsplash photography, local `/public/logo-laci-pos.png` wordmark); `Features`,
-  `Pricing`, `Cta`, `Footer` are still from the original "Landing Page" canvas. Both share the same
-  neo-minimalist/brutalist hybrid look (zinc/lime/orange palette, Michroma display + Outfit body).
-  The original "Landing Page" versions of the four swapped sections are kept as unreferenced
-  backups — `Navbar2`/`Hero2`/`ClientsMarquee2`/`Infrastructure2` — not imported anywhere, for
-  rollback. Note: the "Landing Page 2" canvas's login slide-in modal (`#login-modal` / fake auth
-  flow on the nav's "System Login" button) was intentionally not ported — out of scope, "System
-  Login" is currently an inert link.
-- `src/components/landing/ScrollEffects.tsx` — client component wiring the scroll-reveal
-  (`IntersectionObserver`) and sticky-navbar shadow behavior from the original design's script.
-- `prisma/schema.prisma` — `Inquiry` (public contact/inquiry inbox), `AdminUser`, and
-  `ClientContract` (the internal client/contract registry described in the repo-root `PLAN.md`).
-  `Package` enum (`BASIC`/`PLUS`/`BUSINESS`) is shared by `Inquiry.packageInterest` and
-  `ClientContract.package` — same 3 SKUs, single source of truth. `ClientContract` deliberately
-  has **no credential/secret fields** (PLAN.md constraint: license/contract/contact + server
-  metadata only, never plaintext POS passwords — those belong in a vault).
+Framework:
+- Next.js App Router
+- TypeScript
+- TailwindCSS
 
-## Admin section (`/admin`)
+UI Strategy:
+- Use shadcn/ui for all functional UI.
+- Use React Bits only for visual enhancements and as requested by prompt.
+- React Bits reference: "https://reactbits.dev/get-started/installation"
+- Never create custom dialog, form, table, or input if shadcn exists.
 
-Internal-only CRUD for inquiries + the client/contract registry — plain utilitarian UI (zinc
-palette, no brutalist/marquee/reveal styling), deliberately distinct from the public marketing
-site.
+Images:
+- All images and their parent containers must NOT have rounded corners (no `rounded-*` classes on image or parent div).
+- Use `/logo-swillfam.png` for all logo references.
 
-- **Auth**: custom, not Auth.js — `bcryptjs` password hashing + `jose`-signed httpOnly JWT cookie
-  (`laci_admin_session`, 7-day expiry, stateless — no DB-backed session/revocation). `src/lib/auth.ts`
-  (sign/verify, used by both the login action and `middleware.ts`), `src/lib/session.ts` (cookie
-  name/options), `src/lib/get-admin-session.ts` (Server Component/Action-only cookie reader — kept
-  separate from `auth.ts`'s edge-safe exports so `middleware.ts`'s bundle stays minimal).
-- **`middleware.ts`** (repo root) gates `/admin/:path*` except `/admin/login`, redirecting to
-  login when the session cookie is missing/invalid.
-- **No public admin signup.** First/only admin accounts are created via
-  `npx tsx prisma/seed-admin.ts` (idempotent upsert from `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars,
-  run manually) — there's no in-app "create admin" screen (confirmed: small fixed team).
-- **Route structure**: `src/app/admin/login` + `logout` sit outside the `(dashboard)` route group
-  so the login page isn't wrapped in the sidebar shell; `src/app/admin/(dashboard)/layout.tsx`
-  does a defense-in-depth session check (redirects to login) in addition to the middleware, and
-  renders `src/components/admin/Sidebar.tsx`. `inquiries/` and `contracts/` each have their own
-  `actions.ts` (Server Actions) colocated with their pages — no separate REST API layer, this is
-  an internal tool only.
-- **`src/lib/contract-status.ts`** — `computeRenewalBadge(contractEnd, renewalStatus)`: the
-  Active/Due-Soon/Expired/Cancelled badge shown in the UI is computed from `contractEnd` at render
-  time (30-day window), not stored — `ClientContract.renewalStatus` only persists the manual
-  `CANCELLED` override, so the badge can never go stale.
+Design Source:
+- Figma MCP is the source of truth.
+- Please read the FIGMA_STRUCTURE.md to get the list of Frames
 
-## Public contact form (`/contact`)
+Documentation:
+- Always query Context7 before using third-party libraries.
 
-`src/app/contact/page.tsx` is the public form that actually creates `Inquiry` rows (the model
-existed since earlier but had no public-facing writer until this). `ContactHero`/`ContactForm`
-live in `src/components/contact/` — `ContactHero` is a smaller, separate component adapted from
-`FeaturesHero` (not a shared abstraction, to avoid coupling the two pages). `ContactForm` follows
-the same `useActionState` + colocated `"use server"` action pattern as `/admin/login` — on
-success the action returns `{ success: true }` and the form is swapped inline for a thank-you
-panel (no redirect/separate route).
-
-`src/app/contact/actions.ts`'s `submitInquiryAction` has two abuse-prevention layers, in order:
-1. **Honeypot** — a hidden `company_site` input (off-screen via absolute positioning, not
-   `display:none`, plus `aria-hidden`) that real users never see or fill. If it's non-empty, the
-   action returns success without writing anything or touching the rate limiter — deliberately
-   doesn't tip off a bot that it was caught.
-2. **Rate limiting** — `src/lib/rate-limit.ts`'s `checkRateLimit` is an in-memory sliding-window
-   limiter (3 submissions / 10 min per IP via `x-forwarded-for`/`x-real-ip`). No Redis/DB — accepted
-   tradeoff for a single self-hosted instance: resets on restart, doesn't share state across
-   multiple instances.
-
-`Navbar.tsx`'s `active` prop is `"features" | "contact"`.
-
-## Env
-
-Copy `.env.example` to `.env` and fill in your Supabase project's pooled (`DATABASE_URL`, port
-6543, `pgbouncer=true`) and direct (`DIRECT_URL`, port 5432) connection strings, plus
-`NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY` from Project Settings → API, plus
-`ADMIN_SESSION_SECRET` (`openssl rand -base64 32`) and `ADMIN_EMAIL`/`ADMIN_PASSWORD` (only read by
-the seed script, not at app runtime).
+Code Style:
+- Layout Desktop First then Mobile First
+- Server Components by default
+- Client Components only when required
 
 ## Commands
 
 ```bash
 npm install
-npx prisma generate            # regenerate the client after schema changes
-npx prisma migrate dev         # apply schema changes to Supabase (uses DIRECT_URL)
-npx tsx prisma/seed-admin.ts   # create/update the admin account from ADMIN_EMAIL/ADMIN_PASSWORD
-npm run dev                    # http://localhost:3000
-npm run build && npm run lint
+npm run dev                       # http://localhost:3000
+npm run build && npm run lint     # build also runs the TS typecheck
+npx prisma generate               # after any schema change
+npx prisma migrate dev --name x   # create + apply a migration (needs a reachable Postgres)
+npx prisma migrate deploy         # apply existing migrations (e.g. the generated init) to a fresh DB
+npx tsx prisma/seed-admin.ts      # create/update the admin login from ADMIN_EMAIL/ADMIN_PASSWORD
 ```
+
+No automated tests — verify by building and exercising the admin UI under `npm run dev`.
+
+Env: copy `.env.example` → `.env`. Needs `DATABASE_URL` (Postgres), `ADMIN_SESSION_SECRET`
+(`openssl rand -base64 32`), and `ADMIN_EMAIL`/`ADMIN_PASSWORD` (read only by the seed script).
+
+## Auth (`/admin`)
+
+Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie
+(`swillfam_admin_session`, 7-day, stateless — no DB session/revocation).
+
+- `src/lib/auth.ts` — edge-safe `signSession`/`verifySession` (used by the login action **and**
+  `middleware.ts`). `src/lib/session.ts` — cookie name/options. `src/lib/get-admin-session.ts` —
+  Server Component/Action cookie reader, kept separate so `middleware.ts`'s edge bundle stays lean.
+- `middleware.ts` (repo root) gates `/admin/:path*` except `/admin/login`. The `(dashboard)` layout
+  re-checks the session (defense in depth) and renders `Sidebar`. `login`/`logout` live outside the
+  `(dashboard)` group so they aren't wrapped in the sidebar shell.
+- **No in-app admin signup** — accounts come only from `prisma/seed-admin.ts` (idempotent upsert).
+
+## Admin CRUD pattern (the core thing to replicate)
+
+Every resource lives at `src/app/admin/(dashboard)/<resource>/` with the same shape:
+
+- `page.tsx` — list via the generic `AdminTable` (`columns`/`getKey`/`empty`).
+- `new/page.tsx` — blank form. `[id]/page.tsx` — fetch-by-id-or-404, pre-filled form + delete.
+- `actions.ts` — colocated `"use server"` `createX`/`updateX`/`deleteX`, ending in
+  `revalidatePath(...)` + `redirect(...)`. No REST layer — Server Actions only.
+- Form component in `src/components/admin/<Resource>Form.tsx`, composed from shared primitives.
+
+Shared building blocks (use these instead of re-implementing inputs/tables):
+`form-fields.tsx` (`Field`/`SelectField`/`TextareaField`/`CheckboxField`/`SaveButton`/`toDateInputValue`),
+`AdminTable.tsx`, `PageHeader.tsx` (`PageHeader`/`EditHeader`/`Card`), `Thumb.tsx`, `NameForm.tsx`
+(name-only resources), `RichTextEditor.tsx` (Tiptap → hidden input HTML), `SlugField.tsx`
+(auto-fills from a sibling field until edited), `ConfirmDeleteButton.tsx`, `EventScheduleFields.tsx`.
+`/admin` redirects to `/admin/inquiries`.
+
+## Image / file uploads (understand before touching forms)
+
+Stored on **local disk** under `public/uploads/<category>/` (served at `/uploads/...`).
+`next.config.ts` raises `serverActions.bodySizeLimit` to `15mb` so uploads aren't rejected.
+`public/uploads/*` is gitignored except `.gitkeep`. Works for a self-hosted `next start`; not for
+ephemeral/serverless filesystems.
+
+**Storage shape:** single-image fields are `String?`; multi-image fields are `String[]` where array
+order = display order. Only `SegmentGallery.images` and `Event.galleries` are multi; every
+`image`/`bannerImage`/`posterImage` is single.
+
+**`ImageManager.tsx`** (client) handles single or multi: thumbnails, reorder (↑/↓ buttons), and
+checkbox-select → "Delete selected". It posts two hidden fields per image field: `<name>__order`
+(JSON tokens — kept existing paths, or `"new:<N>"`) and `<name>__file` (new File objects, FileList
+rebuilt via `DataTransfer`).
+
+**`src/lib/upload.ts`** (server) is what every action calls:
+- `reconcileImageField` / `reconcileSingleImage` — reads `__order` + `__file`, saves new files,
+  keeps existing in posted order, and **`deleteUploadedFile`s any path removed from the set** (how
+  checkbox-delete and replace both physically unlink the file). Pass the current row's
+  `previousPaths`/`previousPath` on update; `[]`/`null` on create.
+- `deleteUploadedFile` is path-traversal-guarded (must resolve under `public/uploads`) and never
+  throws. `collectImagePaths(...)` flattens single+multi fields so `deleteX` removes every file when
+  a row is destroyed (also used for the Application resume PDF).
+
+## Data model (`prisma/schema.prisma`)
+
+16 models: `AdminUser`, `Inquiry`, `Career`, `Application`, `Merchandise`, `ArticleCategory`,
+`Article`, `Category`, `Venue`, `SegmentGallery`, `Talent`, `Promotion`, `EventCategory`, `Event`,
+`Gallery`, `Video`. All ids are `uuid()`. Conventions worth knowing:
+
+- **All foreign keys are optional + `onDelete: SetNull`** — deleting a parent (venue, category,
+  career) never cascades or fails; children just lose the association. Forms still mark the relevant
+  select `required` at the UI layer.
+- **Slugs** (`@unique`, auto-generated, editable) on `Article`, `Category`, `Venue`, `Promotion`,
+  `Event`, via `src/lib/slug.ts` `ensureUniqueSlug` (appends `-2`/`-3` on collision; pass
+  `excludeId` on update).
+- **Events** are `FIXED` or `RECURRING` (`eventType`). `RECURRING` uses `recurringDays Weekday[]`
+  (e.g. Fri+Sat); `FIXED` uses `startDate` as the date. `EventScheduleFields` drives the toggle.
+- `Event.isPrivate` maps to SQL column `private` (`@map`, dodging the reserved word).
+- `Article.status` is `Int` (0=Draft, 1=Published, per spec "flag by int"), not an enum.
+- `Merchandise.price` is `Decimal` — render with `.toString()`, never the raw object in JSX.
+- `String[]` uses native Postgres `text[]` (no join tables) for `SegmentGallery.images`,
+  `Event.galleries`, `Event.recurringDays`.
+
+The public `/contact` form (`src/app/contact/actions.ts`) is the only public writer — it creates
+`Inquiry` rows behind a honeypot + an in-memory sliding-window rate limiter (`src/lib/rate-limit.ts`,
+3/10min per IP, resets on restart). `Application` rows are also public-submitted (admin gets list +
+read-only detail + delete only), but the public application form is part of the unbuilt public pages.

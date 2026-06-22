@@ -10,8 +10,8 @@ export function Navbar({ active }: NavbarProps = {}) {
       id="navbar"
       className="fixed top-0 w-full z-50 bg-brand-bg flex items-center justify-between border-b-2 border-brand-black h-20 px-4 sm:px-6 lg:px-12 transition-transform duration-300"
     >
-      <Link href="/" className="h-10 block flex-shrink-0">
-        <img src="/logo-laci-pos.png" alt="Laci POS" className="h-full object-contain" />
+      <Link href="/" className="h-10 flex items-center flex-shrink-0">
+        <span className="font-display text-xl tracking-widest uppercase text-brand-black">SWILLFAM</span>
       </Link>
 
       <div className="hidden lg:flex items-center gap-8 font-display text-xs font-bold uppercase tracking-widest">

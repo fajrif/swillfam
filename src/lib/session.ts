@@ -1,4 +1,4 @@
-export const SESSION_COOKIE_NAME = "laci_admin_session";
+export const SESSION_COOKIE_NAME = "swillfam_admin_session";
 
 export const SESSION_COOKIE_OPTIONS = {
   httpOnly: true,

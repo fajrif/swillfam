@@ -3,7 +3,6 @@
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { checkRateLimit } from "@/lib/rate-limit";
-import type { Package } from "@/generated/prisma/client";
 
 export type ContactActionState = {
   error?: string;
@@ -11,7 +10,6 @@ export type ContactActionState = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const VALID_PACKAGES = ["BASIC", "PLUS", "BUSINESS"];
 const RATE_LIMIT_MAX = 3;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
@@ -36,38 +34,20 @@ export async function submitInquiryAction(
     return { error: "Too many submissions — please try again later." };
   }
 
-  const businessName = String(formData.get("businessName") ?? "").trim();
-  const contactName = String(formData.get("contactName") ?? "").trim();
+  const fullName = String(formData.get("fullName") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const phone = String(formData.get("phone") ?? "").trim();
-  const packageInterest = String(formData.get("packageInterest") ?? "").trim();
-  const expectedUsersRaw = String(formData.get("expectedUsers") ?? "").trim();
-  const message = String(formData.get("message") ?? "").trim();
+  const subject = String(formData.get("subject") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
 
-  if (!businessName || !contactName || !email) {
-    return { error: "Business name, contact name, and email are required." };
+  if (!fullName || !email || !subject || !description) {
+    return { error: "All fields are required." };
   }
   if (!EMAIL_RE.test(email)) {
     return { error: "Please enter a valid email address." };
   }
-  if (!VALID_PACKAGES.includes(packageInterest)) {
-    return { error: "Please select a package." };
-  }
-  const expectedUsers = Number.parseInt(expectedUsersRaw, 10);
-  if (!Number.isInteger(expectedUsers) || expectedUsers < 1) {
-    return { error: "Expected number of users must be at least 1." };
-  }
 
   await prisma.inquiry.create({
-    data: {
-      businessName,
-      contactName,
-      email,
-      phone: phone || null,
-      packageInterest: packageInterest as Package,
-      expectedUsers,
-      message: message || null,
-    },
+    data: { fullName, email, subject, description },
   });
 
   return { success: true };

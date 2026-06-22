@@ -6,8 +6,8 @@ import { ContactHero } from "@/components/contact/ContactHero";
 import { ContactForm } from "@/components/contact/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact | Laci POS",
-  description: "Tell us about your business and we'll help you find the right Laci POS package.",
+  title: "Contact | Swillfam",
+  description: "Tell us about your business and we'll help you find the right Swillfam package.",
 };
 
 export default function ContactPage() {

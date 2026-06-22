@@ -12,7 +12,7 @@ import { LoyaltyVisual } from "@/components/features/visuals/LoyaltyVisual";
 import { ReportingVisual } from "@/components/features/visuals/ReportingVisual";
 
 export const metadata: Metadata = {
-  title: "Features | Laci POS - High Performance Systems",
+  title: "Features | Swillfam - High Performance Systems",
   description:
     "Engineered for throughput: hyper-kinetic checkout, atomic inventory mapping, a behavioral retention engine, and forensic system audits.",
 };

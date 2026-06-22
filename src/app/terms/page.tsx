@@ -4,8 +4,8 @@ import { LegalDocument, type LegalSection } from "@/components/legal/LegalDocume
 import { Footer } from "@/components/landing/Footer";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Laci POS",
-  description: "Terms and conditions governing the deployment and use of Laci POS.",
+  title: "Terms & Conditions | Swillfam",
+  description: "Terms and conditions governing the deployment and use of Swillfam.",
 };
 
 const sections: LegalSection[] = [
@@ -18,8 +18,8 @@ const sections: LegalSection[] = [
         <p>
           These Terms and Conditions (&ldquo;Terms&rdquo;) constitute a legally binding agreement
           between you, whether personally or on behalf of a business (&ldquo;Client&rdquo;,
-          &ldquo;you&rdquo;), and PT. Laci Pos Indonesia (&ldquo;Laci POS&rdquo;, &ldquo;we&rdquo;,
-          &ldquo;us&rdquo;, &ldquo;our&rdquo;), governing your access to and use of the Laci POS
+          &ldquo;you&rdquo;), and Swillfam (&ldquo;Swillfam&rdquo;, &ldquo;we&rdquo;,
+          &ldquo;us&rdquo;, &ldquo;our&rdquo;), governing your access to and use of the Swillfam
           software, the dedicated server instance provisioned for your business, and any related
           dashboards or support services (collectively, the &ldquo;Service&rdquo;).
         </p>
@@ -38,7 +38,7 @@ const sections: LegalSection[] = [
     body: (
       <Fragment key="license-body">
         <p>
-          Laci POS is licensed, not sold. Subject to your compliance with these Terms and full
+          Swillfam is licensed, not sold. Subject to your compliance with these Terms and full
           payment under your selected package (Basic, Plus, or Business), we grant you a
           revocable, non-exclusive, non-transferable right to access and use the Service solely
           for your own business operations, for the duration of your contract term.
@@ -112,7 +112,7 @@ const sections: LegalSection[] = [
     body: (
       <Fragment key="data-body">
         <p>
-          All catalog, transaction, customer, and staff data you enter into your Laci POS instance
+          All catalog, transaction, customer, and staff data you enter into your Swillfam instance
           is stored exclusively on your dedicated server and database. We act as your
           infrastructure operator and data processor for that data — you remain the data
           controller, responsible for your own retail and tax record-keeping obligations.
@@ -156,7 +156,7 @@ const sections: LegalSection[] = [
     body: (
       <Fragment key="liability-body">
         <p>
-          TO THE MAXIMUM EXTENT PERMITTED BY LAW, PT. LACI POS INDONESIA WILL NOT BE LIABLE FOR ANY
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, PT. SWILLFAM WILL NOT BE LIABLE FOR ANY
           INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS OR LOST
           SALES DATA, ARISING FROM YOUR USE OF THE SERVICE, EXCEPT WHERE CAUSED BY OUR GROSS
           NEGLIGENCE OR WILLFUL MISCONDUCT.
@@ -194,11 +194,11 @@ export default function TermsPage() {
         title="Terms & Conditions"
         lastUpdated="June 18, 2026"
         effectiveDate="June 18, 2026"
-        contactEmail="legal@lacipos.com"
+        contactEmail="legal@swillfam.com"
         noticeTitle="Important Notice"
         noticeBody={
           <Fragment key="notice-body">
-            Please read these Terms carefully before deploying or using Laci POS. By accepting a
+            Please read these Terms carefully before deploying or using Swillfam. By accepting a
             package quote or accessing your dedicated instance, you agree to these conditions.
           </Fragment>
         }

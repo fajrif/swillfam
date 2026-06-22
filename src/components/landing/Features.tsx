@@ -1,7 +1,7 @@
 export function Features() {
   return (
     <section
-      id="why-laci"
+      id="why-swillfam"
       className="py-24 px-4 sm:px-6 lg:px-12 section-border relative z-10 max-w-7xl mx-auto"
     >
       <div className="mb-16 md:flex justify-between items-end reveal-element">
@@ -11,7 +11,7 @@ export function Features() {
             Unforgiving.
           </h2>
           <p className="text-zinc-500 font-base max-w-sm">
-            We stripped away the bloat. Laci POS focuses entirely on raw transaction speed,
+            We stripped away the bloat. Swillfam focuses entirely on raw transaction speed,
             inventory logic, and absolute uptime.
           </p>
         </div>
@@ -77,7 +77,7 @@ export function Features() {
               Offline Resilience
             </h3>
             <p className="text-white/80 font-base text-sm">
-              Internet down? Laci stores transactions aggressively on local memory and syncs back
+              Internet down? Swillfam stores transactions aggressively on local memory and syncs back
               when uplink drops back in.
             </p>
           </div>

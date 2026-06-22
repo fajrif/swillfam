@@ -4,8 +4,8 @@ import { LegalDocument, type LegalSection } from "@/components/legal/LegalDocume
 import { Footer } from "@/components/landing/Footer";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Laci POS",
-  description: "How PT. Laci Pos Indonesia collects, uses, and protects your data.",
+  title: "Privacy Policy | Swillfam",
+  description: "How Swillfam collects, uses, and protects your data.",
 };
 
 const sections: LegalSection[] = [
@@ -15,9 +15,9 @@ const sections: LegalSection[] = [
     heading: "1. Overview",
     body: (
       <p key="overview-body">
-        This Privacy Policy explains how PT. Laci Pos Indonesia (&ldquo;Laci POS&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) handles
+        This Privacy Policy explains how Swillfam (&ldquo;Swillfam&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) handles
         two distinct kinds of data: (a) the contact details you submit through this marketing
-        site when you reach out about Laci POS, and (b) the operational data processed by a Laci
+        site when you reach out about Swillfam, and (b) the operational data processed by a Swillfam
         POS instance once deployed for your business. These are handled very differently, as
         explained in Sections 2 and 4 below.
       </p>
@@ -70,14 +70,14 @@ const sections: LegalSection[] = [
     body: (
       <Fragment key="transaction-data-body">
         <p>
-          Once you deploy Laci POS, the catalog, sales, customer, and staff data your business
+          Once you deploy Swillfam, the catalog, sales, customer, and staff data your business
           generates is stored entirely on <strong>your own dedicated server</strong> — never on
           this marketing site or its database. We do not access this data except to provide
           support you have requested, perform routine backups, or as required by law.
         </p>
         <p>
           If your business collects personal data from your own end customers (for example,
-          loyalty program details) through Laci POS, you are the data controller for that
+          loyalty program details) through Swillfam, you are the data controller for that
           information under applicable law, and you are responsible for your own compliance and
           disclosures to your customers.
         </p>
@@ -107,7 +107,7 @@ const sections: LegalSection[] = [
     body: (
       <p key="cookies-body">
         This site does not use third-party advertising or analytics cookies. Any cookies used by
-        the deployed Laci POS application itself are strictly functional (for example, keeping you
+        the deployed Swillfam application itself are strictly functional (for example, keeping you
         signed in) and are documented separately in your instance&apos;s own session-handling
         configuration.
       </p>
@@ -133,8 +133,8 @@ const sections: LegalSection[] = [
     body: (
       <p key="contact-body">
         Questions about this Privacy Policy, or requests relating to your data, can be sent to{" "}
-        <a href="mailto:privacy@lacipos.com" className="text-brand-black font-bold underline underline-offset-2">
-          privacy@lacipos.com
+        <a href="mailto:privacy@swillfam.com" className="text-brand-black font-bold underline underline-offset-2">
+          privacy@swillfam.com
         </a>
         .
       </p>
@@ -150,12 +150,12 @@ export default function PrivacyPage() {
         title="Privacy Policy"
         lastUpdated="June 18, 2026"
         effectiveDate="June 18, 2026"
-        contactEmail="privacy@lacipos.com"
+        contactEmail="privacy@swillfam.com"
         noticeTitle="Important Notice"
         noticeBody={
           <Fragment key="notice-body">
             This policy explains the limited contact data we collect on this site, separate from
-            the operational data processed by your own dedicated Laci POS instance.
+            the operational data processed by your own dedicated Swillfam instance.
           </Fragment>
         }
         sections={sections}
