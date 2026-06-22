@@ -14,7 +14,7 @@ export function ExclusiveRecap() {
         <div className="relative w-full overflow-hidden">
           <div className="relative aspect-[1390/625] w-full">
             <Image
-              src="/exclusive-content.png"
+              src="/home/recap.png"
               alt="Event recap"
               fill
               sizes="(max-width: 1440px) 100vw, 1390px"
