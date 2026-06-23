@@ -29,14 +29,16 @@ the Swillfam artboard, so it must be queried by its node ID directly.)
 
 ## Frames
 
-Swillfam now has two artboards:
+Swillfam now has three artboards:
 
 | Frame | Node ID | Size |
 | --- | --- | --- |
 | **SwillFam - Home** | `231:4` | 1440 × 6969 |
 | **SwillFam - About** | `453:946` | 1440 × ~9038 |
+| **SwillFam - Experience** | `471:167` | 1440 × 9242 |
 
 > Open About: https://www.figma.com/design/X44kMxcudMZdHSHT35uFbi/Galo-Website-Designs-2026?node-id=453-946
+> Open Experience: https://www.figma.com/design/X44kMxcudMZdHSHT35uFbi/Galo-Website-Designs-2026?node-id=471-167
 
 > Other site pages implied by the nav (Venues, Events, Promotions, Talents, Merchandise,
 > Guides/Journal, Contact, etc.) are **not yet designed**.
@@ -83,6 +85,32 @@ Swillfam now has two artboards:
 
 > About assets live in `public/about/` (provided by the user). Note two misspelled filenames:
 > `phylosophy-2.png`, `phylosophy-3.png` (but `philosophy-1.png`).
+
+### Sections of `SwillFam - Experience` (top → bottom)
+
+> ⚠️ **Child node IDs pending.** Only the frame ID `471:167` is authoritative (read from the URL).
+> Every section below was reconstructed from the full-page export
+> `public/experience/SwillFam - Experience.png` (the Figma MCP was rate-limited on the Starter plan
+> at build time, so per-node IDs could not be sampled). Re-open the frame and run
+> `get_metadata`/`get_design_context` on `471:167` to fill in the child node IDs when access returns.
+
+| # | Section | Built as | Key elements |
+| --- | --- | --- | --- |
+| 1 | **Hero** | `experience/ExperienceHero` | Full-bleed `banner.png` (715px) + Syne title "Your Day, Our Way"; reuses `SiteHeader` overlay |
+| 2 | **One Day, Different Ways** | `OneDaySection` | 2-col: eyebrow "Your Day, Our Way" + title (left); journey-through-the-city body (right) |
+| 3 | **Experience map** | `ExperienceMap` | Full-width day→night route graphic `experience.png` |
+| — | ~~**Moments We've Hosted**~~ | _skipped_ | Animated past-events gallery — **not built** (per user) |
+| — | ~~**Day timeline (MORNING→NIGHT)**~~ | _skipped_ | Per-stop venue schedule — **not built** (no stop images; per user) |
+| 4 | **Want Us to Plan It for You?** | `WantUsToPlanSection` | `PrivateEventsSection` template: text + **PLAN VIA WHATSAPP** pill-outline + `plan-for-event.png` |
+| 5 | **What's Happening This Week** | `WhatsHappeningSection` | Centered heading + 3 event cards (`event-1..3.png`, venue + date overlay) |
+| 6 | **Current Promotions** | `CurrentPromotionsSection` | Centered heading + 3 promo cards (`promo-1..3.png`, venue/date + title) |
+| 7 | **Your Guide to the SCBD…** | `<ArticleListSection>` (reused) | Left intro + lead + **SEE ALL GUIDES**; right dated article rows |
+| 8 | **Destinations / Explore Events** | `StandForColumnsSection` (reused) | 2-col bordered card, `pill-outline` CTAs |
+| 9 | **Private Events at SwillFam** | `PrivateEventsSection` (reused) | 2-col body + PLAN PRIVATE EVENTS pill-outline + image |
+| 10 | **Footer / Newsletter** | `SiteFooter` (shared) | Same component as Home |
+
+> Experience assets live in `public/experience/` (provided by the user): `banner.png`,
+> `experience.png` (the map), `plan-for-event.png`, `event-1..3.png`, `promo-1..3.png`.
 
 ---
 

@@ -26,7 +26,7 @@ export function Experience() {
         </div>
 
         <Link
-          href="#"
+          href="/experience"
           className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px]"
         >
           Discover Experience

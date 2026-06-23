@@ -36,7 +36,7 @@ export function ArticleListSection({
   lead = DEFAULT_LEAD,
   articles = DEFAULT_ARTICLES,
   ctaLabel = "See all guides",
-  ctaHref = "#",
+  ctaHref = "/articles",
 }: {
   title?: string;
   lead?: string;

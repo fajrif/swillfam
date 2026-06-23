@@ -29,7 +29,7 @@ export default async function MerchandisePage() {
       </div>
 
       <Reveal>
-        <EssentialsSection />
+        <EssentialsSection settings={settings} />
       </Reveal>
 
       <Reveal>
