@@ -9,7 +9,7 @@ import { Container } from "./Container";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
-    { label: "About Us", href: "#" },
+    { label: "About Us", href: "/about" },
     { label: "Venues", href: "#" },
     { label: "Events", href: "#" },
     { label: "The Swillfam Experience", href: "#" },
