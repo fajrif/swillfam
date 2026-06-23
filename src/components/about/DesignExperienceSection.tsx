@@ -3,7 +3,7 @@ import { Container } from "@/components/shared/Container";
 
 export function DesignExperienceSection() {
   return (
-    <section className="border-t border-sf-border/60 py-16 lg:py-24">
+    <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-12">
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="flex flex-col gap-2">

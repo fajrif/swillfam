@@ -5,7 +5,7 @@ import { BRAND_RESOURCES } from "./data";
 
 export function BrandResourcesSection() {
   return (
-    <section className="border-t border-sf-border/60 py-16 lg:py-24">
+    <section className="py-16 lg:py-24">
       <Container className="grid gap-12 lg:grid-cols-2">
         <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
           Brand Resources &amp; Media Downloads
