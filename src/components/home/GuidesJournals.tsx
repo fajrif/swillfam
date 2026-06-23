@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 
 const ARTICLES = [
   { img: "/home/guide-1.jpg", date: "22/06/2026" },

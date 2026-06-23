@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 
 const EVENTS = [
   {
@@ -34,7 +34,7 @@ const EVENTS = [
 
 /** Upcoming Events (Figma 302:15) — left intro column + right poster slider. */
 export function UpcomingEvents() {
-  const apiRef = useRef<CarouselApi>();
+  const apiRef = useRef<CarouselApi>(undefined);
 
   // Embla falls back loop:true to false when there's too little slide content
   // to loop without glitches (only 3 posters here), so wrap manually instead.

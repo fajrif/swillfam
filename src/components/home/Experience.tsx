@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "./SectionHeading";
 
 /** The SwillFam Experience (Figma 312:32 + 450:886 day→night route graphic). */

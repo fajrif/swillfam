@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 
 /** Hero (Figma nodes 231:96 bg, 231:109 wordmark, 291:8 tagline, 471:3 featured card). */
 export function Hero() {

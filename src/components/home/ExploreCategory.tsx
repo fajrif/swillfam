@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "./SectionHeading";
 
 /** Explore by Category (Figma 302:2) — two photo tiles with overlay labels. */
