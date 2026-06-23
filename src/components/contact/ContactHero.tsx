@@ -1,26 +1,16 @@
-import { Reveal } from "@/components/Reveal";
+import Image from "next/image";
+import { Container } from "@/components/shared/Container";
 
 export function ContactHero() {
   return (
-    <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-16 border-b-2 border-brand-black bg-brand-bg relative">
-      <div className="absolute right-0 top-0 w-1/4 h-full border-l-2 border-brand-black bg-brand-lime/10 pointer-events-none hidden lg:block">
-        <div className="w-full h-full border-brand-black border-b-2 -translate-x-4 -translate-y-4" />
-      </div>
-
-      <Reveal className="max-w-3xl relative z-10">
-        <span className="inline-block bg-brand-black text-white font-display text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 mb-4 border-2 border-brand-black shadow-brutal">
-          Get In Touch
-        </span>
-        <h1 className="font-display text-3xl md:text-4xl lg:text-5xl uppercase tracking-tighter leading-none text-brand-black mb-4">
-          Let&apos;s Talk
-          <br />
-          <span className="text-brand-orange">Throughput.</span>
+    <div className="relative h-[715px] w-full overflow-hidden">
+      <Image src="/contact/contact-banner.png" alt="" fill className="object-cover" priority />
+      <div className="absolute inset-x-0 bottom-0 h-[225px] bg-gradient-to-t from-sf-bg to-transparent" />
+      <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+        <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+          Get in Touch with SwillFam
         </h1>
-        <p className="text-brand-black/70 font-medium text-base md:text-lg max-w-xl leading-relaxed">
-          Tell us about your business and we&apos;ll help you find the right package — usually
-          within one business day.
-        </p>
-      </Reveal>
-    </section>
+      </Container>
+    </div>
   );
 }
