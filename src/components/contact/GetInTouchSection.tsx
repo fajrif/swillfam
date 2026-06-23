@@ -1,7 +1,7 @@
 import { Container } from "@/components/shared/Container";
+import type { SiteSettings } from "@/lib/site-settings";
 
-/** Intro: big title (left) + body copy and contact details (right). */
-export function GetInTouchSection() {
+export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
   return (
     <section className="py-16 lg:py-24">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -21,13 +21,19 @@ export function GetInTouchSection() {
             the right department.
           </p>
           <div className="mt-2 flex flex-col gap-1 font-inter text-xl text-white">
-            <p>WhatsApp: +62 123 456 7890</p>
-            <p>
-              Email:{" "}
-              <a href="mailto:contact@swillfam.com" className="transition-colors hover:text-sf-accent">
-                contact@swillfam.com
-              </a>
-            </p>
+            {settings.mainWhatsapp && <p>WhatsApp: {settings.mainWhatsapp}</p>}
+            {settings.mainPhone && <p>Phone: {settings.mainPhone}</p>}
+            {settings.mainEmail && (
+              <p>
+                Email:{" "}
+                <a
+                  href={`mailto:${settings.mainEmail}`}
+                  className="transition-colors hover:text-sf-accent"
+                >
+                  {settings.mainEmail}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </Container>

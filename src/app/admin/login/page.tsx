@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-foreground px-4">
+    <div className="min-h-screen flex items-center justify-center bg-black text-foreground px-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <span className="font-display text-lg tracking-widest uppercase">SWILLFAM</span>

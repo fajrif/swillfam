@@ -10,6 +10,7 @@ import {
 } from "@/components/contact";
 import { StandForColumnsSection, CareersSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "Contact SwillFam — Get in Touch",
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
     "Reach the SwillFam team for general inquiries, business opportunities, collaborations, private events, media requests, and venue reservations.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSiteSettings();
+
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       {/* Header overlays the hero */}
@@ -27,7 +30,7 @@ export default function ContactPage() {
       </div>
 
       <Reveal>
-        <GetInTouchSection />
+        <GetInTouchSection settings={settings} />
       </Reveal>
 
       <Reveal>
@@ -50,7 +53,7 @@ export default function ContactPage() {
         <ArticleListSection />
       </Reveal>
 
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </main>
   );
 }

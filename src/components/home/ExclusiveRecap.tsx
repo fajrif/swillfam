@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "./SectionHeading";
 
@@ -29,9 +28,12 @@ export function ExclusiveRecap() {
           </div>
         </div>
 
-        <Button asChild size="pill">
-          <Link href="#">View Exclusive Contents</Link>
-        </Button>
+        <Link
+          href="#"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px]"
+        >
+          View Exclusive Contents
+        </Link>
       </Container>
     </section>
   );

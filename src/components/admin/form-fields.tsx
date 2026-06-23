@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -109,5 +110,24 @@ export function FormActions({ children }: { children?: ReactNode }) {
 }
 
 export function SaveButton({ children = "Save" }: { children?: ReactNode }) {
-  return <Button type="submit">{children}</Button>;
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      disabled={pending}
+      className="bg-black text-white hover:bg-black/90 active:scale-95 transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      {pending ? (
+        <span className="flex items-center gap-2">
+          <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Saving…
+        </span>
+      ) : (
+        children
+      )}
+    </Button>
+  );
 }

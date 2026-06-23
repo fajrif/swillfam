@@ -40,7 +40,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "swillfam",
+      variant: "default",
       size: "default",
     },
   }

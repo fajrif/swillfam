@@ -16,7 +16,7 @@ export function PageHeader({
     <div className="flex items-center justify-between mb-6">
       <h1 className="text-xl font-semibold text-foreground">{title}</h1>
       {newHref && (
-        <Button asChild>
+        <Button asChild className="bg-black text-white hover:bg-black/90 active:scale-95 transition-transform">
           <Link href={newHref}>{newLabel}</Link>
         </Button>
       )}
