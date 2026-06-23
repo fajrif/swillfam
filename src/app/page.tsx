@@ -9,6 +9,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { Reveal } from "@/components/Reveal";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
     "SwillFam connects people with the city's best venues, events, and stories — from casual nights out to curated social experiences and exclusive gatherings.",
 };
 
-export default function Home() {
+export default async function Home() {
+  const settings = await getSiteSettings();
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       {/* Header overlays the hero */}
@@ -42,7 +44,7 @@ export default function Home() {
       <Reveal>
         <ExclusiveRecap />
       </Reveal>
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { Reveal } from "@/components/Reveal";
+import { getSiteSettings } from "@/lib/site-settings";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
@@ -24,7 +25,8 @@ export const metadata: Metadata = {
     "Discover SwillFam's story, philosophy, and mission to create unforgettable experiences in Jakarta's nightlife and hospitality scene.",
 };
 
-export default function About() {
+export default async function About() {
+  const settings = await getSiteSettings();
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       {/* Header overlays the hero */}
@@ -79,7 +81,7 @@ export default function About() {
         <BrandResourcesSection />
       </Reveal>
 
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </main>
   );
 }

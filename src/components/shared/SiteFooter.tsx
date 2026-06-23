@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Container } from "./Container";
+import type { SiteSettings } from "@/lib/site-settings";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
@@ -20,7 +21,7 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
     { label: "Exclusive", href: "#" },
     { label: "Merchandise", href: "#" },
     { label: "Guides/Journal", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "Contact", href: "/contact" },
   ],
 ];
 
@@ -32,7 +33,7 @@ const SOCIALS = [
 ];
 
 /** Footer / Newsletter (Figma 831:313). */
-export function SiteFooter() {
+export function SiteFooter({ settings }: { settings: SiteSettings }) {
   const [email, setEmail] = useState("");
 
   return (
@@ -58,7 +59,7 @@ export function SiteFooter() {
               placeholder="Enter your email here"
               className="h-[50px] w-full rounded-none border-0 border-b border-white bg-transparent px-2 text-center font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0"
             />
-            <Button type="submit" size="pill">
+            <Button type="submit" variant="pill" size="pill">
               Subscribe
             </Button>
           </form>
@@ -81,42 +82,54 @@ export function SiteFooter() {
           <div className="flex flex-col gap-4">
             <p className="font-inter text-base text-white">Find us:</p>
             <div className="flex gap-4">
-              {SOCIALS.map(({ icon, label }) => (
-                <Link
-                  key={label}
-                  href="#"
-                  aria-label={label}
-                  className="text-white transition-colors hover:text-sf-accent"
-                >
-                  <i className={`ph ${icon} text-xl`} aria-hidden />
-                </Link>
-              ))}
+              {SOCIALS.map(({ icon, label }) => {
+                const socialKey = `social${label}` as keyof SiteSettings;
+                const href = settings[socialKey] || "#";
+                return (
+                  <Link
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className="text-white transition-colors hover:text-sf-accent"
+                  >
+                    <i className={`ph ${icon} text-xl`} aria-hidden />
+                  </Link>
+                );
+              })}
             </div>
-            <p className="font-inter text-base text-white">
-              Email:{" "}
-              <a href="mailto:contact@swillfam.com" className="hover:text-sf-accent">
-                contact@swillfam.com
-              </a>
-            </p>
-            <div className="font-inter text-sm leading-relaxed text-white">
-              <p className="text-base font-semibold">Fairgrounds, SCBD lot 14,</p>
-              <p>
-                Jl. Jenderal Sudirman, Senayan, Keb. Baru,<br/>
-                Jakarta Selatan<br/>
-                DKI Jakarta 12190
+            {settings.mainEmail && (
+              <p className="font-inter text-base text-white">
+                Email:{" "}
+                <a href={`mailto:${settings.mainEmail}`} className="hover:text-sf-accent">
+                  {settings.mainEmail}
+                </a>
               </p>
+            )}
+            <div className="font-inter text-sm leading-relaxed text-white">
+              {settings.officeAddressLine1 && (
+                <p className="text-base font-semibold">{settings.officeAddressLine1}</p>
+              )}
+              {settings.officeAddressLine2 && <p>{settings.officeAddressLine2}<br/></p>}
+              {settings.officeAddressCity && <p>{settings.officeAddressCity}</p>}
             </div>
           </div>
 
           {/* Right: WhatsApp on top, nav links anchored bottom-right */}
           <div className="flex flex-col items-end justify-between gap-2">
-            <Link
-              href="https://wa.me/"
-              aria-label="WhatsApp"
-              className="text-white transition-colors hover:text-sf-accent"
-            >
-              <i className="ph ph-whatsapp-logo text-4xl" aria-hidden />
-            </Link>
+            {settings.mainWhatsapp && (
+              <Link
+                href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
+                aria-label="WhatsApp"
+              >
+                <Image
+                  src="/whatsapp.png"
+                  alt="WhatsApp"
+                  width={64}
+                  height={64}
+                  className="h-16 w-auto"
+                />
+              </Link>
+            )}
             <div className="flex gap-12 text-right">
               {FOOTER_COLS.map((col, i) => (
                 <ul key={i} className="flex flex-col">

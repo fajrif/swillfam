@@ -51,7 +51,7 @@ export default function RootLayout({
       lang="en"
       className={`scroll-smooth ${michroma.variable} ${outfit.variable} ${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
-      <body className="font-body antialiased selection:bg-brand-lime selection:text-brand-black">
+      <body className="font-body antialiased selection:bg-sf-accent selection:text-white">
         <Script
           src="https://unpkg.com/@phosphor-icons/web"
           strategy="beforeInteractive"

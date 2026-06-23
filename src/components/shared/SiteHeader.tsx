@@ -29,12 +29,12 @@ export function SiteHeader() {
         {/* Desktop mega-nav: three stacked link columns */}
         <nav className="hidden gap-x-10 lg:flex">
           {NAV_GROUPS.map((group, i) => (
-            <ul key={i} className="flex flex-col gap-2">
+            <ul key={i} className="flex flex-col gap-1">
               {group.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-syne text-[13px] tracking-wide text-white/80 transition-colors hover:text-white"
+                    className="font-syne text-base tracking-wide text-white/80 uppercase transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>

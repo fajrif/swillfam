@@ -41,14 +41,18 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
     label: "People",
     items: [{ href: "/admin/careers", label: "Careers" }],
   },
+  {
+    label: "System",
+    items: [{ href: "/admin/settings", label: "Settings" }],
+  },
 ];
 
 export function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground border-r flex flex-col h-screen sticky top-0">
-      <div className="px-6 py-6 border-b">
+      <div className="px-6 py-6 border-b bg-black text-white">
         <span className="font-display text-sm tracking-widest uppercase">SWILLFAM</span>
-        <div className="text-xs text-muted-foreground mt-1">Admin</div>
+        <div className="text-xs mt-1">Admin</div>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm font-medium">

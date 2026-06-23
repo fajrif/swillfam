@@ -53,7 +53,7 @@ export function ArticleListSection({
           </h2>
           <p className="font-inter text-base leading-relaxed text-white md:text-lg">{lead}</p>
           {ctaLabel ? (
-            <Button asChild size="pill" className="w-fit">
+            <Button asChild variant="swillfam" size="pill" className="w-fit">
               <Link href={ctaHref}>{ctaLabel}</Link>
             </Button>
           ) : null}

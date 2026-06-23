@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
@@ -63,9 +62,12 @@ export function UpcomingEvents() {
             Stay updated with upcoming events, special programs, parties, collaborations, and
             community gatherings happening across Swillfam&rsquo;s network.
           </p>
-          <Button asChild size="pill" className="w-fit">
-            <Link href="#">See all events</Link>
-          </Button>
+          <Link
+            href="#"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px] w-fit"
+          >
+            See all events
+          </Link>
         </div>
 
         <Carousel
