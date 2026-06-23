@@ -3,7 +3,7 @@ import { Container } from "@/components/shared/Container";
 
 export function OurStorySection() {
   return (
-    <section className="border-t border-sf-border/60 py-16 lg:py-24">
+    <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-12">
         {/* Row 1: eyebrow + heading, vertically centered with the intro line */}
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -13,7 +13,7 @@ export function OurStorySection() {
               More Than a Hospitality Group
             </h2>
           </div>
-          <p className="font-inter text-2xl leading-relaxed text-white/90">
+          <p className="font-inter text-3xl leading-relaxed text-white">
             SwillFam began with a vision to redefine what nightlife could be.
           </p>
         </div>
@@ -39,13 +39,13 @@ export function OurStorySection() {
             <p className="text-lg leading-relaxed text-white">
               But destinations with personality, culture, and community at their core.
             </p>
-            <p className="leading-relaxed text-white/70">
+            <p className="leading-relaxed text-white">
               What started as an ambition to create unique experiences has evolved into a growing
               portfolio of hospitality concepts that have become part of Jakarta&apos;s social
               landscape. Each venue is designed with its own identity, atmosphere, and purpose, while
               remaining connected through a shared commitment to exceptional experiences.
             </p>
-            <p className="leading-relaxed text-white/70">
+            <p className="leading-relaxed text-white">
               Today, SwillFam continues to bring together music, design, food, drinks, entertainment,
               and people under one ecosystem, creating spaces where every visit feels memorable.
             </p>

@@ -51,7 +51,7 @@ export function ArticleListSection({
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-sf-text">
             {title}
           </h2>
-          <p className="font-inter text-base leading-relaxed text-white/70 md:text-lg">{lead}</p>
+          <p className="font-inter text-base leading-relaxed text-white md:text-lg">{lead}</p>
           {ctaLabel ? (
             <Button asChild size="pill" className="w-fit">
               <Link href={ctaHref}>{ctaLabel}</Link>
@@ -76,7 +76,7 @@ export function ArticleListSection({
                 <h3 className="font-syne text-xl leading-snug text-white transition-colors group-hover:text-sf-accent lg:text-[22px]">
                   {article.title}
                 </h3>
-                <p className="line-clamp-2 font-inter text-sm leading-relaxed text-white/70">
+                <p className="line-clamp-2 font-inter text-sm leading-relaxed text-white">
                   {article.excerpt}
                 </p>
               </div>

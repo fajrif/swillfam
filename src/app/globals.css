@@ -30,6 +30,7 @@
   --color-sf-text: #ffffff;
 
   --leading-relaxed: 1.5;
+  --leading-tight: 1.1;
 
   --animate-marquee: marquee 25s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
@@ -60,6 +61,8 @@
 body {
   background-color: #f5f2eb;
   color: #111111;
+  font-size: 18px;
+  font-weight: 100;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }

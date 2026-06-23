@@ -62,6 +62,9 @@ Code Style:
 - Server Components by default
 - Client Components only when required
 
+Workflow:
+- create a changes on this project or working on a tasks no need to test on Chrome/Safari/Firefox etc. no need to kill server unless you need to, running "npm run lint" are enough. and let user check the results.
+
 ## Commands
 
 ```bash
