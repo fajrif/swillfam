@@ -59,7 +59,7 @@ export function UpcomingEvents() {
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-sf-text">
             Upcoming Events
           </h2>
-          <p className="font-inter text-base leading-relaxed text-white/70 md:text-lg">
+          <p className="font-inter text-base leading-relaxed text-white md:text-lg">
             Stay updated with upcoming events, special programs, parties, collaborations, and
             community gatherings happening across Swillfam&rsquo;s network.
           </p>
@@ -93,7 +93,7 @@ export function UpcomingEvents() {
                     <h3 className="font-syne text-base font-bold uppercase text-white">
                       {event.title}
                     </h3>
-                    <p className="line-clamp-2 font-inter text-sm text-white/70">
+                    <p className="line-clamp-2 font-inter text-sm text-white">
                       {event.shortDescription}
                     </p>
                   </div>

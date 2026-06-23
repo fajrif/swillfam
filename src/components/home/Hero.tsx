@@ -36,7 +36,7 @@ export function Hero() {
               <p className="font-archivo text-[13px] font-semibold uppercase tracking-wide text-white">
                 Newest Featured Event
               </p>
-              <p className="mt-1 font-inter text-xs leading-snug text-white/70">
+              <p className="mt-1 font-inter text-xs leading-snug text-white">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
               </p>
             </div>
