@@ -33,13 +33,15 @@ function CategoryTile({
 }) {
   return (
     <div className="group relative aspect-[645/614] overflow-hidden">
-      <Image
-        src={src}
-        alt={label}
-        fill
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-      />
+      <div className="absolute inset-0 border border-sf-border/50 p-2 overflow-hidden">
+        <Image
+          src={src}
+          alt={label}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover scale-[0.97] transition-transform duration-700 group-hover:scale-100"
+        />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       <span
         className={cn(

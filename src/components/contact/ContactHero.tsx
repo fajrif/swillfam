@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/Reveal";
+
 export function ContactHero() {
   return (
     <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-16 border-b-2 border-brand-black bg-brand-bg relative">
@@ -5,7 +7,7 @@ export function ContactHero() {
         <div className="w-full h-full border-brand-black border-b-2 -translate-x-4 -translate-y-4" />
       </div>
 
-      <div className="max-w-3xl relative z-10 reveal-element">
+      <Reveal className="max-w-3xl relative z-10">
         <span className="inline-block bg-brand-black text-white font-display text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 mb-4 border-2 border-brand-black shadow-brutal">
           Get In Touch
         </span>
@@ -18,7 +20,7 @@ export function ContactHero() {
           Tell us about your business and we&apos;ll help you find the right package — usually
           within one business day.
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

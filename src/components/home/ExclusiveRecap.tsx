@@ -29,7 +29,7 @@ export function ExclusiveRecap() {
           </div>
         </div>
 
-        <Button asChild variant="pill" size="pill">
+        <Button asChild size="pill">
           <Link href="#">View Exclusive Contents</Link>
         </Button>
       </Container>

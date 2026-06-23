@@ -17,17 +17,18 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
   ],
   [
     { label: "Talents", href: "#" },
-    { label: "Exclusive Merchandise", href: "#" },
+    { label: "Exclusive", href: "#" },
+    { label: "Merchandise", href: "#" },
     { label: "Guides/Journal", href: "#" },
     { label: "Contact", href: "#" },
   ],
 ];
 
 const SOCIALS = [
-  { icon: "ph-instagram-logo", label: "Instagram" },
-  { icon: "ph-facebook-logo", label: "Facebook" },
-  { icon: "ph-x-logo", label: "X" },
+  { icon: "ph-linkedin-logo", label: "LinkedIn" },
+  { icon: "ph-tiktok-logo", label: "TikTok" },
   { icon: "ph-youtube-logo", label: "YouTube" },
+  { icon: "ph-instagram-logo", label: "Instagram" },
 ];
 
 /** Footer / Newsletter (Figma 831:313). */
@@ -35,19 +36,18 @@ export function SiteFooter() {
   const [email, setEmail] = useState("");
 
   return (
-    <footer className="border-t border-sf-border/60 bg-sf-deep">
+    <footer className="border-t border-sf-border/60 bg-sf-deep text-white">
       {/* Newsletter */}
-      <Container className="flex flex-col items-center gap-6 py-16 text-center">
-        <h2 className="font-syne text-[clamp(1.75rem,4vw,48px)] text-white">Stay in the Loop!</h2>
-        <p className="max-w-[480px] font-inter text-sm leading-relaxed text-white/60">
-          Sign up to get our notifications so you won&rsquo;t miss any events or happenings!
-        </p>
+      <Container className="flex flex-col items-center gap-8 py-16 text-center">
+        <h2 className="font-syne text-[clamp(1.75rem,4vw,48px)] uppercase text-white">
+          Stay in the Loop!
+        </h2>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             setEmail("");
           }}
-          className="flex w-full max-w-[520px] flex-col gap-3 sm:flex-row"
+          className="flex w-full max-w-[680px] flex-col items-center gap-8"
         >
           <Input
             type="email"
@@ -55,77 +55,95 @@ export function SiteFooter() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email here"
-            className="h-[50px] flex-1 rounded-full border-white/20 bg-transparent px-5 font-inter text-white placeholder:text-white/40"
+            className="h-[50px] w-full rounded-none border-0 border-b border-white bg-transparent px-2 text-center font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0"
           />
-          <Button type="submit" variant="pill" size="pill">
+          <Button type="submit" size="pill">
             Subscribe
           </Button>
         </form>
       </Container>
 
       {/* Swillfam signature — decorative separator */}
-      <Container className="flex justify-center border-t border-sf-border/40 py-10">
+      <Container className="flex justify-center">
         <Image
           src="/home/footer-signature.png"
           alt="SwillFam"
           width={269}
           height={118}
-          className="h-20 w-auto"
+          className="h-34 w-auto"
         />
       </Container>
 
-      {/* Link + contact grid */}
-      <Container className="grid grid-cols-1 gap-10 border-t border-sf-border/40 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+      {/* Contact (left) + WhatsApp & nav links (bottom-right) */}
+      <Container className="grid grid-cols-1 gap-12 py-8 md:grid-cols-2">
+        {/* Left: find us + socials + email + address */}
         <div className="flex flex-col gap-4">
-          <p className="max-w-[360px] font-inter text-sm leading-relaxed text-white/60">
-            Fairgrounds, SCBD lot 14, Jl. Jenderal Sudirman, RT.5/RW.3, Senayan, Kec. Kby. Baru, Kota
-            Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12190
-          </p>
-          <p className="font-inter text-sm text-white/80">
-            Find us:{" "}
-            <a href="mailto:contact@swillfam.com" className="hover:text-white">
-              contact@swillfam.com
-            </a>
-          </p>
-          <div className="mt-2 flex gap-4">
+          <p className="font-inter text-base text-white">Find us:</p>
+          <div className="flex gap-4">
             {SOCIALS.map(({ icon, label }) => (
               <Link
                 key={label}
                 href="#"
                 aria-label={label}
-                className="text-white/60 transition-colors hover:text-sf-accent"
+                className="text-white transition-colors hover:text-sf-accent"
               >
                 <i className={`ph ${icon} text-xl`} aria-hidden />
               </Link>
             ))}
           </div>
+          <p className="font-inter text-base text-white">
+            Email:{" "}
+            <a href="mailto:contact@swillfam.com" className="hover:text-sf-accent">
+              contact@swillfam.com
+            </a>
+          </p>
+          <div className="font-inter text-sm leading-relaxed text-white">
+            <p className="text-base font-semibold">Fairgrounds, SCBD lot 14,</p>
+            <p>
+              Jl. Jenderal Sudirman, Senayan, Keb. Baru,<br/>
+              Jakarta Selatan<br/>
+              DKI Jakarta 12190
+            </p>
+          </div>
         </div>
 
-        {FOOTER_COLS.map((col, i) => (
-          <ul key={i} className="flex flex-col gap-3">
-            {col.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="font-inter text-sm text-white/70 transition-colors hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              </li>
+        {/* Right: WhatsApp on top, nav links anchored bottom-right */}
+        <div className="flex flex-col items-end justify-between gap-2">
+          <Link
+            href="https://wa.me/"
+            aria-label="WhatsApp"
+            className="text-white transition-colors hover:text-sf-accent"
+          >
+            <i className="ph ph-whatsapp-logo text-4xl" aria-hidden />
+          </Link>
+          <div className="flex gap-12 text-right">
+            {FOOTER_COLS.map((col, i) => (
+              <ul key={i} className="flex flex-col">
+                {col.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="font-inter text-sm uppercase tracking-wide text-white transition-colors hover:text-sf-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             ))}
-          </ul>
-        ))}
+          </div>
+        </div>
       </Container>
 
       {/* Legal bar */}
-      <Container className="flex flex-col items-center justify-between gap-3 border-t border-sf-border/40 py-6 text-center font-inter text-xs text-white/50 sm:flex-row sm:text-left">
-        <p>© 2026 Swillfam. All rights reserved</p>
-        <p>
-          <Link href="/privacy" className="hover:text-white">
+      <Container className="flex flex-col items-center justify-between gap-3 border-t border-sf-border/40 py-6 text-center font-inter text-xs text-white sm:flex-row sm:text-left">
+        <p>© {new Date().getFullYear()} Swillfam. All rights reserved</p>
+        <p className="inline-flex items-center gap-4">
+          <Link href="/privacy" className="hover:text-sf-accent">
             Privacy Policy
-          </Link>{" "}
-          /{" "}
-          <Link href="/terms" className="hover:text-white">
+          </Link>
+          <span aria-hidden>/</span>
+          <Link href="/terms" className="hover:text-sf-accent">
             Terms &amp; Conditions
           </Link>
         </p>

@@ -2,11 +2,14 @@
 
 import { useActionState } from "react";
 import { submitInquiryAction, type ContactActionState } from "@/app/contact/actions";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { cn } from "@/lib/utils";
 
 const initialState: ContactActionState = {};
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitInquiryAction, initialState);
+  const { ref, visible } = useScrollReveal<HTMLFormElement>();
 
   if (state.success) {
     return (
@@ -29,7 +32,11 @@ export function ContactForm() {
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-16">
-      <form action={formAction} className="max-w-xl mx-auto space-y-4 reveal-element">
+      <form
+        ref={ref}
+        action={formAction}
+        className={cn("max-w-xl mx-auto space-y-4 reveal-element", visible && "visible")}
+      >
         {/* Honeypot — visually hidden from sighted users, not display:none, so it still trips up bots that probe computed styles. */}
         <div className="absolute -left-[9999px]" aria-hidden="true">
           <label htmlFor="company_site">Company website</label>
