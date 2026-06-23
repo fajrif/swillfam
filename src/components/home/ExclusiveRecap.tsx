@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Container } from "./Container";
+import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "./SectionHeading";
 
 /** Latest Exclusive Content + Event Recap (Figma 790:124 + 441:108/109). */

@@ -36,7 +36,7 @@ export function SectionHeading({
       {lead ? (
         <p
           className={cn(
-            "max-w-[640px] font-inter text-base leading-relaxed text-white/70 md:text-[24px] md:leading-[1.4]",
+            "max-w-[640px] font-inter text-base leading-relaxed text-white/70 md:text-lg",
             align === "center" && "mx-auto",
           )}
         >

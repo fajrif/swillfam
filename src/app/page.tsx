@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SiteHeader } from "@/components/home/SiteHeader";
+import { SiteHeader } from "@/components/shared/SiteHeader";
 import { Hero } from "@/components/home/Hero";
 import { ExploreCategory } from "@/components/home/ExploreCategory";
 import { UpcomingEvents } from "@/components/home/UpcomingEvents";
@@ -7,7 +7,7 @@ import { Experience } from "@/components/home/Experience";
 import { TrustedCrowd } from "@/components/home/TrustedCrowd";
 import { GuidesJournals } from "@/components/home/GuidesJournals";
 import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
-import { SiteFooter } from "@/components/home/SiteFooter";
+import { SiteFooter } from "@/components/shared/SiteFooter";
 import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
