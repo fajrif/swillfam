@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import type { SiteSettings } from "@/lib/site-settings";
 
-/** Centered intro for the merchandise grid (Figma "SwillFam Essentials"). */
-export function EssentialsSection() {
+export function EssentialsSection({ settings }: { settings: SiteSettings }) {
+  const wa = settings.mainWhatsapp ? `https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}` : "#";
+  const ig = settings.socialInstagram || "#";
+
   return (
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col items-center gap-8 text-center">
@@ -17,10 +20,10 @@ export function EssentialsSection() {
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button asChild variant="pill-outline" size="pill">
-            <Link href="#">DM on Instagram</Link>
+            <Link href={ig}>DM on Instagram</Link>
           </Button>
           <Button asChild variant="pill-outline" size="pill">
-            <Link href="#">Inquire via WhatsApp</Link>
+            <Link href={wa}>Inquire via WhatsApp</Link>
           </Button>
         </div>
       </Container>

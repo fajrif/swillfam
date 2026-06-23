@@ -32,7 +32,7 @@ export function StandForColumnsSection() {
                 </p>
               </div>
               <Button asChild variant="pill-outline" size="pill" className="w-fit">
-                <Link href="#">Explore Venues</Link>
+                <Link href="/experience">Explore Venues</Link>
               </Button>
             </div>
           </div>
@@ -53,7 +53,7 @@ export function StandForColumnsSection() {
               </p>
             </div>
             <Button asChild variant="pill-outline" size="pill" className="w-fit">
-              <Link href="#">See Experiences</Link>
+              <Link href="/experience">See Experiences</Link>
             </Button>
           </div>
         </div>
