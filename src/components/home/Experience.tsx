@@ -26,7 +26,7 @@ export function Experience() {
           />
         </div>
 
-        <Button asChild variant="pill-outline" size="pill">
+        <Button asChild size="pill">
           <Link href="#">Discover Experience</Link>
         </Button>
       </Container>

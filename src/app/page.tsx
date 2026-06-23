@@ -8,6 +8,7 @@ import { TrustedCrowd } from "@/components/home/TrustedCrowd";
 import { GuidesJournals } from "@/components/home/GuidesJournals";
 import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
 import { SiteFooter } from "@/components/home/SiteFooter";
+import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
@@ -23,12 +24,24 @@ export default function Home() {
         <SiteHeader />
         <Hero />
       </div>
-      <ExploreCategory />
-      <UpcomingEvents />
-      <Experience />
-      <TrustedCrowd />
-      <GuidesJournals />
-      <ExclusiveRecap />
+      <Reveal>
+        <ExploreCategory />
+      </Reveal>
+      <Reveal>
+        <UpcomingEvents />
+      </Reveal>
+      <Reveal>
+        <Experience />
+      </Reveal>
+      <Reveal>
+        <TrustedCrowd />
+      </Reveal>
+      <Reveal>
+        <GuidesJournals />
+      </Reveal>
+      <Reveal>
+        <ExclusiveRecap />
+      </Reveal>
       <SiteFooter />
     </main>
   );
