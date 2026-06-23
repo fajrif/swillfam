@@ -29,6 +29,8 @@
   --color-sf-accent: #c6387f;
   --color-sf-text: #ffffff;
 
+  --leading-relaxed: 1.5;
+
   --animate-marquee: marquee 25s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
 

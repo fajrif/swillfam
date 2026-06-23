@@ -57,6 +57,8 @@ Documentation:
 
 Code Style:
 - Layout Desktop First then Mobile First
+- While creating a page, the sections always breakdown into separate components `./src/components`
+- All text should be in `text-white` never user `text-white/80` let user pick where they want different color
 - Server Components by default
 - Client Components only when required
 

@@ -29,14 +29,17 @@ the Swillfam artboard, so it must be queried by its node ID directly.)
 
 ## Frames
 
-The Swillfam work is a single artboard:
+Swillfam now has two artboards:
 
 | Frame | Node ID | Size |
 | --- | --- | --- |
 | **SwillFam - Home** | `231:4` | 1440 × 6969 |
+| **SwillFam - About** | `453:946` | 1440 × ~9038 |
 
-> Only the Home artboard exists for Swillfam. Other site pages implied by the nav (Venues, Events,
-> Promotions, Talents, Merchandise, Guides/Journal, Contact, etc.) are **not yet designed**.
+> Open About: https://www.figma.com/design/X44kMxcudMZdHSHT35uFbi/Galo-Website-Designs-2026?node-id=453-946
+
+> Other site pages implied by the nav (Venues, Events, Promotions, Talents, Merchandise,
+> Guides/Journal, Contact, etc.) are **not yet designed**.
 
 ### Sections of `SwillFam - Home` (top → bottom)
 
@@ -55,6 +58,31 @@ The Swillfam work is a single artboard:
 > **Correction (verified while building the page):** this is a **9-section** page. The three
 > abstract gradients `844:158/159/160` are the visuals *inside* the Trusted cards (not a standalone
 > tile row), and "Latest Exclusive Content" + "Event Recap" are a **single** block.
+
+### Sections of `SwillFam - About` (top → bottom)
+
+> ⚠️ **Child node IDs pending.** Only the frame ID `453:946` is authoritative — it's the one value
+> read from the URL. Every section below was reconstructed from the full-page export
+> `public/about/SwillFam - About.png` (the Figma MCP was rate-limited on the Starter plan at
+> authoring time, so per-node IDs could not be sampled). Re-open the frame and run
+> `get_metadata`/`get_design_context` on `453:946` to fill in the child node IDs when access returns.
+
+| # | Section | Built as | Key elements |
+| --- | --- | --- | --- |
+| 1 | **Hero** | `about/page.tsx` `HeroSection` | Full-bleed image (715px) + Syne title "Creating Jakarta's Most Memorable Nights"; reuses `SiteHeader` overlay. Hero asset not in export → `/home/hero.png` fallback |
+| 2 | **Our Story** | `OurStorySection` | 2-col: eyebrow "Our Story" + "More Than a Hospitality Group" + `our-story.png`; right = "Not simply venues / events" + body |
+| 3 | **Philosophy & Experience** | `DesignExperienceSection` | "We Design Experiences, Not Just Venues" + body, then full-width `malachi-clark.png` |
+| 4 | **Philosophy (3 principles)** | `<TrustedCrowd>` (reused) | Centered title + 3 cards (Creativity First / Community Driven / Excellence in Every Detail), imgs `philosophy-1`, `phylosophy-2`, `phylosophy-3` |
+| 5 | **Vision & Mission** | `<ExploreCategory>` (reused, no heading) | 2 tiles — Vision (top-left label + desc, `vision-swillfam.png`), Mission (bottom-right, `mission-swillfam.png`) |
+| 6 | **What We Stand For** | `WhatWeStandForSection` | Title + stacked Syne words EXPERIENCE / INNOVATION / QUALITY / GROWTH with a full-bleed magenta `animate-marquee` CULTURE band (culture paragraph centered) running through the middle |
+| 7 | **Destinations / Our Experiences** | `StandForColumns` | 2-col: `personalities.png` + "Destinations with Distinct Personalities" (EXPLORE VENUES) and "Our Experiences" (SEE EXPERIENCES); `pill-outline` CTAs |
+| 8 | **Careers at SwillFam** | `CareersSection` | 2-col body + VIEW ALL CAREERS pill-outline, `career-swilfam.png` |
+| 9 | **Press & Media** | `<GuidesJournals>` (reused, no CTA) | Left intro "Press & Media" + lead; right = 3 dated article rows w/ thumbnails |
+| 10 | **Brand Resources & Media Downloads** | `BrandResourcesSection` | Left big title; right = rows (Logos Assets / Brand Guideline / Lorem Ipsum ×2), each label + **DOWNLOAD HERE** `pill-outline`, `sf-border` hairlines |
+| 11 | **Footer / Newsletter** | `SiteFooter` (shared) | Same component as Home — "Stay in the Loop!", signature, socials, address, nav, legal |
+
+> About assets live in `public/about/` (provided by the user). Note two misspelled filenames:
+> `phylosophy-2.png`, `phylosophy-3.png` (but `philosophy-1.png`).
 
 ---
 
