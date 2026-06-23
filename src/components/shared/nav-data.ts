@@ -6,7 +6,7 @@ export const NAV_GROUPS: NavLink[][] = [
   [
     { label: "Venues", href: "#" },
     { label: "Events", href: "#" },
-    { label: "About Us", href: "#" },
+    { label: "About Us", href: "/about" },
   ],
   [
     { label: "The Swillfam Experience", href: "#" },
