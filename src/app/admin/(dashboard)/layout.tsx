@@ -9,7 +9,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   }
 
   return (
-    <div className="flex min-h-screen bg-brand-bg text-foreground">
+    <div className="flex min-h-screen bg-brand-bg text-foreground font-inter">
       <Sidebar email={session.email} />
       <main className="flex-1 p-8">{children}</main>
     </div>
