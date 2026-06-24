@@ -14,6 +14,7 @@ import {
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { getArticleRows } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "The SwillFam Experience | SwillFam",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ExperiencePage() {
-  const settings = await getSiteSettings();
+  const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
 
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
@@ -56,6 +57,7 @@ export default async function ExperiencePage() {
         <ArticleListSection
           title="Your Guide to the SCBD Nightlife Experience"
           lead="Explore our guide to planning a night out around SCBD and nearby SwillFam venues. Discover where to start, where to eat, where to drink, and how to continue the night across our lifestyle and nightlife destinations."
+          articles={articles}
           ctaLabel="See All Guides"
           ctaHref="/articles"
         />

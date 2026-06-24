@@ -25,17 +25,15 @@ export function ArticleContent({
           ← Back to All Articles
         </Link>
 
-        {/* Intro: big title (left) + date & blurb (right) */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        {/* Intro: date, title, blurb stacked in a single column */}
+        <div className="flex flex-col gap-4">
+          <span className="font-inter text-sm text-white/50">
+            {DATE_FMT.format(publishedDate)}
+          </span>
           <h2 className="font-syne text-[clamp(2rem,4.5vw,56px)] leading-[1.05] text-white">
             {title}
           </h2>
-          <div className="flex flex-col gap-4">
-            <span className="font-inter text-sm text-white/50">
-              {DATE_FMT.format(publishedDate)}
-            </span>
-            <p className="font-inter leading-relaxed text-white">{shortDescription}</p>
-          </div>
+          <p className="font-inter leading-relaxed text-white">{shortDescription}</p>
         </div>
 
         {/* Body: admin-authored Tiptap HTML (trusted) */}

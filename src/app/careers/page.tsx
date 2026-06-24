@@ -8,6 +8,7 @@ import { CareersHero, BePartSection, JobListings, ApplyNowSection } from "@/comp
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { getArticleRows } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "Careers | SwillFam",
@@ -16,10 +17,13 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  const [careers, settings] = await Promise.all([
-    prisma.career.findMany({ select: { id: true, jobTitle: true }, orderBy: { createdAt: "desc" } }),
+  const [careers, settings, articles] = await Promise.all([
+    prisma.career.findMany({ orderBy: { createdAt: "desc" } }),
     getSiteSettings(),
+    getArticleRows(3),
   ]);
+
+  const applyNowCareers = careers.map(({ id, jobTitle }) => ({ id, jobTitle }));
 
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
@@ -34,11 +38,11 @@ export default async function CareersPage() {
       </Reveal>
 
       <Reveal>
-        <JobListings />
+        <JobListings careers={careers} />
       </Reveal>
 
       <Reveal>
-        <ApplyNowSection careers={careers} />
+        <ApplyNowSection careers={applyNowCareers} />
       </Reveal>
 
       <Reveal>
@@ -50,7 +54,7 @@ export default async function CareersPage() {
       </Reveal>
 
       <Reveal>
-        <ArticleListSection />
+        <ArticleListSection articles={articles} />
       </Reveal>
 
       <SiteFooter settings={settings} />

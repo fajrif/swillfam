@@ -6,6 +6,7 @@ import { getSiteSettings } from "@/lib/site-settings";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { getArticleRows } from "@/lib/articles";
 import {
   HeroSection,
   OurStorySection,
@@ -16,7 +17,6 @@ import {
   BrandResourcesSection,
   PRINCIPLES,
   VISION_MISSION,
-  PRESS_ITEMS,
 } from "@/components/about";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export default async function About() {
-  const settings = await getSiteSettings();
+  const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       {/* Header overlays the hero */}
@@ -72,7 +72,7 @@ export default async function About() {
         <ArticleListSection
           title="Press & Media"
           lead="For media mentions, press inquiries, brand information, and official assets, visit the SwillFam Press page. Find selected articles, downloadable press kits, logos, and related media resources for SwillFam and our venues."
-          articles={PRESS_ITEMS}
+          articles={articles}
           ctaLabel={null}
         />
       </Reveal>

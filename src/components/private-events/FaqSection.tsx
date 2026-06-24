@@ -7,10 +7,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Container } from "@/components/shared/Container";
-import { FAQS } from "./data";
+import type { Faq } from "@/generated/prisma/client";
 
 /** "Frequently Asked Questions" — title (left) + collapsible list (right). */
-export function FaqSection() {
+export function FaqSection({ faqs }: { faqs: Faq[] }) {
   return (
     <section className="py-16">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -19,10 +19,10 @@ export function FaqSection() {
         </h2>
 
         <Accordion type="single" collapsible className="flex flex-col gap-4">
-          {FAQS.map((faq, i) => (
+          {faqs.map((faq) => (
             <AccordionItem
-              key={i}
-              value={`faq-${i}`}
+              key={faq.id}
+              value={faq.id}
               className="border border-sf-border/60 px-8"
             >
               <AccordionTrigger className="items-center gap-6 py-7 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:hidden [&[data-state=open]_i]:rotate-90">
@@ -33,7 +33,7 @@ export function FaqSection() {
                 />
               </AccordionTrigger>
               <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed text-white">
-                {faq.answer}
+                <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
               </AccordionContent>
             </AccordionItem>
           ))}

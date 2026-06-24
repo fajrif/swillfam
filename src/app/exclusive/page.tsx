@@ -7,6 +7,7 @@ import { ExclusiveHero, ExclusiveSection } from "@/components/exclusive";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { getArticleRows } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "Exclusive | SwillFam",
@@ -15,7 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ExclusivePage() {
-  const settings = await getSiteSettings();
+  const [settings, articles, editorialArticles] = await Promise.all([
+    getSiteSettings(),
+    getArticleRows(3),
+    getArticleRows(6),
+  ]);
 
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
@@ -26,7 +31,7 @@ export default async function ExclusivePage() {
       </div>
 
       <Reveal>
-        <ExclusiveSection />
+        <ExclusiveSection editorialArticles={editorialArticles} />
       </Reveal>
 
       <Reveal>
@@ -38,7 +43,7 @@ export default async function ExclusivePage() {
       </Reveal>
 
       <Reveal>
-        <ArticleListSection />
+        <ArticleListSection articles={articles} />
       </Reveal>
 
       <SiteFooter settings={settings} />

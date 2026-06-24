@@ -1,11 +1,14 @@
 import { Fragment } from "react";
 import type { Metadata } from "next";
 import { LegalDocument, type LegalSection } from "@/components/legal/LegalDocument";
-import { Footer } from "@/components/landing/Footer";
+import { LegalHero } from "@/components/legal/LegalHero";
+import { SiteHeader } from "@/components/shared/SiteHeader";
+import { SiteFooter } from "@/components/shared/SiteFooter";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Swillfam",
-  description: "How Swillfam collects, uses, and protects your data.",
+  description: "How Swillfam Group collects, uses, and protects your data.",
 };
 
 const sections: LegalSection[] = [
@@ -14,13 +17,19 @@ const sections: LegalSection[] = [
     tocLabel: "1. Overview",
     heading: "1. Overview",
     body: (
-      <p key="overview-body">
-        This Privacy Policy explains how Swillfam (&ldquo;Swillfam&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) handles
-        two distinct kinds of data: (a) the contact details you submit through this marketing
-        site when you reach out about Swillfam, and (b) the operational data processed by a Swillfam
-        POS instance once deployed for your business. These are handled very differently, as
-        explained in Sections 2 and 4 below.
-      </p>
+      <Fragment key="overview-body">
+        <p>
+          Swillfam Group (&ldquo;Swillfam&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;,
+          &ldquo;our&rdquo;) owns and operates a portfolio of restaurants, bars, lounges, and
+          clubs. This Privacy Policy explains how we collect, use, and protect personal
+          information when you visit this website, make an inquiry, apply for a role with us, or
+          interact with our venues, events, and promotions.
+        </p>
+        <p>
+          By using this website or submitting information to us, you agree to the practices
+          described below. If you do not agree, please do not submit your information to us.
+        </p>
+      </Fragment>
     ),
   },
   {
@@ -29,57 +38,62 @@ const sections: LegalSection[] = [
     heading: "2. Information We Collect",
     body: (
       <Fragment key="inquiry-data-body">
-        <p>
-          When you submit an inquiry or contact form on this site, we collect only what you give
-          us:
-        </p>
+        <p>We collect information you choose to provide directly to us, including:</p>
         <ul>
-          <li>Your business name</li>
-          <li>Your contact name</li>
-          <li>Your email address</li>
-          <li>Your phone number (optional)</li>
-          <li>Which package you&apos;re interested in (Basic, Plus, or Business)</li>
-          <li>Any message you include</li>
+          <li>
+            <strong>Contact &amp; inquiry details</strong> — name, email, phone number, and
+            message content submitted through our contact form.
+          </li>
+          <li>
+            <strong>Reservation &amp; event requests</strong> — venue, date, party size, and
+            related preferences when you request a table, private event, or guest list entry.
+          </li>
+          <li>
+            <strong>Career applications</strong> — name, contact details, resume/CV, and any
+            other information you submit when applying for a position at one of our venues.
+          </li>
+          <li>
+            <strong>Browsing data</strong> — pages viewed and general device/browser information
+            collected automatically while you browse this website.
+          </li>
         </ul>
-        <p>
-          This information is stored in our database (hosted on Supabase) and is used solely to
-          build and follow up on your inquiry. We do not run advertising trackers or sell this
-          information to third parties.
-        </p>
       </Fragment>
     ),
   },
   {
     id: "use-of-data",
-    tocLabel: "3. How We Use Inquiry Data",
-    heading: "3. How We Use Inquiry Data",
+    tocLabel: "3. How We Use Your Information",
+    heading: "3. How We Use Your Information",
     body: (
-      <p key="use-of-data-body">
-        Inquiry data is used to respond to your request, prepare a quote, schedule onboarding, and
-        maintain our internal record of active clients and contracts (server, domain, package, and
-        contract dates). We do not use it for unrelated marketing without your consent, and we do
-        not share it with third parties except service providers (such as our database host)
-        strictly necessary to operate this site.
-      </p>
+      <Fragment key="use-of-data-body">
+        <p>We use the information we collect to:</p>
+        <ul>
+          <li>Respond to your inquiries, reservation requests, and private event bookings.</li>
+          <li>Review and process career applications submitted to our venues.</li>
+          <li>
+            Share news about new venue openings, events, talents, and promotions, where you have
+            opted in to receive them.
+          </li>
+          <li>Maintain the security, performance, and integrity of this website.</li>
+          <li>Comply with applicable legal and regulatory obligations.</li>
+        </ul>
+      </Fragment>
     ),
   },
   {
     id: "transaction-data",
-    tocLabel: "4. End-Customer Transaction Data",
-    heading: "4. End-Customer Transaction Data",
+    tocLabel: "4. Reservations, Events & Guest Data",
+    heading: "4. Reservations, Events & Guest Data",
     body: (
       <Fragment key="transaction-data-body">
         <p>
-          Once you deploy Swillfam, the catalog, sales, customer, and staff data your business
-          generates is stored entirely on <strong>your own dedicated server</strong> — never on
-          this marketing site or its database. We do not access this data except to provide
-          support you have requested, perform routine backups, or as required by law.
+          When you request a reservation, table, or private event at one of our venues, the
+          details you provide are shared with the relevant venue&apos;s management team so they
+          can plan for your visit. Guest list and event details are retained only for as long as
+          needed to coordinate your visit and for our internal records.
         </p>
         <p>
-          If your business collects personal data from your own end customers (for example,
-          loyalty program details) through Swillfam, you are the data controller for that
-          information under applicable law, and you are responsible for your own compliance and
-          disclosures to your customers.
+          We do not sell guest, reservation, or applicant data to third parties.
         </p>
       </Fragment>
     ),
@@ -90,13 +104,15 @@ const sections: LegalSection[] = [
     heading: "5. Data Security",
     body: (
       <Fragment key="security-body">
-        <p>Every dedicated install is hardened by design:</p>
-        <ul>
-          <li>No public inbound port — your server is reachable only via a Cloudflare Tunnel.</li>
-          <li>Encrypted, automated database backups on a regular schedule.</li>
-          <li>Rate-limiting and lockout on login attempts.</li>
-          <li>Administrative tooling (e.g. API documentation) disabled in production.</li>
-        </ul>
+        <p>
+          We apply reasonable administrative and technical safeguards to protect the information
+          you share with us from unauthorized access, disclosure, or misuse. Access to inquiry,
+          reservation, and application data is limited to staff who need it to do their jobs.
+        </p>
+        <p>
+          No method of transmission or storage is completely secure, and we cannot guarantee
+          absolute security of information submitted to us.
+        </p>
       </Fragment>
     ),
   },
@@ -105,12 +121,14 @@ const sections: LegalSection[] = [
     tocLabel: "6. Cookies & Tracking",
     heading: "6. Cookies & Tracking",
     body: (
-      <p key="cookies-body">
-        This site does not use third-party advertising or analytics cookies. Any cookies used by
-        the deployed Swillfam application itself are strictly functional (for example, keeping you
-        signed in) and are documented separately in your instance&apos;s own session-handling
-        configuration.
-      </p>
+      <Fragment key="cookies-body">
+        <p>
+          This website uses essential cookies to operate correctly, and may use analytics
+          cookies to help us understand how visitors browse our venues, events, and articles
+          pages. You can control or disable cookies through your browser settings; doing so may
+          affect some site functionality.
+        </p>
+      </Fragment>
     ),
   },
   {
@@ -118,12 +136,14 @@ const sections: LegalSection[] = [
     tocLabel: "7. Your Rights",
     heading: "7. Your Rights",
     body: (
-      <p key="rights-body">
-        Under Indonesia&apos;s Law No. 27 of 2022 on Personal Data Protection (&ldquo;UU PDP&rdquo;), you have
-        the right to access, correct, or request deletion of the inquiry data we hold about you,
-        and to object to its further processing. To exercise any of these rights, contact us using
-        the details in Section 8.
-      </p>
+      <Fragment key="rights-body">
+        <p>
+          Subject to applicable law, including Indonesia&apos;s Law No. 27 of 2022 on Personal
+          Data Protection (&ldquo;UU PDP&rdquo;), you may request access to, correction of, or
+          deletion of the personal information you have submitted to us. To exercise these
+          rights, contact us using the details below.
+        </p>
+      </Fragment>
     ),
   },
   {
@@ -131,36 +151,43 @@ const sections: LegalSection[] = [
     tocLabel: "8. Contact",
     heading: "8. Contact",
     body: (
-      <p key="contact-body">
-        Questions about this Privacy Policy, or requests relating to your data, can be sent to{" "}
-        <a href="mailto:privacy@swillfam.com" className="text-brand-black font-bold underline underline-offset-2">
-          privacy@swillfam.com
-        </a>
-        .
-      </p>
+      <Fragment key="contact-body">
+        <p>
+          Questions about this Privacy Policy or how we handle your information can be sent to
+          our team using the contact details on this page, or via our{" "}
+          <a href="/contact">contact page</a>.
+        </p>
+      </Fragment>
     ),
   },
 ];
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const settings = await getSiteSettings();
   return (
-    <>
+    <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
+      <div className="relative">
+        <SiteHeader />
+        <LegalHero
+          badgeLabel="Legal Documentation"
+          title="Privacy Policy"
+          lastUpdated="June 18, 2026"
+          effectiveDate="June 18, 2026"
+        />
+      </div>
       <LegalDocument
-        badgeLabel="Legal Documentation"
-        title="Privacy Policy"
-        lastUpdated="June 18, 2026"
-        effectiveDate="June 18, 2026"
         contactEmail="privacy@swillfam.com"
         noticeTitle="Important Notice"
         noticeBody={
           <Fragment key="notice-body">
-            This policy explains the limited contact data we collect on this site, separate from
-            the operational data processed by your own dedicated Swillfam instance.
+            This Privacy Policy applies to Swillfam Group&apos;s website and your interactions
+            with our restaurants, bars, lounges, and clubs. It does not cover third-party sites
+            we may link to.
           </Fragment>
         }
         sections={sections}
       />
-      <Footer />
-    </>
+      <SiteFooter settings={settings} />
+    </main>
   );
 }

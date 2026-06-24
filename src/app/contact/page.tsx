@@ -11,6 +11,7 @@ import {
 import { StandForColumnsSection, CareersSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getArticleRows } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "Contact SwillFam — Get in Touch",
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const settings = await getSiteSettings();
+  const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
 
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
@@ -50,7 +51,7 @@ export default async function ContactPage() {
       </Reveal>
 
       <Reveal>
-        <ArticleListSection />
+        <ArticleListSection articles={articles} />
       </Reveal>
 
       <SiteFooter settings={settings} />

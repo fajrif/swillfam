@@ -6,9 +6,10 @@ import { ExclusiveNav, type ExclusiveTab } from "./ExclusiveNav";
 import { GalleryGrid } from "./GalleryGrid";
 import { VideosGrid } from "./VideosGrid";
 import { EditorialList } from "./EditorialList";
+import type { ArticleRow } from "@/components/shared/ArticleListSection";
 
 /** GALLERY / VIDEOS / EDITORIAL tab switcher above the matching content. */
-export function ExclusiveSection() {
+export function ExclusiveSection({ editorialArticles }: { editorialArticles: ArticleRow[] }) {
   const [tab, setTab] = useState<ExclusiveTab>("GALLERY");
 
   return (
@@ -17,7 +18,7 @@ export function ExclusiveSection() {
         <ExclusiveNav active={tab} onChange={setTab} />
         {tab === "GALLERY" && <GalleryGrid />}
         {tab === "VIDEOS" && <VideosGrid />}
-        {tab === "EDITORIAL" && <EditorialList />}
+        {tab === "EDITORIAL" && <EditorialList articles={editorialArticles} />}
       </Container>
     </section>
   );
