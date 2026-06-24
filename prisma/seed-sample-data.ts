@@ -19,6 +19,36 @@ async function seedEventCategories() {
   console.log("Seeded 4 event categories.");
 }
 
+async function seedPrivateEventTypes() {
+  if (await prisma.privateEventType.count()) return;
+  const TYPES = [
+    {
+      title: "Birthday Celebrations",
+      description: "Intimate to full-venue birthday setups with custom decor, cake, and music.",
+      image: "/private-events/events-1.png",
+    },
+    {
+      title: "Celebration & After Parties",
+      description: "Late-night after-parties and milestone celebrations with dedicated bottle service.",
+      image: "/private-events/events-2.png",
+    },
+    {
+      title: "Corporate & Brand Events",
+      description: "Product launches, brand activations, and corporate gatherings tailored to your audience.",
+      image: "/private-events/events-3.png",
+    },
+    {
+      title: "Anniversary & Engagement",
+      description: "Romantic, milestone-worthy setups for anniversaries, engagements, and proposals.",
+      image: null,
+    },
+  ];
+  await prisma.privateEventType.createMany({
+    data: TYPES.map((t, i) => ({ ...t, sortOrder: i })),
+  });
+  console.log(`Seeded ${TYPES.length} private event types.`);
+}
+
 async function seedArticleCategories() {
   if (await prisma.articleCategory.count()) return;
   await prisma.articleCategory.createMany({
@@ -342,6 +372,7 @@ async function seedFaqs() {
 
 async function main() {
   await seedEventCategories();
+  await seedPrivateEventTypes();
   await seedArticleCategories();
   await seedArticles();
   await seedCategories();

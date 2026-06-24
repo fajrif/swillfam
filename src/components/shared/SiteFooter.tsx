@@ -10,7 +10,7 @@ import type { SiteSettings } from "@/lib/site-settings";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
-    { label: "About Us", href: "/about" },
+    { label: "About", href: "/about" },
     { label: "Venues", href: "/venues" },
     { label: "Events", href: "/events" },
     { label: "The Swillfam Experience", href: "/experience" },

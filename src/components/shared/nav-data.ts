@@ -4,9 +4,9 @@ export type NavLink = { label: string; href: string };
 
 export const NAV_GROUPS: NavLink[][] = [
   [
+    { label: "About", href: "/about" },
     { label: "Venues", href: "/venues" },
     { label: "Events", href: "/events" },
-    { label: "About Us", href: "/about" },
   ],
   [
     { label: "The Swillfam Experience", href: "/experience" },
