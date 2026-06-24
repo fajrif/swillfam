@@ -6,9 +6,6 @@
 
 /* aesthetic_dna: neo-minimalist_brutalist_hybrid, ui_paradigm: asymmetric_storytelling, palette: zinc_lime_orange */
 @theme {
-  --font-display: var(--font-michroma);
-  --font-body: var(--font-outfit);
-
   --color-brand-black: #111111;
   --color-brand-lime: #c5f82a;
   --color-brand-orange: #ff4911;

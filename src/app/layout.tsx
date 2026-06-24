@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Michroma, Outfit, Syne, Archivo, Inter } from "next/font/google";
+import { Syne, Archivo, Inter } from "next/font/google";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
-
-const michroma = Michroma({
-  variable: "--font-michroma",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
 
 // SwillFam public site type system (Figma "SwillFam - Home"):
 // Syne = display/headings/nav, Archivo = button + label, Inter = body (Acumin substitute) + legal.
@@ -37,9 +26,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Swillfam | The Definitive Point of Sale Architecture",
+  title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
   description:
-    "The highest-performance operational terminal built for scale. Zero-latency register, atomic inventory, offline resilience and macro-level analytics for cafes, minimarkets and boutiques.",
+    "SwillFam connects people with the city's best venues, events, and stories — from casual nights out to curated social experiences and exclusive gatherings.",
   icons: "/favicon.png",
 };
 
@@ -51,9 +40,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${michroma.variable} ${outfit.variable} ${syne.variable} ${archivo.variable} ${inter.variable}`}
+      className={`scroll-smooth ${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
-      <body className="font-body antialiased selection:bg-sf-accent selection:text-white">
+      <body className="font-inter antialiased selection:bg-sf-accent selection:text-white">
         <NextTopLoader
           color="#c6387f"
           height={3}
@@ -65,7 +54,7 @@ export default function RootLayout({
           src="https://unpkg.com/@phosphor-icons/web"
           strategy="beforeInteractive"
         />
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );

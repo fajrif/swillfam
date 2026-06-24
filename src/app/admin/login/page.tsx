@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-black text-foreground font-inter px-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <span className="font-display text-lg tracking-widest uppercase">SWILLFAM</span>
+          <span className="font-bold text-lg tracking-widest uppercase">SWILLFAM</span>
           <p className="text-sm text-muted-foreground">Sign in to the Swillfam admin.</p>
         </CardHeader>
         <CardContent>

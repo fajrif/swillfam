@@ -25,11 +25,6 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
       { href: "/admin/promotions", label: "Promotions" },
       { href: "/admin/event-categories", label: "Event Categories" },
       { href: "/admin/events", label: "Events" },
-    ],
-  },
-  {
-    label: "Private Events",
-    items: [
       { href: "/admin/event-types", label: "Event Types" },
       { href: "/admin/private-events", label: "Private Events" },
     ],
@@ -59,7 +54,7 @@ export function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground border-r flex flex-col h-screen sticky top-0">
       <div className="px-6 py-6 border-b bg-black text-white">
-        <span className="font-display text-sm tracking-widest uppercase">SWILLFAM</span>
+        <span className="font-bold text-sm tracking-widest uppercase">SWILLFAM</span>
         <div className="text-xs mt-1">Admin</div>
       </div>
 
