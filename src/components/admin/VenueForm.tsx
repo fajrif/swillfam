@@ -35,7 +35,7 @@ export function VenueForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Name" name="name" defaultValue={venue?.name} required />
+        <Field label="Name" name="name" defaultValue={venue?.name} required hint=" " />
         <SlugField sourceName="name" defaultValue={venue?.slug} />
       </div>
 
@@ -61,7 +61,7 @@ export function VenueForm({
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Latitude" name="lat" type="number" step="any" defaultValue={venue?.lat ?? ""} hint="For Google Maps" />
-        <Field label="Longitude" name="lng" type="number" step="any" defaultValue={venue?.lng ?? ""} />
+        <Field label="Longitude" name="lng" type="number" step="any" defaultValue={venue?.lng ?? ""} hint=" " />
       </div>
 
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={venue?.spotifyEmbed ?? ""} rows={2} />

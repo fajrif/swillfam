@@ -24,7 +24,7 @@ export function PrivateEventForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Title" name="title" defaultValue={privateEvent?.title} required />
+        <Field label="Title" name="title" defaultValue={privateEvent?.title} required hint=" " />
         <SlugField sourceName="title" defaultValue={privateEvent?.slug} />
       </div>
 

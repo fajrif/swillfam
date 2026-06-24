@@ -14,7 +14,7 @@ export function CategoryForm({
     <form action={action} className="space-y-6 max-w-2xl">
       <ImageManager name="image" label="Image" existing={category?.image ? [category.image] : []} />
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Name" name="name" defaultValue={category?.name} required />
+        <Field label="Name" name="name" defaultValue={category?.name} required hint=" " />
         <SlugField sourceName="name" defaultValue={category?.slug} />
       </div>
       <TextareaField label="Caption" name="caption" defaultValue={category?.caption} rows={3} required />
