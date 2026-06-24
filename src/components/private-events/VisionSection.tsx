@@ -31,8 +31,8 @@ export function VisionSection() {
             first inquiry to the final execution, we help shape the experience so every detail feels
             aligned with your vision.
           </p>
-          <Button asChild variant="pill-outline" size="pill" className="w-fit">
-            <Link href="/experience">View All Venues</Link>
+          <Button asChild variant="swillfam" size="pill" className="w-fit">
+            <Link href="/venues">View All Venues</Link>
           </Button>
         </div>
       </Container>

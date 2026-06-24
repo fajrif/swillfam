@@ -24,7 +24,7 @@ export function BrandResourcesSection() {
               className="flex items-center justify-between gap-4 border-t border-sf-border/50 py-6 last:border-b"
             >
               <span className="font-syne text-2xl text-white">{label}</span>
-              <Button asChild variant="pill-outline" size="pill">
+              <Button asChild variant="swillfam" size="pill">
                 <Link href="#">Download Here</Link>
               </Button>
             </div>

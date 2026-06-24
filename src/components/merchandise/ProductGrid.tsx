@@ -14,7 +14,7 @@ export function ProductGrid() {
           ))}
         </div>
 
-        <Button variant="pill-outline" size="pill">
+        <Button variant="swillfam" size="pill">
           Load More
         </Button>
       </Container>

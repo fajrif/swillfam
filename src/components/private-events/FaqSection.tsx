@@ -18,17 +18,21 @@ export function FaqSection() {
           Frequently Asked Questions
         </h2>
 
-        <Accordion type="single" collapsible className="flex flex-col">
+        <Accordion type="single" collapsible className="flex flex-col gap-4">
           {FAQS.map((faq, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}
-              className="border-b border-sf-border/50 last:border-b-0"
+              className="border border-sf-border/60 px-8"
             >
-              <AccordionTrigger className="font-syne text-lg text-white hover:no-underline">
+              <AccordionTrigger className="items-center gap-6 py-7 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:hidden [&[data-state=open]_i]:rotate-90">
                 {faq.question}
+                <i
+                  className="ph ph-play shrink-0 text-2xl text-white/40 transition-transform duration-200"
+                  aria-hidden
+                />
               </AccordionTrigger>
-              <AccordionContent className="font-inter text-sm leading-relaxed text-white">
+              <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed text-white">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

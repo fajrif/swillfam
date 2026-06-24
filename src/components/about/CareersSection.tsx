@@ -24,7 +24,7 @@ export function CareersSection() {
                 with us.
               </p>
             </div>
-            <Button asChild variant="pill-outline" size="pill" className="w-fit">
+            <Button asChild variant="swillfam" size="pill" className="w-fit">
               <Link href="/careers">View All Careers</Link>
             </Button>
           </div>

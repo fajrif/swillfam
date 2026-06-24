@@ -28,6 +28,13 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
     ],
   },
   {
+    label: "Private Events",
+    items: [
+      { href: "/admin/event-types", label: "Event Types" },
+      { href: "/admin/private-events", label: "Private Events" },
+    ],
+  },
+  {
     label: "Content",
     items: [
       { href: "/admin/article-categories", label: "Article Categories" },

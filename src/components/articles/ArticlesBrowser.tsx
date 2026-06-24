@@ -42,7 +42,7 @@ export function ArticlesBrowser() {
             ))}
           </div>
 
-          <Button variant="pill-outline" size="pill" className="mx-auto">
+          <Button variant="swillfam" size="pill" className="mx-auto">
             Load More
           </Button>
         </div>
