@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { cn } from "@/lib/utils";
 
 export type ArticleRow = {
   img: string;
@@ -50,11 +51,19 @@ export function ArticleListSection({
   ctaHref?: string;
 }) {
   const rows = articles ?? DEFAULT_ARTICLES.slice(0, limit);
+  const isLongTitle = title.length > "Guides & Journals".length;
   return (
     <section className="py-16">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div className="flex max-w-[560px] flex-col gap-6">
-          <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-sf-text">
+          <h2
+            className={cn(
+              "font-syne leading-[1.05] text-sf-text",
+              isLongTitle
+                ? "text-[clamp(1.75rem,3.5vw,40px)]"
+                : "text-[clamp(2.25rem,5vw,64px)]",
+            )}
+          >
             {title}
           </h2>
           <p className="font-inter text-base leading-relaxed text-white md:text-lg">{lead}</p>

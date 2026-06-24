@@ -10,6 +10,7 @@ import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { Reveal } from "@/components/Reveal";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getArticleRows } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const settings = await getSiteSettings();
+  const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       {/* Header overlays the hero */}
@@ -39,7 +40,7 @@ export default async function Home() {
         <CardImageInfoSection />
       </Reveal>
       <Reveal>
-        <ArticleListSection />
+        <ArticleListSection articles={articles} />
       </Reveal>
       <Reveal>
         <ExclusiveRecap />

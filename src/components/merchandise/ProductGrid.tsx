@@ -1,38 +1,59 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
-import { PRODUCTS, type Product } from "./data";
 
-/** 3-column merchandise grid + a "Load More" placeholder button. */
-export function ProductGrid() {
+export type ProductRow = {
+  img: string | null;
+  title: string;
+  description: string;
+  price: string;
+};
+
+/** 3-column merchandise grid + a Load More link, shown when more rows exist. */
+export function ProductGrid({
+  products,
+  hasMore,
+  loadMoreHref,
+}: {
+  products: ProductRow[];
+  hasMore: boolean;
+  loadMoreHref: string;
+}) {
   return (
     <section className="pb-16 lg:pb-24">
       <Container className="flex flex-col items-center gap-12">
         <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PRODUCTS.map((product, i) => (
+          {products.map((product, i) => (
             <ProductCard key={i} {...product} />
           ))}
         </div>
 
-        <Button variant="swillfam" size="pill">
-          Load More
-        </Button>
+        {hasMore && (
+          <Button asChild variant="swillfam" size="pill">
+            <Link href={loadMoreHref}>Load More</Link>
+          </Button>
+        )}
       </Container>
     </section>
   );
 }
 
-function ProductCard({ img, title, description, price }: Product) {
+function ProductCard({ img, title, description, price }: ProductRow) {
   return (
     <article className="flex flex-col border border-sf-border/50">
       <div className="relative aspect-square w-full overflow-hidden bg-sf-surface">
-        <Image
-          src={img}
-          alt={title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-contain p-10"
-        />
+        {img ? (
+          <Image
+            src={img}
+            alt={title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-contain p-10"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-sf-surface" />
+        )}
       </div>
       <div className="flex flex-col items-center gap-2 p-6 text-center bg-sf-surface">
         <h3 className="font-syne text-xl text-white">{title}</h3>

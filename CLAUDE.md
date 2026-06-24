@@ -137,6 +137,17 @@ rebuilt via `DataTransfer`).
   throws. `collectImagePaths(...)` flattens single+multi fields so `deleteX` removes every file when
   a row is destroyed (also used for the Application resume PDF).
 
+## Loading states (global top bar)
+
+Navigation loading is handled by a single global `<NextTopLoader>` (`nextjs-toploader`) mounted once
+in `src/app/layout.tsx` — a thin accent-colored bar (`#c6387f` / `--color-sf-accent`) that animates
+across the top on every client-side navigation (links, the `/articles` category filter + "Load
+More", and admin alike). **There are no per-route `loading.tsx` files** — a single root/parent
+`loading.tsx` only fires on first/hard load, not when navigating between sibling pages (the boundary
+sits above the shared layout), so per-folder files were the only way to get route-level spinners and
+we deliberately traded that for the one global bar. **New data-fetching pages need nothing extra** —
+do not add `loading.tsx`.
+
 ## Data model (`prisma/schema.prisma`)
 
 16 models: `AdminUser`, `Inquiry`, `Career`, `Application`, `Merchandise`, `ArticleCategory`,

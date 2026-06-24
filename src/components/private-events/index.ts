@@ -3,4 +3,4 @@ export { VisionSection } from "./VisionSection";
 export { EventTypesSection } from "./EventTypesSection";
 export { MomentsCarousel } from "./MomentsCarousel";
 export { FaqSection } from "./FaqSection";
-export { EVENT_TYPES, GALLERY, FAQS } from "./data";
+export { EVENT_TYPES, GALLERY } from "./data";

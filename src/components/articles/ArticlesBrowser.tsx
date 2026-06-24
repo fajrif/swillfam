@@ -3,18 +3,31 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
 import { CategoryNav } from "./CategoryNav";
-import { ARTICLES } from "./data";
+import type { ArticleRow } from "@/components/shared/ArticleListSection";
+import type { ArticleCategory } from "@/generated/prisma/client";
 
-/** Category nav (left) + article feed with a Load More button (right). */
-export function ArticlesBrowser() {
+/** Category nav (left) + article feed (right). Category/page state is server-driven via searchParams. */
+export function ArticlesBrowser({
+  categories,
+  activeCategoryId,
+  articles,
+  hasMore,
+  loadMoreHref,
+}: {
+  categories: ArticleCategory[];
+  activeCategoryId?: string;
+  articles: ArticleRow[];
+  hasMore: boolean;
+  loadMoreHref: string;
+}) {
   return (
     <section className="py-16 lg:py-24">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[260px_1fr]">
-        <CategoryNav />
+        <CategoryNav categories={categories} activeCategoryId={activeCategoryId} />
 
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">
-            {ARTICLES.map((article, i) => (
+            {articles.map((article, i) => (
               <Link
                 key={i}
                 href={article.href ?? "#"}
@@ -42,9 +55,13 @@ export function ArticlesBrowser() {
             ))}
           </div>
 
-          <Button variant="swillfam" size="pill" className="mx-auto">
-            Load More
-          </Button>
+          {hasMore && (
+            <Button asChild variant="swillfam" size="pill" className="mx-auto">
+              <Link href={loadMoreHref} scroll={false}>
+                Load More
+              </Link>
+            </Button>
+          )}
         </div>
       </Container>
     </section>

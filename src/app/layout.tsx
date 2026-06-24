@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Michroma, Outfit, Syne, Archivo, Inter } from "next/font/google";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const michroma = Michroma({
@@ -53,6 +54,13 @@ export default function RootLayout({
       className={`scroll-smooth ${michroma.variable} ${outfit.variable} ${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
       <body className="font-body antialiased selection:bg-sf-accent selection:text-white">
+        <NextTopLoader
+          color="#c6387f"
+          height={3}
+          showSpinner={false}
+          shadow={false}
+          zIndex={1600}
+        />
         <Script
           src="https://unpkg.com/@phosphor-icons/web"
           strategy="beforeInteractive"

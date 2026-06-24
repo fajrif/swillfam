@@ -132,13 +132,14 @@ body {
 
 /* Legal document typography (/terms, /privacy) */
 .legal-doc h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-syne);
   text-transform: uppercase;
   font-size: 1.5rem;
   margin-top: 4rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--color-brand-black);
+  border-bottom: 1px solid var(--color-sf-border);
+  color: var(--color-sf-text);
   scroll-margin-top: 120px;
 }
 
@@ -147,16 +148,17 @@ body {
 }
 
 .legal-doc h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-syne);
   font-size: 1rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
   letter-spacing: -0.02em;
+  color: var(--color-sf-text);
 }
 
 .legal-doc p {
   margin-bottom: 1.5rem;
-  color: #3f3f46;
+  color: #ffffff;
   line-height: 1.8;
   font-size: 1.125rem;
 }
@@ -164,7 +166,7 @@ body {
 .legal-doc ul {
   margin-bottom: 1.5rem;
   padding-left: 1.5rem;
-  color: #3f3f46;
+  color: #ffffff;
 }
 
 .legal-doc li {
@@ -177,10 +179,15 @@ body {
   content: "■";
   position: absolute;
   left: -1.5rem;
-  color: var(--color-brand-lime);
+  color: var(--color-sf-accent);
   font-size: 0.8em;
   top: 0.2rem;
-  -webkit-text-stroke: 1px var(--color-brand-black);
+}
+
+.legal-doc a {
+  color: var(--color-sf-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .toc-link {
@@ -188,10 +195,10 @@ body {
 }
 .toc-link:hover {
   transform: translateX(8px);
-  color: var(--color-brand-orange);
+  color: var(--color-sf-text);
 }
 .toc-link.active {
-  color: var(--color-brand-black);
+  color: var(--color-sf-text);
   font-weight: 700;
 }
 .toc-link.active::before {
@@ -202,8 +209,7 @@ body {
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
-  background-color: var(--color-brand-lime);
-  border: 1px solid var(--color-brand-black);
+  background-color: var(--color-sf-accent);
 }
 
 /* /features page */
