@@ -1,8 +1,9 @@
 import type { Promotion } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, SaveButton, toDateInputValue } from "./form-fields";
+import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
+import { toDateInputValue } from "@/lib/date";
 
 export function PromotionForm({
   action,
@@ -22,7 +23,7 @@ export function PromotionForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Name" name="name" defaultValue={promotion?.name} required />
+        <Field label="Name" name="name" defaultValue={promotion?.name} required hint=" " />
         <SlugField sourceName="name" defaultValue={promotion?.slug} />
       </div>
 

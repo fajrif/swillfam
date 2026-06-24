@@ -45,9 +45,7 @@ export function SlugField({
           setValue(e.target.value);
         }}
       />
-      <p className="text-xs text-muted-foreground">
-        Used in the public URL. Auto-generated from the name; edit if needed.
-      </p>
+      <p className="text-xs text-muted-foreground">Auto-generated from the name; edit if needed.</p>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
@@ -7,12 +9,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 export { SelectField } from "./SelectField";
-
-/** Format a Date for an <input type="date"> value. */
-export function toDateInputValue(date: Date | null | undefined): string {
-  if (!date) return "";
-  return date.toISOString().slice(0, 10);
-}
 
 export function Field({
   label,

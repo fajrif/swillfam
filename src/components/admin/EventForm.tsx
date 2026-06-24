@@ -1,8 +1,9 @@
 import type { Event } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, CheckboxField, SaveButton, toDateInputValue } from "./form-fields";
+import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { EventScheduleFields } from "./EventScheduleFields";
+import { toDateInputValue } from "@/lib/date";
 
 export function EventForm({
   action,
@@ -32,7 +33,7 @@ export function EventForm({
       />
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Name" name="name" defaultValue={event?.name} required />
+        <Field label="Name" name="name" defaultValue={event?.name} required hint=" " />
         <SlugField sourceName="name" defaultValue={event?.slug} />
       </div>
 

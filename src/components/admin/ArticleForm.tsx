@@ -1,8 +1,9 @@
 import type { Article } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, SaveButton, toDateInputValue } from "./form-fields";
+import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
+import { toDateInputValue } from "@/lib/date";
 
 export function ArticleForm({
   action,
@@ -18,7 +19,7 @@ export function ArticleForm({
       <ImageManager name="image" label="Cover image" existing={article?.image ? [article.image] : []} />
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Title" name="title" defaultValue={article?.title} required />
+        <Field label="Title" name="title" defaultValue={article?.title} required hint=" " />
         <SlugField sourceName="title" defaultValue={article?.slug} />
       </div>
 

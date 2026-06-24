@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { ImageLightbox } from "./ImageLightbox";
 
 type Item =
   | { kind: "existing"; id: string; path: string }
@@ -154,8 +155,7 @@ export function ImageManager({
                   isSelected && "border-destructive ring-2 ring-destructive/30",
                 )}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="h-24 w-full rounded object-cover bg-muted" />
+                <ImageLightbox src={src} className="h-24 w-full rounded" />
                 <label className="absolute top-2 left-2 flex items-center gap-1 rounded bg-background/90 px-1 py-0.5 text-[10px]">
                   <input
                     type="checkbox"
