@@ -23,6 +23,9 @@ const DEFAULT_ARTICLES: ArticleRow[] = [
   { img: "/home/guide-1.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
   { img: "/home/guide-2.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
   { img: "/home/guide-3.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
+  { img: "/home/guide-1.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
+  { img: "/home/guide-2.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
+  { img: "/home/guide-3.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
 ];
 
 /**
@@ -34,16 +37,19 @@ const DEFAULT_ARTICLES: ArticleRow[] = [
 export function ArticleListSection({
   title = DEFAULT_TITLE,
   lead = DEFAULT_LEAD,
-  articles = DEFAULT_ARTICLES,
+  articles,
+  limit = 3,
   ctaLabel = "See all guides",
   ctaHref = "/articles",
 }: {
   title?: string;
   lead?: string;
   articles?: ArticleRow[];
+  limit?: number;
   ctaLabel?: string | null;
   ctaHref?: string;
 }) {
+  const rows = articles ?? DEFAULT_ARTICLES.slice(0, limit);
   return (
     <section className="py-16">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -60,7 +66,7 @@ export function ArticleListSection({
         </div>
 
         <div className="flex flex-col gap-4">
-          {articles.map((article, i) => (
+          {rows.map((article, i) => (
             <Link key={i} href={article.href ?? "#"} className="group flex gap-2 border border-sf-border/50">
               <div className="relative w-[120px] shrink-0 overflow-hidden bg-sf-surface sm:w-[140px] h-full">
                 <Image

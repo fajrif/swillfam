@@ -19,10 +19,10 @@ export function EssentialsSection({ settings }: { settings: SiteSettings }) {
           available at our venues or kindly DM us to order.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button asChild variant="pill-outline" size="pill">
+          <Button asChild variant="swillfam" size="pill">
             <Link href={ig}>DM on Instagram</Link>
           </Button>
-          <Button asChild variant="pill-outline" size="pill">
+          <Button asChild variant="swillfam" size="pill">
             <Link href={wa}>Inquire via WhatsApp</Link>
           </Button>
         </div>

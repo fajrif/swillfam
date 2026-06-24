@@ -25,8 +25,8 @@ export function PrivateEventsSection() {
                 memorable and successful occasion.
               </p>
             </div>
-            <Button asChild variant="pill-outline" size="pill" className="w-fit">
-              <Link href="/contact">Plan Private Events</Link>
+            <Button asChild variant="swillfam" size="pill" className="w-fit">
+              <Link href="/private-events">Plan Private Events</Link>
             </Button>
           </div>
 

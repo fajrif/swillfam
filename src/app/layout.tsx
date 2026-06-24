@@ -39,6 +39,7 @@ export const metadata: Metadata = {
   title: "Swillfam | The Definitive Point of Sale Architecture",
   description:
     "The highest-performance operational terminal built for scale. Zero-latency register, atomic inventory, offline resilience and macro-level analytics for cafes, minimarkets and boutiques.",
+  icons: "/favicon.png",
 };
 
 export default function RootLayout({

@@ -53,7 +53,7 @@ export function ContactForm() {
 
       {state.error ? <p className="font-inter text-sm text-sf-accent">{state.error}</p> : null}
 
-      <Button type="submit" variant="pill-outline" size="pill" disabled={pending} className="w-fit">
+      <Button type="submit" variant="swillfam" size="pill" disabled={pending} className="w-fit">
         {pending ? "Sending…" : "Submit"}
       </Button>
     </form>

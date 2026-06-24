@@ -31,8 +31,8 @@ export function StandForColumnsSection() {
                   create memorable moments.
                 </p>
               </div>
-              <Button asChild variant="pill-outline" size="pill" className="w-fit">
-                <Link href="/experience">Explore Venues</Link>
+              <Button asChild variant="swillfam" size="pill" className="w-fit">
+                <Link href="/venues">Explore Venues</Link>
               </Button>
             </div>
           </div>
@@ -52,7 +52,7 @@ export function StandForColumnsSection() {
                 designed to connect people and leave a lasting impression.
               </p>
             </div>
-            <Button asChild variant="pill-outline" size="pill" className="w-fit">
+            <Button asChild variant="swillfam" size="pill" className="w-fit">
               <Link href="/experience">See Experiences</Link>
             </Button>
           </div>

@@ -26,7 +26,7 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
                 can help you plan a route that fits your mood.
               </p>
             </div>
-            <Button asChild variant="pill-outline" size="pill" className="w-fit">
+            <Button asChild variant="swillfam" size="pill" className="w-fit">
               <Link href={wa}>Plan via WhatsApp</Link>
             </Button>
           </div>

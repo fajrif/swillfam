@@ -11,14 +11,14 @@ import type { SiteSettings } from "@/lib/site-settings";
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
     { label: "About Us", href: "/about" },
-    { label: "Venues", href: "/experience" },
-    { label: "Events", href: "/experience" },
+    { label: "Venues", href: "/venues" },
+    { label: "Events", href: "/events" },
     { label: "The Swillfam Experience", href: "/experience" },
-    { label: "Private Events", href: "/contact" },
+    { label: "Private Events", href: "/private-events" },
   ],
   [
-    { label: "Talents", href: "#" },
-    { label: "Exclusive", href: "/articles" },
+    { label: "Talents", href: "/talents" },
+    { label: "Exclusive", href: "/exclusive" },
     { label: "Merchandise", href: "/merchandise" },
     { label: "Guides/Journal", href: "/articles" },
     { label: "Contact", href: "/contact" },

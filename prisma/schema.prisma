@@ -315,3 +315,37 @@ model Faq {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// ---------------------------------------------------------------------------
+// Private events: the "Event Types" tiles + the "Moments We've Hosted" entries.
+// (Model is PrivateEventType, not EventType — that name is the FIXED/RECURRING enum.)
+// ---------------------------------------------------------------------------
+
+model PrivateEventType {
+  id            String         @id @default(uuid())
+  image         String?
+  title         String
+  description   String
+  sortOrder     Int            @default(0)
+  published     Boolean        @default(true)
+  privateEvents PrivateEvent[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PrivateEvent {
+  id                 String            @id @default(uuid())
+  image              String?
+  bannerImage        String?
+  title              String
+  slug               String            @unique
+  caption            String
+  shortDescription   String
+  description        String
+  privateEventTypeId String?
+  privateEventType   PrivateEventType? @relation(fields: [privateEventTypeId], references: [id], onDelete: SetNull)
+  sortOrder          Int               @default(0)
+  published          Boolean           @default(true)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+}
