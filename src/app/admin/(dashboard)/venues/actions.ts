@@ -38,8 +38,9 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 export async function createVenueAction(formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
+  const logo = await reconcileSingleImage({ formData, field: "logo", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.venue.create({ data: { ...parse(formData), slug, image, bannerImage } });
+  await prisma.venue.create({ data: { ...parse(formData), slug, image, bannerImage, logo } });
   revalidatePath(BASE);
   redirect(BASE);
 }
@@ -49,8 +50,9 @@ export async function updateVenueAction(id: string, formData: FormData) {
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
+  const logo = await reconcileSingleImage({ formData, field: "logo", category: CATEGORY, previousPath: current.logo });
   const slug = await uniqueSlug(formData, id);
-  await prisma.venue.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage } });
+  await prisma.venue.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, logo } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   redirect(BASE);
@@ -62,7 +64,7 @@ export async function deleteVenueAction(id: string) {
     // Segment galleries / talents / promotions / events reference venueId with
     // onDelete: SetNull, so they survive (their own images aren't touched here).
     await prisma.venue.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.logo));
   }
   revalidatePath(BASE);
   redirect(BASE);

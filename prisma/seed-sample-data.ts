@@ -215,12 +215,24 @@ async function seedCategories() {
     {
       name: "Nightlife",
       caption: "Where the city comes alive after dark.",
-      image: "/categories/category-nightlife.png",
+      headline: "Nightlife Clubs & Bars by SwillFam",
+      description:
+        "Step into SwillFam's nightlife, where music, energy, and atmosphere come together after dark. From late-night lounges and social bars to high-energy clubs and live performances, each destination is designed to keep the night moving. Whether you are meeting friends for after-work drinks, celebrating a special occasion, or chasing the city's best DJ sets and parties, our venues deliver unforgettable evenings filled with great music, vibrant crowds, and the unmistakable SwillFam spirit.",
+      shortDescription:
+        "Explore DJ nights, live performances, parties, club programs, late-night sessions, and music-led experiences designed for after-hours energy. From intimate music showcases and themed parties to headline performances and venue takeovers, our nightlife events celebrate the vibrant spirit of the city after dark.\n\nWhether you are looking for a lively dance floor, a unique entertainment experience, or a night out with friends, SwillFam's nightlife calendar delivers unforgettable evenings filled with music, atmosphere, and excitement.",
+      image: "/categories/image-nightlife.png",
+      bannerImage: "/categories/banner-nightlife.png",
     },
     {
       name: "Lifestyle",
       caption: "Spaces designed for how you actually want to spend your time.",
-      image: "/categories/category-lifestyle.png",
+      headline: "Lifestyle Restaurants & Bars by SwillFam",
+      description:
+        "Discover SwillFam's lifestyle venues, where food, drinks, atmosphere, and people come together. From Japanese-inspired dining to modern restaurants and social bars, each destination is thoughtfully designed to create meaningful experiences for guests throughout the day and into the night. Whether you are meeting friends for a casual meal, celebrating a special occasion, enjoying after-work drinks, or exploring new places around the city, our venues offer welcoming spaces that bring people closer together. With distinctive concepts, carefully curated menus, attentive hospitality, and unique atmospheres, every SwillFam destination delivers its own character while sharing the same commitment to memorable moments, genuine connections, and enjoyable experiences that keep guests coming back.",
+      shortDescription:
+        "Discover restaurants, cafes, and social bars made for every part of the day, from slow morning coffee and relaxed lunches to unhurried dinners and after-work drinks. Each lifestyle venue brings great food, considered design, and genuine hospitality together in spaces built for connection.\n\nWhether you are catching up with friends, marking a special occasion, or simply finding a new favorite spot around the city, SwillFam's lifestyle destinations offer welcoming rooms, distinctive menus, and atmospheres that make every visit feel effortless.",
+      image: "/categories/image-lifestyle.png",
+      bannerImage: "/categories/banner-lifestyle.png",
     },
   ];
   for (const c of CATEGORIES) {
@@ -228,9 +240,139 @@ async function seedCategories() {
       const found = await prisma.category.findUnique({ where: { slug: s } });
       return !!found;
     });
-    await prisma.category.create({ data: { name: c.name, slug, caption: c.caption, image: c.image } });
+    await prisma.category.create({
+      data: {
+        name: c.name,
+        slug,
+        caption: c.caption,
+        headline: c.headline,
+        description: c.description,
+        shortDescription: c.shortDescription,
+        image: c.image,
+        bannerImage: c.bannerImage,
+      },
+    });
   }
   console.log(`Seeded ${CATEGORIES.length} categories.`);
+}
+
+async function seedVenues() {
+  if (await prisma.venue.count()) return;
+
+  const categories = await prisma.category.findMany({ select: { id: true, name: true } });
+  const categoryId = (name: string) => categories.find((c) => c.name === name)?.id ?? null;
+  const asset = (folder: string, file: string) => `/categories/venues/${folder}/${file}`;
+
+  // folder, Titleized name, category, and whether the folder ships a banner.png.
+  const VENUES = [
+    {
+      folder: "atsumaru-izakaya",
+      name: "Atsumaru Izakaya",
+      category: "Lifestyle",
+      hasBanner: true,
+      operatingHours: "Tuesday - Sunday: 18:00 - 02:00",
+      location: "SCBD, Jakarta",
+      lat: -6.249291022294074,
+      lng: 106.8003771668123,
+      description:
+        "A Japanese-inspired dining and social destination made for good food, good drinks, and good company. Atsumaru Izakaya brings together warm hospitality, flavorful dishes, and a relaxed atmosphere for casual lunches, intimate dinners, and group gatherings.",
+    },
+    {
+      folder: "kilo",
+      name: "Kilo",
+      category: "Lifestyle",
+      hasBanner: false,
+      operatingHours: "Daily: 10:00 - 22:00",
+      location: "SCBD, Jakarta",
+      lat: -6.229813053282502,
+      lng: 106.80704052448323,
+      description:
+        "An all-day cafe and kitchen built around slow mornings, easy lunches, and unhurried catch-ups. Kilo pairs a considered menu with a calm, design-led room that works just as well for solo coffee as it does for long table conversations.",
+    },
+    {
+      folder: "dualism",
+      name: "Dualism",
+      category: "Lifestyle",
+      hasBanner: false,
+      operatingHours: "Tuesday - Sunday: 18:00 - 02:00",
+      location: "SCBD, Jakarta",
+      lat: -6.230096084344473,
+      lng: 106.80957632448332,
+      description:
+        "A modern restaurant and bar where dinner service shifts effortlessly into an evening of drinks and music. Dualism balances a refined kitchen with a social, atmospheric room designed to carry a night from the first course onward.",
+    },
+    {
+      folder: "truce",
+      name: "Truce",
+      category: "Lifestyle",
+      hasBanner: false,
+      operatingHours: "Tuesday - Sunday: 18:00 - 02:00",
+      location: "SCBD, Jakarta",
+      lat: -6.22616914830079,
+      lng: 106.80707301098985,
+      description:
+        "A laid-back bar and lounge built for after-work unwinding and easy evenings out. Truce offers a curated drinks list, considered small plates, and a warm room that invites you to settle in and stay a while.",
+    },
+    {
+      folder: "zoo",
+      name: "Zoo",
+      category: "Nightlife",
+      hasBanner: false,
+      operatingHours: "Wednesday - Sunday: 19:00 - 04:00",
+      location: "SCBD, Jakarta",
+      lat: -6.226216879413745,
+      lng: 106.80709112263447,
+      description:
+        "A high-energy club where music leads and the night runs late. Zoo brings together a serious sound system, resident and guest DJs, and a packed dance floor for the city's most committed night owls.",
+    },
+    {
+      folder: "swillhouse",
+      name: "Swillhouse",
+      category: "Nightlife",
+      hasBanner: false,
+      operatingHours: "Wednesday - Sunday: 19:00 - 04:00",
+      location: "SCBD, Jakarta",
+      lat: -6.226764348529861,
+      lng: 106.80725476681219,
+      description:
+        "A late-night bar and party space with a reputation for atmosphere. Swillhouse pairs inventive drinks with curated music programming, turning an ordinary evening into a proper night out.",
+    },
+    {
+      folder: "lecirque",
+      name: "Lecirque",
+      category: "Nightlife",
+      hasBanner: false,
+      operatingHours: "Friday - Saturday: 21:00 - 05:00",
+      location: "SCBD, Jakarta",
+      lat: -6.226252844973073,
+      lng: 106.80709598215432,
+      description:
+        "A theatrical nightlife destination built for headline performances and venue takeovers. Lecirque blends live entertainment, immersive production, and a charged dance floor for unforgettable late-night experiences.",
+    },
+  ];
+
+  for (const v of VENUES) {
+    const slug = await ensureUniqueSlug(v.name, async (s) => {
+      const found = await prisma.venue.findUnique({ where: { slug: s } });
+      return !!found;
+    });
+    await prisma.venue.create({
+      data: {
+        name: v.name,
+        slug,
+        description: v.description,
+        image: asset(v.folder, "image.png"),
+        bannerImage: v.hasBanner ? asset(v.folder, "banner.png") : null,
+        logo: asset(v.folder, "logo.png"),
+        categoryId: categoryId(v.category),
+        operatingHours: v.operatingHours,
+        location: v.location,
+        lat: v.lat,
+        lng: v.lng,
+      },
+    });
+  }
+  console.log(`Seeded ${VENUES.length} venues.`);
 }
 
 async function seedCareers() {
@@ -376,6 +518,7 @@ async function main() {
   await seedArticleCategories();
   await seedArticles();
   await seedCategories();
+  await seedVenues();
   await seedCareers();
   await seedMerchandise();
   await seedFaqs();

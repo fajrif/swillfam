@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "./SectionHeading";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 
 /** The SwillFam Experience (Figma 312:32 + 450:886 day→night route graphic). */
 export function Experience() {
