@@ -28,7 +28,12 @@ export default async function Home() {
         <Hero />
       </div>
       <Reveal>
-        <DualImageColumnSection />
+        <DualImageColumnSection
+          tiles={[
+            { src: "/home/category-lifestyle.png", label: "Lifestyle", labelAlign: "top-left", href: "/category/lifestyle" },
+            { src: "/home/category-nightlife.png", label: "Nightlife", labelAlign: "bottom-right", href: "/category/nightlife" },
+          ]}
+        />
       </Reveal>
       <Reveal>
         <UpcomingEvents />

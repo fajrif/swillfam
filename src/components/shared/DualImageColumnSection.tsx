@@ -1,36 +1,27 @@
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/home/SectionHeading";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 
 export type CategoryTileData = {
   src: string;
   label: string;
   labelAlign: "top-left" | "bottom-right";
   description?: string;
+  href?: string;
 };
 
-const DEFAULT_TILES: CategoryTileData[] = [
-  { src: "/home/category-lifestyle.png", label: "Lifestyle", labelAlign: "top-left" },
-  { src: "/home/category-nightlife.png", label: "Nightlife", labelAlign: "bottom-right" },
-];
-
-/**
- * Two photo tiles with overlay labels (Figma home 302:2).
- * Prop-driven so it can be reused — defaults reproduce the homepage "Explore by
- * Category" section when rendered with no props. `description` adds a paragraph
- * under each tile label (used by the About "Vision & Mission" section).
- */
 export function DualImageColumnSection({
   title = "Explore by Category",
   description,
   titleClassName,
-  tiles = DEFAULT_TILES,
+  tiles,
 }: {
   title?: string;
   description?: string;
   titleClassName?: string;
-  tiles?: CategoryTileData[];
+  tiles: CategoryTileData[];
 }) {
   return (
     <section className="py-16 lg:py-24">
@@ -48,9 +39,9 @@ export function DualImageColumnSection({
   );
 }
 
-function CategoryTile({ src, label, labelAlign, description }: CategoryTileData) {
-  return (
-    <div className="group relative aspect-[645/614] overflow-hidden">
+function CategoryTile({ src, label, labelAlign, description, href }: CategoryTileData) {
+  const content = (
+    <>
       <div className="absolute inset-0 border border-sf-border/50 p-2 overflow-hidden">
         <Image
           src={src}
@@ -78,6 +69,20 @@ function CategoryTile({ src, label, labelAlign, description }: CategoryTileData)
           </p>
         ) : null}
       </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className="group relative aspect-[645/614] overflow-hidden block">
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="group relative aspect-[645/614] overflow-hidden">
+      {content}
     </div>
   );
 }

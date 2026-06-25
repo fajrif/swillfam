@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/home/SectionHeading";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 
 export type TrustedCard = {
   img?: string;

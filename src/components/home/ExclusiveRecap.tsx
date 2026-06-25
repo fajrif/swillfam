@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "./SectionHeading";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 
 /** Latest Exclusive Content + Event Recap (Figma 790:124 + 441:108/109). */
 export function ExclusiveRecap() {

@@ -152,14 +152,18 @@ model Article {
 // ---------------------------------------------------------------------------
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String   @unique
-  image     String?
-  caption   String
-  venues    Venue[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  image       String?
+  bannerImage String?
+  caption     String
+  headline    String?
+  description String?
+  shortDescription String?
+  venues      Venue[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Venue {
@@ -169,6 +173,7 @@ model Venue {
   description     String
   image           String?
   bannerImage     String?
+  logo            String?
   categoryId      String?
   category        Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   operatingHours  String
