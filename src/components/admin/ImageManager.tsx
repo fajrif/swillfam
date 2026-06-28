@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ImageLightbox } from "./ImageLightbox";
 
 type Item =
-  | { kind: "existing"; id: string; path: string }
-  | { kind: "new"; id: string; file: File; url: string };
+  | { kind: "existing"; id: string; path: string; title: string; description: string }
+  | { kind: "new"; id: string; file: File; url: string; title: string; description: string };
 
 let idCounter = 0;
 const nextId = () => `im-${idCounter++}`;
@@ -20,6 +22,10 @@ const nextId = () => `im-${idCounter++}`;
  *   - `<name>__order`: JSON array of tokens (kept existing paths, or "new:<N>")
  *   - `<name>__file`:  the new File objects, in order (FileList built via DataTransfer)
  *
+ * When `captions` is set, each tile also gets a title + description input and two
+ * more hidden fields (`<name>__titles`, `<name>__descriptions`, JSON arrays aligned
+ * to `__order`) read by `reconcileImageFieldWithCaptions`.
+ *
  * Supports reordering (multi), and checkbox selection → "Delete selected". Removing an
  * image simply omits it from the posted order, which makes the server unlink the file.
  */
@@ -28,26 +34,40 @@ export function ImageManager({
   label,
   multiple = false,
   existing = [],
+  existingTitles = [],
+  existingDescriptions = [],
   accept = "image/*",
   hint,
+  captions = false,
 }: {
   name: string;
   label: string;
   multiple?: boolean;
   existing?: string[];
+  existingTitles?: string[];
+  existingDescriptions?: string[];
   accept?: string;
   hint?: string;
+  captions?: boolean;
 }) {
   const [items, setItems] = useState<Item[]>(() =>
-    existing.map((path) => ({ kind: "existing" as const, id: nextId(), path })),
+    existing.map((path, i) => ({
+      kind: "existing" as const,
+      id: nextId(),
+      path,
+      title: existingTitles[i] ?? "",
+      description: existingDescriptions[i] ?? "",
+    })),
   );
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const fileInputRef = useRef<HTMLInputElement>(null); // hidden, submitted
   const orderInputRef = useRef<HTMLInputElement>(null); // hidden, submitted
+  const titlesInputRef = useRef<HTMLInputElement>(null); // hidden, submitted (captions)
+  const descriptionsInputRef = useRef<HTMLInputElement>(null); // hidden, submitted (captions)
   const pickerRef = useRef<HTMLInputElement>(null); // visible picker
 
-  // Keep the two hidden submitted inputs in sync with the current item list/order.
+  // Keep the hidden submitted inputs in sync with the current item list/order.
   useEffect(() => {
     const newItems = items.filter(
       (it): it is Extract<Item, { kind: "new" }> => it.kind === "new",
@@ -62,6 +82,12 @@ export function ImageManager({
         it.kind === "existing" ? it.path : `new:${newItems.indexOf(it)}`,
       );
       orderInputRef.current.value = JSON.stringify(tokens);
+    }
+    if (titlesInputRef.current) {
+      titlesInputRef.current.value = JSON.stringify(items.map((it) => it.title));
+    }
+    if (descriptionsInputRef.current) {
+      descriptionsInputRef.current.value = JSON.stringify(items.map((it) => it.description));
     }
   }, [items]);
 
@@ -82,6 +108,8 @@ export function ImageManager({
       id: nextId(),
       file,
       url: URL.createObjectURL(file),
+      title: "",
+      description: "",
     }));
     setItems((prev) => {
       if (multiple) return [...prev, ...additions];
@@ -123,6 +151,10 @@ export function ImageManager({
     });
   }
 
+  function updateCaption(id: string, field: "title" | "description", value: string) {
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [field]: value } : it)));
+  }
+
   const selectedCount = selected.size;
 
   return (
@@ -143,7 +175,7 @@ export function ImageManager({
       </div>
 
       {items.length > 0 && (
-        <ul className="flex flex-wrap gap-3">
+        <ul className={cn("flex flex-wrap gap-3", captions && "gap-4")}>
           {items.map((it, index) => {
             const src = it.kind === "existing" ? it.path : it.url;
             const isSelected = selected.has(it.id);
@@ -151,7 +183,8 @@ export function ImageManager({
               <li
                 key={it.id}
                 className={cn(
-                  "relative w-28 rounded-md border bg-card p-1",
+                  "relative rounded-md border bg-card p-1",
+                  captions ? "w-56" : "w-28",
                   isSelected && "border-destructive ring-2 ring-destructive/30",
                 )}
               >
@@ -189,6 +222,23 @@ export function ImageManager({
                     </Button>
                   </div>
                 )}
+                {captions && (
+                  <div className="mt-1.5 grid gap-1.5">
+                    <Input
+                      value={it.title}
+                      onChange={(e) => updateCaption(it.id, "title", e.target.value)}
+                      placeholder="Title"
+                      className="h-8 text-xs"
+                    />
+                    <Textarea
+                      value={it.description}
+                      onChange={(e) => updateCaption(it.id, "description", e.target.value)}
+                      placeholder="Short description"
+                      rows={2}
+                      className="text-xs"
+                    />
+                  </div>
+                )}
               </li>
             );
           })}
@@ -207,6 +257,17 @@ export function ImageManager({
 
       {/* Submitted to the server action. */}
       <input ref={orderInputRef} type="hidden" name={`${name}__order`} defaultValue="[]" />
+      {captions && (
+        <>
+          <input ref={titlesInputRef} type="hidden" name={`${name}__titles`} defaultValue="[]" />
+          <input
+            ref={descriptionsInputRef}
+            type="hidden"
+            name={`${name}__descriptions`}
+            defaultValue="[]"
+          />
+        </>
+      )}
       <input ref={fileInputRef} type="file" name={`${name}__file`} multiple className="hidden" tabIndex={-1} aria-hidden />
     </div>
   );

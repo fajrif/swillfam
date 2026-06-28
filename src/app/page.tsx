@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { Hero } from "@/components/home/Hero";
 import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
-import { UpcomingEvents } from "@/components/home/UpcomingEvents";
+import { EventSectionWithImage } from "@/components/shared/EventSectionWithImage";
 import { Experience } from "@/components/home/Experience";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
@@ -36,7 +36,17 @@ export default async function Home() {
         />
       </Reveal>
       <Reveal>
-        <UpcomingEvents />
+        <EventSectionWithImage
+          title="Upcoming Events"
+          description="Stay updated with upcoming events, special programs, parties, collaborations, and community gatherings happening across Swillfam's network."
+          ctaText="See all events"
+          ctaHref="/events"
+          items={[
+            { img: "/home/poster-1.png", title: "Mat & Mingle", shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+            { img: "/home/poster-2.png", title: "High Five", shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+            { img: "/home/poster-3.png", title: "Truce", shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+          ]}
+        />
       </Reveal>
       <Reveal>
         <Experience />

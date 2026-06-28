@@ -1,40 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Category, Venue } from "@/generated/prisma/client";
-import { Container } from "@/components/shared/Container";
-import { SectionHeading } from "@/components/shared/SectionHeading";
+import type { Venue } from "@/generated/prisma/client";
 
 const FALLBACK = "/home/hero.png";
 
 /**
- * "Explore Our {Name} Venues" — responsive 2-column grid of venue tiles.
- * Card mechanic mirrors `private-events/EventTypesSection`: the venue logo sits
- * centered over the image, and a transparent-black inset box reveals the venue
- * name + description on hover. Each card links to the venue detail page.
+ * Venue tile: centered logo over the venue image; on hover a transparent-black
+ * inset box reveals the venue name + description. Links to the detail page.
  */
-export function VenuesGrid({ category }: { category: Category & { venues: Venue[] } }) {
-  const { venues } = category;
-
-  return (
-    <section className="py-16 lg:py-24">
-      <Container className="flex flex-col gap-8 lg:gap-12">
-        <SectionHeading title={`Explore Our ${category.name} Venues`} align="center" />
-
-        {venues.length === 0 ? (
-          <p className="text-center font-inter text-white">No venues in this category yet.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {venues.map((venue) => (
-              <VenueCard key={venue.id} venue={venue} />
-            ))}
-          </div>
-        )}
-      </Container>
-    </section>
-  );
-}
-
-function VenueCard({ venue }: { venue: Venue }) {
+export function VenueCard({ venue }: { venue: Venue }) {
   return (
     <Link
       href={`/venues/${venue.slug}`}

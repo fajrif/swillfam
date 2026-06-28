@@ -196,6 +196,10 @@ model SegmentGallery {
   title       String
   description String
   images      String[] // multiple uploaded image paths, ordered
+  // Per-image caption arrays, index-aligned with `images`. Populated only for
+  // `special` galleries (the "dishes" template); empty otherwise.
+  imageTitles       String[]
+  imageDescriptions String[]
   special     Boolean  @default(false)
   venueId     String?
   venue       Venue?   @relation(fields: [venueId], references: [id], onDelete: SetNull)
