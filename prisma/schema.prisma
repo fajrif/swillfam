@@ -171,6 +171,8 @@ model Venue {
   name            String
   slug            String           @unique
   description     String
+  shortDescription String?
+  caption         String?
   image           String?
   bannerImage     String?
   logo            String?

@@ -17,6 +17,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import {
   VenueHero,
+  VenueDescription,
   DishesSection,
   TalentSection,
   VenueLocationHours,
@@ -106,6 +107,10 @@ export default async function VenueSlugPage({
         <SiteHeader />
         <VenueHero venue={venue} />
       </div>
+
+      <Reveal>
+        <VenueDescription venue={venue} />
+      </Reveal>
 
       {galleries.map((gallery) => (
         <Reveal key={gallery.id}>
