@@ -130,6 +130,71 @@ export async function reconcileImageField(opts: {
   return finalPaths;
 }
 
+/** Parse a hidden field holding a JSON string array (used for order/titles/descriptions). */
+function parseJsonStringArray(value: FormDataEntryValue | null): string[] {
+  const raw = String(value ?? "");
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Caption-aware variant of {@link reconcileImageField}. In addition to the
+ * ordered paths, reads the index-aligned `<field>__titles` / `<field>__descriptions`
+ * JSON arrays posted by <ImageManager captions>. Titles/descriptions are kept in
+ * lockstep with the surviving paths (so dropped tokens don't misalign the arrays).
+ */
+export async function reconcileImageFieldWithCaptions(opts: {
+  formData: FormData;
+  field: string;
+  category: string;
+  previousPaths: string[];
+  allowedTypes?: string[];
+  maxBytes?: number;
+}): Promise<{ paths: string[]; titles: string[]; descriptions: string[] }> {
+  const { formData, field, category, previousPaths } = opts;
+  const allowedTypes = opts.allowedTypes ?? IMAGE_MIME_TYPES;
+  const maxBytes = opts.maxBytes ?? MAX_IMAGE_BYTES;
+
+  const tokens = parseJsonStringArray(formData.get(`${field}__order`));
+  const titlesIn = parseJsonStringArray(formData.get(`${field}__titles`));
+  const descriptionsIn = parseJsonStringArray(formData.get(`${field}__descriptions`));
+
+  const files = formData
+    .getAll(`${field}__file`)
+    .filter((f): f is File => f instanceof File && f.size > 0);
+
+  const paths: string[] = [];
+  const titles: string[] = [];
+  const descriptions: string[] = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    let saved: string | null = null;
+    if (token.startsWith("new:")) {
+      const idx = Number.parseInt(token.slice(4), 10);
+      const file = files[idx];
+      if (file) saved = await saveUploadedFile(file, category, { allowedTypes, maxBytes });
+    } else if (previousPaths.includes(token)) {
+      saved = token;
+    }
+    if (saved) {
+      paths.push(saved);
+      titles.push(titlesIn[i] ?? "");
+      descriptions.push(descriptionsIn[i] ?? "");
+    }
+  }
+
+  const removed = previousPaths.filter((p) => !paths.includes(p));
+  await deleteUploadedFiles(removed);
+
+  return { paths, titles, descriptions };
+}
+
 /** Single-image variant of reconcileImageField — returns one path or null. */
 export async function reconcileSingleImage(opts: {
   formData: FormData;

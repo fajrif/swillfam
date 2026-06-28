@@ -17,8 +17,11 @@ export function SegmentGalleryForm({
         name="images"
         label="Images"
         multiple
+        captions
         existing={segmentGallery?.images ?? []}
-        hint="Add multiple images; drag order with the ↑ ↓ buttons. Select + delete to remove."
+        existingTitles={segmentGallery?.imageTitles ?? []}
+        existingDescriptions={segmentGallery?.imageDescriptions ?? []}
+        hint="Add multiple images; reorder with ↑ ↓, select + delete to remove. The per-image Title/Description are shown only on 'Special' galleries (the dishes template)."
       />
       <div className="grid grid-cols-2 gap-4">
         <Field label="Title" name="title" defaultValue={segmentGallery?.title} required />

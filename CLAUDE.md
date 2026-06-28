@@ -172,3 +172,37 @@ The public `/contact` form (`src/app/contact/actions.ts`) is the only public wri
 `Inquiry` rows behind a honeypot + an in-memory sliding-window rate limiter (`src/lib/rate-limit.ts`,
 3/10min per IP, resets on restart). `Application` rows are also public-submitted (admin gets list +
 read-only detail + delete only), but the public application form is part of the unbuilt public pages.
+
+## TASKS
+
+Can you start create page detail for Venue "/venues/[slug]":
+1. please read the screenshot layout @"public/categories/venues/atsumaru-izakaya/SwillFam - Atsumaru.png" this is a layout for venues restaurant "Atsumaru Izakaya"
+2. banner already inside the folder
+3. for gallery "Inside Atsumaru" you can create similar @src/components/private-events/MomentsCarousel.tsx (use image gallery-*.png)
+4. for menus also the same similar like gallery but use image menu-*.png
+5. for dishes also create similar like gallery but 4 item display (use image dishes-*.png) these are different the image can be hovered to display short information.
+6. for talents section use image talent-*.png
+7. for event section copy this from home page use @src/components/home/UpcomingEvents.tsx (you can refactor this to change the title and description also supply tiles like @src/components/shared/DualImageColumnSection.tsx )
+8. for current promotion also have to be reusable (component based) like that `UpcomingEvents`
+9. can you please rename @src/components/home/UpcomingEvents.tsx into generic name like `EventSectionWithImage.tsx`
+10. you can create "Location & Operation Hours" using MapBox again `public/image-1.png`
+11. these 3 section for social media, each venue can have spotify_embed, instagram, youtube. the design can be look different. you can analyze is this possible to make look
+like in the screenshots `public/image-2.png` `public/image-3.png` `public/image-4.png` 
+12. FAQ you can use @src/components/private-events/FaqSection.tsx (this also need to be place inside components/shared folder)
+13. See Other Venues for 2 data only with same category use @src/components/category/VenuesGrid.tsx (if this shareable please move this component into shared folder)
+14. the rest bento are the same with page "/category/[slug]"
+
+### SEGMENT GALLERIES
+
+I think we already setup for each Venue will have many SegmentGalleries, can you check on the database for this?
+the purpose is for handling many galleries like point no. 3 and no.4.
+
+you will need to create a component that will supply title, description and display like the gallery i mentioned.
+
+if you get what i mean this information will be store in database, what about the No. 5. each image will have title and description?
+
+I was thinking this is the same and can be rendered using different template with a `special` flag.
+
+cause not every venue will provide dishes and menus, so the menu and dishes will be optional.
+
+you will need to create seed file for venue "Atsumaru Izakaya" only for now.
