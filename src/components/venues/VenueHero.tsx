@@ -25,9 +25,6 @@ export function VenueHero({ venue }: { venue: Venue & { category: Category | nul
         <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
           {venue.name}
         </h1>
-        <p className="max-w-2xl font-inter text-base leading-relaxed text-white md:text-lg">
-          {venue.description}
-        </p>
       </Container>
     </div>
   );

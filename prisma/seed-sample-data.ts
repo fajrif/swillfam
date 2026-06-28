@@ -275,7 +275,10 @@ async function seedVenues() {
       lat: -6.249291022294074,
       lng: 106.8003771668123,
       description:
+        "Atsumaru Izakaya is a modern Japanese restaurant in Jakarta that brings the warmth and vibrancy of traditional izakaya culture into a refined, contemporary setting.\n\nDesigned as a welcoming space for everyday dining, after-work drinks, and special celebrations, Atsumaru reflects a commitment to constant innovation while staying true to authentic Japanese flavors and hospitality. The menu features a wide variety of dishes, from sushi and sashimi to yakitori, donburi, and comforting izakaya classics, ensuring there\u2019s something for every palate and occasion. Whether you\u2019re gathering with friends, sharing a meal with family, or hosting an intimate celebration, Atsumaru Izakaya offers the perfect combination of delicious food, warm ambiance, and genuine Japanese culinary culture in the heart of Jakarta.",
+      shortDescription:
         "A Japanese-inspired dining and social destination made for good food, good drinks, and good company. Atsumaru Izakaya brings together warm hospitality, flavorful dishes, and a relaxed atmosphere for casual lunches, intimate dinners, and group gatherings.",
+      caption: "Good food, good drinks, good company",
     },
     {
       folder: "kilo",
@@ -287,7 +290,10 @@ async function seedVenues() {
       lat: -6.229813053282502,
       lng: 106.80704052448323,
       description:
+        "Kilo Kitchen Jakarta is a standout culinary destination known for its modern comfort food rooted in a bold fusion of Latin and Asian flavors.\n\nLocated in the vibrant heart of Jakarta, Kilo offers a stylish yet relaxed atmosphere perfect for casual dining, date nights, or social gatherings. Blending Jakarta\u2019s fast-paced city life with Kilo\u2019s signature lifestyle approach, the venue creates an immersive experience where food, music, and culture converge. Guests can expect elevated dishes, handcrafted cocktails, and an inviting ambiance that redefines contemporary dining in Indonesia. Whether you\u2019re craving unique flavor combinations or a cozy escape with great vibes, Kilo Kitchen Jakarta is your go-to restaurant for unforgettable dining moments.",
+      shortDescription:
         "An all-day cafe and kitchen built around slow mornings, easy lunches, and unhurried catch-ups. Kilo pairs a considered menu with a calm, design-led room that works just as well for solo coffee as it does for long table conversations.",
+      caption: "Latin-Asian fusion in a stylish setting",
     },
     {
       folder: "dualism",
@@ -299,7 +305,10 @@ async function seedVenues() {
       lat: -6.230096084344473,
       lng: 106.80957632448332,
       description:
+        "Dualism is Jakarta\u2019s innovative cocktail bar where contrast takes center stage.\n\nEvery cocktail begins with the same foundation, then branches into two distinct expressions: one bold and spirit-forward, the other playful and elegant. This dual-format menu invites guests to explore the endless possibilities of flavor, texture, and technique. At Dualism, you\u2019ll experience both the familiar and the unexpected. From clean and composed sips to indulgent and expressive pours, each pair reveals the dynamic spectrum of modern mixology. Whether you\u2019re a fan of classic cocktails or experimental drinks, Dualism redefines how we taste by celebrating the power of duality. This isn\u2019t just a bar, it\u2019s an exploration of opposites. And in every contrast, you\u2019ll discover something new.",
+      shortDescription:
         "A modern restaurant and bar where dinner service shifts effortlessly into an evening of drinks and music. Dualism balances a refined kitchen with a social, atmospheric room designed to carry a night from the first course onward.",
+      caption: "Where every cocktail explores both sides",
     },
     {
       folder: "truce",
@@ -311,7 +320,10 @@ async function seedVenues() {
       lat: -6.22616914830079,
       lng: 106.80707301098985,
       description:
+        "In the heart of SCBD, Truce introduces Jakarta to a slow bar experience inspired by Japanese bar philosophy. Every detail at Truce is intentional. The beverage programme focuses on spirit-forward, classic drinks crafted with method over novelty. Sugar is used sparingly, and a deep respect for base spirits remains central to the offerings. To keep the experience dynamic, the bar also features house ferments, savoury tinctures and hydroponic herbs grown on site.\n\nThe cocktail list is divided into four categories. Crafted Creations reinterpret classic structures with a smoked, late-night twist, while Original Vol. 1 experiments with Japanese ingredients such as edamame, gari and ogura. Seasonal specials, like Hail Mary Pass, push the boundaries of savoury drinking. For lighter moods, highballs, teas and spritzes can be found in the Seltzers and Mizuwari section, reflecting Tokyo\u2019s preference for refreshing drinks that extend the evening.",
+      shortDescription:
         "A laid-back bar and lounge built for after-work unwinding and easy evenings out. Truce offers a curated drinks list, considered small plates, and a warm room that invites you to settle in and stay a while.",
+      caption: "A slow bar inspired by Japanese philosophy",
     },
     {
       folder: "zoo",
@@ -323,7 +335,10 @@ async function seedVenues() {
       lat: -6.226216879413745,
       lng: 106.80709112263447,
       description:
+        "Zoo is a boutique lounge concept created for all party animals to embrace their wild side.\n\nKnown for its vibrant music direction, ranging from afro, amapiano, baila, to fresh DJ-led sounds, Zoo brings a unique energy to Jakarta\u2019s nightlife scene. Inside, guests can explore a lineup of immersive private rooms, each crafted with its own bold, animal-inspired design. Whether you\u2019re here for late-night drinks, curated DJ sets, or a private celebration, Zoo offers a nightlife experience unlike anywhere else in Jakarta the moment you step through the door.",
+      shortDescription:
         "A high-energy club where music leads and the night runs late. Zoo brings together a serious sound system, resident and guest DJs, and a packed dance floor for the city's most committed night owls.",
+      caption: "A boutique lounge for all party animals",
     },
     {
       folder: "swillhouse",
@@ -335,7 +350,10 @@ async function seedVenues() {
       lat: -6.226764348529861,
       lng: 106.80725476681219,
       description:
+        "The Swillhouse is a hip-hop\u2013focused bar and creative event space in Jakarta.\n\nIt is known for its high-energy atmosphere, curated music, and contemporary minimalist design. A destination for nightlife lovers and the youthful party crowd, The Swillhouse blends hip-hop culture, live DJ sets, and signature events under one roof. Here, hype isn\u2019t just a feeling, it\u2019s the experience. The Swillhouse continues to be one of Jakarta\u2019s go-to spots for nights out, club sessions, and unforgettable moments.",
+      shortDescription:
         "A late-night bar and party space with a reputation for atmosphere. Swillhouse pairs inventive drinks with curated music programming, turning an ordinary evening into a proper night out.",
+      caption: "Hip-hop culture and high-energy nights",
     },
     {
       folder: "lecirque",
@@ -347,7 +365,10 @@ async function seedVenues() {
       lat: -6.226252844973073,
       lng: 106.80709598215432,
       description:
+        "LE CIRQUE REPRESENTS A SHIFT TOWARD A BOLDER, MORE DYNAMIC AND MORE SOULFUL NIGHTLIFE CULTURE MIXED WITH MAD + FUN EXPERIENCE.\n\nA new cultural nightlife house built for Jakarta\u2019s growing community of music lovers. Designed as a playground of sound, style, and energy, Le Cirque brings an experience that blends intimacy, credibility, and modern nightlife culture \u2014 something truly different from anything currently offered in Indonesia. Powered by a custom lighting and visual system, the venue offers a dynamic, immersive atmosphere that moves in sync with the sound. Le Cirque champions a spectrum of unique house-driven styles \u2014 deep house, disco, minimal house, tech house, and modern club rhythms, presented by Indonesia\u2019s top talents and curated international guests. Built for tastemakers, dancers, and true music lovers, Le Cirque is where fun feels inevitable and every night feels alive.",
+      shortDescription:
         "A theatrical nightlife destination built for headline performances and venue takeovers. Lecirque blends live entertainment, immersive production, and a charged dance floor for unforgettable late-night experiences.",
+      caption: "A new cultural nightlife house",
     },
   ];
 
@@ -361,6 +382,8 @@ async function seedVenues() {
         name: v.name,
         slug,
         description: v.description,
+        shortDescription: v.shortDescription ?? null,
+        caption: v.caption,
         image: asset(v.folder, "image.png"),
         bannerImage: v.hasBanner ? asset(v.folder, "banner.png") : null,
         logo: asset(v.folder, "logo.png"),

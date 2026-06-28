@@ -75,6 +75,7 @@ npx prisma generate               # after any schema change
 npx prisma migrate dev --name x   # create + apply a migration (needs a reachable Postgres)
 npx prisma migrate deploy         # apply existing migrations (e.g. the generated init) to a fresh DB
 npx tsx prisma/seed-admin.ts      # create/update the admin login from ADMIN_EMAIL/ADMIN_PASSWORD
+npm run seed:all                  # run all the seed scripts
 ```
 
 No automated tests — verify by building and exercising the admin UI under `npm run dev`.
@@ -175,34 +176,58 @@ read-only detail + delete only), but the public application form is part of the 
 
 ## TASKS
 
-Can you start create page detail for Venue "/venues/[slug]":
-1. please read the screenshot layout @"public/categories/venues/atsumaru-izakaya/SwillFam - Atsumaru.png" this is a layout for venues restaurant "Atsumaru Izakaya"
-2. banner already inside the folder
-3. for gallery "Inside Atsumaru" you can create similar @src/components/private-events/MomentsCarousel.tsx (use image gallery-*.png)
-4. for menus also the same similar like gallery but use image menu-*.png
-5. for dishes also create similar like gallery but 4 item display (use image dishes-*.png) these are different the image can be hovered to display short information.
-6. for talents section use image talent-*.png
-7. for event section copy this from home page use @src/components/home/UpcomingEvents.tsx (you can refactor this to change the title and description also supply tiles like @src/components/shared/DualImageColumnSection.tsx )
-8. for current promotion also have to be reusable (component based) like that `UpcomingEvents`
-9. can you please rename @src/components/home/UpcomingEvents.tsx into generic name like `EventSectionWithImage.tsx`
-10. you can create "Location & Operation Hours" using MapBox again `public/image-1.png`
-11. these 3 section for social media, each venue can have spotify_embed, instagram, youtube. the design can be look different. you can analyze is this possible to make look
-like in the screenshots `public/image-2.png` `public/image-3.png` `public/image-4.png` 
-12. FAQ you can use @src/components/private-events/FaqSection.tsx (this also need to be place inside components/shared folder)
-13. See Other Venues for 2 data only with same category use @src/components/category/VenuesGrid.tsx (if this shareable please move this component into shared folder)
-14. the rest bento are the same with page "/category/[slug]"
+i need you to create seed files for the following venues:
+- zoo
+- swillhouse
+- kilo
+- dualism
+- truce
+- lecirgue
 
-### SEGMENT GALLERIES
+1. the expected seed files should look like `prisma/seed-atsumaru.ts`, you can check that out as an example.
+2. the following image files can be found in `public/categories/venues/<name>/`.
+3. you will need to upload the images for:
+- banner
+- gallery -> this is was using SegmentGallery (please using a better paragraph that will related to the venue)
+- menu -> this also using SegmentGallery
+- promo -> create promo for this venue (save promo with venue_id)
+- drinks -> are only use in `dualism` venue since this venue data not have menu. please using the template like atsumaru for the `dishes`, but this time using term "Beverages" 
 
-I think we already setup for each Venue will have many SegmentGalleries, can you check on the database for this?
-the purpose is for handling many galleries like point no. 3 and no.4.
+you will need to use description as i provided below "VENUES DESCRIPTION" for each venue.
+also the current/existing description data have to move to short_description.
 
-you will need to create a component that will supply title, description and display like the gallery i mentioned.
+### ATSUMARU SEED CHANGES
+you will need to edit atsumaru for descripition and im using the new image gallery for atsumaru. you will need to replace that with the new image gallery.
 
-if you get what i mean this information will be store in database, what about the No. 5. each image will have title and description?
+** Notes: **
+do not create `UPDATE` statement for this task. i will reset this database entirely and create a new database with the new seed `INSERT` data.
 
-I was thinking this is the same and can be rendered using different template with a `special` flag.
+### VENUES DESCRIPTION
 
-cause not every venue will provide dishes and menus, so the menu and dishes will be optional.
+1. zoo description:
+Zoo is a boutique lounge concept created for all party animals to embrace their wild side.
+Known for its vibrant music direction, ranging from afro, amapiano, baila, to fresh DJ-led sounds, Zoo brings a unique energy to Jakarta’s nightlife scene. Inside, guests can explore a lineup of immersive private rooms, each crafted with its own bold, animal-inspired design. Whether you’re here for late-night drinks, curated DJ sets, or a private celebration, Zoo offers a nightlife experience unlike anywhere else in Jakarta the moment you step through the door.
 
-you will need to create seed file for venue "Atsumaru Izakaya" only for now.
+2. swillhouse description:
+The Swillhouse is a hip-hop–focused bar and creative event space in Jakarta.
+It is known for its high-energy atmosphere, curated music, and contemporary minimalist design. A destination for nightlife lovers and the youthful party crowd, The Swillhouse blends hip-hop culture, live DJ sets, and signature events under one roof. Here, hype isn’t just a feeling, it’s the experience. The Swillhouse continues to be one of Jakarta’s go-to spots for nights out, club sessions, and unforgettable moments.
+
+3. kilo description:
+Kilo Kitchen Jakarta is a standout culinary destination known for its modern comfort food rooted in a bold fusion of Latin and Asian flavors.
+Located in the vibrant heart of Jakarta, Kilo offers a stylish yet relaxed atmosphere perfect for casual dining, date nights, or social gatherings. Blending Jakarta’s fast-paced city life with Kilo’s signature lifestyle approach, the venue creates an immersive experience where food, music, and culture converge. Guests can expect elevated dishes, handcrafted cocktails, and an inviting ambiance that redefines contemporary dining in Indonesia. Whether you're craving unique flavor combinations or a cozy escape with great vibes, Kilo Kitchen Jakarta is your go-to restaurant for unforgettable dining moments.
+
+4. dualism description:
+Dualism is Jakarta’s innovative cocktail bar where contrast takes center stage.
+Every cocktail begins with the same foundation, then branches into two distinct expressions: one bold and spirit-forward, the other playful and elegant. This dual-format menu invites guests to explore the endless possibilities of flavor, texture, and technique. At Dualism, you’ll experience both the familiar and the unexpected. From clean and composed sips to indulgent and expressive pours, each pair reveals the dynamic spectrum of modern mixology. Whether you're a fan of classic cocktails or experimental drinks, Dualism redefines how we taste by celebrating the power of duality. This isn’t just a bar, it’s an exploration of opposites. And in every contrast, you’ll discover something new.
+
+5. truce description:
+In the heart of SCBD, Truce introduces Jakarta to a slow bar experience inspired by Japanese bar philosophy. Every detail at Truce is intentional. The beverage programme focuses on spirit-forward, classic drinks crafted with method over novelty. Sugar is used sparingly, and a deep respect for base spirits remains central to the offerings. To keep the experience dynamic, the bar also features house ferments, savoury tinctures and hydroponic herbs grown on site.
+The cocktail list is divided into four categories. Crafted Creations reinterpret classic structures with a smoked, late-night twist, while Original Vol. 1 experiments with Japanese ingredients such as edamame, gari and ogura. Seasonal specials, like Hail Mary Pass, push the boundaries of savoury drinking. For lighter moods, highballs, teas and spritzes can be found in the Seltzers and Mizuwari section, reflecting Tokyo’s preference for refreshing drinks that extend the evening.
+
+6. lecirque description:
+LE CIRQUE REPRESENTS A SHIFT TOWARD A BOLDER, MORE DYNAMIC AND MORE SOULFUL NIGHTLIFE CULTURE MIXED WITH MAD + FUN EXPERIENCE.
+A new cultural nightlife house built for Jakarta’s growing community of music lovers. Designed as a playground of sound, style, and energy, Le Cirque brings an experience that blends intimacy, credibility, and modern nightlife culture — something truly different from anything currently offered in Indonesia. Powered by a custom lighting and visual system, the venue offers a dynamic, immersive atmosphere that moves in sync with the sound. Le Cirque champions a spectrum of unique house-driven styles — deep house, disco, minimal house, tech house, and modern club rhythms, presented by Indonesia’s top talents and curated international guests. Built for tastemakers, dancers, and true music lovers, Le Cirque is where fun feels inevitable and every night feels alive.
+
+7. atsumaru description:
+Atsumaru Izakaya is a modern Japanese restaurant in Jakarta that brings the warmth and vibrancy of traditional izakaya culture into a refined, contemporary setting.
+Designed as a welcoming space for everyday dining, after-work drinks, and special celebrations, Atsumaru reflects a commitment to constant innovation while staying true to authentic Japanese flavors and hospitality. The menu features a wide variety of dishes, from sushi and sashimi to yakitori, donburi, and comforting izakaya classics, ensuring there’s something for every palate and occasion. Whether you’re gathering with friends, sharing a meal with family, or hosting an intimate celebration, Atsumaru Izakaya offers the perfect combination of delicious food, warm ambiance, and genuine Japanese culinary culture in the heart of Jakarta.

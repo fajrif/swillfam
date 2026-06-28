@@ -28,7 +28,8 @@ async function getOrCreateVenue() {
       name: "Atsumaru Izakaya",
       slug,
       description:
-        "A Japanese-inspired dining and social destination made for good food, good drinks, and good company. Atsumaru Izakaya brings together warm hospitality, flavorful dishes, and a relaxed atmosphere for casual lunches, intimate dinners, and group gatherings.",
+        "Atsumaru Izakaya is a modern Japanese restaurant in Jakarta that brings the warmth and vibrancy of traditional izakaya culture into a refined, contemporary setting.\n\nDesigned as a welcoming space for everyday dining, after-work drinks, and special celebrations, Atsumaru reflects a commitment to constant innovation while staying true to authentic Japanese flavors and hospitality. The menu features a wide variety of dishes, from sushi and sashimi to yakitori, donburi, and comforting izakaya classics, ensuring there\u2019s something for every palate and occasion. Whether you\u2019re gathering with friends, sharing a meal with family, or hosting an intimate celebration, Atsumaru Izakaya offers the perfect combination of delicious food, warm ambiance, and genuine Japanese culinary culture in the heart of Jakarta.",
+      caption: "Good food, good drinks, good company",
       image: asset("image.png"),
       bannerImage: asset("banner.png"),
       logo: asset("logo.png"),
@@ -48,7 +49,7 @@ async function seedGalleries(venueId: string) {
       title: "Inside Atsumaru",
       description:
         "Step into a warm, design-led izakaya room built for long dinners, easy conversation, and late-night drinks across an intimate, atmospheric space.",
-      images: [asset("gallery-1.png"), asset("gallery-2.png"), asset("gallery-3.png")],
+      images: [asset("gallery-1.png"), asset("gallery-2.jpg"), asset("gallery-3.jpg"), asset("gallery-4.jpg")],
       imageTitles: [],
       imageDescriptions: [],
       special: false,
