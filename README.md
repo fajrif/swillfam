@@ -167,6 +167,22 @@ sudo certbot --nginx -d example.com -d www.example.com
 
 Certbot rewrites the file in place to add the 443 block + HTTP→HTTPS redirect.
 
+Once HTTPS is confirmed working, flip the admin session cookie back to secure:
+
+```bash
+# in /home/deployer/swillfam/.env
+COOKIE_SECURE="true"
+```
+
+```bash
+pm2 restart swillfam --update-env
+```
+
+(`--update-env` is required — PM2 otherwise keeps the environment it captured at the last
+`pm2 start`.) Skipping this step is harmless before SSL is live (the app already defaults to
+`COOKIE_SECURE=false`/unset), but leaving it unset after HTTPS is up means the admin session
+cookie is sent over plain HTTP too, which it shouldn't be.
+
 ### Future deploys
 
 ```bash
