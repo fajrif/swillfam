@@ -202,6 +202,32 @@ pm2 restart swillfam
 - Sessions are stateless JWTs with no DB-side revocation — rotating `ADMIN_SESSION_SECRET` is the
   only way to force-invalidate all admin sessions if a cookie ever leaks.
 
+### Troubleshooting
+
+**Large images / JS chunks fail with `ERR_CONTENT_LENGTH_MISMATCH` or
+`ERR_INCOMPLETE_CHUNKED_ENCODING` (small assets load fine).**
+
+Root cause: nginx buffers any upstream response bigger than its in-memory buffers to a temp file
+under `/var/lib/nginx/`, and it couldn't write there — the error log shows
+`open() "/var/lib/nginx/proxy/..." failed (13: Permission denied) while reading upstream`. This
+happens when nginx's working dirs are owned by a different user than the one nginx runs as (e.g. a
+box converted from an older setup where nginx ran as `deployer`/`nginx`, then switched to the
+standard `user www-data;`). Small responses stay in memory and work; large ones must spill to the
+unwritable temp dir and get truncated.
+
+Confirm and fix:
+
+```bash
+sudo tail -50 /var/log/nginx/error.log        # look for "/var/lib/nginx/..." Permission denied
+sudo chown -R www-data:www-data /var/lib/nginx  # hand the dirs to the user nginx runs as
+sudo systemctl reload nginx
+```
+
+Diagnostic tip: a fast reader like `curl` on the server drains nginx's memory buffers before they
+spill to disk, so `curl http://127.0.0.1/<asset>` returns the full file even while real (slower)
+browsers truncate — a full loopback download does **not** rule this out. `ip -s link show eth0`
+(TX errors `0`) and a matching `Content-Length` confirm it's not a network/NIC/MTU problem.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
