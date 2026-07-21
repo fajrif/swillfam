@@ -1,11 +1,21 @@
-# /etc/nginx/sites-available/swillfam
+# Target path: /etc/nginx/conf.d/swillfam.conf
+#
+# NOTE: this repo previously suggested /etc/nginx/sites-available + a sites-enabled
+# symlink, but that only works if your nginx.conf's http{} block has
+# `include /etc/nginx/sites-enabled/*;`. If your nginx.conf only has
+# `include /etc/nginx/conf.d/*.conf;` (check before assuming), drop this file
+# directly at /etc/nginx/conf.d/swillfam.conf instead - no symlink needed.
+#
 # Reverse proxy for the Next.js app (PM2, listening on 127.0.0.1:3000).
-# Copy in place, then: sudo ln -s /etc/nginx/sites-available/swillfam /etc/nginx/sites-enabled/
 
 server {
-    listen 80;
-    listen [::]:80;
-    server_name example.com www.example.com;   # <-- replace with your domain
+    # IP-only / no domain yet: `default_server` + `server_name _;` catches any
+    # request that doesn't match another server_name on this box (e.g. a legacy
+    # vhost for a different, dormant app). Let's Encrypt can't issue certs for a
+    # bare IP, so there's no SSL step until a real domain points here.
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
 
     # Match next.config.ts serverActions.bodySizeLimit (15mb) with headroom.
     client_max_body_size 20m;
@@ -29,5 +39,11 @@ server {
     }
 }
 
-# After `sudo certbot --nginx -d example.com -d www.example.com`, certbot rewrites
-# this file in place to add the 443 server block + HTTP->HTTPS redirect.
+# --- Once you have a real domain pointed at this server ---
+# 1. Replace `server_name _;` above with your real domain(s), e.g.:
+#      server_name example.com www.example.com;
+#    (keep or drop `default_server` - harmless either way once server_name matches)
+# 2. sudo apt install -y certbot python3-certbot-nginx
+# 3. sudo certbot --nginx -d example.com -d www.example.com
+#    Certbot rewrites this file in place to add the 443 server block + the
+#    HTTP -> HTTPS redirect. Nothing to do manually after that.
