@@ -1,10 +1,13 @@
-# Target path: /etc/nginx/conf.d/swillfam.conf
+# Target path: /etc/nginx/sites-available/swillfam
+# Requires nginx.conf's http{} block to have `include /etc/nginx/sites-enabled/*;`
+# (see deploy/nginx-main.conf.example for a clean base nginx.conf that has it).
 #
-# NOTE: this repo previously suggested /etc/nginx/sites-available + a sites-enabled
-# symlink, but that only works if your nginx.conf's http{} block has
-# `include /etc/nginx/sites-enabled/*;`. If your nginx.conf only has
-# `include /etc/nginx/conf.d/*.conf;` (check before assuming), drop this file
-# directly at /etc/nginx/conf.d/swillfam.conf instead - no symlink needed.
+# Enable with:
+#   sudo ln -s /etc/nginx/sites-available/swillfam /etc/nginx/sites-enabled/swillfam
+#   sudo rm -f /etc/nginx/sites-enabled/default   # stock Ubuntu default vhost also
+#                                                  # claims `default_server` on :80 -
+#                                                  # only one is allowed per port.
+#   sudo nginx -t && sudo systemctl reload nginx
 #
 # Reverse proxy for the Next.js app (PM2, listening on 127.0.0.1:3000).
 

@@ -32,7 +32,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Production Deployment
 
 Self-hosted on Ubuntu 24 with Nginx + PM2 (not Vercel). Repo includes `ecosystem.config.js`
-(PM2 process config) and `deploy/nginx.conf.example` (reverse proxy config) used below.
+(PM2 process config), `deploy/nginx-main.conf.example` (base `nginx.conf`), and
+`deploy/nginx.conf.example` (the swillfam vhost) used below.
 
 ### 1. Dump your current database (local machine)
 
@@ -70,15 +71,17 @@ If the connection fails on auth, Postgres is likely set to `peer` auth locally �
 
 ### 4. Get the app onto the server
 
+Any directory works here (Next.js/PM2 don't care where the project lives — see "Where should the
+code live?" below); these steps assume the `deployer` user's home, matching the rest of this guide.
+
 ```bash
-cd /var/www
-sudo git clone <your-repo-url> swillfam
-sudo chown -R $USER:$USER swillfam
+cd /home/deployer
+git clone <your-repo-url> swillfam
 cd swillfam
 npm ci
 ```
 
-Create `/var/www/swillfam/.env` (never commit this):
+Create `/home/deployer/swillfam/.env` (never commit this):
 
 ```bash
 DATABASE_URL="postgresql://swillfam:STRONG_PASSWORD_HERE@localhost:5432/swillfam_db"
@@ -91,6 +94,14 @@ NEXT_PUBLIC_MAPBOX_TOKEN="pk.xxxxx"
 `public/uploads/*` is gitignored and never comes from `git clone` — if your dump references
 uploaded images, also sync your local `public/uploads/` directory to the same path on the server,
 and make sure nothing wipes it on later deploys.
+
+**Where should the code live?** Doesn't matter to Next.js/PM2 — `npm run build` produces `.next/`,
+not a portable `dist/`, and it has to stay next to `node_modules/` + `public/` in one project
+directory (this app isn't a static export; it needs a running Node process for Server Actions,
+Prisma, and the admin middleware). `ecosystem.config.js` uses `cwd: __dirname`, so it runs from
+wherever you cloned it. `/home/deployer` works because nginx only reverse-proxies to
+`127.0.0.1:3000` and never reads the app's files directly — the only requirement is that the user
+running `pm2 start` (here, `deployer`) owns the directory and can write to `public/uploads/`.
 
 ### 5. Migrate, generate, seed admin, build
 
@@ -111,20 +122,34 @@ pm2 startup   # run the systemd command it prints, once
 
 `pm2 logs swillfam` to tail logs, `pm2 restart swillfam` after future deploys.
 
-### 7. Nginx
+### 7. Nginx (sites-available/sites-enabled)
 
-Check your `/etc/nginx/nginx.conf`'s `http {}` block first: if it already has
-`include /etc/nginx/sites-enabled/*;`, you can use the sites-available/sites-enabled convention.
-If it only has `include /etc/nginx/conf.d/*.conf;` (common on boxes carried over from an older/
-CentOS-style setup, e.g. if a previous app's config lives directly in `nginx.conf`), drop the file
-straight into `conf.d/` instead — no symlink needed, and it won't touch the legacy config:
+If `/etc/nginx/nginx.conf` is a stock install, it already has `include /etc/nginx/sites-enabled/*;`
+and you can skip straight to the vhost. If it's been customized (e.g. carried over from an older
+CentOS-style setup where a previous app's server blocks lived directly in `nginx.conf`), replace it
+with the clean base first:
 
 ```bash
-sudo cp deploy/nginx.conf.example /etc/nginx/conf.d/swillfam.conf
+sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+sudo cp deploy/nginx-main.conf.example /etc/nginx/nginx.conf
+```
+
+Then add the vhost:
+
+```bash
+sudo mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+sudo cp deploy/nginx.conf.example /etc/nginx/sites-available/swillfam
+sudo ln -s /etc/nginx/sites-available/swillfam /etc/nginx/sites-enabled/swillfam
+
+# Stock Ubuntu ships sites-enabled/default with its own `default_server` on :80 —
+# only one is allowed per port, so remove the symlink (the template stays behind
+# at sites-available/default if you ever want it back).
+sudo rm -f /etc/nginx/sites-enabled/default
+
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-The example ships IP-only, no domain, no SSL (`listen 80 default_server; server_name _;`) — this
+The vhost ships IP-only, no domain, no SSL (`listen 80 default_server; server_name _;`) — this
 works immediately by visiting `http://your-server-ip`. Let's Encrypt can't issue a cert for a bare
 IP, so there's no SSL step yet.
 
@@ -133,7 +158,7 @@ IP, so there's no SSL step yet.
 Add an A record for your domain (and `www`) to the server's IP, then:
 
 ```bash
-sudo nano /etc/nginx/conf.d/swillfam.conf   # replace `server_name _;` with your real domain(s)
+sudo nano /etc/nginx/sites-available/swillfam   # replace `server_name _;` with your real domain(s)
 sudo nginx -t && sudo systemctl reload nginx
 
 sudo apt install -y certbot python3-certbot-nginx
@@ -145,7 +170,7 @@ Certbot rewrites the file in place to add the 443 block + HTTP→HTTPS redirect.
 ### Future deploys
 
 ```bash
-cd /var/www/swillfam
+cd /home/deployer/swillfam
 git pull
 npm ci
 npx prisma generate
