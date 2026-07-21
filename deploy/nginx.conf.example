@@ -1,0 +1,33 @@
+# /etc/nginx/sites-available/swillfam
+# Reverse proxy for the Next.js app (PM2, listening on 127.0.0.1:3000).
+# Copy in place, then: sudo ln -s /etc/nginx/sites-available/swillfam /etc/nginx/sites-enabled/
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com www.example.com;   # <-- replace with your domain
+
+    # Match next.config.ts serverActions.bodySizeLimit (15mb) with headroom.
+    client_max_body_size 20m;
+
+    # Static build assets are content-hashed -> cache aggressively.
+    location /_next/static/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_cache_valid 60m;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# After `sudo certbot --nginx -d example.com -d www.example.com`, certbot rewrites
+# this file in place to add the 443 server block + HTTP->HTTPS redirect.
