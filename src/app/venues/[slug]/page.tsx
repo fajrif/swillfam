@@ -103,6 +103,7 @@ export default async function VenueSlugPage({
     img: p.posterImage ?? p.image ?? p.bannerImage ?? POSTER_FALLBACK,
     title: p.name,
     shortDescription: p.shortDescription,
+    href: `/promotions/${p.slug}`,
   }));
 
   return (

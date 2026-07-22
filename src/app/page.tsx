@@ -62,7 +62,7 @@ export default async function Home() {
         <ArticleListSection articles={articles} />
       </Reveal>
       <Reveal>
-        <ExclusiveRecap />
+        <ExclusiveRecap youtubeUrl={settings.socialYoutube} />
       </Reveal>
       <SiteFooter settings={settings} />
     </main>

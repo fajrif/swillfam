@@ -48,6 +48,7 @@ export default async function ExperiencePage() {
     venueName: p.venue?.name ?? null,
     venueLogo: p.venue?.logo ?? null,
     meta: formatDateRange(p.startDate, p.endDate),
+    href: `/promotions/${p.slug}`,
   }));
 
   return (
