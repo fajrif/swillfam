@@ -113,6 +113,16 @@ Shared building blocks (use these instead of re-implementing inputs/tables):
 (auto-fills from a sibling field until edited), `ConfirmDeleteButton.tsx`, `EventScheduleFields.tsx`.
 `/admin` redirects to `/admin/inquiries`.
 
+**Every list page must include:**
+1. **Search** — `SearchInput` from `@/components/admin/SearchInput` above `<Card>`. It auto-filters
+   on typing (debounced 300ms, min 3 chars) via URL `?q=...`. The server reads `q` from
+   `searchParams`, builds a `where` clause with `contains` + `mode: "insensitive" as const` on the
+   relevant field (`name`, `title`, `fullName`, `question`, `jobTitle`, etc.).
+2. **Pagination** — `Pagination` from `@/components/admin/Pagination` below `<AdminTable>` inside
+   `<Card>`. Accept `page` from `searchParams`, compute `skip`/`take` (pageSize: 20), run
+   `findMany` and `count` in parallel via `Promise.all`. The type annotation must include `page?:
+   string`: `searchParams: Promise<{ q?: string; page?: string }>`.
+
 ## Image / file uploads (understand before touching forms)
 
 Stored on **local disk** under `public/uploads/<category>/` (served at `/uploads/...`).

@@ -60,8 +60,7 @@ export function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground border-r flex flex-col h-screen sticky top-0">
       <div className="px-6 py-6 border-b bg-black text-white">
-        <Link href="/"><Image src="/logo-swillfam.png" alt="Swillfam" width={100} height={10} className="cursor-pointer" /></Link>
-        <div className="text-xs mt-1">Admin</div>
+        <Link href="/"><Image src="/logo-swillfam.png" alt="Swillfam" width={100} height={44} className="cursor-pointer" /></Link>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm font-medium">

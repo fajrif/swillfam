@@ -2,22 +2,30 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { SearchInput } from "@/components/admin/SearchInput";
+import { Pagination } from "@/components/admin/Pagination";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 
-export default async function InquiriesPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await props.searchParams;
+export default async function InquiriesPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
+  const p = Math.max(1, Number(page) || 1);
+  const pageSize = 20;
+  const skip = (p - 1) * pageSize;
+  const where = search
+    ? {
+        OR: [
+          { fullName: { contains: search, mode: "insensitive" as const } },
+          { subject: { contains: search, mode: "insensitive" as const } },
+        ],
+      }
+    : undefined;
   const inquiries = await prisma.inquiry.findMany({
-    where: search
-      ? {
-          OR: [
-            { fullName: { contains: search, mode: "insensitive" } },
-            { subject: { contains: search, mode: "insensitive" } },
-          ],
-        }
-      : undefined,
+    where,
+    skip,
+    take: pageSize,
     orderBy: { createdAt: "desc" },
-  });
+    })
+  const total = await prisma.inquiry.count({ where });
 
   return (
     <div>
@@ -45,6 +53,7 @@ export default async function InquiriesPage(props: { searchParams: Promise<{ q?:
             { header: "Received", cell: (i) => i.createdAt.toLocaleDateString(), className: "text-zinc-500" },
           ]}
         />
+        <Pagination page={p} totalPages={Math.ceil(total / pageSize)} />
       </div>
     </div>
   );

@@ -3,7 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
+import { Pagination } from "@/components/admin/Pagination";
 import { Thumb } from "@/components/admin/Thumb";
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
 const WEEKDAY_SHORT: Record<string, string> = {
   MONDAY: "Mon",
@@ -15,14 +19,21 @@ const WEEKDAY_SHORT: Record<string, string> = {
   SUNDAY: "Sun",
 };
 
-export default async function EventsPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await props.searchParams;
+export default async function EventsPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
+  const p = Math.max(1, Number(page) || 1);
+  const pageSize = 20;
+  const skip = (p - 1) * pageSize;
+  const where = search ? { name: { contains: search, mode: "insensitive" as const } } : undefined;
   const events = await prisma.event.findMany({
-    where: search ? { name: { contains: search, mode: "insensitive" } } : undefined,
+    where,
+    skip,
+    take: pageSize,
     orderBy: { startDate: "desc" },
     include: { venue: { select: { name: true } }, eventCategory: { select: { name: true } } },
-  });
+    })
+  const total = await prisma.event.count({ where });
 
   return (
     <div>
@@ -38,16 +49,13 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
             {
               header: "Name",
               cell: (e) => (
-                <>
-                  <Link href={`/admin/events/${e.id}`} className="font-medium text-zinc-900 hover:underline">
-                    {e.name}
-                  </Link>
-                  <div className="text-xs text-zinc-400">
-                    {[e.eventCategory?.name, e.venue?.name].filter(Boolean).join(" · ") || "—"}
-                  </div>
-                </>
+                <Link href={`/admin/events/${e.id}`} className="font-medium text-zinc-900 hover:underline">
+                  {e.name}
+                </Link>
               ),
             },
+            { header: "Venue", cell: (e) => e.venue?.name ?? "—" },
+            { header: "Category", cell: (e) => e.eventCategory?.name ?? "—" },
             {
               header: "Schedule",
               cell: (e) =>
@@ -56,7 +64,7 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
                     Every {e.recurringDays.map((d) => WEEKDAY_SHORT[d] ?? d).join(", ") || "—"}
                   </span>
                 ) : (
-                  <span className="text-zinc-500">{e.startDate.toLocaleDateString()}</span>
+                  <span className="text-zinc-500">{fmtDate(e.startDate)}</span>
                 ),
             },
             {
@@ -69,6 +77,7 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
             },
           ]}
         />
+        <Pagination page={p} totalPages={Math.ceil(total / pageSize)} />
       </Card>
     </div>
   );
