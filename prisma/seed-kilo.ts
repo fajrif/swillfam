@@ -78,9 +78,13 @@ async function seedGalleries(venueId: string) {
 async function seedPromotions(venueId: string) {
   const now = new Date();
   const in30 = new Date(now.getTime() + 30 * 86400000);
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
   const PROMOS = [
     {
-      poster: asset("promo-1.jpg"),
+      poster: "/promotions/sample-promo-kilo.png",
+      category: "Food & Drink",
       name: "Lunch Special",
       shortDescription: "A two-course lunch menu featuring Kilo's signature Latin-Asian fusion creations.",
       description:
@@ -92,6 +96,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-2.jpg"),
+      category: "Food & Drink",
       name: "Happy Hour",
       shortDescription: "Two-for-one on handcrafted cocktails and selected drinks from 5 PM to 7 PM.",
       description:
@@ -103,6 +108,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-3.jpg"),
+      category: "Food & Drink",
       name: "Date Night Set",
       shortDescription: "A three-course dinner for two with a complimentary glass of wine each.",
       description:
@@ -114,6 +120,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-4.jpg"),
+      category: "Seasonal",
       name: "Weekend Brunch",
       shortDescription: "A leisurely weekend brunch spread with free-flow selected beverages.",
       description:
@@ -125,6 +132,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-5.jpg"),
+      category: "Group & Table",
       name: "Group Dining Package",
       shortDescription: "A shared feast for groups of four or more with a set menu and drinks.",
       description:
@@ -136,6 +144,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-6.jpg"),
+      category: "Food & Drink",
       name: "Cocktail Masterclass",
       shortDescription: "Learn to craft Kilo's signature cocktails with our head bartender.",
       description:
@@ -147,6 +156,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-7.jpg"),
+      category: "Group & Table",
       name: "Birthday Celebration",
       shortDescription: "Celebrate your birthday with a complimentary dessert and a glass of sparkling wine.",
       description:
@@ -158,6 +168,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-8.jpg"),
+      category: "Food & Drink",
       name: "Loyalty Rewards",
       shortDescription: "Earn points on every visit and redeem them for exclusive menu items.",
       description:
@@ -189,6 +200,7 @@ async function seedPromotions(venueId: string) {
         startHour: p.startHour,
         endHour: p.endHour,
         venueId,
+        promotionCategoryId: catId(p.category),
       },
     });
   }

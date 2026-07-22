@@ -9,10 +9,12 @@ export function PromotionForm({
   action,
   promotion,
   venues,
+  categories,
 }: {
   action: (formData: FormData) => void;
   promotion?: Promotion;
   venues: { id: string; name: string }[];
+  categories: { id: string; name: string }[];
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
@@ -35,8 +37,16 @@ export function PromotionForm({
           blankLabel="— None —"
           options={venues.map((v) => ({ value: v.id, label: v.name }))}
         />
-        <Field label="Caption" name="caption" defaultValue={promotion?.caption} required />
+        <SelectField
+          label="Category"
+          name="promotionCategoryId"
+          defaultValue={promotion?.promotionCategoryId ?? ""}
+          blankLabel="— None —"
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+        />
       </div>
+
+      <Field label="Caption" name="caption" defaultValue={promotion?.caption} required />
 
       <TextareaField label="Short description" name="shortDescription" defaultValue={promotion?.shortDescription} rows={2} required />
       <TextareaField label="Description" name="description" defaultValue={promotion?.description} rows={4} required />
