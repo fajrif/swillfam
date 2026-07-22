@@ -2,12 +2,16 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { EMPLOYMENT_OPTIONS } from "@/components/admin/CareerForm";
 
 const employmentLabel = (v: string) => EMPLOYMENT_OPTIONS.find((o) => o.value === v)?.label ?? v;
 
-export default async function CareersPage() {
+export default async function CareersPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const careers = await prisma.career.findMany({
+    where: search ? { jobTitle: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { applications: true } } },
   });
@@ -15,6 +19,7 @@ export default async function CareersPage() {
   return (
     <div>
       <PageHeader title="Careers" newHref="/admin/careers/new" newLabel="New career" />
+      <SearchInput placeholder="Search by job title..." />
       <Card>
         <AdminTable
           rows={careers}

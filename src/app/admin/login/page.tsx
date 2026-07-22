@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,9 +17,9 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-foreground font-inter px-4">
       <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <span className="font-bold text-lg tracking-widest uppercase">SWILLFAM</span>
-          <p className="text-sm text-muted-foreground">Sign in to the Swillfam admin.</p>
+        <CardHeader className="text-center bg-black py-6">
+          <Link href="/"><Image src="/logo-swillfam.png" alt="Swillfam" width={160} height={40} className="mx-auto cursor-pointer" /></Link>
+          <p className="text-sm text-white">Sign in to the Swillfam admin.</p>
         </CardHeader>
         <CardContent>
           <form action={formAction} className="space-y-4">

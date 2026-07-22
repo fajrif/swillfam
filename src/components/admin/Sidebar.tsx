@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { LogOut } from "lucide-react";
 
 const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] = [
   {
@@ -56,7 +60,7 @@ export function Sidebar({ email }: { email: string }) {
   return (
     <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground border-r flex flex-col h-screen sticky top-0">
       <div className="px-6 py-6 border-b bg-black text-white">
-        <span className="font-bold text-sm tracking-widest uppercase">SWILLFAM</span>
+        <Link href="/"><Image src="/logo-swillfam.png" alt="Swillfam" width={100} height={10} className="cursor-pointer" /></Link>
         <div className="text-xs mt-1">Admin</div>
       </div>
 
@@ -71,7 +75,7 @@ export function Sidebar({ email }: { email: string }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+                  className="block px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer"
                 >
                   {item.label}
                 </Link>
@@ -84,9 +88,10 @@ export function Sidebar({ email }: { email: string }) {
       <Separator />
       <div className="px-3 py-4 space-y-2">
         <div className="px-3 text-xs text-muted-foreground truncate">{email}</div>
-        <form action="/admin/logout" method="POST">
-          <Button type="submit" variant="ghost" size="sm" className="w-full justify-start">
+        <form action="/admin/logout" method="POST" onSubmit={(e) => { if (!confirm("Are you sure you want to logout?")) e.preventDefault(); }}>
+          <Button type="submit" variant="ghost" size="sm" className="w-full justify-between">
             Log out
+            <LogOut className="h-4 w-4 ml-2" />
           </Button>
         </form>
       </div>

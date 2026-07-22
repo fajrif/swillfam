@@ -57,7 +57,7 @@ export function PromotionsBrowser({
               type="button"
               onClick={() => switchMode(m)}
               className={cn(
-                "font-syne text-[clamp(2rem,6vw,64px)] font-bold uppercase leading-none tracking-tight transition-colors",
+                "font-syne text-[clamp(2rem,6vw,64px)] font-bold uppercase leading-none tracking-tight transition-colors cursor-pointer",
                 mode === m ? "text-white" : "text-white/40 hover:text-white",
               )}
             >
@@ -118,7 +118,7 @@ function SidebarItem({
       type="button"
       onClick={onClick}
       className={cn(
-        "text-left font-syne text-2xl leading-tight transition-colors lg:text-[28px]",
+        "text-left font-syne text-2xl leading-tight transition-colors lg:text-[28px] cursor-pointer",
         active ? "text-white" : "text-white/40 hover:text-white",
       )}
     >

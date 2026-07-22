@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { Thumb } from "@/components/admin/Thumb";
 
 const WEEKDAY_SHORT: Record<string, string> = {
@@ -14,8 +15,11 @@ const WEEKDAY_SHORT: Record<string, string> = {
   SUNDAY: "Sun",
 };
 
-export default async function EventsPage() {
+export default async function EventsPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const events = await prisma.event.findMany({
+    where: search ? { name: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { startDate: "desc" },
     include: { venue: { select: { name: true } }, eventCategory: { select: { name: true } } },
   });
@@ -23,6 +27,7 @@ export default async function EventsPage() {
   return (
     <div>
       <PageHeader title="Events" newHref="/admin/events/new" newLabel="New event" />
+      <SearchInput placeholder="Search by name..." />
       <Card>
         <AdminTable
           rows={events}
