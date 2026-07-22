@@ -188,12 +188,32 @@ cookie is sent over plain HTTP too, which it shouldn't be.
 ```bash
 cd /home/deployer/swillfam
 git pull
-npm ci
-npx prisma generate
+npm ci                        # postinstall regenerates the Prisma client automatically
 npx prisma migrate deploy
-npm run build
+npm run build                 # also regenerates the Prisma client, as a second safety net
 pm2 restart swillfam
 ```
+
+Public content pages (promotions, talents, venues, etc.) revalidate themselves automatically
+(ISR, ~60s) — a data-only change (an admin edit, or a seed script below) does **not** need this
+full rebuild+restart; only a code/schema change does.
+
+### Seeding additional data on production
+
+A handful of `prisma/seed-*.ts` scripts are safe to run directly against production — they're
+idempotent and non-destructive (find-or-create / upsert-by-stable-key, never `deleteMany`):
+
+```bash
+npx tsx prisma/seed-promotion-categories.ts
+npx tsx prisma/seed-sample-promotions.ts
+npx tsx prisma/seed-talent-categories.ts
+npx tsx prisma/seed-sample-talents.ts
+```
+
+Re-running any of these is safe — categories won't duplicate, and sample rows are matched by a
+stable key so they update in place instead of creating copies. The rest of the `prisma/seed-*.ts`
+files (the per-venue ones, `seed-sample-data.ts`) are **local/demo-only** — they `deleteMany` before
+reseeding and will wipe real data if run against production.
 
 ### Pre-launch checklist
 
@@ -227,6 +247,41 @@ Diagnostic tip: a fast reader like `curl` on the server drains nginx's memory bu
 spill to disk, so `curl http://127.0.0.1/<asset>` returns the full file even while real (slower)
 browsers truncate — a full loopback download does **not** rule this out. `ip -s link show eth0`
 (TX errors `0`) and a matching `Content-Length` confirm it's not a network/NIC/MTU problem.
+
+**`npm install` / `npm ci` gets killed with no other output (just `Killed`).**
+
+This is the Linux OOM killer, not an npm bug — common on small VPS instances (e.g. a 2GB box) where
+Postgres, PM2, and a running Next.js process are already using a chunk of RAM, leaving too little
+headroom for npm's own install-time memory spike. Confirm with:
+
+```bash
+dmesg -T | tail -30   # look for "Out of memory: Killed process ... (npm)"
+```
+
+Fix: stop the app first to free memory, then retry:
+
+```bash
+pm2 stop swillfam
+npm install   # or npm ci
+```
+
+If it still gets OOM-killed, the box has no swap — add some (fixes it for good, not just this
+deploy):
+
+```bash
+free -h   # confirm swap is 0 before adding
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+Also note: `npm ci` **always deletes `node_modules` first**, then reinstalls from
+`package-lock.json` — if it's killed partway through, `node_modules` is left missing/incomplete
+(this is why a subsequent `npx prisma generate` can suddenly prompt to install an unrelated newer
+Prisma version, or fail on `Cannot find module 'dotenv/config'`). Plain `npm install` doesn't delete
+first, so it's the safer command to retry with after an interrupted `npm ci`.
 
 ## Deploy on Vercel
 

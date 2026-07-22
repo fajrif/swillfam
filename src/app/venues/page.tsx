@@ -9,6 +9,10 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { VenuesHero, VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
 
+// Statically rendered but data-driven (categories, venues, articles) — revalidate
+// periodically so admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Venues | SwillFam",
   description:

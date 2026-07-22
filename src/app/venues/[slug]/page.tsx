@@ -26,6 +26,10 @@ import {
 
 const POSTER_FALLBACK = "/home/hero.png";
 
+// SSG per known slug at build time, but data-driven — revalidate periodically so
+// admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getVenueBySlug = cache((slug: string) =>
   prisma.venue.findUnique({

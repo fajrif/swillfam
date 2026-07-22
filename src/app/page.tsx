@@ -12,6 +12,10 @@ import { Reveal } from "@/components/Reveal";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 
+// Statically rendered but data-driven (articles) — revalidate periodically so
+// admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
   description:
