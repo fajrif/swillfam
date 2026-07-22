@@ -8,6 +8,7 @@ import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
 
 export type TalentCardData = {
   id: string;
+  slug: string;
   name: string;
   description: string;
   image: string | null;
@@ -64,6 +65,7 @@ export function TalentsBrowser({
     venueName: t.venueName,
     venueLogo: t.venueLogo,
     meta: t.categoryName,
+    href: `/talents/${t.slug}`,
   }));
 
   return (

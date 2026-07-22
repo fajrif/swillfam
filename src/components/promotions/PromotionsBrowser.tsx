@@ -9,6 +9,7 @@ import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
 
 export type PromoCard = {
   id: string;
+  slug: string;
   name: string;
   shortDescription: string;
   image: string | null;
@@ -66,6 +67,7 @@ export function PromotionsBrowser({
     venueName: p.venueName,
     venueLogo: p.venueLogo,
     meta: formatDateRange(p.startDate, p.endDate),
+    href: `/promotions/${p.slug}`,
   }));
 
   return (

@@ -42,6 +42,7 @@ export default async function PromotionsPage() {
 
   const promoCards: PromoCard[] = promotions.map((p) => ({
     id: p.id,
+    slug: p.slug,
     name: p.name,
     shortDescription: p.shortDescription,
     image: p.image ?? p.posterImage,

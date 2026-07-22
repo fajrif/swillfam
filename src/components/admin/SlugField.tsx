@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { slugify } from "@/lib/slug";
 
-/** Slug input that auto-fills from a sibling field (by name) until the user edits it. */
+/** Slug input, always derived from a sibling field (by name) — not directly editable. */
 export function SlugField({
   sourceName,
   name = "slug",
@@ -18,16 +18,14 @@ export function SlugField({
   defaultValue?: string;
 }) {
   const [value, setValue] = useState(defaultValue);
-  const editedRef = useRef(Boolean(defaultValue));
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const form = inputRef.current?.closest("form");
     const source = form?.querySelector(`[name="${sourceName}"]`) as HTMLInputElement | null;
     if (!source) return;
-    const handler = () => {
-      if (!editedRef.current) setValue(slugify(source.value));
-    };
+    const handler = () => setValue(slugify(source.value));
+    handler();
     source.addEventListener("input", handler);
     return () => source.removeEventListener("input", handler);
   }, [sourceName]);
@@ -40,12 +38,12 @@ export function SlugField({
         id={name}
         name={name}
         value={value}
-        onChange={(e) => {
-          editedRef.current = true;
-          setValue(e.target.value);
-        }}
+        readOnly
+        className="cursor-not-allowed bg-muted text-muted-foreground"
       />
-      <p className="text-xs text-muted-foreground">Auto-generated from the name; edit if needed.</p>
+      <p className="text-xs text-muted-foreground">
+        Automatically generated from the name/title — not editable directly.
+      </p>
     </div>
   );
 }

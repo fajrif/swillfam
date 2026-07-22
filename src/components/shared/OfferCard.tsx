@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export type OfferCardData = {
   id: string;
@@ -9,12 +10,14 @@ export type OfferCardData = {
   venueLogo: string | null;
   /** Right-side label opposite the venue logo — a date range for promotions, a category for talents. */
   meta: string | null;
+  /** When set, the whole card becomes a link to this href. */
+  href?: string;
 };
 
 /** Shared "venue offer" card: image, then [venue logo | meta label], title, description. */
 export function OfferCard({ offer }: { offer: OfferCardData }) {
-  return (
-    <article className="flex flex-col border border-sf-border/50 bg-sf-surface">
+  const inner = (
+    <>
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
         {offer.image ? (
           <Image
@@ -22,7 +25,7 @@ export function OfferCard({ offer }: { offer: OfferCardData }) {
             alt={offer.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="absolute inset-0 bg-sf-surface" />
@@ -50,6 +53,18 @@ export function OfferCard({ offer }: { offer: OfferCardData }) {
         <h3 className="font-syne text-2xl font-bold leading-tight text-white">{offer.title}</h3>
         <p className="line-clamp-3 font-inter text-sm leading-relaxed text-white">{offer.description}</p>
       </div>
-    </article>
+    </>
   );
+
+  const className = "group flex flex-col border border-sf-border/50 bg-sf-surface";
+
+  if (offer.href) {
+    return (
+      <Link href={offer.href} className={className}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return <article className={className}>{inner}</article>;
 }
