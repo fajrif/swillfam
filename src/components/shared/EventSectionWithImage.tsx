@@ -116,7 +116,7 @@ export function EventSectionWithImage({
                   </div>
                 );
                 return (
-                  <CarouselItem key={item.img} className="basis-[58%] sm:basis-[40%]">
+                  <CarouselItem key={`${i}-${item.img}`} className="basis-[58%] sm:basis-[40%]">
                     {item.href ? (
                       <Link href={item.href} className="block">
                         {card}

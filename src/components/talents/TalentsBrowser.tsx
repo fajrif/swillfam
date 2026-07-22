@@ -4,7 +4,19 @@ import { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { TalentCard, type TalentCardData } from "./TalentCard";
+import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
+
+export type TalentCardData = {
+  id: string;
+  name: string;
+  description: string;
+  image: string | null;
+  venueId: string | null;
+  talentCategoryId: string | null;
+  venueName: string | null;
+  venueLogo: string | null;
+  categoryName: string | null;
+};
 
 type Mode = "venues" | "categories";
 
@@ -44,7 +56,15 @@ export function TalentsBrowser({
     if (selectedId === null) return true;
     return mode === "venues" ? t.venueId === selectedId : t.talentCategoryId === selectedId;
   });
-  const shown = filtered.slice(0, visible);
+  const shown: OfferCardData[] = filtered.slice(0, visible).map((t) => ({
+    id: t.id,
+    image: t.image,
+    title: t.name,
+    description: t.description,
+    venueName: t.venueName,
+    venueLogo: t.venueLogo,
+    meta: t.categoryName,
+  }));
 
   return (
     <section className="py-16 lg:py-24">
@@ -84,8 +104,8 @@ export function TalentsBrowser({
           <div className="flex flex-col items-center gap-12">
             {shown.length > 0 ? (
               <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
-                {shown.map((t) => (
-                  <TalentCard key={t.id} talent={t} />
+                {shown.map((offer) => (
+                  <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
             ) : (

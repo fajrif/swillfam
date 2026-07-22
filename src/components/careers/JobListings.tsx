@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Container } from "@/components/shared/Container";
+import { CollapseArrow } from "@/components/shared/CollapseArrow";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Career, EmploymentType } from "@/generated/prisma/client";
 
@@ -33,12 +34,7 @@ export function JobListings({ careers }: { careers: Career[] }) {
                     aria-label={isOpen ? "View less" : "View more"}
                     className="absolute top-6 right-6"
                   >
-                    <i
-                      className={`ph ph-play inline-block shrink-0 text-2xl text-white/40 transition-transform duration-200 ${
-                        isOpen ? "rotate-90" : ""
-                      }`}
-                      aria-hidden
-                    />
+                    <CollapseArrow open={isOpen} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>{isOpen ? "View less" : "View more"}</TooltipContent>

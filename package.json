@@ -11,6 +11,7 @@
     "seed:all": "npx tsx prisma/seed-site-settings.ts && npx tsx prisma/seed-sample-data.ts && npx tsx prisma/seed-promotion-categories.ts && npx tsx prisma/seed-talent-categories.ts && npx tsx prisma/seed-atsumaru.ts && npx tsx prisma/seed-zoo.ts && npx tsx prisma/seed-swillhouse.ts && npx tsx prisma/seed-kilo.ts && npx tsx prisma/seed-dualism.ts && npx tsx prisma/seed-truce.ts && npx tsx prisma/seed-lecirque.ts && npx tsx prisma/seed-admin.ts && npx tsx prisma/seed-sample-promotions.ts && npx tsx prisma/seed-sample-talents.ts"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@tiptap/pm": "^2.11.5",
