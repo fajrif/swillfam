@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { whatsappHref } from "@/lib/whatsapp";
 
 export type VenuePin = {
   id: string;
@@ -25,12 +26,6 @@ export type VenuePin = {
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 const DEFAULT_CENTER = { longitude: 106.809, latitude: -6.2249 }; // SCBD, Jakarta
-
-function whatsappHref(phone: string, name: string) {
-  const digits = phone.replace(/[^0-9]/g, "");
-  const text = encodeURIComponent(`Hi SwillFam, I would like to reserve a table at ${name}.`);
-  return `https://wa.me/${digits}?text=${text}`;
-}
 
 /** Map (left) + collapsible venue list (right). Opening a venue flies the map to it. */
 export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsapp?: string }) {
@@ -126,7 +121,7 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
                     {whatsapp ? (
                       <Button asChild variant="swillfam" size="pill" className="w-full">
                         <a
-                          href={whatsappHref(whatsapp, venue.name)}
+                          href={whatsappHref(whatsapp, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >

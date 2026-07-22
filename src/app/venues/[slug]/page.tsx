@@ -22,6 +22,7 @@ import {
   TalentSection,
   VenueLocationHours,
   OtherVenuesSection,
+  VenueSocialEmbeds,
 } from "@/components/venues";
 
 const POSTER_FALLBACK = "/home/hero.png";
@@ -169,6 +170,15 @@ export default async function VenueSlugPage({
           operatingHours={venue.operatingHours}
           lat={venue.lat}
           lng={venue.lng}
+        />
+      </Reveal>
+
+      <Reveal>
+        <VenueSocialEmbeds
+          spotifyEmbed={venue.spotifyEmbed}
+          youtubeEmbed={venue.youtubeEmbed}
+          instagramEmbed={venue.instagramEmbed}
+          venueName={venue.name}
         />
       </Reveal>
 

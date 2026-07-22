@@ -136,7 +136,15 @@ async function seedTalents(venueId: string) {
       instagramUrl: "https://instagram.com/",
     },
   ];
-  await prisma.talent.createMany({ data: TALENTS.map((t) => ({ ...t, venueId })) });
+  const rows = [];
+  for (const t of TALENTS) {
+    const slug = await ensureUniqueSlug(t.name, async (s) => {
+      const found = await prisma.talent.findUnique({ where: { slug: s }, select: { id: true } });
+      return !!found;
+    });
+    rows.push({ ...t, slug, venueId });
+  }
+  await prisma.talent.createMany({ data: rows });
   console.log(`Seeded ${TALENTS.length} talents.`);
 }
 

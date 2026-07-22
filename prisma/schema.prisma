@@ -221,6 +221,7 @@ model Talent {
   id               String          @id @default(uuid())
   image            String?
   name             String
+  slug             String          @unique
   speciality       String
   description      String
   venueId          String?
@@ -228,6 +229,9 @@ model Talent {
   talentCategoryId String?
   talentCategory   TalentCategory? @relation(fields: [talentCategoryId], references: [id], onDelete: SetNull)
   instagramUrl     String?
+  spotifyEmbed     String?
+  youtubeEmbed     String?
+  instagramEmbed   String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }

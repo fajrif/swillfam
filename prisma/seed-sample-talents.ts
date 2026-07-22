@@ -1,12 +1,13 @@
 import "dotenv/config";
 import { prisma } from "../src/lib/prisma";
+import { ensureUniqueSlug } from "../src/lib/slug";
 
 /**
  * Seeds the 4 canonical sample talents (one per public/talents/sample-DJ-*.png,
  * matching the talents mockup). Production-safe: matches existing venues by slug/name,
  * looks up (does not create) categories, and finds-or-updates by the natural key
- * (name, venueId) — Talent has no unique slug, so this is a manual upsert rather than
- * a Prisma `.upsert()`. Never deletes existing talents, never duplicates on re-run.
+ * (name, venueId). Never deletes existing talents, never duplicates on re-run.
+ * On create it assigns a unique slug from the name; on update the existing slug is kept.
  *
  * Run "npm run seed:talent-categories" first so the talents get categorized.
  */
@@ -101,7 +102,11 @@ async function main() {
     if (existing) {
       await prisma.talent.update({ where: { id: existing.id }, data });
     } else {
-      await prisma.talent.create({ data });
+      const slug = await ensureUniqueSlug(s.name, async (candidate) => {
+        const found = await prisma.talent.findUnique({ where: { slug: candidate }, select: { id: true } });
+        return !!found;
+      });
+      await prisma.talent.create({ data: { ...data, slug } });
     }
     upserted += 1;
   }

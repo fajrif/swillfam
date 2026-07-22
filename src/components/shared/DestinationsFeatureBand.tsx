@@ -5,9 +5,21 @@ import { Container } from "@/components/shared/Container";
 
 /**
  * Shared band used on /promotions and /talents: left "Destinations with Distinct
- * Personalities" (reproduced from StandForColumnsSection) + right "Explore Events" column.
+ * Personalities" (reproduced from StandForColumnsSection) + a configurable right column.
+ * The right column defaults to "Explore Events"; the promotion pages override it to
+ * "Explore Promotions".
  */
-export function DestinationsFeatureBand() {
+export function DestinationsFeatureBand({
+  rightTitle = "Explore Events",
+  rightBody = "Explore upcoming lifestyle and nightlife events happening across SwillFam venues, from relaxed gatherings and social meetups to high-energy nights, live entertainment, and special experiences designed to bring people together.",
+  rightCtaLabel = "View Events",
+  rightCtaHref = "/events",
+}: {
+  rightTitle?: string;
+  rightBody?: string;
+  rightCtaLabel?: string;
+  rightCtaHref?: string;
+} = {}) {
   return (
     <section className="pt-16">
       <Container>
@@ -41,20 +53,16 @@ export function DestinationsFeatureBand() {
             </div>
           </div>
 
-          {/* Explore Events */}
+          {/* Right column (Explore Events by default; Explore Promotions on promo pages) */}
           <div className="flex flex-col justify-between gap-4 p-4 lg:border-l lg:border-sf-border/40">
             <div className="flex flex-col gap-4">
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                Explore Events
+                {rightTitle}
               </h3>
-              <p className="font-inter leading-relaxed text-white">
-                Explore upcoming lifestyle and nightlife events happening across SwillFam venues,
-                from relaxed gatherings and social meetups to high-energy nights, live
-                entertainment, and special experiences designed to bring people together.
-              </p>
+              <p className="font-inter leading-relaxed text-white">{rightBody}</p>
             </div>
             <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href="/events">View Events</Link>
+              <Link href={rightCtaHref}>{rightCtaLabel}</Link>
             </Button>
           </div>
         </div>

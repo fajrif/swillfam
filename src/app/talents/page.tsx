@@ -42,6 +42,7 @@ export default async function TalentsPage() {
 
   const talentCards: TalentCardData[] = talents.map((t) => ({
     id: t.id,
+    slug: t.slug,
     name: t.name,
     description: t.description,
     image: t.image,
