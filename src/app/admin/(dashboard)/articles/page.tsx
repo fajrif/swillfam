@@ -2,10 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function ArticlesPage() {
+export default async function ArticlesPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const articles = await prisma.article.findMany({
+    where: search ? { title: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { publishedDate: "desc" },
     include: { articleCategory: { select: { name: true } } },
   });
@@ -13,6 +17,7 @@ export default async function ArticlesPage() {
   return (
     <div>
       <PageHeader title="Articles" newHref="/admin/articles/new" newLabel="New article" />
+      <SearchInput placeholder="Search by title..." />
       <Card>
         <AdminTable
           rows={articles}

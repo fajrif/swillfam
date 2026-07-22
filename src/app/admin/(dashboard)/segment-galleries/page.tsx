@@ -2,10 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function SegmentGalleriesPage() {
+export default async function SegmentGalleriesPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const galleries = await prisma.segmentGallery.findMany({
+    where: search ? { title: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { createdAt: "desc" },
     include: { venue: { select: { name: true } } },
   });
@@ -13,6 +17,7 @@ export default async function SegmentGalleriesPage() {
   return (
     <div>
       <PageHeader title="Segment Galleries" newHref="/admin/segment-galleries/new" newLabel="New segment gallery" />
+      <SearchInput placeholder="Search by title..." />
       <Card>
         <AdminTable
           rows={galleries}

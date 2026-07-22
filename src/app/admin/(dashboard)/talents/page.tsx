@@ -2,10 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function TalentsPage() {
+export default async function TalentsPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const talents = await prisma.talent.findMany({
+    where: search ? { name: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { createdAt: "desc" },
     include: { venue: { select: { name: true } } },
   });
@@ -13,6 +17,7 @@ export default async function TalentsPage() {
   return (
     <div>
       <PageHeader title="Talents" newHref="/admin/talents/new" newLabel="New talent" />
+      <SearchInput placeholder="Search by name..." />
       <Card>
         <AdminTable
           rows={talents}

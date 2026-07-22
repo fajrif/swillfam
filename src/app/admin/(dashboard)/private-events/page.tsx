@@ -2,10 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
+import { SearchInput } from "@/components/admin/SearchInput";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function PrivateEventsPage() {
+export default async function PrivateEventsPage(props: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await props.searchParams;
+  const search = q && q.length >= 3 ? q : undefined;
   const privateEvents = await prisma.privateEvent.findMany({
+    where: search ? { title: { contains: search, mode: "insensitive" } } : undefined,
     orderBy: { sortOrder: "asc" },
     include: { privateEventType: { select: { title: true } } },
   });
@@ -13,6 +17,7 @@ export default async function PrivateEventsPage() {
   return (
     <div>
       <PageHeader title="Private Events" newHref="/admin/private-events/new" newLabel="New private event" />
+      <SearchInput placeholder="Search by title..." />
       <Card>
         <AdminTable
           rows={privateEvents}
