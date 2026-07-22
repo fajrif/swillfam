@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Talent } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
@@ -24,21 +25,26 @@ export function TalentSection({
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {talents.map((talent) => (
-            <div key={talent.id} className="flex flex-col gap-4">
-              <div className="relative aspect-[4/5] w-full overflow-hidden border border-sf-border/40 bg-sf-surface">
+            <div key={talent.id} className="group flex flex-col gap-4">
+              <Link
+                href={`/talents/${talent.slug}`}
+                className="relative aspect-[4/5] w-full overflow-hidden border border-sf-border/40 bg-sf-surface"
+              >
                 <Image
                   src={talent.image ?? FALLBACK}
                   alt={talent.name}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              </div>
+              </Link>
               <div className="flex flex-col gap-2">
                 <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="font-syne text-xl font-bold leading-tight text-white">
-                    {talent.name}
-                  </h3>
+                  <Link href={`/talents/${talent.slug}`}>
+                    <h3 className="font-syne text-xl font-bold leading-tight text-white transition-colors group-hover:text-sf-accent">
+                      {talent.name}
+                    </h3>
+                  </Link>
                   {talent.instagramUrl ? (
                     <a
                       href={talent.instagramUrl}

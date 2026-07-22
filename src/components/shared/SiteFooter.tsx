@@ -26,10 +26,10 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
 ];
 
 const SOCIALS = [
-  { icon: "ph-linkedin-logo", label: "LinkedIn" },
-  { icon: "ph-tiktok-logo", label: "TikTok" },
-  { icon: "ph-youtube-logo", label: "YouTube" },
-  { icon: "ph-instagram-logo", label: "Instagram" },
+  { icon: "ph-linkedin-logo", label: "LinkedIn", key: "socialLinkedin" },
+  { icon: "ph-tiktok-logo", label: "TikTok", key: "socialTiktok" },
+  { icon: "ph-youtube-logo", label: "YouTube", key: "socialYoutube" },
+  { icon: "ph-instagram-logo", label: "Instagram", key: "socialInstagram" },
 ];
 
 /** Footer / Newsletter (Figma 831:313). */
@@ -82,13 +82,14 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           <div className="flex flex-col gap-4">
             <p className="font-inter text-base text-white">Find us:</p>
             <div className="flex gap-4">
-              {SOCIALS.map(({ icon, label }) => {
-                const socialKey = `social${label}` as keyof SiteSettings;
-                const href = settings[socialKey] || "#";
+              {SOCIALS.map(({ icon, label, key }) => {
+                const href = settings[key] || "#";
                 return (
                   <Link
                     key={label}
                     href={href}
+                    target={href !== "#" ? "_blank" : undefined}
+                    rel={href !== "#" ? "noopener noreferrer" : undefined}
                     aria-label={label}
                     className="text-white transition-colors hover:text-sf-accent"
                   >
@@ -154,6 +155,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
       {settings.mainWhatsapp && (
         <Link
           href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label="WhatsApp"
           className="fixed right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
         >

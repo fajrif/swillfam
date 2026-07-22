@@ -20,10 +20,14 @@ export function EssentialsSection({ settings }: { settings: SiteSettings }) {
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Button asChild variant="swillfam" size="pill">
-            <Link href={ig}>DM on Instagram</Link>
+            <Link href={ig} target="_blank" rel="noopener noreferrer">
+              DM on Instagram
+            </Link>
           </Button>
           <Button asChild variant="swillfam" size="pill">
-            <Link href={wa}>Inquire via WhatsApp</Link>
+            <Link href={wa} target="_blank" rel="noopener noreferrer">
+              Inquire via WhatsApp
+            </Link>
           </Button>
         </div>
       </Container>

@@ -27,7 +27,9 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
               </p>
             </div>
             <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href={wa}>Plan via WhatsApp</Link>
+              <Link href={wa} target="_blank" rel="noopener noreferrer">
+                Plan via WhatsApp
+              </Link>
             </Button>
           </div>
 
