@@ -3,16 +3,24 @@ import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
+import { Pagination } from "@/components/admin/Pagination";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function CategoriesPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await props.searchParams;
+export default async function CategoriesPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
+  const p = Math.max(1, Number(page) || 1);
+  const pageSize = 20;
+  const skip = (p - 1) * pageSize;
+  const where = search ? { name: { contains: search, mode: "insensitive" as const } } : undefined;
   const categories = await prisma.category.findMany({
-    where: search ? { name: { contains: search, mode: "insensitive" } } : undefined,
+    where,
+    skip,
+    take: pageSize,
     orderBy: { name: "asc" },
     include: { _count: { select: { venues: true } } },
-  });
+    })
+  const total = await prisma.category.count({ where });
 
   return (
     <div>
@@ -39,6 +47,7 @@ export default async function CategoriesPage(props: { searchParams: Promise<{ q?
             { header: "Venues", cell: (c) => c._count.venues },
           ]}
         />
+        <Pagination page={p} totalPages={Math.ceil(total / pageSize)} />
       </Card>
     </div>
   );

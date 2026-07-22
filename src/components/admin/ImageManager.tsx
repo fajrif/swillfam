@@ -39,6 +39,7 @@ export function ImageManager({
   accept = "image/*",
   hint,
   captions = false,
+  bgBlack,
 }: {
   name: string;
   label: string;
@@ -49,6 +50,7 @@ export function ImageManager({
   accept?: string;
   hint?: string;
   captions?: boolean;
+  bgBlack?: boolean;
 }) {
   const [items, setItems] = useState<Item[]>(() =>
     existing.map((path, i) => ({
@@ -188,7 +190,13 @@ export function ImageManager({
                   isSelected && "border-destructive ring-2 ring-destructive/30",
                 )}
               >
-                <ImageLightbox src={src} className="h-24 w-full rounded" />
+                <ImageLightbox
+                  src={src}
+                  className="h-24 w-full rounded"
+                  bgBlack={bgBlack}
+                  fileName={it.kind === "new" ? it.file.name : undefined}
+                  fileSize={it.kind === "new" ? it.file.size : undefined}
+                />
                 <label className="absolute top-2 left-2 flex items-center gap-1 rounded bg-background/90 px-1 py-0.5 text-[10px]">
                   <input
                     type="checkbox"

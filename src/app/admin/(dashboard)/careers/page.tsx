@@ -3,18 +3,26 @@ import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
+import { Pagination } from "@/components/admin/Pagination";
 import { EMPLOYMENT_OPTIONS } from "@/components/admin/CareerForm";
 
 const employmentLabel = (v: string) => EMPLOYMENT_OPTIONS.find((o) => o.value === v)?.label ?? v;
 
-export default async function CareersPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await props.searchParams;
+export default async function CareersPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
+  const p = Math.max(1, Number(page) || 1);
+  const pageSize = 20;
+  const skip = (p - 1) * pageSize;
+  const where = search ? { jobTitle: { contains: search, mode: "insensitive" as const } } : undefined;
   const careers = await prisma.career.findMany({
-    where: search ? { jobTitle: { contains: search, mode: "insensitive" } } : undefined,
+    where,
+    skip,
+    take: pageSize,
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { applications: true } } },
-  });
+    })
+  const total = await prisma.career.count({ where });
 
   return (
     <div>
@@ -42,6 +50,7 @@ export default async function CareersPage(props: { searchParams: Promise<{ q?: s
             { header: "Applications", cell: (c) => c._count.applications },
           ]}
         />
+        <Pagination page={p} totalPages={Math.ceil(total / pageSize)} />
       </Card>
     </div>
   );

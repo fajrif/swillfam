@@ -3,16 +3,24 @@ import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
+import { Pagination } from "@/components/admin/Pagination";
 import { Thumb } from "@/components/admin/Thumb";
 
-export default async function PrivateEventsPage(props: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await props.searchParams;
+export default async function PrivateEventsPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
+  const p = Math.max(1, Number(page) || 1);
+  const pageSize = 20;
+  const skip = (p - 1) * pageSize;
+  const where = search ? { title: { contains: search, mode: "insensitive" as const } } : undefined;
   const privateEvents = await prisma.privateEvent.findMany({
-    where: search ? { title: { contains: search, mode: "insensitive" } } : undefined,
+    where,
+    skip,
+    take: pageSize,
     orderBy: { sortOrder: "asc" },
     include: { privateEventType: { select: { title: true } } },
-  });
+    })
+  const total = await prisma.privateEvent.count({ where });
 
   return (
     <div>
@@ -43,6 +51,7 @@ export default async function PrivateEventsPage(props: { searchParams: Promise<{
             },
           ]}
         />
+        <Pagination page={p} totalPages={Math.ceil(total / pageSize)} />
       </Card>
     </div>
   );

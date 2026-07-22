@@ -2,7 +2,7 @@ import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
+export const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
 
 const EXT_BY_MIME: Record<string, string> = {
   "image/jpeg": "jpg",

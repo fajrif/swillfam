@@ -32,7 +32,7 @@ export function VenueForm({
       <div className="grid grid-cols-3 gap-6">
         <ImageManager name="image" label="Image" existing={venue?.image ? [venue.image] : []} />
         <ImageManager name="bannerImage" label="Banner image" existing={venue?.bannerImage ? [venue.bannerImage] : []} />
-        <ImageManager name="logo" label="Logo" existing={venue?.logo ? [venue.logo] : []} />
+        <ImageManager name="logo" label="Logo" existing={venue?.logo ? [venue.logo] : []} bgBlack />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
