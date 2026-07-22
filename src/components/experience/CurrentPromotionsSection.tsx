@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
-import { PROMOS } from "./data";
+import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
 
-/** "Current Promotions" — centered heading + 3-col promo cards. */
-export function CurrentPromotionsSection() {
+/** "Current Promotions" — centered heading + 3-col promo cards. Caller omits this section entirely when `promotions` is empty. */
+export function CurrentPromotionsSection({ promotions }: { promotions: OfferCardData[] }) {
   return (
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-12">
@@ -19,24 +18,8 @@ export function CurrentPromotionsSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {PROMOS.map((promo, i) => (
-            <article key={i} className="flex flex-col gap-4 border border-sf-border/50 p-4">
-              <div className="relative aspect-[407/349] w-full overflow-hidden bg-sf-surface">
-                <Image
-                  src={promo.img}
-                  alt={promo.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <span className="font-syne text-sm text-white">{promo.venue}</span>
-                  <span className="font-inter text-xs text-white">{promo.date}</span>
-                </div>
-              </div>
-              <h3 className="font-syne text-2xl text-white">{promo.title}</h3>
-              <p className="font-inter text-sm leading-relaxed text-white">{promo.description}</p>
-            </article>
+          {promotions.map((offer) => (
+            <OfferCard key={offer.id} offer={offer} />
           ))}
         </div>
       </Container>

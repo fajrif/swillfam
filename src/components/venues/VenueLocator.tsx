@@ -104,14 +104,10 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
             <AccordionItem
               key={venue.id}
               value={venue.slug}
-              className="border border-sf-border/60 px-6 sm:px-8"
+              className="border border-sf-border/60 px-6 sm:px-8 last:border-b"
             >
-              <AccordionTrigger className="items-center gap-6 py-6 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:hidden [&[data-state=open]_i]:rotate-90">
+              <AccordionTrigger className="items-center gap-6 py-6 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:size-6 [&>svg]:text-white/40">
                 {venue.name}
-                <i
-                  className="ph ph-play shrink-0 text-2xl text-white/40 transition-transform duration-200"
-                  aria-hidden
-                />
               </AccordionTrigger>
               <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed text-white">
                 <div className="flex flex-col gap-5">

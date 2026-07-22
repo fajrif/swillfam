@@ -114,22 +114,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             </div>
           </div>
 
-          {/* Right: WhatsApp on top, nav links anchored bottom-right */}
+          {/* Right: nav links anchored bottom-right */}
           <div className="flex flex-col items-end justify-between gap-2">
-            {settings.mainWhatsapp && (
-              <Link
-                href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
-                aria-label="WhatsApp"
-              >
-                <Image
-                  src="/whatsapp.png"
-                  alt="WhatsApp"
-                  width={64}
-                  height={64}
-                  className="h-16 w-auto"
-                />
-              </Link>
-            )}
             <div className="flex gap-12 text-right">
               {FOOTER_COLS.map((col, i) => (
                 <ul key={i} className="flex flex-col">
@@ -164,6 +150,22 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </p>
         </Container>
       </footer>
+
+      {settings.mainWhatsapp && (
+        <Link
+          href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
+          aria-label="WhatsApp"
+          className="fixed right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
+        >
+          <Image
+            src="/whatsapp.png"
+            alt="WhatsApp"
+            width={60}
+            height={60}
+            className="h-[60px] w-[60px] rounded-full border-[2.5px] border-white object-cover"
+          />
+        </Link>
+      )}
     </>
   );
 }

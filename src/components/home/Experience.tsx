@@ -14,7 +14,7 @@ export function Experience() {
           lead="Swillfam is designed to make discovery easier. We connect people with venues, events, and stories that match their lifestyle, from casual nights out to curated social experiences and exclusive gatherings."
         />
 
-        <div className="relative w-full overflow-hidden border border-sf-border/60 bg-sf-surface">
+        <div className="relative w-full overflow-hidden bg-sf-surface">
           <Image
             src="/home/experience.png"
             alt="A day-to-night journey across SwillFam venues"

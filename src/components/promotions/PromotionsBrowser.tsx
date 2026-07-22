@@ -4,7 +4,21 @@ import { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PromotionCard, type PromoCard } from "./PromotionCard";
+import { formatDateRange } from "@/lib/date";
+import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
+
+export type PromoCard = {
+  id: string;
+  name: string;
+  shortDescription: string;
+  image: string | null;
+  venueId: string | null;
+  promotionCategoryId: string | null;
+  venueName: string | null;
+  venueLogo: string | null;
+  startDate: Date;
+  endDate: Date;
+};
 
 type Mode = "venues" | "categories";
 
@@ -44,7 +58,15 @@ export function PromotionsBrowser({
     if (selectedId === null) return true;
     return mode === "venues" ? p.venueId === selectedId : p.promotionCategoryId === selectedId;
   });
-  const shown = filtered.slice(0, visible);
+  const shown: OfferCardData[] = filtered.slice(0, visible).map((p) => ({
+    id: p.id,
+    image: p.image,
+    title: p.name,
+    description: p.shortDescription,
+    venueName: p.venueName,
+    venueLogo: p.venueLogo,
+    meta: formatDateRange(p.startDate, p.endDate),
+  }));
 
   return (
     <section className="py-16 lg:py-24">
@@ -84,8 +106,8 @@ export function PromotionsBrowser({
           <div className="flex flex-col items-center gap-12">
             {shown.length > 0 ? (
               <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
-                {shown.map((p) => (
-                  <PromotionCard key={p.id} promo={p} />
+                {shown.map((offer) => (
+                  <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
             ) : (

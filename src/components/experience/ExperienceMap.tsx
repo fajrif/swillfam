@@ -6,7 +6,7 @@ export function ExperienceMap() {
   return (
     <section className="pb-16 lg:pb-24">
       <Container>
-        <div className="relative w-full overflow-hidden border border-sf-border/60 bg-sf-surface">
+        <div className="relative w-full overflow-hidden bg-sf-surface">
           <div className="relative aspect-[2780/1308] w-full overflow-hidden">
             <Image
               src="/experience/experience.png"
