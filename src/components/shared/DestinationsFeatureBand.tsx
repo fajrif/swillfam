@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
 
 /**
- * Promotions-specific band: left "Destinations with Distinct Personalities"
- * (reproduced from StandForColumnsSection) + right "Explore Events" column.
+ * Shared band used on /promotions and /talents: left "Destinations with Distinct
+ * Personalities" (reproduced from StandForColumnsSection) + right "Explore Events" column.
  */
-export function PromotionsFeatureBand() {
+export function DestinationsFeatureBand() {
   return (
     <section className="pt-16">
       <Container>

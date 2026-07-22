@@ -209,17 +209,27 @@ model SegmentGallery {
   updatedAt   DateTime @updatedAt
 }
 
+model TalentCategory {
+  id        String   @id @default(uuid())
+  name      String
+  talents   Talent[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Talent {
-  id           String   @id @default(uuid())
-  image        String?
-  name         String
-  speciality   String
-  description  String
-  venueId      String?
-  venue        Venue?   @relation(fields: [venueId], references: [id], onDelete: SetNull)
-  instagramUrl String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String          @id @default(uuid())
+  image            String?
+  name             String
+  speciality       String
+  description      String
+  venueId          String?
+  venue            Venue?          @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  talentCategoryId String?
+  talentCategory   TalentCategory? @relation(fields: [talentCategoryId], references: [id], onDelete: SetNull)
+  instagramUrl     String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 // ---------------------------------------------------------------------------

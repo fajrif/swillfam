@@ -9,11 +9,11 @@ import {
   PromotionsHero,
   PromotionsIntro,
   PromotionsBrowser,
-  PromotionsFeatureBand,
   type PromoCard,
 } from "@/components/promotions";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
 
 export const metadata: Metadata = {
   title: "Promotions | SwillFam",
@@ -62,7 +62,7 @@ export default async function PromotionsPage() {
       <PromotionsBrowser promotions={promoCards} venues={venues} categories={categories} />
 
       <Reveal>
-        <PromotionsFeatureBand />
+        <DestinationsFeatureBand />
       </Reveal>
 
       <Reveal>
