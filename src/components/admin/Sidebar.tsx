@@ -16,6 +16,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
       { href: "/admin/categories", label: "Venue Categories" },
       { href: "/admin/venues", label: "Venues" },
       { href: "/admin/segment-galleries", label: "Segment Galleries" },
+      { href: "/admin/talent-categories", label: "Talent Categories" },
       { href: "/admin/talents", label: "Talents" },
     ],
   },

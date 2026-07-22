@@ -6,10 +6,12 @@ export function TalentForm({
   action,
   talent,
   venues,
+  categories,
 }: {
   action: (formData: FormData) => void;
   talent?: Talent;
   venues: { id: string; name: string }[];
+  categories: { id: string; name: string }[];
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
@@ -26,8 +28,15 @@ export function TalentForm({
           blankLabel="— None —"
           options={venues.map((v) => ({ value: v.id, label: v.name }))}
         />
-        <Field label="Instagram URL" name="instagramUrl" type="url" defaultValue={talent?.instagramUrl ?? ""} />
+        <SelectField
+          label="Category"
+          name="talentCategoryId"
+          defaultValue={talent?.talentCategoryId ?? ""}
+          blankLabel="— None —"
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+        />
       </div>
+      <Field label="Instagram URL" name="instagramUrl" type="url" defaultValue={talent?.instagramUrl ?? ""} />
       <TextareaField label="Description" name="description" defaultValue={talent?.description} rows={4} required />
       <SaveButton>Save talent</SaveButton>
     </form>

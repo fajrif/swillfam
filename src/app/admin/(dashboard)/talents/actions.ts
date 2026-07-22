@@ -10,11 +10,13 @@ const CATEGORY = "talents";
 
 function parse(formData: FormData) {
   const venueId = String(formData.get("venueId") ?? "").trim();
+  const talentCategoryId = String(formData.get("talentCategoryId") ?? "").trim();
   return {
     name: String(formData.get("name") ?? "").trim(),
     speciality: String(formData.get("speciality") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
     venueId: venueId || null,
+    talentCategoryId: talentCategoryId || null,
     instagramUrl: String(formData.get("instagramUrl") ?? "").trim() || null,
   };
 }

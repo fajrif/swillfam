@@ -7,9 +7,10 @@ import { updateTalentAction, deleteTalentAction } from "../actions";
 
 export default async function EditTalentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [talent, venues] = await Promise.all([
+  const [talent, venues, categories] = await Promise.all([
     prisma.talent.findUnique({ where: { id } }),
     prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.talentCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   if (!talent) notFound();
 
@@ -17,7 +18,7 @@ export default async function EditTalentPage({ params }: { params: Promise<{ id:
     <div>
       <EditHeader title="Edit Talent" backHref="/admin/talents" />
       <Card>
-        <TalentForm action={updateTalentAction.bind(null, id)} talent={talent} venues={venues} />
+        <TalentForm action={updateTalentAction.bind(null, id)} talent={talent} venues={venues} categories={categories} />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deleteTalentAction.bind(null, id)} label="Delete talent" />
         </div>
