@@ -107,9 +107,18 @@ export function PromotionsBrowser({
           {/* Grid + Load More */}
           <div className="flex flex-col items-center gap-12">
             {shown.length > 0 ? (
-              <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
-                {shown.map((offer) => (
-                  <OfferCard key={offer.id} offer={offer} />
+              <div
+                key={`${mode}-${selectedId}`}
+                className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2"
+              >
+                {shown.map((offer, i) => (
+                  <div
+                    key={offer.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
+                  >
+                    <OfferCard offer={offer} />
+                  </div>
                 ))}
               </div>
             ) : (
