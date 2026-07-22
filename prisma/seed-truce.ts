@@ -52,6 +52,79 @@ async function seedGalleries(venueId: string) {
   console.log("Seeded 1 segment gallery (Inside).");
 }
 
+async function seedPromotions(venueId: string) {
+  const now = new Date();
+  const in30 = new Date(now.getTime() + 30 * 86400000);
+
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
+  const PROMOS = [
+    {
+      poster: "/promotions/sample-promo-truce.png",
+      category: "Group & Table",
+      name: "Group Table Package",
+      shortDescription: "Reserve a table for your group and enjoy a curated round of house classics to start the night.",
+      description:
+        "Settle in with your crew at Truce. Our group table package includes a reserved table and a curated round of spirit-forward house classics, the perfect way to begin an unhurried evening together.",
+      caption: "Valid for groups of 4+",
+      terms: "<p>Valid for groups of four or more with advance table reservation. Not combinable with other promotions.</p>",
+      startHour: "18:00",
+      endHour: "23:00",
+    },
+    {
+      poster: asset("gallery-1.jpg"),
+      category: "Food & Drink",
+      name: "Truce Happy Hour",
+      shortDescription: "Selected classic cocktails and highballs at a special price from open until 8 PM.",
+      description:
+        "Ease into the evening with Truce's happy hour. Enjoy selected spirit-forward classics and refreshing highballs at a special price from opening until 8 PM, paired with our small plates.",
+      caption: "Tue – Sun, open – 20:00",
+      terms: "<p>Valid Tuesday to Sunday from opening until 20:00. Dine-in only. Not combinable with other promotions.</p>",
+      startHour: "18:00",
+      endHour: "20:00",
+    },
+    {
+      poster: asset("gallery-2.jpg"),
+      category: "Seasonal",
+      name: "Seasonal Sessions",
+      shortDescription: "A rotating list of seasonal specials built around house ferments and hydroponic herbs.",
+      description:
+        "Discover Truce's seasonal specials, a rotating selection of drinks built around house ferments, savoury tinctures, and hydroponic herbs grown on site. Available for a limited time each season.",
+      caption: "Limited seasonal run",
+      terms: "<p>Available while the seasonal list runs. Selection changes without notice. One per guest per visit.</p>",
+      startHour: "18:00",
+      endHour: "02:00",
+    },
+  ];
+
+  for (const p of PROMOS) {
+    const slug = await ensureUniqueSlug(p.name, async (s) => {
+      const found = await prisma.promotion.findUnique({ where: { slug: s } });
+      return !!found;
+    });
+    await prisma.promotion.create({
+      data: {
+        name: p.name,
+        slug,
+        posterImage: p.poster,
+        image: p.poster,
+        shortDescription: p.shortDescription,
+        description: p.description,
+        caption: p.caption,
+        terms: p.terms,
+        startDate: now,
+        endDate: in30,
+        startHour: p.startHour,
+        endHour: p.endHour,
+        venueId,
+        promotionCategoryId: catId(p.category),
+      },
+    });
+  }
+  console.log(`Seeded ${PROMOS.length} promotions.`);
+}
+
 async function seedVenueFaqs() {
   await prisma.faq.deleteMany({ where: { segment: "venue" } });
   const FAQS = [
@@ -87,8 +160,10 @@ async function main() {
   const venue = await getOrCreateVenue();
 
   await prisma.segmentGallery.deleteMany({ where: { venueId: venue.id } });
+  await prisma.promotion.deleteMany({ where: { venueId: venue.id } });
 
   await seedGalleries(venue.id);
+  await seedPromotions(venue.id);
   await seedVenueFaqs();
 
   console.log(`\nDone seeding Truce (${venue.slug}).`);

@@ -74,9 +74,13 @@ async function seedGalleries(venueId: string) {
 async function seedPromotions(venueId: string) {
   const now = new Date();
   const in30 = new Date(now.getTime() + 30 * 86400000);
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
   const PROMOS = [
     {
       poster: asset("promo-1.png"),
+      category: "Food & Drink",
       name: "Wild Hour",
       shortDescription: "Discounted drinks and beats from open until 9 PM every Wednesday to Sunday.",
       description:
@@ -88,6 +92,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-2.png"),
+      category: "Group & Table",
       name: "Bottle Service Special",
       shortDescription: "Premium bottle service with mixers and a dedicated server for your table.",
       description:
@@ -99,6 +104,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-3.png"),
+      category: "Group & Table",
       name: "Birthday Party Package",
       shortDescription: "Celebrate your birthday with a reserved table, bottle, and a complimentary shot tower.",
       description:
@@ -109,7 +115,8 @@ async function seedPromotions(venueId: string) {
       endHour: "04:00",
     },
     {
-      poster: asset("promo-4.png"),
+      poster: "/promotions/sample-promo-zoo.png",
+      category: "Ladies Night",
       name: "Ladies Night",
       shortDescription: "Free-flow selected cocktails for ladies every Wednesday night.",
       description:
@@ -141,6 +148,7 @@ async function seedPromotions(venueId: string) {
         startHour: p.startHour,
         endHour: p.endHour,
         venueId,
+        promotionCategoryId: catId(p.category),
       },
     });
   }

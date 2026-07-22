@@ -11,6 +11,7 @@ const CATEGORY = "promotions";
 
 function parse(formData: FormData) {
   const venueId = String(formData.get("venueId") ?? "").trim();
+  const promotionCategoryId = String(formData.get("promotionCategoryId") ?? "").trim();
   return {
     name: String(formData.get("name") ?? "").trim(),
     shortDescription: String(formData.get("shortDescription") ?? "").trim(),
@@ -18,6 +19,7 @@ function parse(formData: FormData) {
     caption: String(formData.get("caption") ?? "").trim(),
     terms: String(formData.get("terms") ?? ""),
     venueId: venueId || null,
+    promotionCategoryId: promotionCategoryId || null,
     startDate: new Date(String(formData.get("startDate"))),
     endDate: new Date(String(formData.get("endDate"))),
     startHour: String(formData.get("startHour") ?? "").trim(),

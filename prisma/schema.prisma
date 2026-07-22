@@ -226,25 +226,35 @@ model Talent {
 // Promotions.
 // ---------------------------------------------------------------------------
 
+model PromotionCategory {
+  id         String      @id @default(uuid())
+  name       String
+  promotions Promotion[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
 model Promotion {
-  id               String   @id @default(uuid())
-  image            String?
-  bannerImage      String?
-  posterImage      String?
-  name             String
-  slug             String   @unique
-  shortDescription String
-  description      String
-  caption          String
-  terms            String // rich text (HTML)
-  venueId          String?
-  venue            Venue?   @relation(fields: [venueId], references: [id], onDelete: SetNull)
-  startDate        DateTime
-  endDate          DateTime
-  startHour        String // "HH:mm"
-  endHour          String // "HH:mm"
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                  String             @id @default(uuid())
+  image               String?
+  bannerImage         String?
+  posterImage         String?
+  name                String
+  slug                String             @unique
+  shortDescription    String
+  description         String
+  caption             String
+  terms               String // rich text (HTML)
+  venueId             String?
+  venue               Venue?             @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  promotionCategoryId String?
+  promotionCategory   PromotionCategory? @relation(fields: [promotionCategoryId], references: [id], onDelete: SetNull)
+  startDate           DateTime
+  endDate             DateTime
+  startHour           String // "HH:mm"
+  endHour             String // "HH:mm"
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 }
 
 // ---------------------------------------------------------------------------

@@ -22,6 +22,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
   {
     label: "Programs",
     items: [
+      { href: "/admin/promotion-categories", label: "Promotion Categories" },
       { href: "/admin/promotions", label: "Promotions" },
       { href: "/admin/event-categories", label: "Event Categories" },
       { href: "/admin/events", label: "Events" },

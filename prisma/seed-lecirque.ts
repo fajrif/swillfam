@@ -72,9 +72,13 @@ async function seedGalleries(venueId: string) {
 async function seedPromotions(venueId: string) {
   const now = new Date();
   const in30 = new Date(now.getTime() + 30 * 86400000);
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
   const PROMOS = [
     {
-      poster: asset("promo-1.png"),
+      poster: "/promotions/sample-promo-lecirque.png",
+      category: "Ladies Night",
       name: "Le Cirque Opening Hour",
       shortDescription: "Free-flow selected drinks and discounted bottles during opening hour every Friday and Saturday.",
       description:
@@ -106,6 +110,7 @@ async function seedPromotions(venueId: string) {
         startHour: p.startHour,
         endHour: p.endHour,
         venueId,
+        promotionCategoryId: catId(p.category),
       },
     });
   }

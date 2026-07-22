@@ -71,9 +71,13 @@ async function seedGalleries(venueId: string) {
 async function seedPromotions(venueId: string) {
   const now = new Date();
   const in30 = new Date(now.getTime() + 30 * 86400000);
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
   const PROMOS = [
     {
       poster: asset("promo-1.jpg"),
+      category: "Food & Drink",
       name: "Hip-Hop Happy Hour",
       shortDescription: "Two-for-one on selected drinks and beers from open until 9 PM.",
       description:
@@ -85,6 +89,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-2.jpg"),
+      category: "Group & Table",
       name: "Bottle Service",
       shortDescription: "Premium bottle service with mixers, garnishes, and dedicated host.",
       description:
@@ -95,7 +100,8 @@ async function seedPromotions(venueId: string) {
       endHour: "04:00",
     },
     {
-      poster: asset("promo-3.jpg"),
+      poster: "/promotions/sample-promo-swillhouse.png",
+      category: "Group & Table",
       name: "Group Booking Deal",
       shortDescription: "Reserve a table for six or more and receive a complimentary bottle.",
       description:
@@ -127,6 +133,7 @@ async function seedPromotions(venueId: string) {
         startHour: p.startHour,
         endHour: p.endHour,
         venueId,
+        promotionCategoryId: catId(p.category),
       },
     });
   }

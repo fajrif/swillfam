@@ -143,9 +143,13 @@ async function seedTalents(venueId: string) {
 async function seedPromotions(venueId: string) {
   const now = new Date();
   const in30 = new Date(now.getTime() + 30 * 86400000);
+  const cats = await prisma.promotionCategory.findMany({ select: { id: true, name: true } });
+  const catId = (name: string) => cats.find((c) => c.name === name)?.id ?? null;
+
   const PROMOS = [
     {
-      poster: asset("promo-1.png"),
+      poster: "/promotions/sample-promo-atsumaru.png",
+      category: "Food & Drink",
       name: "Atsumaru Happy Hour",
       shortDescription: "Two-for-one signature highballs and sake every evening from open until 8 PM.",
       description:
@@ -158,6 +162,7 @@ async function seedPromotions(venueId: string) {
     },
     {
       poster: asset("promo-2.png"),
+      category: "Food & Drink",
       name: "Weekend Sake Flight",
       shortDescription: "A curated flight of three premium sakes, available all weekend long.",
       description:
@@ -189,6 +194,7 @@ async function seedPromotions(venueId: string) {
         startHour: p.startHour,
         endHour: p.endHour,
         venueId,
+        promotionCategoryId: catId(p.category),
       },
     });
   }
