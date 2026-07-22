@@ -19,6 +19,10 @@ import {
   VISION_MISSION,
 } from "@/components/about";
 
+// Statically rendered but data-driven (articles) — revalidate periodically so
+// admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "About SwillFam — Creating Jakarta's Most Memorable Nights",
   description:

@@ -15,6 +15,10 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
 
+// Statically rendered but data-driven (promotions, venues, categories, articles) —
+// revalidate periodically so admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Promotions | SwillFam",
   description:

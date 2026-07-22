@@ -16,6 +16,10 @@ import {
   ContinueExperience,
 } from "@/components/category";
 
+// SSG per known slug at build time, but data-driven — revalidate periodically so
+// admin edits/seeds show up without a full rebuild.
+export const revalidate = 60;
+
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getCategoryBySlug = cache((slug: string) =>
   prisma.category.findUnique({
