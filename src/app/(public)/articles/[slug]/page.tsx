@@ -1,9 +1,13 @@
 import { cache } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
-import { ArticleHero, ArticleContent } from "@/components/articles";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { ArticleContent } from "@/components/articles";
 import { ArticleListSection, type ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
@@ -53,9 +57,26 @@ export default async function ArticlePage({
   }));
 
   return (
-    <>
-      <ArticleHero title={article.title} image={article.image} />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image
+            src={article.image ?? "/articles/sample-banner.png"}
+            alt=""
+            fill
+            className="object-cover"
+            priority
+          />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-4xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            {article.title}
+          </h1>
+        </Container>
+      }
+    >
       <ArticleContent
         title={article.title}
         publishedDate={article.publishedDate}
@@ -80,6 +101,6 @@ export default async function ArticlePage({
       <Reveal>
         <PrivateEventsSection />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

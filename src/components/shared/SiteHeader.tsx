@@ -4,89 +4,134 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
-import { NAV_GROUPS, NAV_LINKS } from "./nav-data";
+import { NAV_GROUPS } from "./nav-data";
 
-/** Transparent mega-nav overlaid on the hero (Figma node 231:100). */
+/** The three stacked link columns — shared by the top mega-nav and the compact
+ *  header's expanding panel so link positions stay identical. Stacks on mobile. */
+function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
+  return (
+    <nav className="flex flex-col gap-8 md:flex-row md:gap-10">
+      {NAV_GROUPS.map((group, i) => (
+        <ul key={i} className="flex flex-col gap-1">
+          {group.map((link) => (
+            <li key={link.label}>
+              <Link
+                href={link.href}
+                onClick={onNavigate}
+                className="font-syne text-base tracking-wide text-white/80 uppercase transition-colors hover:text-white"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </nav>
+  );
+}
+
+/**
+ * Scroll-transforming nav (Figma mega-nav, node 231:100). At the very top:
+ * the transparent mega-nav (logo-left / 3-column nav-right). As the user
+ * scrolls it fades out and a compact fixed bar (blurred, hamburger-left /
+ * logo-right) takes over; the hamburger toggles a panel with the same
+ * 3-column links. Scrolling back to the top restores the mega-nav.
+ * (On mobile the compact bar is always shown — there's no room for the mega-nav.)
+ */
 export function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const { scrollY } = useScroll();
+  const topOpacity = useTransform(scrollY, [0, 120], [1, 0]);
+
+  useMotionValueEvent(scrollY, "change", (v) => {
+    setScrolled(v > 80);
+    if (v <= 80 && open) setOpen(false); // collapse the panel when back at top
+  });
+
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
-      <Container className="flex items-start justify-between py-6 lg:py-8">
-        <Link href="/" aria-label="SwillFam home" className="shrink-0">
-          <Image
-            src="/logo-swillfam.png"
-            alt="SwillFam"
-            width={93}
-            height={41}
-            priority
-            className="h-9 w-auto lg:h-10"
-          />
-        </Link>
+    <>
+      {/* Top mega-nav — desktop only, fades out on scroll. */}
+      <motion.header
+        className="absolute inset-x-0 top-0 z-50 hidden lg:block"
+        style={{ opacity: topOpacity, pointerEvents: scrolled ? "none" : "auto" }}
+      >
+        <Container className="flex items-start justify-between py-6 lg:py-8">
+          <Link href="/" aria-label="SwillFam home" className="shrink-0">
+            <Image
+              src="/logo-swillfam.png"
+              alt="SwillFam"
+              width={93}
+              height={41}
+              priority
+              className="h-9 w-auto lg:h-10"
+            />
+          </Link>
+          <NavColumns />
+        </Container>
+      </motion.header>
 
-        {/* Desktop mega-nav: three stacked link columns */}
-        <nav className="hidden gap-x-10 lg:flex">
-          {NAV_GROUPS.map((group, i) => (
-            <ul key={i} className="flex flex-col gap-1">
-              {group.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="font-syne text-base tracking-wide text-white/80 uppercase transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ))}
-        </nav>
-
-        {/* Mobile trigger */}
-        <button
-          type="button"
-          aria-label="Open menu"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-          className="text-white lg:hidden"
-        >
-          <Menu className="size-7" />
-        </button>
-      </Container>
-
-      {/* Mobile drawer */}
-      <div
+      {/* Compact bar — always visible on mobile; on desktop only once scrolled. */}
+      <header
         className={cn(
-          "fixed inset-0 z-50 bg-sf-bg/98 backdrop-blur-sm transition-opacity lg:hidden",
-          open ? "opacity-100" : "pointer-events-none opacity-0",
+          "fixed inset-x-0 top-0 z-[70] transition-[opacity,transform] duration-300",
+          scrolled
+            ? "translate-y-0 opacity-100"
+            : "translate-y-0 opacity-100 lg:pointer-events-none lg:-translate-y-full lg:opacity-0",
         )}
       >
-        <Container className="flex items-center justify-between py-6">
-          <Image src="/logo-swillfam.png" alt="SwillFam" width={93} height={41} className="h-9 w-auto" />
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={() => setOpen(false)}
-            className="text-white"
-          >
-            <X className="size-7" />
-          </button>
-        </Container>
-        <nav className="mt-6 flex flex-col gap-5 px-8">
-          {NAV_LINKS.map((link) => (
+        <div className="border-b border-sf-border/40 bg-sf-bg/70 backdrop-blur-md">
+          <Container className="flex items-center justify-between py-4">
+            {/* Logo — left. */}
             <Link
-              key={link.label}
-              href={link.href}
+              href="/"
+              aria-label="SwillFam home"
+              className="shrink-0"
               onClick={() => setOpen(false)}
-              className="font-syne text-2xl text-white/85 transition-colors hover:text-white"
             >
-              {link.label}
+              <Image src="/logo-swillfam.png" alt="SwillFam" width={93} height={41} className="h-8 w-auto" />
             </Link>
-          ))}
-        </nav>
-      </div>
-    </header>
+
+            {/* Hamburger / close — right. */}
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((o) => !o)}
+              className="relative size-7 text-white"
+            >
+              <Menu
+                className={cn(
+                  "absolute inset-0 m-auto size-7 transition-all duration-300",
+                  open ? "rotate-90 opacity-0" : "rotate-0 opacity-100",
+                )}
+              />
+              <X
+                className={cn(
+                  "absolute inset-0 m-auto size-7 transition-all duration-300",
+                  open ? "rotate-0 opacity-100" : "-rotate-90 opacity-0",
+                )}
+              />
+            </button>
+          </Container>
+
+          {/* Expanding menu panel — same 3-column layout as the top mega-nav. */}
+          <div
+            className={cn(
+              "overflow-hidden transition-[max-height,opacity] duration-300 ease-out",
+              open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
+            )}
+          >
+            <Container className="flex justify-end pt-1 pb-8">
+              <NavColumns onNavigate={() => setOpen(false)} />
+            </Container>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
-import { VenuesHero, VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
+import { VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
 
 // Statically rendered but data-driven (categories, venues, articles) — revalidate
 // periodically so admin edits/seeds show up without a full rebuild.
@@ -37,9 +41,26 @@ export default async function VenuesPage() {
   ]);
 
   return (
-    <>
-      <VenuesHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image
+            src="/categories/venues/banner.png"
+            alt="SwillFam venues"
+            fill
+            className="object-cover"
+            priority
+          />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Creating Jakarta&apos;s Most Memorable Nights
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <VenuesIntro />
       </Reveal>
@@ -59,6 +80,6 @@ export default async function VenuesPage() {
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

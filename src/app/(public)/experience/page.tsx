@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import {
-  ExperienceHero,
   OneDaySection,
   ExperienceMap,
   WantUsToPlanSection,
@@ -50,9 +53,20 @@ export default async function ExperiencePage() {
   }));
 
   return (
-    <>
-      <ExperienceHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image src="/experience/banner.png" alt="" fill priority className="object-cover" />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Your Day, Our Way
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <OneDaySection />
       </Reveal>
@@ -92,6 +106,6 @@ export default async function ExperiencePage() {
       <Reveal>
         <PrivateEventsSection />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }
