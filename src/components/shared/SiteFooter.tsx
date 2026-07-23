@@ -172,6 +172,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             alt="WhatsApp"
             width={60}
             height={60}
+            loading="eager"
             className="h-[60px] w-[60px] rounded-full border-[2.5px] border-white object-cover"
           />
         </Link>
