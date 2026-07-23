@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { UploadCloud } from "lucide-react";
-import { submitApplicationAction, type ApplicationActionState } from "@/app/careers/actions";
+import { submitApplicationAction, type ApplicationActionState } from "@/app/(public)/careers/actions";
 import { Input } from "@/components/ui/input";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
