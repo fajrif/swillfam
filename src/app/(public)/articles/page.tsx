@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
-import { ArticlesHero, ArticlesBrowser } from "@/components/articles";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { ArticlesBrowser } from "@/components/articles";
 import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
@@ -53,9 +57,20 @@ export default async function ArticlesPage({
   }).toString()}`;
 
   return (
-    <>
-      <ArticlesHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image src="/articles/banner.png" alt="" fill className="object-cover" priority />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Your Guide to the SwillFam Scene
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <ArticlesBrowser
           categories={categories}
@@ -73,6 +88,6 @@ export default async function ArticlesPage({
       <Reveal>
         <PrivateEventsSection />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

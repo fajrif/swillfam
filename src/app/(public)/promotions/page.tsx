@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import {
-  PromotionsHero,
   PromotionsIntro,
   PromotionsBrowser,
   type PromoCard,
@@ -51,9 +54,20 @@ export default async function PromotionsPage() {
   }));
 
   return (
-    <>
-      <PromotionsHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image src="/promotions/banner.png" alt="" fill className="object-cover" priority />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Food, Drinks, Ladies Night &amp; Venue Offers
+          </h1>
+        </Container>
+      }
+    >
       <PromotionsIntro />
 
       <PromotionsBrowser promotions={promoCards} venues={venues} categories={categories} />
@@ -69,6 +83,6 @@ export default async function PromotionsPage() {
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

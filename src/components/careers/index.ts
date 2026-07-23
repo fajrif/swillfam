@@ -1,4 +1,3 @@
-export { CareersHero } from "./CareersHero";
 export { BePartSection } from "./BePartSection";
 export { JobListings } from "./JobListings";
 export { ApplyNowSection } from "./ApplyNowSection";

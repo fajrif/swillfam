@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { getSiteSettings } from "@/lib/site-settings";
 import { formatIDR } from "@/lib/currency";
 import {
-  MerchandiseHero,
   EssentialsSection,
   ProductGrid,
   PrivateEventsSection,
@@ -47,9 +50,20 @@ export default async function MerchandisePage({
   const loadMoreHref = `/merchandise?page=${page + 1}`;
 
   return (
-    <>
-      <MerchandiseHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image src="/merchandise/merchandise-banner.png" alt="" fill className="object-cover" priority />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Merchandise for the Fam
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <EssentialsSection settings={settings} />
       </Reveal>
@@ -69,6 +83,6 @@ export default async function MerchandisePage({
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

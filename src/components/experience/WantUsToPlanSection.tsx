@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
@@ -31,13 +32,15 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
           </div>
 
           <div className="relative aspect-[680/581] w-full overflow-hidden border border-sf-border/30">
-            <Image
-              src="/experience/plan-for-event.png"
-              alt="Plan your SwillFam experience"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+            <ParallaxImage>
+              <Image
+                src="/experience/plan-for-event.png"
+                alt="Plan your SwillFam experience"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </ParallaxImage>
           </div>
         </div>
       </Container>

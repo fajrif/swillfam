@@ -1,9 +1,13 @@
 import { cache } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 import {
   EventSectionWithImage,
@@ -13,7 +17,6 @@ import { FaqSection } from "@/components/shared/FaqSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import {
-  VenueHero,
   VenueDescription,
   DishesSection,
   TalentSection,
@@ -23,6 +26,7 @@ import {
 } from "@/components/venues";
 
 const POSTER_FALLBACK = "/home/hero.png";
+const FALLBACK = "/home/hero.png";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -103,9 +107,31 @@ export default async function VenueSlugPage({
   }));
 
   return (
-    <>
-      <VenueHero venue={venue} />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image
+            src={venue.bannerImage ?? venue.image ?? FALLBACK}
+            alt={venue.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
+          {venue.category ? (
+            <span className="font-archivo text-sm uppercase tracking-[0.18em] text-white">
+              {venue.category.name}
+            </span>
+          ) : null}
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            {venue.name}
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <VenueDescription venue={venue} />
       </Reveal>
@@ -194,6 +220,6 @@ export default async function VenueSlugPage({
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

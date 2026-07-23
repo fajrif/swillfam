@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { PlasmaBackground } from "@/components/reactbits/PlasmaBackground";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 import {
-  HeroSection,
   OurStorySection,
   DesignExperienceSection,
   WhatWeStandForSection,
@@ -29,9 +31,25 @@ export const metadata: Metadata = {
 export default async function About() {
   const articles = await getArticleRows(3);
   return (
-    <>
-      <HeroSection />
-
+    <StickyHero
+      backdrop={
+        <PlasmaBackground
+          className="absolute inset-0"
+          color="#c6387f"
+          speed={0.2}
+          direction="pingpong"
+          scale={2.3}
+          opacity={0.8}
+        />
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Creating Jakarta&apos;s Most Memorable Nights
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <OurStorySection />
       </Reveal>
@@ -77,6 +95,6 @@ export default async function About() {
       <Reveal>
         <BrandResourcesSection />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

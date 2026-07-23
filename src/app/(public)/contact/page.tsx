@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import {
-  ContactHero,
   GetInTouchSection,
   LetsConnectSection,
   ContactVenuesSection,
@@ -21,9 +24,20 @@ export default async function ContactPage() {
   const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
 
   return (
-    <>
-      <ContactHero />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image src="/contact/contact-banner.png" alt="" fill className="object-cover" priority />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            Get in Touch with SwillFam
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <GetInTouchSection settings={settings} />
       </Reveal>
@@ -47,6 +61,6 @@ export default async function ContactPage() {
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

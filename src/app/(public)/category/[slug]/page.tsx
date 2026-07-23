@@ -1,17 +1,22 @@
 import { cache } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
+import { Container } from "@/components/shared/Container";
+import { StickyHero } from "@/components/shared/StickyHero";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import {
-  CategoryHero,
   CategoryIntro,
   VenuesGrid,
   SiblingCategorySection,
   ContinueExperience,
 } from "@/components/category";
+
+const FALLBACK = "/home/hero.png";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -62,9 +67,26 @@ export default async function CategoryPage({
   ]);
 
   return (
-    <>
-      <CategoryHero category={category} />
-
+    <StickyHero
+      backdrop={
+        <ParallaxImage>
+          <Image
+            src={category.bannerImage ?? category.image ?? FALLBACK}
+            alt={category.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        </ParallaxImage>
+      }
+      heroContent={
+        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
+            {category.headline ?? category.name}
+          </h1>
+        </Container>
+      }
+    >
       <Reveal>
         <CategoryIntro category={category} />
       </Reveal>
@@ -86,6 +108,6 @@ export default async function CategoryPage({
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </>
+    </StickyHero>
   );
 }

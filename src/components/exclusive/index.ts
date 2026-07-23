@@ -1,4 +1,3 @@
-export { ExclusiveHero } from "./ExclusiveHero";
 export { ExclusiveSection } from "./ExclusiveSection";
 export { ExclusiveNav } from "./ExclusiveNav";
 export { GalleryGrid } from "./GalleryGrid";
