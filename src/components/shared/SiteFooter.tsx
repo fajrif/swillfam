@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Container } from "./Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import type { SiteSettings } from "@/lib/site-settings";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
@@ -59,9 +59,16 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               placeholder="Enter your email here"
               className="h-[50px] w-full rounded-none border-0 border-b border-white bg-transparent px-2 text-center font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0"
             />
-            <Button type="submit" variant="pill" size="pill">
+            <SpecularButton
+              type="submit"
+              size="lg"
+              radius={30}
+              tint="#c6387f"
+              tintOpacity={1}
+              hoverBackgroundOpacity={0.9}
+            >
               Subscribe
-            </Button>
+            </SpecularButton>
           </form>
         </Container>
 

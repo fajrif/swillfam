@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { ContactForm } from "./ContactForm";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 /** "Let's Connect" — venue image (left) + inquiry form (right). */
 export function LetsConnectSection() {
@@ -8,13 +9,15 @@ export function LetsConnectSection() {
     <section>
       <Container className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-2">
         <div className="relative aspect-[683/740] w-full overflow-hidden border border-sf-border/30">
-          <Image
-            src="/contact/contact-us.png"
-            alt="Inside a SwillFam venue"
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
-          />
+          <ParallaxImage>
+            <Image
+              src="/contact/contact-us.png"
+              alt="Inside a SwillFam venue"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </ParallaxImage>
         </div>
 
         <div className="flex flex-col justify-center">

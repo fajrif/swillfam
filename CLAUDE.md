@@ -47,6 +47,7 @@ UI Strategy:
 Images:
 - All images and their parent containers must NOT have rounded corners (no `rounded-*` classes on image or parent div).
 - Use `/logo-swillfam.png` for all logo references.
+- **Every page hero or banner that uses an image must wrap the `<Image>` in `<ParallaxImage>`** (from `@/components/shared/ParallaxImage`) for scroll-linked parallax effect. This applies to all full-bleed page-level hero components. Do not add parallax to section-level, grid, card, or carousel images unless explicitly requested.
 
 Design Source:
 - Figma MCP is the source of truth.

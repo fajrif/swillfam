@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function CareersSection() {
   return (
@@ -24,19 +24,21 @@ export function CareersSection() {
                 with us.
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href="/careers">View All Careers</Link>
-            </Button>
+            <SpecularButton href="/careers" size="lg" radius={30} className="w-fit">
+              View All Careers
+            </SpecularButton>
           </div>
 
           <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">
-            <Image
-              src="/about/career-swilfam.png"
-              alt="Join the SwillFam team"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+            <ParallaxImage>
+              <Image
+                src="/about/career-swilfam.png"
+                alt="Join the SwillFam team"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </ParallaxImage>
           </div>
         </div>
       </Container>

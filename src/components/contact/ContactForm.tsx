@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { submitInquiryAction, type ContactActionState } from "@/app/contact/actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 const initialState: ContactActionState = {};
 
@@ -53,9 +53,18 @@ export function ContactForm() {
 
       {state.error ? <p className="font-inter text-sm text-sf-accent">{state.error}</p> : null}
 
-      <Button type="submit" variant="swillfam" size="pill" disabled={pending} className="w-fit">
+      <SpecularButton
+        type="submit"
+        size="lg"
+        radius={30}
+        disabled={pending}
+        className="w-fit"
+        tint="#c6387f"
+        tintOpacity={1}
+        hoverBackgroundOpacity={0.9}
+      >
         {pending ? "Sending…" : "Submit"}
-      </Button>
+      </SpecularButton>
     </form>
   );
 }

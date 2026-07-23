@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { ParallaxTileGrid } from "@/components/shared/ParallaxTileGrid";
 
 export type CategoryTileData = {
   src: string;
@@ -17,11 +18,14 @@ export function DualImageColumnSection({
   description,
   titleClassName,
   tiles,
+  parallax = false,
 }: {
   title?: string;
   description?: string;
   titleClassName?: string;
   tiles: CategoryTileData[];
+  /** Scroll-linked parallax on the tile images (alternating direction per tile). */
+  parallax?: boolean;
 }) {
   return (
     <section className="py-16 lg:py-24">
@@ -29,11 +33,15 @@ export function DualImageColumnSection({
         {title ? (
           <SectionHeading title={title} lead={description} titleClassName={titleClassName} />
         ) : null}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          {tiles.map((tile) => (
-            <CategoryTile key={tile.label} {...tile} />
-          ))}
-        </div>
+        {parallax ? (
+          <ParallaxTileGrid tiles={tiles} />
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {tiles.map((tile) => (
+              <CategoryTile key={tile.label} {...tile} />
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );
@@ -42,13 +50,13 @@ export function DualImageColumnSection({
 function CategoryTile({ src, label, labelAlign, description, href }: CategoryTileData) {
   const content = (
     <>
-      <div className="absolute inset-0 border border-sf-border/50 p-2 overflow-hidden">
+      <div className="absolute inset-0 border border-sf-border/50 overflow-hidden">
         <Image
           src={src}
           alt={label}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover scale-[0.97] transition-transform duration-700 group-hover:scale-100"
+          className="object-cover scale-100 transition-transform duration-700 group-hover:scale-110"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -60,7 +68,7 @@ function CategoryTile({ src, label, labelAlign, description, href }: CategoryTil
             : "bottom-0 right-0 items-end text-right",
         )}
       >
-        <span className="font-syne text-[clamp(2rem,4vw,48px)] font-extrabold uppercase leading-none text-white">
+        <span className="font-syne text-[clamp(2rem,4vw,48px)] font-extrabold uppercase leading-none text-white transition-all duration-300 group-hover:[filter:drop-shadow(0_0_6px_#fff)_drop-shadow(0_0_3px_#f5f)]">
           {label}
         </span>
         {description ? (

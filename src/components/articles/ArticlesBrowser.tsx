@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { CategoryNav } from "./CategoryNav";
 import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import type { ArticleCategory } from "@/generated/prisma/client";
@@ -26,12 +26,16 @@ export function ArticlesBrowser({
         <CategoryNav categories={categories} activeCategoryId={activeCategoryId} />
 
         <div className="flex flex-col gap-10">
-          <div className="flex flex-col gap-4">
+          {/* Keyed by category so switching category remounts the list and
+              replays the fade-up entrance; Load More (same category, more
+              items) keeps this key, so only newly-appended cards animate in. */}
+          <div key={activeCategoryId ?? "all"} className="flex flex-col gap-4">
             {articles.map((article, i) => (
               <Link
                 key={i}
                 href={article.href ?? "#"}
-                className="group flex gap-4 border border-sf-border/50"
+                className="group flex gap-4 border border-sf-border/50 transition-colors duration-300 hover:border-white/80 animate-fade-up"
+                style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
               >
                 <div className="relative w-[140px] shrink-0 overflow-hidden bg-sf-surface sm:w-[200px]">
                   <Image
@@ -44,7 +48,7 @@ export function ArticlesBrowser({
                 </div>
                 <div className="flex flex-col gap-2 p-4">
                   <span className="font-inter text-xs text-white/50">{article.date}</span>
-                  <h3 className="font-syne text-xl leading-snug text-white transition-colors group-hover:text-sf-accent lg:text-2xl">
+                  <h3 className="font-syne text-xl leading-snug text-white transition-colors duration-300 group-hover:text-sf-accent lg:text-2xl">
                     {article.title}
                   </h3>
                   <p className="line-clamp-3 font-inter text-sm leading-relaxed text-white">
@@ -56,11 +60,11 @@ export function ArticlesBrowser({
           </div>
 
           {hasMore && (
-            <Button asChild variant="swillfam" size="pill" className="mx-auto">
-              <Link href={loadMoreHref} scroll={false}>
+            <div className="flex justify-center">
+              <SpecularButton href={loadMoreHref} scroll={false} size="lg" radius={30} className="mx-auto w-fit">
                 Load More
-              </Link>
-            </Button>
+              </SpecularButton>
+            </div>
           )}
         </div>
       </Container>

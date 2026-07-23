@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function DesignExperienceSection() {
   return (
@@ -24,13 +25,15 @@ export function DesignExperienceSection() {
         </div>
 
         <div className="relative aspect-[1389/570] w-full overflow-hidden border border-sf-border/30">
-          <Image
-            src="/about/malachi-clark.png"
-            alt="A SwillFam night in motion"
-            fill
-            sizes="(max-width: 1440px) 100vw, 1390px"
-            className="object-cover"
-          />
+          <ParallaxImage>
+            <Image
+              src="/about/malachi-clark.png"
+              alt="A SwillFam night in motion"
+              fill
+              sizes="(max-width: 1440px) 100vw, 1390px"
+              className="object-cover"
+            />
+          </ParallaxImage>
         </div>
       </Container>
     </section>

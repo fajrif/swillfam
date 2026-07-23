@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function PrivateEventsSection() {
   return (
@@ -25,19 +25,21 @@ export function PrivateEventsSection() {
                 memorable and successful occasion.
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href="/private-events">Plan Private Events</Link>
-            </Button>
+            <SpecularButton href="/private-events" size="lg" radius={30} className="w-fit">
+              Plan Private Events
+            </SpecularButton>
           </div>
 
           <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">
-            <Image
-              src="/merchandise/private-event.png"
-              alt="A SwillFam private event"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+            <ParallaxImage>
+              <Image
+                src="/merchandise/private-event.png"
+                alt="A SwillFam private event"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </ParallaxImage>
           </div>
         </div>
       </Container>

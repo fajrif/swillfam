@@ -12,7 +12,7 @@ export function CategoryNav({
   activeCategoryId?: string;
 }) {
   return (
-    <nav className="flex flex-col gap-3">
+    <nav className="flex flex-col gap-3 self-start lg:sticky lg:top-24">
       <Link
         href="/articles"
         scroll={false}

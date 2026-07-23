@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Map, { Marker, type MapRef } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -10,8 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { whatsappHref } from "@/lib/whatsapp";
 
 export type VenuePin = {
@@ -115,19 +114,20 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
                     <p className="whitespace-pre-line text-white">{venue.operatingHours}</p>
                   </div>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <Button asChild variant="swillfam" size="pill" className="w-full">
-                      <Link href={`/venues/${venue.slug}`}>See Venue</Link>
-                    </Button>
+                    <SpecularButton href={`/venues/${venue.slug}`} size="lg" radius={30} className="w-full">
+                      See Venue
+                    </SpecularButton>
                     {whatsapp ? (
-                      <Button asChild variant="swillfam" size="pill" className="w-full">
-                        <a
-                          href={whatsappHref(whatsapp, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Reserve via WhatsApp
-                        </a>
-                      </Button>
+                      <SpecularButton
+                        href={whatsappHref(whatsapp, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        size="lg"
+                        radius={30}
+                        className="w-full"
+                      >
+                        Reserve via WhatsApp
+                      </SpecularButton>
                     ) : null}
                   </div>
                 </div>

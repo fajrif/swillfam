@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Syne, Archivo, Inter } from "next/font/google";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
+import { ReactLenis } from "lenis/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 // SwillFam public site type system (Figma "SwillFam - Home"):
@@ -40,9 +42,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${syne.variable} ${archivo.variable} ${inter.variable}`}
+      className={`${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
       <body className="font-inter antialiased selection:bg-sf-accent selection:text-white">
+        {/* Lenis owns scroll smoothing site-wide — CSS scroll-behavior:smooth is
+            deliberately not used alongside it (the two fight each other). */}
+        <ReactLenis root options={{ anchors: true }} />
         <NextTopLoader
           color="#c6387f"
           height={3}

@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 /**
  * "Continue the Experience" bento (Figma category 860:1333-1358).
@@ -18,14 +18,16 @@ export function ContinueExperience() {
         <div className="grid border border-sf-border/40 lg:grid-cols-[8fr_4fr]">
           {/* Continue the Experience — image + text */}
           <div className="flex flex-col gap-8 border-b border-sf-border/40 p-4 sm:flex-row lg:border-b-0">
-            <div className="relative aspect-[382/522] w-full shrink-0 overflow-hidden sm:w-[300px]">
-              <Image
-                src="/image1.png"
-                alt=""
-                fill
-                sizes="(max-width: 768px) 100vw, 300px"
-                className="object-cover"
-              />
+            <div className="relative aspect-[382/522] w-full shrink-0 overflow-hidden sm:w-[400px]">
+              <ParallaxImage>
+                <Image
+                  src="/image1.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="object-cover"
+                />
+              </ParallaxImage>
             </div>
             <div className="flex flex-1 flex-col justify-between gap-6">
               <div className="flex flex-col gap-4">
@@ -38,9 +40,9 @@ export function ContinueExperience() {
                   visit, celebration, or gathering.
                 </p>
               </div>
-              <Button asChild variant="swillfam" size="pill" className="w-fit">
-                <Link href="/experience">Discover Experiences</Link>
-              </Button>
+              <SpecularButton href="/experience" size="lg" radius={30} className="w-fit">
+                Discover Experiences
+              </SpecularButton>
             </div>
           </div>
 
@@ -56,9 +58,9 @@ export function ContinueExperience() {
                 and special experiences designed to bring people together.
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href="/events">View Events</Link>
-            </Button>
+            <SpecularButton href="/events" size="lg" radius={30} className="w-fit">
+              View Events
+            </SpecularButton>
           </div>
         </div>
 
@@ -76,14 +78,14 @@ export function ContinueExperience() {
                 across the SwillFam world.
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href="/promotions">View Promotions</Link>
-            </Button>
+            <SpecularButton href="/promotions" size="lg" radius={30} className="w-fit">
+              View Promotions
+            </SpecularButton>
           </div>
 
           {/* Private Events — text + image (PrivateEventsSection pattern) */}
-          <div className="grid gap-8 p-4 lg:grid-cols-[7fr_5fr] lg:border-l lg:border-sf-border/40">
-            <div className="flex flex-col justify-between gap-6">
+          <div className="flex flex-col gap-8 p-4 sm:flex-row lg:border-l lg:border-sf-border/40">
+            <div className="flex flex-1 flex-col justify-between gap-6">
               <div className="flex flex-col gap-4">
                 <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                   Private Events at SwillFam
@@ -95,18 +97,20 @@ export function ContinueExperience() {
                   your guests, goals, and occasion.
                 </p>
               </div>
-              <Button asChild variant="swillfam" size="pill" className="w-fit">
-                <Link href="/private-events">Plan Private Events</Link>
-              </Button>
+              <SpecularButton href="/private-events" size="lg" radius={30} className="w-fit">
+                Plan Private Events
+              </SpecularButton>
             </div>
-            <div className="relative aspect-[382/522] w-full overflow-hidden border border-sf-border/30">
-              <Image
-                src="/merchandise/private-event.png"
-                alt=""
-                fill
-                sizes="(max-width: 1024px) 100vw, 35vw"
-                className="object-cover"
-              />
+            <div className="relative aspect-[382/522] w-full shrink-0 overflow-hidden border border-sf-border/30 sm:w-[400px]">
+              <ParallaxImage>
+                <Image
+                  src="/merchandise/private-event.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="object-cover"
+                />
+              </ParallaxImage>
             </div>
           </div>
         </div>

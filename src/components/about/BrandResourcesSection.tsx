@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { BRAND_RESOURCES } from "./data";
 
 export function BrandResourcesSection() {
@@ -24,9 +23,9 @@ export function BrandResourcesSection() {
               className="flex items-center justify-between gap-4 border-t border-sf-border/50 py-6 last:border-b"
             >
               <span className="font-syne text-2xl text-white">{label}</span>
-              <Button asChild variant="swillfam" size="pill">
-                <Link href="#">Download Here</Link>
-              </Button>
+              <SpecularButton href="#" size="lg" radius={30}>
+                Download Here
+              </SpecularButton>
             </div>
           ))}
         </div>

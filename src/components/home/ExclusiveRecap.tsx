@@ -1,7 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 /** Latest Exclusive Content + Event Recap (Figma 790:124 + 441:108/109).
  *  "View Exclusive Contents" links out to the admin-configured YouTube channel
@@ -16,30 +15,32 @@ export function ExclusiveRecap({ youtubeUrl }: { youtubeUrl?: string | null }) {
 
         <div className="relative w-full overflow-hidden">
           <div className="relative aspect-[1390/625] w-full">
-            <Image
-              src="/home/recap.png"
-              alt="Event recap"
-              fill
-              sizes="(max-width: 1440px) 100vw, 1390px"
-              className="object-cover"
+            <video
+              src="https://swillfam.com/assets/BICYdCYp.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-black/40" />
             <div className="absolute inset-0 flex items-center justify-center">
               <h3 className="px-6 text-center font-syne text-[clamp(1.75rem,5vw,64px)] leading-tight text-white">
-                Event Recap Title
+                SWILLFAM EXCLUSIVE
               </h3>
             </div>
           </div>
         </div>
 
-        <Link
+        <SpecularButton
           href={href}
           target={youtubeUrl ? "_blank" : undefined}
           rel={youtubeUrl ? "noopener noreferrer" : undefined}
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px]"
+          size="lg"
+          radius={30}
         >
           View Exclusive Contents
-        </Link>
+        </SpecularButton>
       </Container>
     </section>
   );

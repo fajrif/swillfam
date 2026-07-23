@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function OurStorySection() {
   return (
@@ -21,13 +22,15 @@ export function OurStorySection() {
         {/* Row 2: image + remaining story text, "Not simply..." aligned to the image top */}
         <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
           <div className="relative aspect-[683/547] w-full overflow-hidden border border-sf-border/30">
-            <Image
-              src="/about/our-story.png"
-              alt="A SwillFam venue at night"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
+            <ParallaxImage>
+              <Image
+                src="/about/our-story.png"
+                alt="A SwillFam venue at night"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </ParallaxImage>
           </div>
 
           <div className="flex flex-col gap-6 font-inter text-white">

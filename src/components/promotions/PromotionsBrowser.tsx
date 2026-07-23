@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Container } from "@/components/shared/Container";
-import { Button } from "@/components/ui/button";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { cn } from "@/lib/utils";
 import { formatDateRange } from "@/lib/date";
 import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
@@ -92,7 +92,7 @@ export function PromotionsBrowser({
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr] lg:gap-12">
           {/* Sidebar: All + venues or categories */}
-          <aside className="flex flex-col gap-3">
+          <aside className="flex flex-col gap-3 self-start lg:sticky lg:top-24">
             <SidebarItem label="All" active={selectedId === null} onClick={() => select(null)} />
             {items.map((it) => (
               <SidebarItem
@@ -126,9 +126,9 @@ export function PromotionsBrowser({
             )}
 
             {filtered.length > visible && (
-              <Button type="button" variant="swillfam" size="pill" onClick={() => setVisible((v) => v + PAGE)}>
+              <SpecularButton type="button" size="lg" radius={30} onClick={() => setVisible((v) => v + PAGE)}>
                 Load More
-              </Button>
+              </SpecularButton>
             )}
           </div>
         </div>

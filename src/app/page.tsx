@@ -33,6 +33,7 @@ export default async function Home() {
       </div>
       <Reveal>
         <DualImageColumnSection
+          parallax
           tiles={[
             { src: "/home/category-lifestyle.png", label: "Lifestyle", labelAlign: "top-left", href: "/category/lifestyle" },
             { src: "/home/category-nightlife.png", label: "Nightlife", labelAlign: "bottom-right", href: "/category/nightlife" },
