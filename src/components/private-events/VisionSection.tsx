@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 /** Intro: eyebrow + title (left) + body paragraphs + CTA (right). */
 export function VisionSection() {
@@ -31,9 +30,9 @@ export function VisionSection() {
             first inquiry to the final execution, we help shape the experience so every detail feels
             aligned with your vision.
           </p>
-          <Button asChild variant="swillfam" size="pill" className="w-fit">
-            <Link href="/venues">View All Venues</Link>
-          </Button>
+          <SpecularButton href="/venues" size="lg" radius={30} className="w-fit">
+            View All Venues
+          </SpecularButton>
         </div>
       </Container>
     </section>

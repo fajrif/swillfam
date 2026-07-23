@@ -20,11 +20,11 @@ export function ContactVenuesSection() {
         </div>
 
         {/* Right: venue rows */}
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           {VENUE_CONTACTS.map((venue) => (
             <div
               key={venue.name}
-              className="flex items-center gap-5 border-t border-sf-border/50 py-5 first:border-t-0 first:pt-0 last:pb-0"
+              className="group flex items-center gap-5 border border-sf-border/50 transition-colors duration-300 hover:border-white/80"
             >
               <div className="relative aspect-[140/96] w-[140px] shrink-0 overflow-hidden bg-sf-surface">
                 <Image
@@ -32,15 +32,19 @@ export function ContactVenuesSection() {
                   alt={venue.name}
                   fill
                   sizes="140px"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <h3 className="font-syne text-2xl leading-tight text-white">{venue.name}</h3>
+                <Link href={`/venues/${venue.slug}`} className="w-fit">
+                  <h3 className="font-syne text-2xl leading-tight text-white transition-colors duration-300 group-hover:text-sf-accent">
+                    {venue.name}
+                  </h3>
+                </Link>
                 <p className="font-inter text-sm text-white">WhatsApp: {venue.whatsapp}</p>
                 <p className="font-inter text-sm text-white">
                   Location:{" "}
-                  <Link href={venue.mapHref} className="underline transition-colors hover:text-sf-accent">
+                  <Link href={venue.mapHref} className="transition-colors text-white/50 hover:text-sf-accent">
                     View on Map
                   </Link>
                 </p>

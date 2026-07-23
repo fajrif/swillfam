@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { submitApplicationAction, type ApplicationActionState } from "@/app/careers/actions";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 const initialState: ApplicationActionState = {};
 
@@ -77,9 +77,18 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
 
       {state.error ? <p className="font-inter text-sm text-sf-accent">{state.error}</p> : null}
 
-      <Button type="submit" variant="pill" size="pill" disabled={pending} className="w-fit">
+      <SpecularButton
+        type="submit"
+        size="lg"
+        radius={30}
+        disabled={pending}
+        className="w-fit"
+        tint="#c6387f"
+        tintOpacity={1}
+        hoverBackgroundOpacity={0.9}
+      >
         {pending ? "Sending…" : "Submit"}
-      </Button>
+      </SpecularButton>
     </form>
   );
 }

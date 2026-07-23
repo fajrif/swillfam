@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { cn } from "@/lib/utils";
 
 export type ArticleRow = {
@@ -68,15 +68,15 @@ export function ArticleListSection({
           </h2>
           <p className="font-inter text-base leading-relaxed text-white md:text-lg">{lead}</p>
           {ctaLabel ? (
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href={ctaHref}>{ctaLabel}</Link>
-            </Button>
+            <SpecularButton href={ctaHref} size="lg" radius={30} className="w-fit">
+              {ctaLabel}
+            </SpecularButton>
           ) : null}
         </div>
 
         <div className="flex flex-col gap-4">
           {rows.map((article, i) => (
-            <Link key={i} href={article.href ?? "#"} className="group flex gap-2 border border-sf-border/50">
+            <Link key={i} href={article.href ?? "#"} className="group flex gap-2 border border-sf-border/50 transition-colors duration-300 hover:border-white/80">
               <div className="relative w-[120px] shrink-0 overflow-hidden bg-sf-surface sm:w-[140px] h-full">
                 <Image
                   src={article.img}
@@ -88,7 +88,7 @@ export function ArticleListSection({
               </div>
               <div className="flex flex-col gap-2 p-2">
                 <span className="font-inter text-xs text-white/50">{article.date}</span>
-                <h3 className="font-syne text-xl leading-snug text-white transition-colors group-hover:text-sf-accent lg:text-[22px]">
+                <h3 className="font-syne text-xl leading-snug text-white transition-colors duration-300 group-hover:text-sf-accent lg:text-[22px]">
                   {article.title}
                 </h3>
                 <p className="line-clamp-2 font-inter text-sm leading-relaxed text-white">

@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 export type ProductRow = {
   img: string | null;
@@ -30,9 +29,9 @@ export function ProductGrid({
         </div>
 
         {hasMore && (
-          <Button asChild variant="swillfam" size="pill">
-            <Link href={loadMoreHref}>Load More</Link>
-          </Button>
+          <SpecularButton href={loadMoreHref} size="lg" radius={30}>
+            Load More
+          </SpecularButton>
         )}
       </Container>
     </section>

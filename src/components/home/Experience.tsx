@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 /** The SwillFam Experience (Figma 312:32 + 450:886 day→night route graphic). */
 export function Experience() {
@@ -25,12 +25,9 @@ export function Experience() {
           />
         </div>
 
-        <Link
-          href="/experience"
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px]"
-        >
+        <SpecularButton href="/experience" size="lg" radius={30}>
           Discover Experience
-        </Link>
+        </SpecularButton>
       </Container>
     </section>
   );

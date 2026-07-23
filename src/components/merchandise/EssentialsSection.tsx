@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function EssentialsSection({ settings }: { settings: SiteSettings }) {
@@ -19,16 +18,12 @@ export function EssentialsSection({ settings }: { settings: SiteSettings }) {
           available at our venues or kindly DM us to order.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <Button asChild variant="swillfam" size="pill">
-            <Link href={ig} target="_blank" rel="noopener noreferrer">
-              DM on Instagram
-            </Link>
-          </Button>
-          <Button asChild variant="swillfam" size="pill">
-            <Link href={wa} target="_blank" rel="noopener noreferrer">
-              Inquire via WhatsApp
-            </Link>
-          </Button>
+          <SpecularButton href={ig} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
+            DM on Instagram
+          </SpecularButton>
+          <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
+            Inquire via WhatsApp
+          </SpecularButton>
         </div>
       </Container>
     </section>

@@ -1,8 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Venue } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
-import { Button } from "@/components/ui/button";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 /** "Performing at <Venue>" — venue blurb + CTA (left) and venue image (right),
  *  boxed like CareersSection. Caller only renders this when the talent has a home venue. */
@@ -22,9 +21,9 @@ export function TalentPerformingSection({ venue }: { venue: Venue }) {
                 {venue.shortDescription ?? venue.description}
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href={`/venues/${venue.slug}`}>Discover {venue.name}</Link>
-            </Button>
+            <SpecularButton href={`/venues/${venue.slug}`} size="lg" radius={30} className="w-fit">
+              Discover {venue.name}
+            </SpecularButton>
           </div>
 
           <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">

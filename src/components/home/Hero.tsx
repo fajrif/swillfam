@@ -1,21 +1,19 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { MetaballsBackground } from "@/components/reactbits/MetaballsBackground";
 
 /** Hero (Figma nodes 231:96 bg, 231:109 wordmark, 291:8 tagline, 471:3 featured card). */
 export function Hero() {
   return (
     <section className="relative flex min-h-[620px] items-end overflow-hidden lg:h-[715px] lg:min-h-0">
-      {/* Background photo + darkening overlays */}
-      <Image
-        src="/home/hero.png"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
+      {/* Animated plasma background (replaces the former static photo + overlays) */}
+      <MetaballsBackground
+        className="absolute inset-0"
+        speed={0.5}
+        direction="forward"
+        scale={1.8}
+        opacity={0.8}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-sf-bg via-sf-bg/40 to-sf-bg/20" />
-      <div className="absolute inset-0 bg-sf-bg/30" />
 
       <Container className="relative z-10 grid w-full grid-cols-1 items-end gap-8 pb-12 lg:grid-cols-[1fr_auto] lg:pb-16">
         <h1 className="order-2 font-syne text-[clamp(3.25rem,13vw,130px)] font-bold uppercase leading-[0.9] tracking-tight text-white lg:order-1">

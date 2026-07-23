@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Category } from "@/generated/prisma/client";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { cn } from "@/lib/utils";
 
 const FALLBACK = "/home/hero.png";
@@ -41,9 +41,9 @@ export function SiblingCategorySection({
                 {category.shortDescription ?? category.caption}
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href={`/category/${category.slug}`}>See {category.name}</Link>
-            </Button>
+            <SpecularButton href={`/category/${category.slug}`} size="lg" radius={30} className="w-fit">
+              See {category.name}
+            </SpecularButton>
           </div>
 
           <div
@@ -52,13 +52,15 @@ export function SiblingCategorySection({
               imageLeft && "lg:order-1",
             )}
           >
-            <Image
-              src={category.image ?? FALLBACK}
-              alt={category.name}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover scale-[0.97] transition-transform duration-700 group-hover:scale-100"
-            />
+            <ParallaxImage>
+              <Image
+                src={category.image ?? FALLBACK}
+                alt={category.name}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover scale-100 transition-transform duration-700 group-hover:scale-110"
+              />
+            </ParallaxImage>
           </div>
         </div>
       </Container>

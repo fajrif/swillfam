@@ -16,6 +16,7 @@ import {
   DualImageColumnSection,
   type CategoryTileData,
 } from "@/components/shared/DualImageColumnSection";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 export type EventCarouselItem = {
   img: string;
@@ -74,12 +75,9 @@ export function EventSectionWithImage({
             {description}
           </p>
           {ctaHref && ctaText ? (
-            <Link
-              href={ctaHref}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent h-[50px] px-9 text-[15px] w-fit"
-            >
+            <SpecularButton href={ctaHref} size="lg" radius={30} className="w-fit shrink-0">
               {ctaText}
-            </Link>
+            </SpecularButton>
           ) : null}
         </div>
 

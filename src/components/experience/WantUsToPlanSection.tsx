@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
@@ -26,11 +25,9 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
                 can help you plan a route that fits your mood.
               </p>
             </div>
-            <Button asChild variant="swillfam" size="pill" className="w-fit">
-              <Link href={wa} target="_blank" rel="noopener noreferrer">
-                Plan via WhatsApp
-              </Link>
-            </Button>
+            <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30} className="w-fit">
+              Plan via WhatsApp
+            </SpecularButton>
           </div>
 
           <div className="relative aspect-[680/581] w-full overflow-hidden border border-sf-border/30">

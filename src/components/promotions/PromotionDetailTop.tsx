@@ -1,18 +1,10 @@
-import Link from "next/link";
 import type { Promotion, Venue } from "@/generated/prisma/client";
 import type { SiteSettings } from "@/lib/site-settings";
 import { Container } from "@/components/shared/Container";
-import { Button } from "@/components/ui/button";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { formatDateRange } from "@/lib/date";
 import { whatsappHref } from "@/lib/whatsapp";
 import { PromotionGallery } from "./PromotionGallery";
-
-const SOCIALS = [
-  { icon: "ph-instagram-logo", label: "Instagram" },
-  { icon: "ph-youtube-logo", label: "YouTube" },
-  { icon: "ph-tiktok-logo", label: "TikTok" },
-  { icon: "ph-linkedin-logo", label: "LinkedIn" },
-];
 
 type PromotionWithVenue = Promotion & { venue: Venue | null };
 
@@ -83,18 +75,19 @@ export function PromotionDetailTop({
 
           <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
             {whatsapp ? (
-              <Button asChild variant="swillfam" size="pill" className="w-fit">
-                <a
-                  href={whatsappHref(
-                    whatsapp,
-                    `Hi SwillFam, I'm interested in the "${promotion.name}"${venue ? ` promotion at ${venue.name}` : " promotion"}.`,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Reserve via WhatsApp
-                </a>
-              </Button>
+              <SpecularButton
+                href={whatsappHref(
+                  whatsapp,
+                  `Hi SwillFam, I'm interested in the "${promotion.name}"${venue ? ` promotion at ${venue.name}` : " promotion"}.`,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="lg"
+                radius={30}
+                className="w-fit"
+              >
+                Reserve via WhatsApp
+              </SpecularButton>
             ) : (
               <span />
             )}
