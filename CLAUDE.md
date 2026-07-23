@@ -8,12 +8,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 (restaurants/bars/clubs). It publishes venues, events, promotions, talents, articles, merchandise,
 careers, and galleries/videos. Two sections share one Next.js app and one database:
 
-- **Public section** (`src/app/page.tsx` + `src/app/{contact,features,privacy,terms}`) — the
-  marketing/landing site. **Note:** the landing/legal pages are still the original brutalist
-  marketing layout with only literal brand-name swaps applied; the real public consumer pages
-  (venue listing, event calendar, blog, etc.) that render the CMS data are **not built yet** — a
-  future pass. If you see stale "Laci"/POS wording in landing/legal copy, it's leftover marketing
-  text from the fork this repo started as, not a live concept.
+- **Public section** — every route under `src/app/(public)/` (home, venues, promotions, talents,
+  events, category, experience, articles, careers, contact, merchandise, exclusive, private-events,
+  privacy/terms). See "Public layout" below for how the shared header/footer chrome works. If you
+  see stale "Laci"/POS wording anywhere, it's leftover marketing text from the fork this repo started
+  as, not a live concept.
 - **Admin section** (`src/app/admin`) — internal CRUD for every model, plain zinc utilitarian UI,
   deliberately distinct from the public site.
 
@@ -83,6 +82,27 @@ No automated tests — verify by building and exercising the admin UI under `npm
 
 Env: copy `.env.example` → `.env`. Needs `DATABASE_URL` (Postgres), `ADMIN_SESSION_SECRET`
 (`openssl rand -base64 32`), and `ADMIN_EMAIL`/`ADMIN_PASSWORD` (read only by the seed script).
+
+## Public layout (`src/app/(public)/`)
+
+Every public route lives under the `(public)` route group so `src/app/(public)/layout.tsx` can own
+the shared chrome once: it's an async Server Component that calls `getSiteSettings()` and renders
+`<main className="min-h-dvh bg-sf-bg font-inter text-sf-text">` wrapping `<SiteHeader />` (in its own
+`<div className="relative">`, so the header floats absolutely over whatever the page renders first —
+a Hero, or just padded content on hero-less detail pages), then `{children}`, then
+`<SiteFooter settings={settings} />`. **Individual pages no longer render `SiteHeader`/`SiteFooter`/
+`<main>` themselves** — a page's `page.tsx` is just its own content, typically a Hero component
+followed by `<Reveal>`-wrapped sections.
+
+- `getSiteSettings` (`src/lib/site-settings.ts`) is wrapped in React's `cache()`. Pages that also need
+  `settings` for their own sections (not just the footer) still call `getSiteSettings()` themselves —
+  a layout can't inject props into a page's children — and `cache()` dedupes that to a single DB
+  query per request. Currently that's `contact`, `experience`, `merchandise`, home (`page.tsx`),
+  `venues`, and `promotions/[slug]`.
+- The route group is purely organizational (Next.js strips `(name)` segments from the URL), so no
+  page's path changed when it moved into `(public)`.
+- `src/app/admin/**` is a sibling of `(public)`, not nested inside it, with its own separate
+  `admin/(dashboard)/layout.tsx` (see "Admin CRUD pattern" below) — the two sections never share chrome.
 
 ## Auth (`/admin`)
 
@@ -180,7 +200,7 @@ do not add `loading.tsx`.
 - `String[]` uses native Postgres `text[]` (no join tables) for `SegmentGallery.images`,
   `Event.galleries`, `Event.recurringDays`.
 
-The public `/contact` form (`src/app/contact/actions.ts`) is the only public writer — it creates
+The public `/contact` form (`src/app/(public)/contact/actions.ts`) is the only public writer — it creates
 `Inquiry` rows behind a honeypot + an in-memory sliding-window rate limiter (`src/lib/rate-limit.ts`,
 3/10min per IP, resets on restart). `Application` rows are also public-submitted (admin gets list +
 read-only detail + delete only), but the public application form is part of the unbuilt public pages.
