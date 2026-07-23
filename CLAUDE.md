@@ -207,320 +207,782 @@ read-only detail + delete only), but the public application form is part of the 
 
 ## TASKS
 
-## Integrate the <FlowingMenu /> component from React Bits
+# ROLE
 
-You are helping integrate an open-source React component into an existing application.
+You are a Senior Graphics Engineer specializing in WebGL, GLSL, OGL, React, and interactive website backgrounds.
 
-### Component: FlowingMenu
-### Variant: JavaScript + CSS
-### Dependencies: gsap
+You are building a production-ready reusable component for a premium digital agency website.
+
+The visual quality should be comparable to Stripe, Apple, Linear, Vercel, Framer and ReactBits Pro.
+
+The final result must be clean, modular, maintainable and highly optimized.
 
 ---
 
-### Usage Example
-```jsx
-import FlowingMenu from './FlowingMenu'
+# OBJECTIVE
 
-const demoItems = [
-  { link: '#', text: 'Mojave', image: 'https://picsum.photos/600/400?random=1' },
-  { link: '#', text: 'Sonoma', image: 'https://picsum.photos/600/400?random=2' },
-  { link: '#', text: 'Monterey', image: 'https://picsum.photos/600/400?random=3' },
-  { link: '#', text: 'Sequoia', image: 'https://picsum.photos/600/400?random=4' }
-];
+Create a brand new component named
 
-<div style={{ height: '600px', position: 'relative' }}>
-  <FlowingMenu items={demoItems} />
-</div>
-```
+GradientBandsBackground
 
-### Props
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| items | object[] | [] | An array of objects containing: link, text, image. |
-| speed | number | 15 | Duration of the marquee animation in seconds (lower = faster). |
-| textColor | string | #ffffff | Color of the static menu text. |
-| bgColor | string | #120F17 | Background color of the menu container. |
-| marqueeBgColor | string | #ffffff | Background color of the marquee overlay. |
-| marqueeTextColor | string | #120F17 | Text color inside the marquee. |
-| borderColor | string | #ffffff | Color of the dividing lines between menu items. |
+This is NOT a Plasma shader.
 
-### Full Component Source
-```jsx
-import { useRef, useEffect, useState } from 'react';
-import { gsap } from 'gsap';
+This is NOT Aurora.
 
-import './FlowingMenu.css';
+This is NOT Mesh Gradient.
 
-function FlowingMenu({
-  items = [],
-  speed = 15,
-  textColor = '#fff',
-  bgColor = '#120F17',
-  marqueeBgColor = '#fff',
-  marqueeTextColor = '#120F17',
-  borderColor = '#fff'
-}) {
-  return (
-    <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
-      <nav className="menu">
-        {items.map((item, idx) => (
-          <MenuItem
-            key={idx}
-            {...item}
-            speed={speed}
-            textColor={textColor}
-            marqueeBgColor={marqueeBgColor}
-            marqueeTextColor={marqueeTextColor}
-            borderColor={borderColor}
-          />
-        ))}
-      </nav>
-    </div>
-  );
-}
+This is NOT Noise Clouds.
 
-function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor }) {
-  const itemRef = useRef(null);
-  const marqueeRef = useRef(null);
-  const marqueeInnerRef = useRef(null);
-  const animationRef = useRef(null);
-  const [repetitions, setRepetitions] = useState(4);
+This is NOT Metaballs.
 
-  const animationDefaults = { duration: 0.6, ease: 'expo' };
+Do not modify an existing shader.
 
-  const findClosestEdge = (mouseX, mouseY, width, height) => {
-    const topEdgeDist = distMetric(mouseX, mouseY, width / 2, 0);
-    const bottomEdgeDist = distMetric(mouseX, mouseY, width / 2, height);
-    return topEdgeDist < bottomEdgeDist ? 'top' : 'bottom';
-  };
+Instead design an entirely new animated shader.
 
-  const distMetric = (x, y, x2, y2) => {
-    const xDiff = x - x2;
-    const yDiff = y - y2;
-    return xDiff * xDiff + yDiff * yDiff;
-  };
+The attached image is only the visual inspiration.
 
-  useEffect(() => {
-    const calculateRepetitions = () => {
-      if (!marqueeInnerRef.current) return;
+Do NOT recreate the image pixel by pixel.
 
-      // Get the first marquee part to measure content width
-      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee__part');
-      if (!marqueeContent) return;
+Instead reproduce its visual language.
 
-      const contentWidth = marqueeContent.offsetWidth;
-      const viewportWidth = window.innerWidth;
+---
 
-      // Calculate how many copies we need to fill viewport + extra for seamless loop
-      // We need at least 2, but calculate based on content vs viewport
-      const needed = Math.ceil(viewportWidth / contentWidth) + 2;
-      setRepetitions(Math.max(4, needed));
-    };
+# VISUAL STYLE
 
-    calculateRepetitions();
-    window.addEventListener('resize', calculateRepetitions);
-    return () => window.removeEventListener('resize', calculateRepetitions);
-  }, [text, image]);
+The animation should feel like a premium cinematic website background.
 
-  useEffect(() => {
-    const setupMarquee = () => {
-      if (!marqueeInnerRef.current) return;
+The screen consists of multiple wide horizontal color bands.
 
-      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee__part');
-      if (!marqueeContent) return;
+The bands are soft.
 
-      const contentWidth = marqueeContent.offsetWidth;
-      if (contentWidth === 0) return;
+The bands blend together.
 
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
+No visible hard edges.
 
-      // Animate exactly one content width for seamless loop
-      animationRef.current = gsap.to(marqueeInnerRef.current, {
-        x: -contentWidth,
-        duration: speed,
-        ease: 'none',
-        repeat: -1
-      });
-    };
+No obvious procedural patterns.
 
-    // Small delay to ensure DOM is ready after repetitions update
-    const timer = setTimeout(setupMarquee, 50);
+No rainbow colors.
 
-    return () => {
-      clearTimeout(timer);
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
-    };
-  }, [text, image, repetitions, speed]);
+No psychedelic plasma.
 
-  const handleMouseEnter = ev => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
-    const rect = itemRef.current.getBoundingClientRect();
-    const x = ev.clientX - rect.left;
-    const y = ev.clientY - rect.top;
-    const edge = findClosestEdge(x, y, rect.width, rect.height);
+No smoke.
 
-    gsap
-      .timeline({ defaults: animationDefaults })
-      .set(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
-      .set(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0)
-      .to([marqueeRef.current, marqueeInnerRef.current], { y: '0%' }, 0);
-  };
+No fire.
 
-  const handleMouseLeave = ev => {
-    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
-    const rect = itemRef.current.getBoundingClientRect();
-    const x = ev.clientX - rect.left;
-    const y = ev.clientY - rect.top;
-    const edge = findClosestEdge(x, y, rect.width, rect.height);
+No liquid.
 
-    gsap
-      .timeline({ defaults: animationDefaults })
-      .to(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
-      .to(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0);
-  };
+No aurora.
 
-  return (
-    <div className="menu__item" ref={itemRef} style={{ borderColor }}>
-      <a
-        className="menu__item-link"
-        href={link}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        style={{ color: textColor }}
-      >
-        {text}
-      </a>
-      <div className="marquee" ref={marqueeRef} style={{ backgroundColor: marqueeBgColor }}>
-        <div className="marquee__inner-wrap">
-          <div className="marquee__inner" ref={marqueeInnerRef} aria-hidden="true">
-            {[...Array(repetitions)].map((_, idx) => (
-              <div className="marquee__part" key={idx} style={{ color: marqueeTextColor }}>
-                <span>{text}</span>
-                <div className="marquee__img" style={{ backgroundImage: `url(${image})` }} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+No particles.
 
-export default FlowingMenu;
+Everything should feel calm and elegant.
 
-```
+---
 
-### Component CSS
-```css
-.menu-wrap {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+# COLORS
 
-.menu {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+Use a dark luxury palette.
 
-.menu__item {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  border-top: 1px solid;
-}
+Approximate colors:
 
-.menu__item:first-child {
-  border-top: none;
-}
+Background
 
-.menu__item-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  position: relative;
-  cursor: pointer;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  font-weight: 600;
-  font-size: 4vh;
-}
+#05020B
 
-.menu__item-link:hover {
-  color: inherit;
-}
+Gradient Palette
 
-.menu__item-link:focus:not(:focus-visible) {
-  color: inherit;
-}
+#201248
 
-.marquee {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  transform: translate3d(0, 101%, 0);
-}
+#35206C
 
-.marquee__inner-wrap {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
+#55359A
 
-.marquee__inner {
-  display: flex;
-  align-items: center;
-  position: relative;
-  height: 100%;
-  width: fit-content;
-  will-change: transform;
-}
+#7546C4
 
-.marquee__part {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
+#9357D9
 
-.marquee span {
-  white-space: nowrap;
-  text-transform: uppercase;
-  font-weight: 400;
-  font-size: 4vh;
-  line-height: 1;
-  padding: 0 1vw;
-}
+#B76ED9
 
-.marquee__img {
-  width: 200px;
-  height: 7vh;
-  margin: 2em 2vw;
-  padding: 1em 0;
-  border-radius: 50px;
-  background-size: cover;
-  background-position: 50% 50%;
-}
+#D98ACF
 
-```
+#F3A9D8
 
-### Integration Instructions
-1. Install any listed dependencies.
-2. Copy the component source into the appropriate directory in the project.
-3. Import the CSS file alongside the component.
-4. Import and render the component using the usage example above as a starting point.
-5. Adjust props as needed for the specific use case — refer to the props table for all available options.
+#FFE3EC
 
+Blend them smoothly.
+
+Never show abrupt transitions.
+
+---
+
+## COLOR EXTRACTION
+
+Analyze the attached reference image.
+
+Automatically extract approximately
+
+10 dominant horizontal color layers.
+
+Estimate the average color of each layer.
+
+Use those extracted colors as the palette.
+
+Do not invent new colors.
+
+The generated background should preserve the same overall color balance as the reference image.
+
+The image should look like it belongs to the same visual family.
+
+The animation should simply bring the still image to life.
+
+# BAND STRUCTURE
+
+Create around
+
+18~24
+
+horizontal bands.
+
+Each band occupies around
+
+4%–8%
+
+of the screen height.
+
+Every band has
+
+soft interpolation
+
+instead of hard stripes.
+
+Bands overlap each other.
+
+The blending should look almost like a huge blurred gradient.
+
+---
+
+## BAND GEOMETRY
+
+Do NOT render thin stripes.
+
+Do NOT render glowing lines.
+
+Do NOT render laser beams.
+
+Each band should be a very large horizontal layer.
+
+Target
+
+9–11 bands
+
+across the entire viewport.
+
+Each band occupies approximately
+
+8%–14%
+
+of the viewport height.
+
+Neighboring bands overlap heavily.
+
+The screen should feel almost completely filled.
+
+The viewer should not perceive individual stripes.
+
+Instead they should perceive stacked soft color layers.
+
+Avoid large empty black gaps.
+
+## BAND EDGES
+
+Band edges should be extremely soft.
+
+The transition between neighboring bands should occupy almost
+
+40–60%
+
+of the band height.
+
+Never use hard alpha edges.
+
+Every band slowly fades into the next one.
+
+
+# MOTION
+
+The movement should be extremely subtle.
+
+Each band moves independently.
+
+Some bands move left.
+
+Some move right.
+
+Different speeds.
+
+Movement should be nearly imperceptible.
+
+Target mood:
+
+calm
+
+premium
+
+cinematic
+
+ambient
+
+Do not make obvious looping.
+
+Do not make sine-wave animation.
+
+Instead use low-frequency domain warping.
+
+Maximum displacement should be very small.
+
+---
+
+# WARP
+
+Bands should not be perfectly straight.
+
+Apply an extremely subtle domain warp.
+
+Amplitude
+
+2~4 pixels.
+
+Frequency
+
+very low.
+
+The viewer should almost not notice it.
+
+The purpose is simply to remove mechanical straight lines.
+
+---
+
+# BLUR
+
+Do NOT implement Gaussian blur.
+
+Instead fake blur using
+
+smoothstep
+
+gradient interpolation
+
+soft distance falloff
+
+layer blending
+
+The image should feel naturally blurred.
+
+---
+
+# DEPTH
+
+Create visual depth by layering bands.
+
+Some bands should be more opaque.
+
+Some less opaque.
+
+Some slightly brighter.
+
+No shadows.
+
+Only soft luminosity.
+
+---
+
+# VIGNETTE
+
+Add a soft vignette.
+
+Corners slightly darker.
+
+Very subtle.
+
+---
+
+# PERFORMANCE
+
+This shader must be optimized.
+
+No raymarching.
+
+No expensive loops.
+
+No FBM with many octaves.
+
+No unnecessary branches.
+
+Target
+
+60–120 FPS
+
+on modern laptops.
+
+---
+
+# TECHNOLOGY
+
+Use
+
+React
+
+TypeScript
+
+OGL
+
+WebGL2
+
+GLSL 300 ES
+
+Follow the coding style of ReactBits.
+
+---
+
+# FILE STRUCTURE
+
+Create
+
+src/components/reactbits/
+
+GradientBandsBackground.tsx
+
+GradientBandsBackground.css
+
+shaders/
+
+gradientBands.vert
+
+gradientBands.frag
+
+---
+
+# REACT COMPONENT
+
+The public API should look like
+
+<GradientBandsBackground
+    opacity={1}
+    speed={0.12}
+    bandCount={20}
+    grain={0.02}
+    warpStrength={0.04}
+    blur={0.22}
+    mouseInteractive={false}
+    colors={[
+        "#05020B",
+        "#201248",
+        "#35206C",
+        "#55359A",
+        "#7546C4",
+        "#9357D9",
+        "#B76ED9",
+        "#D98ACF",
+        "#F3A9D8",
+        "#FFE3EC"
+    ]}
+/>
+
+---
+
+# IMPLEMENTATION REQUIREMENTS
+
+Implement
+
+ResizeObserver
+
+IntersectionObserver
+
+WebGL context lost handling
+
+High DPI rendering
+
+Proper cleanup
+
+Responsive resizing
+
+React hooks
+
+Strong TypeScript typing
+
+No memory leaks.
+
+---
+
+# IMPLEMENTATION STRATEGY
+
+Do NOT use a single global linear gradient.
+
+Instead:
+
+1. Generate N horizontal bands.
+
+2. For each band:
+
+   - assign an independent gradient palette
+   - generate 3–6 color stops
+   - interpolate smoothly between stops
+   - animate stop positions over time
+   - assign independent motion direction
+   - assign independent speed
+   - assign independent phase offset
+   - assign independent brightness multiplier
+
+3. Blend all bands together using smooth interpolation.
+
+4. Apply a subtle domain warp.
+
+5. Apply film grain.
+
+6. Apply vignette.
+
+The final result should look like layered animated ribbons of light rather than procedural stripes.
+
+
+# SHADER ARCHITECTURE
+
+Build the shader in layers.
+
+Layer 1
+
+Background
+
+Layer 2
+
+Gradient bands
+
+Layer 3
+
+Independent motion
+
+Layer 4
+
+Domain warp
+
+Layer 5
+
+Soft blending
+
+Layer 6
+
+Brightness modulation
+
+Layer 7
+
+Film grain
+
+Layer 8
+
+Vignette
+
+Every layer should be isolated inside reusable GLSL helper functions.
+
+Avoid giant main() functions.
+
+---
+
+# CLEAN CODE
+
+Split calculations into reusable GLSL functions.
+
+Comment every function.
+
+Avoid magic numbers.
+
+Keep uniforms organized.
+
+Readable variable names.
+
+Production quality only.
+
+---
+
+# FINAL QUALITY TARGET
+
+The animation should feel like a premium landing page background from
+
+Apple
+
+Stripe
+
+Linear
+
+Framer
+
+Raycast
+
+Vercel
+
+ReactBits Pro
+
+The final result should be elegant enough to become the signature background of an entire design system.
+
+# HORIZONTAL GRADIENT BANDS
+
+Do not render each band as a flat solid color.
+
+Instead, every horizontal band must contain its own independent horizontal gradient.
+
+Think of every band as a long ribbon made from multiple colors that blend together.
+
+For example
+
+Band 01
+
+Deep Indigo
+→ Royal Purple
+→ Violet
+→ Magenta
+→ Pink
+
+Band 02
+
+Dark Purple
+→ Violet
+→ Lavender
+→ Soft Pink
+
+Band 03
+
+Royal Purple
+→ Orchid
+→ Pink
+→ Pale Rose
+
+Each band should have a unique gradient composition.
+
+Do not repeat identical gradients.
+
+---
+
+## HORIZONTAL GRADIENT
+
+Each band has a very wide horizontal gradient.
+
+The gradient spans almost the entire screen width.
+
+Do not create small repeating gradients.
+
+Each band contains
+
+4–6
+
+large color regions.
+
+Example
+
+██████▒▒▒▒▒▒▓▓▓▓▓▓██████
+
+not
+
+██▒█▒██▒█▒█▒██▒█▒█▒
+
+The horizontal gradient should feel like cinematic color grading.
+
+Not procedural noise.
+
+
+# COLOR INTERPOLATION
+
+Color interpolation should be extremely smooth.
+
+No visible color stops.
+
+No abrupt transitions.
+
+No banding artifacts.
+
+Use smooth interpolation between color stops.
+
+The final appearance should resemble premium cinematic color grading rather than CSS gradients.
+
+---
+
+# HORIZONTAL MOVEMENT
+
+Each horizontal gradient should slowly drift independently.
+
+The gradient itself moves inside the band.
+
+Not the whole band.
+
+Imagine the colors gently flowing through the ribbon.
+
+Some bands drift left.
+
+Some drift right.
+
+Each has different speed.
+
+The movement should be extremely subtle.
+
+Almost imperceptible.
+
+The viewer should only notice it after watching for several seconds.
+
+---
+
+# INDEPENDENT PHASE
+
+Every band should have
+
+its own
+
+offset
+
+phase
+
+speed
+
+gradient start
+
+gradient length
+
+noise seed
+
+No two bands should animate identically.
+
+Avoid synchronized motion.
+
+---
+
+# COLOR STOPS
+
+Each band should randomly generate between
+
+3 and 6
+
+color stops.
+
+Example
+
+Purple
+
+↓
+
+Violet
+
+↓
+
+Magenta
+
+↓
+
+Pink
+
+↓
+
+Lavender
+
+↓
+
+Dark Purple
+
+The positions of these color stops should slowly evolve over time.
+
+The colors themselves should never abruptly change.
+
+Only their positions shift.
+
+---
+
+# DOMAIN WARP
+
+Apply a subtle domain warp before evaluating the gradient.
+
+The warp should be almost invisible.
+
+It exists only to prevent perfectly mechanical horizontal gradients.
+
+Maximum displacement
+
+2–4 pixels.
+
+Very low frequency.
+
+---
+
+# BLENDING
+
+Neighboring bands should softly overlap.
+
+There should never be a visible hard edge between bands.
+
+Each band fades into the next.
+
+Use smooth distance falloff rather than alpha-only blending.
+
+The result should feel like many large blurred ribbons stacked vertically.
+
+---
+
+# LUMINOSITY
+
+Some bands should be brighter.
+
+Some darker.
+
+Brightness should vary slowly across the horizontal axis.
+
+Never use flat brightness.
+
+The scene should have natural visual depth.
+
+---
+
+# PREMIUM FEEL
+
+Avoid making the gradients look like:
+
+CSS linear-gradient()
+
+PowerPoint gradients
+
+Windows wallpapers
+
+Cheap rainbow effects
+
+Instead aim for the cinematic color treatment seen in luxury websites from Apple, Stripe, Linear, Framer and Raycast.
+
+The animation should feel alive, but almost motionless.
+
+The background should remain elegant and never distract from foreground content.
+
+## IMPORTANT
+
+Do not stop after generating a first version.
+
+Do NOT generate colors from noise.
+
+Noise is only allowed to slightly distort positions.
+
+Color distribution must be artist-directed.
+
+The colors should resemble a manually painted gradient.
+
+Think like a motion designer rather than a shader programmer.
+
+Iteratively refine the shader until the visual quality reaches production level.
+
+After each implementation:
+
+1. Critique the result.
+2. Identify weaknesses.
+3. Improve band blending.
+4. Improve motion.
+5. Improve color interpolation.
+6. Reduce any procedural appearance.
+7. Improve premium feeling.
+8. Repeat until no obvious improvements remain.
+
+Prioritize aesthetics over algorithmic simplicity.
+
+The goal is to create a reusable background component worthy of ReactBits Pro.
+
+Notes:
+"Treat the reference image `public/articles/banner.png` as the keyframe of the animation. Analyze it first. Estimate the position, thickness, average color, opacity, and blur of each horizontal layer. Build the shader so that at t = 0 it visually matches this keyframe, then animate the layers with extremely subtle independent horizontal motion while preserving the same composition."

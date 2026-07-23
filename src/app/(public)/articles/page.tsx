@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { GradientBandsBackground } from "@/components/reactbits/GradientBandsBackground";
 import { ArticlesBrowser } from "@/components/articles";
 import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
@@ -58,11 +57,7 @@ export default async function ArticlesPage({
 
   return (
     <StickyHero
-      backdrop={
-        <ParallaxImage>
-          <Image src="/articles/banner.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
-      }
+      backdrop={<GradientBandsBackground speed={0.22} bandCount={14} sweep={0.62} className="absolute inset-0" />}
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
