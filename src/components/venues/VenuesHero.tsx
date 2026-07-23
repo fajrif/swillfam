@@ -9,7 +9,7 @@ export function VenuesHero() {
     <div className="relative h-[715px] w-full overflow-hidden">
       <ParallaxImage>
         <Image
-          src="/categories/venues/banner.png"
+          src="/home/hero.png"
           alt="SwillFam venues"
           fill
           className="object-cover"
