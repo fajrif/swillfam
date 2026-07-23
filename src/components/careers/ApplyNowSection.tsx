@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ApplicationForm } from "./ApplicationForm";
 
 /** "Apply Now" — application form (left) + venue image (right). */
@@ -12,13 +13,15 @@ export function ApplyNowSection({ careers }: { careers: { id: string; jobTitle: 
         </div>
 
         <div className="relative aspect-[680/794] w-full overflow-hidden border border-sf-border/30">
-          <Image
-            src="/careers/application-form.png"
-            alt="Inside a SwillFam venue"
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
-          />
+          <ParallaxImage>
+            <Image
+              src="/careers/application-form.png"
+              alt="Inside a SwillFam venue"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </ParallaxImage>
         </div>
       </Container>
     </section>

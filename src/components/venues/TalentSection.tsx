@@ -23,7 +23,15 @@ export function TalentSection({
       <Container className="flex flex-col gap-8 lg:gap-12">
         <SectionHeading title={title} lead={description} align="center" />
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <div
+          className={
+            talents.length === 1
+              ? "mx-auto grid max-w-sm grid-cols-1 gap-6 sm:gap-8"
+              : talents.length === 2
+                ? "mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
+                : "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+          }
+        >
           {talents.map((talent) => (
             <div key={talent.id} className="group flex flex-col gap-4">
               <Link
