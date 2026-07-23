@@ -1,6 +1,7 @@
 export { HeroSection } from "./HeroSection";
 export { OurStorySection } from "./OurStorySection";
 export { DesignExperienceSection } from "./DesignExperienceSection";
+export { WhatWeStandForFlowingSection } from "./WhatWeStandForFlowingSection";
 export { WhatWeStandForSection } from "./WhatWeStandForSection";
 export { StandForColumnsSection } from "./StandForColumnsSection";
 export { CareersSection } from "./CareersSection";

@@ -10,7 +10,7 @@ import { getArticleRows } from "@/lib/articles";
 import {
   OurStorySection,
   DesignExperienceSection,
-  WhatWeStandForSection,
+  WhatWeStandForFlowingSection,
   StandForColumnsSection,
   CareersSection,
   BrandResourcesSection,
@@ -72,7 +72,7 @@ export default async function About() {
       </Reveal>
 
       <Reveal>
-        <WhatWeStandForSection />
+        <WhatWeStandForFlowingSection />
       </Reveal>
 
       <Reveal>
