@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { submitInquiryAction, type ContactActionState } from "@/app/contact/actions";
+import { submitInquiryAction, type ContactActionState } from "@/app/(public)/contact/actions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
