@@ -45,7 +45,7 @@ export function GalleryCarousel({
   };
 
   return (
-    <section className="py-16 lg:pt-16 lg:pb-24">
+    <section className="py-16 lg:pb-24">
       <Container className="flex flex-col gap-12">
         <div className="mx-auto flex max-w-[740px] flex-col gap-4 text-center">
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
