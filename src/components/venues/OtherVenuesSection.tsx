@@ -3,7 +3,7 @@ import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { VenueCard } from "@/components/shared/VenueCard";
 
-/** "See Other Venues" — sibling venues from the same category (max 2 supplied by the page). */
+/** "See Other Venues" — sibling venues from the same category (max 3 supplied by the page). */
 export function OtherVenuesSection({ venues }: { venues: Venue[] }) {
   if (venues.length === 0) return null;
 
@@ -12,9 +12,9 @@ export function OtherVenuesSection({ venues }: { venues: Venue[] }) {
       <Container className="flex flex-col gap-8 lg:gap-12">
         <SectionHeading title="See Other Venues" align="center" />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {venues.map((venue) => (
-            <VenueCard key={venue.id} venue={venue} />
+            <VenueCard key={venue.id} venue={venue} disableHoverOverlay />
           ))}
         </div>
       </Container>

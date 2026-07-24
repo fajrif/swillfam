@@ -18,18 +18,20 @@ export type OfferCardData = {
 export function OfferCard({ offer }: { offer: OfferCardData }) {
   const inner = (
     <>
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
-        {offer.image ? (
-          <Image
-            src={offer.image}
-            alt={offer.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-sf-surface" />
-        )}
+      <div className="p-3">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
+          {offer.image ? (
+            <Image
+              src={offer.image}
+              alt={offer.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-sf-surface" />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 p-5">

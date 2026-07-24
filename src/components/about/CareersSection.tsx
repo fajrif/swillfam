@@ -5,10 +5,10 @@ import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function CareersSection() {
   return (
-    <section className="pt-8 pb-16">
+    <section className="pt-4 pb-16">
       <Container>
         <div className="grid gap-8 p-4 border border-sf-border/40 lg:grid-cols-[7fr_5fr]">
-          <div className="flex flex-col justify-between">
+          <div className="order-2 flex flex-col justify-between lg:order-1">
             <div className="flex flex-col gap-6">
               <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
                 Careers at SwillFam
@@ -18,7 +18,7 @@ export function CareersSection() {
                 venue operations and hospitality to marketing, events, creative, and management, our
                 team plays an important role in shaping every guest experience.
               </p>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed text-white">
                 If you are passionate about lifestyle, hospitality, nightlife, food and beverage, or
                 creative experiences, SwillFam is always open to discovering people who want to grow
                 with us.
@@ -29,7 +29,7 @@ export function CareersSection() {
             </SpecularButton>
           </div>
 
-          <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">
+          <div className="order-1 relative aspect-[4/3] w-full overflow-hidden border border-sf-border/30 lg:order-2">
             <ParallaxImage>
               <Image
                 src="/about/career-swilfam.png"

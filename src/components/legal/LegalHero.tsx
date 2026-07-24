@@ -22,6 +22,9 @@ export function LegalHero({
       <div className="absolute inset-x-0 bottom-0 h-[225px] bg-gradient-to-t from-sf-bg to-transparent" />
       <ParallaxHeroContent>
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+          <span className="mb-4 font-inter text-sm uppercase tracking-widest text-white">
+            {badgeLabel}
+          </span>
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
             {title}
           </h1>

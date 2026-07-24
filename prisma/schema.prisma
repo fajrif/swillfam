@@ -304,6 +304,10 @@ model Event {
   endHour          String // "HH:mm"
   recurringDays    Weekday[] // used when eventType = RECURRING
   featured         Boolean        @default(false)
+  // false = retired: hidden from the public calendar + listings, but its detail
+  // page still renders (stamped "Past Event", reservations disabled) and it
+  // feeds the "Past Editions" grid on recurring event pages.
+  active           Boolean        @default(true)
   isPrivate        Boolean        @default(false) @map("private")
   galleries        String[] // multiple uploaded image paths, ordered
   ticketInfo       String?

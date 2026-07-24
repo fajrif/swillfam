@@ -194,6 +194,7 @@ export type MetaballsBackgroundProps = {
   speed?: number;
   direction?: Direction;
   scale?: number;
+  scaleMobile?: number;
   opacity?: number;
   mouseInteractive?: boolean;
   className?: string;
@@ -206,6 +207,7 @@ export function MetaballsBackground({
   speed = 1,
   direction = "forward",
   scale = 1,
+  scaleMobile,
   opacity = 1,
   mouseInteractive = false,
   className,
@@ -243,6 +245,10 @@ export function MetaballsBackground({
 
     const geometry = new Triangle(gl);
 
+    // Responsive scale: use matchMedia to pick the right value per breakpoint.
+    const mql = window.matchMedia("(min-width: 1024px)");
+    const getScale = () => (mql.matches ? scale : (scaleMobile ?? scale));
+
     const program = new Program(gl, {
       vertex,
       fragment,
@@ -261,6 +267,11 @@ export function MetaballsBackground({
     });
 
     const mesh = new Mesh(gl, { geometry, program });
+
+    // Keep the uScale uniform in sync with the current viewport.
+    const updateScale = () => { program.uniforms.uScale.value = getScale(); };
+    mql.addEventListener("change", updateScale);
+    updateScale();
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!mouseInteractive) return;
@@ -350,6 +361,7 @@ export function MetaballsBackground({
       io.disconnect();
       canvas.removeEventListener("webglcontextlost", handleContextLost);
       canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+      mql.removeEventListener("change", updateScale);
       if (mouseInteractive) {
         containerEl.removeEventListener("mousemove", handleMouseMove);
       }

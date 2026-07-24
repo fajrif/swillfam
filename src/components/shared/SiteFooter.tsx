@@ -123,8 +123,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </div>
 
           {/* Right: nav links anchored bottom-right */}
-          <div className="flex flex-col items-end justify-between gap-2">
-            <div className="flex gap-12 text-right">
+          <div className="flex flex-col items-start md:items-end justify-between gap-2">
+            <div className="flex gap-12 text-left md:text-right">
               {FOOTER_COLS.map((col, i) => (
                 <ul key={i} className="flex flex-col">
                   {col.map((link) => (
@@ -165,7 +165,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="WhatsApp"
-          className="fixed right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
+          className="fixed right-4 md:right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
         >
           <Image
             src="/whatsapp.png"

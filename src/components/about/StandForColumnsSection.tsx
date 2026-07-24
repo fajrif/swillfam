@@ -19,7 +19,7 @@ export function StandForColumnsSection() {
                 SwillFam brings together food, drinks, music, entertainment, and community to
                 create memorable moments.
               </p>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed text-white">
                 From events and celebrations to collaborations and nights out, every experience is
                 designed to connect people and leave a lasting impression.
               </p>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -12,16 +13,26 @@ import { NAV_GROUPS } from "./nav-data";
 /** The three stacked link columns — shared by the top mega-nav and the compact
  *  header's expanding panel so link positions stay identical. Stacks on mobile. */
 function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
+
   return (
     <nav className="flex flex-col gap-8 md:flex-row md:gap-10">
       {NAV_GROUPS.map((group, i) => (
-        <ul key={i} className="flex flex-col gap-1">
+        <ul key={i} className="flex flex-col">
           {group.map((link) => (
             <li key={link.label}>
               <Link
                 href={link.href}
                 onClick={onNavigate}
-                className="font-syne text-base tracking-wide text-white/80 uppercase transition-colors hover:text-white"
+                className={cn(
+                  "font-syne text-base tracking-wide uppercase transition-colors hover:text-white",
+                  isActive(link.href)
+                    ? "font-bold text-white underline"
+                    : "text-white/80",
+                )}
               >
                 {link.label}
               </Link>
@@ -84,7 +95,14 @@ export function SiteHeader() {
             : "translate-y-0 opacity-100 lg:pointer-events-none lg:-translate-y-full lg:opacity-0",
         )}
       >
-        <div className="border-b border-sf-border/40 bg-sf-bg/70 backdrop-blur-md">
+        <div
+          className={cn(
+            "transition-[background,border-color] duration-300",
+            scrolled || open
+              ? "border-b border-sf-border/40 bg-sf-bg/70 backdrop-blur-md"
+              : "border-transparent bg-transparent",
+          )}
+        >
           <Container className="flex items-center justify-between py-4">
             {/* Logo — left. */}
             <Link
@@ -126,7 +144,7 @@ export function SiteHeader() {
               open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
             )}
           >
-            <Container className="flex justify-end pt-1 pb-8">
+            <Container className="flex justify-start md:justify-end  pt-1 pb-8">
               <NavColumns onNavigate={() => setOpen(false)} />
             </Container>
           </div>

@@ -11,7 +11,6 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Container } from "@/components/shared/Container";
 import {
   DualImageColumnSection,
   type CategoryTileData,
@@ -66,12 +65,12 @@ export function EventSectionWithImage({
 
   return (
     <section className="py-16">
-      <Container className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-top">
-        <div className="flex max-w-[560px] flex-col gap-6">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-top">
+        <div className="flex flex-col gap-6 px-5 lg:pl-[25px] lg:pr-0">
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-sf-text">
             {title}
           </h2>
-          <p className="font-inter text-base leading-relaxed text-white md:text-lg">
+          <p className="font-inter max-w-[560px] text-base leading-relaxed text-white md:text-lg mb-5">
             {description}
           </p>
           {ctaHref && ctaText ? (
@@ -93,17 +92,17 @@ export function EventSectionWithImage({
               {items.map((item, i) => {
                 const card = (
                   <div className="group flex flex-col gap-3">
-                    <div className="relative aspect-[290/516] overflow-hidden bg-sf-surface">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-sf-surface">
                       <Image
                         src={item.img}
                         alt={item.title}
                         fill
-                        sizes="(max-width: 1024px) 40vw, 290px"
+                        sizes="(max-width: 767px) 85vw, (max-width: 1024px) 66vw, 33vw"
                         className="object-cover"
                         priority={i === 0}
                       />
                     </div>
-                    <div className="opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                    <div>
                       <h3 className="font-syne text-base font-bold uppercase text-white">
                         {item.title}
                       </h3>
@@ -114,7 +113,7 @@ export function EventSectionWithImage({
                   </div>
                 );
                 return (
-                  <CarouselItem key={`${i}-${item.img}`} className="basis-[58%] sm:basis-[40%]">
+                  <CarouselItem key={`${i}-${item.img}`} className="basis-[85%] md:basis-2/3">
                     {item.href ? (
                       <Link href={item.href} className="block">
                         {card}
@@ -138,7 +137,7 @@ export function EventSectionWithImage({
             />
           </Carousel>
         ) : null}
-      </Container>
+      </div>
 
       {tiles && tiles.length > 0 ? (
         <DualImageColumnSection title="" tiles={tiles} />

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
+import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
@@ -13,9 +14,12 @@ import {
   EventSectionWithImage,
   type EventCarouselItem,
 } from "@/components/shared/EventSectionWithImage";
+import { OfferCardSection } from "@/components/shared/OfferCardSection";
+import { type OfferCardData } from "@/components/shared/OfferCard";
 import { FaqSection } from "@/components/shared/FaqSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
+import { formatEventSchedule } from "@/lib/event-calendar";
 import {
   VenueDescription,
   DishesSection,
@@ -41,7 +45,7 @@ const getVenueBySlug = cache((slug: string) =>
       segmentGalleries: { orderBy: { createdAt: "asc" } },
       talents: { orderBy: { createdAt: "asc" } },
       promotions: { orderBy: { startDate: "asc" } },
-      events: { orderBy: { startDate: "asc" } },
+      events: { where: { active: true, isPrivate: false }, orderBy: { startDate: "asc" } },
     },
   }),
 );
@@ -74,12 +78,12 @@ export default async function VenueSlugPage({
   const venue = await getVenueBySlug(slug);
   if (!venue) notFound();
 
-  const [otherVenues, faqs, articles] = await Promise.all([
+  const [otherVenues, faqs, articles, settings] = await Promise.all([
     venue.categoryId
       ? prisma.venue.findMany({
           where: { categoryId: venue.categoryId, id: { not: venue.id } },
           orderBy: { name: "asc" },
-          take: 2,
+          take: 3,
         })
       : Promise.resolve([]),
     prisma.faq.findMany({
@@ -87,15 +91,20 @@ export default async function VenueSlugPage({
       orderBy: { sortOrder: "asc" },
     }),
     getArticleRows(3),
+    getSiteSettings(),
   ]);
 
   const galleries = venue.segmentGalleries.filter((g) => !g.special);
   const dishGalleries = venue.segmentGalleries.filter((g) => g.special);
 
-  const eventItems: EventCarouselItem[] = venue.events.map((e) => ({
-    img: e.posterImage ?? e.image ?? e.bannerImage ?? POSTER_FALLBACK,
+  const eventItems: OfferCardData[] = venue.events.map((e) => ({
+    id: e.id,
+    image: e.image ?? e.posterImage,
     title: e.name,
-    shortDescription: e.shortDescription,
+    description: e.shortDescription,
+    venueName: venue.name,
+    venueLogo: venue.logo,
+    meta: formatEventSchedule(e),
     href: `/events/${e.slug}`,
   }));
 
@@ -160,12 +169,12 @@ export default async function VenueSlugPage({
 
       {eventItems.length > 0 ? (
         <Reveal>
-          <EventSectionWithImage
+          <OfferCardSection
             title={`What's Happening at ${venue.name}`}
-            description="Discover upcoming events, live performances, and special nights happening at this venue."
+            lead="Discover upcoming events, live performances, and special nights happening at this venue."
+            offers={eventItems}
             ctaText="See all events"
             ctaHref="/events"
-            items={eventItems}
           />
         </Reveal>
       ) : null}
@@ -189,6 +198,7 @@ export default async function VenueSlugPage({
           operatingHours={venue.operatingHours}
           lat={venue.lat}
           lng={venue.lng}
+          whatsapp={settings.mainWhatsapp}
         />
       </Reveal>
 

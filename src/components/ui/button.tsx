@@ -23,9 +23,9 @@ const buttonVariants = cva(
         pill: "rounded-[30px] bg-sf-accent text-white font-archivo uppercase tracking-[0.06em] hover:bg-sf-accent/90",
         "pill-outline":
           "rounded-[30px] border border-sf-accent text-sf-text font-archivo uppercase tracking-[0.06em] hover:bg-sf-accent/10",
-        // SwillFam outline button: transparent → solid pink fill on hover
+        // SwillFam outline button: transparent → translucent pink fill on hover
         swillfam:
-          "rounded-[30px] border border-sf-accent bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-sf-accent",
+          "rounded-full border border-[#6e3853] bg-transparent text-white font-archivo uppercase tracking-[0.06em] transition-colors hover:bg-[#c6377e66]",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
