@@ -14,6 +14,20 @@ const EXT_BY_MIME: Record<string, string> = {
   "application/pdf": "pdf",
 };
 
+/**
+ * Reverse of EXT_BY_MIME, for serving stored files back (see the /uploads route
+ * handler). Written out rather than derived because the mapping isn't 1:1 —
+ * both image/jpeg and image/jpg store as "jpg", and jpeg is the correct type.
+ */
+export const MIME_BY_EXT: Record<string, string> = {
+  jpg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif",
+  avif: "image/avif",
+  pdf: "application/pdf",
+};
+
 export const IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",

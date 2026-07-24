@@ -194,9 +194,21 @@ npm run build                 # also regenerates the Prisma client, as a second 
 pm2 restart swillfam
 ```
 
-Public content pages (promotions, talents, venues, etc.) revalidate themselves automatically
-(ISR, ~60s) — a data-only change (an admin edit, or a seed script below) does **not** need this
-full rebuild+restart; only a code/schema change does.
+A data-only change (an admin edit, or a seed script below) does **not** need this full
+rebuild+restart; only a code/schema change does. Admin writes revalidate the public pages they
+affect on save, and uploaded images are served from disk per request by
+`src/app/uploads/[...path]/route.ts`.
+
+That route handler exists because `next start` snapshots the `public/` directory once at boot and
+only consults that snapshot afterwards — without it, a newly uploaded image 404s (a broken image on
+the public site *and* in the admin list) until `pm2 restart swillfam`. Don't delete it, and note it
+can't be exercised via `npm run dev`, which reads the disk per request and so never reproduces the
+bug.
+
+One-time nginx step that goes with it: `deploy/nginx.conf.example` has a `location /uploads/` block
+that serves uploaded files straight from disk. Copy it into the live vhost (fixing the `alias` path
+to match this checkout), then `sudo nginx -t && sudo systemctl reload nginx`. It's an optimisation,
+not a requirement — the route handler answers `/uploads/...` on its own if the block is missing.
 
 ### Seeding additional data on production
 
