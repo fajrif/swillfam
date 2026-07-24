@@ -34,6 +34,8 @@ export async function createCategoryAction(formData: FormData) {
     },
   });
   revalidatePath(BASE);
+  revalidatePath(`/category/${slug}`);
+  revalidatePath("/venues");
   redirect(BASE);
 }
 
@@ -58,6 +60,8 @@ export async function updateCategoryAction(id: string, formData: FormData) {
   });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath(`/category/${slug}`);
+  revalidatePath("/venues");
   redirect(BASE);
 }
 
@@ -67,6 +71,8 @@ export async function deleteCategoryAction(id: string) {
     // Venues reference categoryId with onDelete: SetNull — they survive.
     await prisma.category.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage));
+    revalidatePath(`/category/${current.slug}`);
+    revalidatePath("/venues");
   }
   revalidatePath(BASE);
   redirect(BASE);

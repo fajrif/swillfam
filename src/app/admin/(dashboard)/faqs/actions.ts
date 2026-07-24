@@ -19,6 +19,8 @@ function parse(formData: FormData) {
 export async function createFaqAction(formData: FormData) {
   await prisma.faq.create({ data: parse(formData) });
   revalidatePath(BASE);
+  revalidatePath("/venues/[slug]", "page");
+  revalidatePath("/private-events");
   redirect(BASE);
 }
 
@@ -26,11 +28,15 @@ export async function updateFaqAction(id: string, formData: FormData) {
   await prisma.faq.update({ where: { id }, data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/venues/[slug]", "page");
+  revalidatePath("/private-events");
   redirect(BASE);
 }
 
 export async function deleteFaqAction(id: string) {
   await prisma.faq.delete({ where: { id } });
   revalidatePath(BASE);
+  revalidatePath("/venues/[slug]", "page");
+  revalidatePath("/private-events");
   redirect(BASE);
 }

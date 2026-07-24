@@ -34,6 +34,8 @@ export async function createArticleAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.article.create({ data: { ...parse(formData), slug, image } });
   revalidatePath(BASE);
+  revalidatePath("/articles");
+  revalidatePath(`/articles/${slug}`);
   redirect(BASE);
 }
 
@@ -45,6 +47,8 @@ export async function updateArticleAction(id: string, formData: FormData) {
   await prisma.article.update({ where: { id }, data: { ...parse(formData), slug, image } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/articles");
+  revalidatePath(`/articles/${slug}`);
   redirect(BASE);
 }
 
@@ -53,6 +57,8 @@ export async function deleteArticleAction(id: string) {
   if (current) {
     await prisma.article.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image));
+    revalidatePath("/articles");
+    revalidatePath(`/articles/${current.slug}`);
   }
   revalidatePath(BASE);
   redirect(BASE);

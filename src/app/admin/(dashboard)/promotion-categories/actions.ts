@@ -10,6 +10,7 @@ export async function createPromotionCategoryAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   await prisma.promotionCategory.create({ data: { name } });
   revalidatePath(BASE);
+  revalidatePath("/promotions");
   redirect(BASE);
 }
 
@@ -17,11 +18,13 @@ export async function updatePromotionCategoryAction(id: string, formData: FormDa
   const name = String(formData.get("name") ?? "").trim();
   await prisma.promotionCategory.update({ where: { id }, data: { name } });
   revalidatePath(BASE);
+  revalidatePath("/promotions");
   redirect(BASE);
 }
 
 export async function deletePromotionCategoryAction(id: string) {
   await prisma.promotionCategory.delete({ where: { id } });
   revalidatePath(BASE);
+  revalidatePath("/promotions");
   redirect(BASE);
 }

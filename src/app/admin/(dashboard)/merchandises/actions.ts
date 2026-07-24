@@ -20,6 +20,7 @@ export async function createMerchandiseAction(formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   await prisma.merchandise.create({ data: { ...parse(formData), image } });
   revalidatePath(BASE);
+  revalidatePath("/merchandise");
   redirect(BASE);
 }
 
@@ -30,6 +31,7 @@ export async function updateMerchandiseAction(id: string, formData: FormData) {
   await prisma.merchandise.update({ where: { id }, data: { ...parse(formData), image } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/merchandise");
   redirect(BASE);
 }
 
@@ -38,6 +40,7 @@ export async function deleteMerchandiseAction(id: string) {
   if (current) {
     await prisma.merchandise.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image));
+    revalidatePath("/merchandise");
   }
   revalidatePath(BASE);
   redirect(BASE);

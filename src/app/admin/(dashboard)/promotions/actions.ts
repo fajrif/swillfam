@@ -42,6 +42,8 @@ export async function createPromotionAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.promotion.create({ data: { ...parse(formData), slug, image, bannerImage, posterImage } });
   revalidatePath(BASE);
+  revalidatePath("/promotions");
+  revalidatePath(`/promotions/${slug}`);
   redirect(BASE);
 }
 
@@ -55,6 +57,8 @@ export async function updatePromotionAction(id: string, formData: FormData) {
   await prisma.promotion.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, posterImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/promotions");
+  revalidatePath(`/promotions/${slug}`);
   redirect(BASE);
 }
 
@@ -63,6 +67,8 @@ export async function deletePromotionAction(id: string) {
   if (current) {
     await prisma.promotion.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.posterImage));
+    revalidatePath("/promotions");
+    revalidatePath(`/promotions/${current.slug}`);
   }
   revalidatePath(BASE);
   redirect(BASE);
