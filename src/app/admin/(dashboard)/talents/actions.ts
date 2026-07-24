@@ -38,6 +38,8 @@ export async function createTalentAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.talent.create({ data: { ...parse(formData), slug, image } });
   revalidatePath(BASE);
+  revalidatePath("/talents");
+  revalidatePath(`/talents/${slug}`);
   redirect(BASE);
 }
 
@@ -49,6 +51,8 @@ export async function updateTalentAction(id: string, formData: FormData) {
   await prisma.talent.update({ where: { id }, data: { ...parse(formData), slug, image } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/talents");
+  revalidatePath(`/talents/${slug}`);
   redirect(BASE);
 }
 
@@ -57,6 +61,8 @@ export async function deleteTalentAction(id: string) {
   if (current) {
     await prisma.talent.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image));
+    revalidatePath("/talents");
+    revalidatePath(`/talents/${current.slug}`);
   }
   revalidatePath(BASE);
   redirect(BASE);

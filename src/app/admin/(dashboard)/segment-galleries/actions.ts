@@ -19,6 +19,7 @@ function parse(formData: FormData) {
 }
 
 export async function createSegmentGalleryAction(formData: FormData) {
+  const data = parse(formData);
   const { paths, titles, descriptions } = await reconcileImageFieldWithCaptions({
     formData,
     field: "images",
@@ -26,15 +27,20 @@ export async function createSegmentGalleryAction(formData: FormData) {
     previousPaths: [],
   });
   await prisma.segmentGallery.create({
-    data: { ...parse(formData), images: paths, imageTitles: titles, imageDescriptions: descriptions },
+    data: { ...data, images: paths, imageTitles: titles, imageDescriptions: descriptions },
   });
   revalidatePath(BASE);
+  if (data.venueId) {
+    const venue = await prisma.venue.findUnique({ where: { id: data.venueId }, select: { slug: true } });
+    if (venue) revalidatePath(`/venues/${venue.slug}`);
+  }
   redirect(BASE);
 }
 
 export async function updateSegmentGalleryAction(id: string, formData: FormData) {
   const current = await prisma.segmentGallery.findUnique({ where: { id } });
   if (!current) redirect(BASE);
+  const data = parse(formData);
   const { paths, titles, descriptions } = await reconcileImageFieldWithCaptions({
     formData,
     field: "images",
@@ -43,10 +49,15 @@ export async function updateSegmentGalleryAction(id: string, formData: FormData)
   });
   await prisma.segmentGallery.update({
     where: { id },
-    data: { ...parse(formData), images: paths, imageTitles: titles, imageDescriptions: descriptions },
+    data: { ...data, images: paths, imageTitles: titles, imageDescriptions: descriptions },
   });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  const venueIds = [...new Set([current.venueId, data.venueId].filter((v): v is string => !!v))];
+  for (const venueId of venueIds) {
+    const venue = await prisma.venue.findUnique({ where: { id: venueId }, select: { slug: true } });
+    if (venue) revalidatePath(`/venues/${venue.slug}`);
+  }
   redirect(BASE);
 }
 
@@ -55,6 +66,10 @@ export async function deleteSegmentGalleryAction(id: string) {
   if (current) {
     await prisma.segmentGallery.delete({ where: { id } });
     await deleteUploadedFiles(current.images);
+    if (current.venueId) {
+      const venue = await prisma.venue.findUnique({ where: { id: current.venueId }, select: { slug: true } });
+      if (venue) revalidatePath(`/venues/${venue.slug}`);
+    }
   }
   revalidatePath(BASE);
   redirect(BASE);

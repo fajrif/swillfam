@@ -10,6 +10,7 @@ export async function createEventCategoryAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   await prisma.eventCategory.create({ data: { name } });
   revalidatePath(BASE);
+  revalidatePath("/events");
   redirect(BASE);
 }
 
@@ -17,11 +18,13 @@ export async function updateEventCategoryAction(id: string, formData: FormData) 
   const name = String(formData.get("name") ?? "").trim();
   await prisma.eventCategory.update({ where: { id }, data: { name } });
   revalidatePath(BASE);
+  revalidatePath("/events");
   redirect(BASE);
 }
 
 export async function deleteEventCategoryAction(id: string) {
   await prisma.eventCategory.delete({ where: { id } });
   revalidatePath(BASE);
+  revalidatePath("/events");
   redirect(BASE);
 }

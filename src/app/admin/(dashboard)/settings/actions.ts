@@ -29,6 +29,7 @@ export async function updateSettingsAction(prevState: SettingsActionResult | nul
       });
     }
     revalidatePath("/admin/settings");
+    revalidatePath("/", "layout");
     return { success: true, message: "Settings saved successfully." };
   } catch {
     return { success: false, message: "Failed to save settings." };

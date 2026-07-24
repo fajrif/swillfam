@@ -54,6 +54,8 @@ export async function createEventAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.event.create({ data: { ...parse(formData), slug, image, bannerImage, posterImage, galleries } });
   revalidatePath(BASE);
+  revalidatePath("/events");
+  revalidatePath(`/events/${slug}`);
   redirect(BASE);
 }
 
@@ -68,6 +70,8 @@ export async function updateEventAction(id: string, formData: FormData) {
   await prisma.event.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, posterImage, galleries } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/events");
+  revalidatePath(`/events/${slug}`);
   redirect(BASE);
 }
 
@@ -78,6 +82,8 @@ export async function deleteEventAction(id: string) {
     await deleteUploadedFiles(
       collectImagePaths(current.image, current.bannerImage, current.posterImage, current.galleries),
     );
+    revalidatePath("/events");
+    revalidatePath(`/events/${current.slug}`);
   }
   revalidatePath(BASE);
   redirect(BASE);

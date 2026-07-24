@@ -20,6 +20,7 @@ function parse(formData: FormData) {
 export async function createCareerAction(formData: FormData) {
   await prisma.career.create({ data: parse(formData) });
   revalidatePath(BASE);
+  revalidatePath("/careers");
   redirect(BASE);
 }
 
@@ -27,6 +28,7 @@ export async function updateCareerAction(id: string, formData: FormData) {
   await prisma.career.update({ where: { id }, data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/careers");
   redirect(BASE);
 }
 
@@ -34,5 +36,6 @@ export async function deleteCareerAction(id: string) {
   // Applications reference careerId with onDelete: SetNull — they survive the delete.
   await prisma.career.delete({ where: { id } });
   revalidatePath(BASE);
+  revalidatePath("/careers");
   redirect(BASE);
 }

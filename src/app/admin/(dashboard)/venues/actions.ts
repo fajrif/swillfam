@@ -42,6 +42,8 @@ export async function createVenueAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.venue.create({ data: { ...parse(formData), slug, image, bannerImage, logo } });
   revalidatePath(BASE);
+  revalidatePath("/venues");
+  revalidatePath(`/venues/${slug}`);
   redirect(BASE);
 }
 
@@ -55,6 +57,8 @@ export async function updateVenueAction(id: string, formData: FormData) {
   await prisma.venue.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, logo } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
+  revalidatePath("/venues");
+  revalidatePath(`/venues/${slug}`);
   redirect(BASE);
 }
 
@@ -65,6 +69,8 @@ export async function deleteVenueAction(id: string) {
     // onDelete: SetNull, so they survive (their own images aren't touched here).
     await prisma.venue.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.logo));
+    revalidatePath("/venues");
+    revalidatePath(`/venues/${current.slug}`);
   }
   revalidatePath(BASE);
   redirect(BASE);
