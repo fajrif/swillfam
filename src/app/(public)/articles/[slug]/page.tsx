@@ -6,7 +6,6 @@ import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ArticleContent } from "@/components/articles";
 import { ArticleListSection, type ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
@@ -59,7 +58,6 @@ export default async function ArticlePage({
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image
             src={article.image ?? "/articles/sample-banner.png"}
             alt=""
@@ -67,7 +65,6 @@ export default async function ArticlePage({
             className="object-cover"
             priority
           />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

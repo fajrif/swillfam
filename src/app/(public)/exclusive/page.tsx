@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ExclusiveSection } from "@/components/exclusive";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
@@ -29,9 +28,7 @@ export default async function ExclusivePage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image src="/gallery/banner.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

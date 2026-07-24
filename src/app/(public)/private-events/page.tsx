@@ -38,9 +38,7 @@ export default async function PrivateEventsPage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
-          <Image src="/private-events/Mask group.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
+        <Image src="/private-events/Mask group.png" alt="" fill className="object-cover" priority />
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
