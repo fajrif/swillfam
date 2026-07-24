@@ -30,6 +30,23 @@ server {
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
+    # Admin-uploaded media, served straight from disk so it never touches Node.
+    # Filenames are uuids, so the bytes at a given path never change.
+    #
+    # EDIT THIS PATH: it must be the absolute path to the app checkout (the same
+    # directory PM2 uses as `cwd`), and both the location and the alias need their
+    # trailing slash.
+    #
+    # /_next/image?url=/uploads/... still proxies to Node - next/image resolves
+    # local paths through an internal request that never leaves the process, and
+    # src/app/uploads/[...path]/route.ts is what answers it.
+    location /uploads/ {
+        alias /home/deployer/swillfam/public/uploads/;
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        access_log off;
+    }
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
