@@ -13,7 +13,7 @@ export function DestinationsColumn({
 }) {
   return (
     <div className="flex flex-col gap-8 border-b border-sf-border/40 p-4 sm:flex-row lg:border-b-0">
-      <div className="relative aspect-[382/522] w-full shrink-0 overflow-hidden sm:w-[340px]">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden sm:w-[340px]">
         <ParallaxImage>
           <Image
             src={imageSrc}
@@ -29,7 +29,7 @@ export function DestinationsColumn({
           <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
             Destinations with Distinct Personalities
           </h3>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="mb-5 font-inter leading-relaxed text-white">
             Every SwillFam venue has its own concept and atmosphere. From dining and social spaces to
             nightlife and events, each offers a unique experience while reflecting the SwillFam
             identity. Our venues are designed to bring people together and create memorable moments.

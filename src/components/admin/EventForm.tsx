@@ -1,6 +1,7 @@
 import type { Event } from "@/generated/prisma/client";
 import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
+import { RichTextEditor } from "./RichTextEditor";
 import { SlugField } from "./SlugField";
 import { EventScheduleFields } from "./EventScheduleFields";
 import { toDateInputValue } from "@/lib/date";
@@ -56,7 +57,7 @@ export function EventForm({
 
       <Field label="Caption" name="caption" defaultValue={event?.caption} required />
       <TextareaField label="Short description" name="shortDescription" defaultValue={event?.shortDescription} rows={2} required />
-      <TextareaField label="Description" name="description" defaultValue={event?.description} rows={4} required />
+      <RichTextEditor name="description" label="Description" defaultValue={event?.description ?? ""} />
 
       <EventScheduleFields
         defaultEventType={event?.eventType}
@@ -70,6 +71,9 @@ export function EventForm({
       <div className="flex gap-8">
         <CheckboxField label="Featured" name="featured" defaultChecked={event?.featured} />
         <CheckboxField label="Private event" name="isPrivate" defaultChecked={event?.isPrivate} />
+        {/* Uncheck to retire: hidden from the public calendar and listings, but
+            the detail page still renders as a "Past Event". New events default on. */}
+        <CheckboxField label="Active" name="active" defaultChecked={event?.active ?? true} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

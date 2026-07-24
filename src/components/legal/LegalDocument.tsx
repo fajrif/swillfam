@@ -82,6 +82,13 @@ export function LegalDocument({
               <i className="ph-fill ph-warning-circle text-xl" /> {noticeTitle}
             </strong>
             {noticeBody}
+            <p className="mt-4 font-inter text-sm text-white">
+              Questions? Contact us at{" "}
+              <a href={`mailto:${contactEmail}`} className="underline">
+                {contactEmail}
+              </a>
+              .
+            </p>
           </div>
 
           {sections.map((section) => (

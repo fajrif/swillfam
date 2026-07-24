@@ -8,8 +8,19 @@ import { Search, X } from "lucide-react";
 function SearchInputInner({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initial = searchParams.get("q") ?? "";
-  const [value, setValue] = useState(initial);
+  const q = searchParams.get("q") ?? "";
+  const [value, setValue] = useState(q);
+  // Tracks the `q` this render's `value` was last synced against, so an
+  // external URL change (back/forward nav, a link elsewhere clearing the
+  // filter) can reset `value` by adjusting state during render instead of via
+  // an effect — React's recommended alternative to a sync-on-prop-change
+  // effect, and the only form of this reset that isn't flagged as a
+  // synchronous setState-in-effect.
+  const [syncedQ, setSyncedQ] = useState(q);
+  if (q !== syncedQ) {
+    setSyncedQ(q);
+    setValue(q);
+  }
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
@@ -26,10 +37,6 @@ function SearchInputInner({ placeholder }: { placeholder: string }) {
     }
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [value, router]);
-
-  useEffect(() => {
-    setValue(searchParams.get("q") ?? "");
-  }, [searchParams]);
 
   function clear() {
     setValue("");

@@ -5,10 +5,10 @@ import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export function PrivateEventsSection() {
   return (
-    <section className="pt-8 pb-16">
+    <section className="pt-4 pb-16">
       <Container>
         <div className="grid gap-8 p-4 border border-sf-border/40 lg:grid-cols-[7fr_5fr]">
-          <div className="flex flex-col justify-between">
+          <div className="order-2 flex flex-col justify-between lg:order-1">
             <div className="flex flex-col gap-6">
               <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
                 Private Events at SwillFam
@@ -19,7 +19,7 @@ export function PrivateEventsSection() {
                 occasions to large-scale functions, our team helps create seamless experiences
                 tailored to your vision, guests, and event goals.
               </p>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed text-white">
                 With flexible spaces, curated food and beverage options, and experienced event
                 coordination, we work closely with you to ensure every detail comes together for a
                 memorable and successful occasion.
@@ -30,7 +30,7 @@ export function PrivateEventsSection() {
             </SpecularButton>
           </div>
 
-          <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">
+          <div className="order-1 relative aspect-[4/3] w-full overflow-hidden border border-sf-border/30 lg:order-2">
             <ParallaxImage>
               <Image
                 src="/merchandise/private-event.png"

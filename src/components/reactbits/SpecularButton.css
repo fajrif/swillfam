@@ -88,4 +88,6 @@
 .specular-button__label {
   position: relative;
   z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }

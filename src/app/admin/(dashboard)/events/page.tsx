@@ -71,7 +71,13 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
               header: "Flags",
               cell: (e) => (
                 <span className="text-xs text-zinc-500">
-                  {[e.featured ? "Featured" : null, e.isPrivate ? "Private" : null].filter(Boolean).join(", ") || "—"}
+                  {[
+                    e.featured ? "Featured" : null,
+                    e.isPrivate ? "Private" : null,
+                    e.active ? null : "Past",
+                  ]
+                    .filter(Boolean)
+                    .join(", ") || "—"}
                 </span>
               ),
             },

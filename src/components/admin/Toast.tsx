@@ -10,10 +10,13 @@ export function Toast({ toast, onDone }: { toast: ToastData; onDone: () => void 
 
   useEffect(() => {
     if (!toast) return;
-    setVisible(true);
+    // Deferred a frame so the mount commits with `visible` still false first —
+    // required for the CSS transition below to actually animate the entrance.
+    const raf = requestAnimationFrame(() => setVisible(true));
     const hide = setTimeout(() => setVisible(false), 3000);
     const done = setTimeout(() => onDone(), 3300);
     return () => {
+      cancelAnimationFrame(raf);
       clearTimeout(hide);
       clearTimeout(done);
     };

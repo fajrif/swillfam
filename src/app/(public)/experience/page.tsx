@@ -4,18 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
+import { formatEventSchedule } from "@/lib/event-calendar";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { type OfferCardData } from "@/components/shared/OfferCard";
-import {
-  OneDaySection,
-  ExperienceMap,
-  WantUsToPlanSection,
-  WhatsHappeningSection,
-  CurrentPromotionsSection,
-} from "@/components/experience";
+import { OfferCardSection } from "@/components/shared/OfferCardSection";
+import { OneDaySection, ExperienceMap, WantUsToPlanSection } from "@/components/experience";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
@@ -31,11 +27,17 @@ export const metadata: Metadata = {
 };
 
 export default async function ExperiencePage() {
-  const [settings, articles, promotions] = await Promise.all([
+  const [settings, articles, promotions, events] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
     prisma.promotion.findMany({
       orderBy: { startDate: "desc" },
+      take: 3,
+      include: { venue: { select: { name: true, logo: true } } },
+    }),
+    prisma.event.findMany({
+      where: { isPrivate: false, active: true },
+      orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
@@ -50,6 +52,17 @@ export default async function ExperiencePage() {
     venueLogo: p.venue?.logo ?? null,
     meta: formatDateRange(p.startDate, p.endDate),
     href: `/promotions/${p.slug}`,
+  }));
+
+  const upcomingEvents: OfferCardData[] = events.map((e) => ({
+    id: e.id,
+    image: e.image ?? e.posterImage,
+    title: e.name,
+    description: e.shortDescription,
+    venueName: e.venue?.name ?? null,
+    venueLogo: e.venue?.logo ?? null,
+    meta: formatEventSchedule(e),
+    href: `/events/${e.slug}`,
   }));
 
   return (
@@ -79,13 +92,23 @@ export default async function ExperiencePage() {
         <WantUsToPlanSection settings={settings} />
       </Reveal>
 
-      <Reveal>
-        <WhatsHappeningSection />
-      </Reveal>
+      {upcomingEvents.length > 0 ? (
+        <Reveal>
+          <OfferCardSection
+            title="What's Happening This Week"
+            lead="Explore upcoming events across SwillFam venues and see what is happening this week. From dining experiences and regular programs to music nights and special events, there is always something to discover."
+            offers={upcomingEvents}
+          />
+        </Reveal>
+      ) : null}
 
       {currentPromotions.length > 0 ? (
         <Reveal>
-          <CurrentPromotionsSection promotions={currentPromotions} />
+          <OfferCardSection
+            title="Current Promotions"
+            lead="Make your next SwillFam visit even better with active promotions across our venues. Explore selected offers for food, drinks, ladies night, group packages, table deals, and seasonal specials."
+            offers={currentPromotions}
+          />
         </Reveal>
       ) : null}
 

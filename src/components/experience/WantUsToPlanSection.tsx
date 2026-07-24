@@ -10,10 +10,10 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
   return (
     <section className="pt-8 pb-16">
       <Container>
-        <div className="grid gap-8 p-4 border border-sf-border/40 lg:grid-cols-[7fr_5fr]">
+        <div className="grid gap-8 p-4 lg:grid-cols-[1fr_1fr]">
           <div className="flex flex-col justify-between">
             <div className="flex flex-col gap-6">
-              <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
+              <h2 className="font-syne text-[clamp(2.5rem,5vw,64px)] leading-tight text-white">
                 Want Us to Plan It for You?
               </h2>
               <p className="font-inter leading-relaxed text-white">

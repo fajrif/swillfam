@@ -30,6 +30,7 @@ function parse(formData: FormData) {
     endHour: String(formData.get("endHour") ?? "").trim(),
     recurringDays: eventType === "RECURRING" ? recurringDays : [],
     featured: formData.get("featured") === "true",
+    active: formData.get("active") === "true",
     isPrivate: formData.get("isPrivate") === "true",
     ticketInfo: String(formData.get("ticketInfo") ?? "").trim() || null,
     waPhone: String(formData.get("waPhone") ?? "").trim() || null,

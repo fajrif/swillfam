@@ -1,7 +1,7 @@
 "use client";
 
 import type { Faq } from "@/generated/prisma/client";
-import { Field, TextareaField, CheckboxField, SaveButton } from "./form-fields";
+import { Field, CheckboxField, SaveButton } from "./form-fields";
 import { RichTextEditor } from "./RichTextEditor";
 
 export function FaqForm({
