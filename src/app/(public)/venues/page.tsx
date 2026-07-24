@@ -6,7 +6,6 @@ import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
@@ -43,7 +42,6 @@ export default async function VenuesPage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image
             src="/home/hero.png"
             alt="SwillFam venues"
@@ -51,7 +49,6 @@ export default async function VenuesPage() {
             className="object-cover"
             priority
           />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

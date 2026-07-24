@@ -147,6 +147,7 @@ sudo ln -s /etc/nginx/sites-available/swillfam /etc/nginx/sites-enabled/swillfam
 sudo rm -f /etc/nginx/sites-enabled/default
 
 sudo nginx -t && sudo systemctl reload nginx
+sudo chmod o+x /home/deployer # THIS IS IMPORTANT FOR NGINX READ PERMS
 ```
 
 The vhost ships IP-only, no domain, no SSL (`listen 80 default_server; server_name _;`) — this

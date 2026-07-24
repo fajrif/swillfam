@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { getSiteSettings } from "@/lib/site-settings";
 import { formatIDR } from "@/lib/currency";
 import {
@@ -52,9 +51,7 @@ export default async function MerchandisePage({
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image src="/merchandise/merchandise-banner.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

@@ -68,9 +68,7 @@ export default async function ExperiencePage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
-          <Image src="/experience/banner.png" alt="" fill priority className="object-cover" />
-        </ParallaxImage>
+        <Image src="/experience/banner.png" alt="" fill priority className="object-cover" />
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

@@ -7,7 +7,6 @@ import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import {
   CategoryIntro,
@@ -69,7 +68,6 @@ export default async function CategoryPage({
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image
             src={category.bannerImage ?? category.image ?? FALLBACK}
             alt={category.name}
@@ -77,7 +75,6 @@ export default async function CategoryPage({
             className="object-cover"
             priority
           />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

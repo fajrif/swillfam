@@ -5,7 +5,6 @@ import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import {
   TalentsIntro,
   TalentsBrowser,
@@ -55,9 +54,7 @@ export default async function TalentsPage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image src="/talents/banner.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

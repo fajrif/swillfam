@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import {
   GetInTouchSection,
   LetsConnectSection,
@@ -26,9 +25,7 @@ export default async function ContactPage() {
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image src="/contact/contact-banner.png" alt="" fill className="object-cover" priority />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">

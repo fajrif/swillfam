@@ -8,7 +8,6 @@ import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 import {
   EventSectionWithImage,
@@ -118,7 +117,6 @@ export default async function VenueSlugPage({
   return (
     <StickyHero
       backdrop={
-        <ParallaxImage>
           <Image
             src={venue.bannerImage ?? venue.image ?? FALLBACK}
             alt={venue.name}
@@ -126,7 +124,6 @@ export default async function VenueSlugPage({
             className="object-cover"
             priority
           />
-        </ParallaxImage>
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
