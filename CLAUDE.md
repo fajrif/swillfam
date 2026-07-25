@@ -211,21 +211,280 @@ read-only detail + delete only), but the public application form is part of the 
 
 ## TASKS
 
-you will need to create component dropdown with image + text options. called it DropdownIcons (`src/components/shared/DropdownIcons.tsx`)
+# ROLE
 
-please use `shadcn/ui` for this. use `@radix-ui/react-dropdown-menu` for the dropdown menu.
+You are a Senior Graphics Engineer and Motion Designer specializing in WebGL, GLSL, OGL, and cinematic website backgrounds.
 
-the accepted props will be passing icons or images
+Your task is to build a production-quality reusable shader component called
 
-you will need to implement this component in `src/components/events/EventCalendarSection.tsx`.
+GlassRefractionBackground
 
-you will create filter dropdown Venues with that component. to filter event data based on selected venues.
-so calendar only shows events per venue. the default venue will be the first data venue from database. e.g: 'atsumaru-izakaya'
+The attached image is the design reference.
 
-by changing the dropdown value, the calendar will be filtered based on the selected venue.
+Do NOT recreate the image pixel-for-pixel.
 
-remember please use venue.logo for image and venue.name for text.
+Instead analyze its visual language and reproduce it procedurally.
 
-also while selected the dropdown will display the logo and name of selected venue.
+# OVERVIEW
 
-i expect the border of the dropdown to use `rounded-lg border border-sf-border/60 bg-sf-surface`.
+i need you to make another background component called `GlassRefractionBackground`:
+- this is the design reference: `./glass-refraction-banner.png`
+- that design is vertical glass refraction with gradient colors
+- i need this to be created similar like `./src/components/reactbits/GradientBandsBackground.tsx` with props to handle speed, bandCount, blur, colors, etc.
+- i expect the background to also have animation like light traveling energy wave
+- if you notice from the design there's a gradient color shape like "half spheres like" or "amplitude curve"
+- it will be nice the animation is that slowly and smoothly can make the "amplitude curve" curving like sound wave
+- there's also some reference to make this "Glass Refraction" style you can check at this project `../quantara/app/(public)/contact/page.tsx` Line: 109 - 120
+- it depends on your approach you may want make that all using Ogl / WebGL or you want to combine with "div Glass Refraction bar"
+
+below i give visual analysis of the image reference
+
+---
+
+# VISUAL ANALYSIS
+
+The artwork consists of multiple independent visual layers.
+
+Layer 1
+
+Very dark purple-black background.
+
+Layer 2
+
+A huge blurred red volumetric light.
+
+This light remains mostly static.
+
+Layer 3
+
+A soft magenta/purple rim light following the upper contour of the red light.
+
+Layer 4
+
+Around 28 vertical translucent glass slats.
+
+The slats cover the full viewport height.
+
+Each slat behaves like a thin piece of glass.
+
+Layer 5
+
+Every slat slightly refracts the image behind it.
+
+Refraction amount
+
+1–4 pixels.
+
+Layer 6
+
+Subtle film grain.
+
+---
+
+# IMPORTANT
+
+The vertical structures are NOT lines.
+
+They are translucent glass panels.
+
+They should slightly distort
+
+brightness
+
+color
+
+position
+
+behind them.
+
+Think of architectural ribbed glass.
+
+---
+
+# MOTION
+
+The red volumetric light remains mostly stable.
+
+Instead animate the glass.
+
+Each glass slat moves independently.
+
+Movement should resemble
+
+a slow audio spectrum
+
+or
+
+moving sound amplitude.
+
+Do NOT animate with obvious sine waves.
+
+Instead:
+
+Each slat has
+
+independent phase
+
+independent speed
+
+independent amplitude
+
+independent delay
+
+The motion should feel organic.
+
+Very slow.
+
+Very subtle.
+
+---
+
+# REFRACTION
+
+Every slat should distort UV coordinates.
+
+Distortion
+
+1–4 pixels.
+
+Very soft.
+
+Different for every slat.
+
+Never identical.
+
+---
+
+# HIGHLIGHT
+
+Each slat should generate
+
+a soft purple highlight.
+
+The highlight follows the motion.
+
+Never use hard edges.
+
+---
+
+# LIGHTING
+
+The scene should feel cinematic.
+
+Soft volumetric lighting.
+
+No sharp glow.
+
+No bloom explosion.
+
+The purple light softly wraps around the red blob.
+
+---
+
+# COLORS
+
+Approximate palette
+
+Background
+
+#05030A
+
+#09040E
+
+#0D0715
+
+Red
+
+#B0002A
+
+#8A0022
+
+#620018
+
+Purple
+
+#5A1BA8
+
+#7B29FF
+
+#A53CFF
+
+Magenta
+
+#FF2AC8
+
+#FF3DA5
+
+Highlight
+
+#FFD4FF
+
+Use smooth interpolation.
+
+No banding.
+
+---
+
+# IMPLEMENTATION
+
+Use
+
+React
+
+TypeScript
+
+OGL
+
+GLSL 300 ES
+
+Same architecture as GradientBandsBackground.
+
+Support
+
+ResizeObserver
+
+IntersectionObserver
+
+HiDPI
+
+Context lost
+
+Cleanup
+
+Responsive resizing
+
+---
+
+# PERFORMANCE
+
+No raymarching.
+
+No expensive loops.
+
+No heavy FBM.
+
+Prefer
+
+domain warp
+
+gradient fields
+
+refraction
+
+smooth interpolation
+
+signed distance masks
+
+The target is
+
+60–120 FPS.
+
+---
+
+# FINAL GOAL
+
+The finished animation should feel like a premium glass sculpture illuminated by magenta and red light.
+
+The movement should resemble a high-end audio visualization where vertical glass fins gently breathe like a moving sound amplitude.
+
+It should look elegant, calm, luxurious, and suitable as the hero background of a premium digital agency website.

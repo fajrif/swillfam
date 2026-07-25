@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { PlasmaBackground } from "@/components/reactbits/PlasmaBackground";
+import { GlassRefractionBackground } from "@/components/reactbits/GlassRefractionBackground";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
@@ -33,14 +33,7 @@ export default async function About() {
   return (
     <StickyHero
       backdrop={
-        <PlasmaBackground
-          className="absolute inset-0"
-          color="#c6387f"
-          speed={0.2}
-          direction="pingpong"
-          scale={2.3}
-          opacity={0.8}
-        />
+        <GlassRefractionBackground className="absolute inset-0" />
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
