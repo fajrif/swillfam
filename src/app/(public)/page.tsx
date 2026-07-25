@@ -39,6 +39,12 @@ export default async function Home() {
     }),
   ]);
 
+  const featuredEvent = await prisma.event.findFirst({
+    where: { isPrivate: false, active: true, featured: true },
+    orderBy: { startDate: "asc" },
+    select: { image: true, name: true, shortDescription: true, caption: true, slug: true },
+  });
+
   const categoryTiles: CategoryVenuesTileData[] = categories.map((cat, i) => ({
     src: cat.image ?? "/home/hero.png",
     label: cat.name,
@@ -58,6 +64,7 @@ export default async function Home() {
     image: e.image ?? e.posterImage,
     title: e.name,
     description: e.shortDescription,
+    caption: e.caption,
     venueName: e.venue?.name ?? null,
     venueLogo: e.venue?.logo ?? null,
     meta: formatEventSchedule(e),
@@ -65,7 +72,7 @@ export default async function Home() {
   }));
 
   return (
-    <Hero>
+    <Hero featuredEvent={featuredEvent}>
       <Reveal>
         <CategoryVenuesLogoSection
           parallax

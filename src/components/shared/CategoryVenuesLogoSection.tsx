@@ -172,6 +172,7 @@ function LogoMarquee({
                 src={logo.src}
                 alt={logo.alt}
                 fill
+                sizes="200px"
                 className="object-contain brightness-0 invert"
               />
             </div>
