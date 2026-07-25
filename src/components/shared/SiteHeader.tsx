@@ -19,24 +19,30 @@ function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <nav className="flex flex-col gap-8 md:flex-row md:gap-10">
+    <nav className="flex flex-col gap-8 md:flex-row md:gap-10 text-right">
       {NAV_GROUPS.map((group, i) => (
         <ul key={i} className="flex flex-col">
           {group.map((link) => (
-            <li key={link.label}>
-              <Link
-                href={link.href}
-                onClick={onNavigate}
-                className={cn(
-                  "font-syne text-base tracking-wide uppercase transition-colors hover:text-white",
-                  isActive(link.href)
-                    ? "font-bold text-white underline"
-                    : "text-white/80",
-                )}
-              >
-                {link.label}
-              </Link>
-            </li>
+            <li key={link.label} className="grid">
+                <span
+                  className="invisible col-start-1 row-start-1 font-syne font-bold text-base uppercase tracking-wide"
+                  aria-hidden="true"
+                >
+                  {link.label}
+                </span>
+                <Link
+                  href={link.href}
+                  onClick={onNavigate}
+                  className={cn(
+                    "col-start-1 row-start-1 font-inter text-base tracking-wide uppercase text-white",
+                    isActive(link.href)
+                      ? "font-syne font-bold"
+                      : "hover:font-syne hover:font-bold",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
           ))}
         </ul>
       ))}
@@ -144,7 +150,7 @@ export function SiteHeader() {
               open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
             )}
           >
-            <Container className="flex justify-start md:justify-end  pt-1 pb-8">
+            <Container className="flex justify-end pt-1 pb-8">
               <NavColumns onNavigate={() => setOpen(false)} />
             </Container>
           </div>
