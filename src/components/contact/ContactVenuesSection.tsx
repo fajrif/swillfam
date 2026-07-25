@@ -24,9 +24,9 @@ export function ContactVenuesSection() {
           {VENUE_CONTACTS.map((venue) => (
             <div
               key={venue.name}
-              className="group flex items-center gap-5 border border-sf-border/50 transition-colors duration-300 hover:border-white/80"
+              className="group flex flex-col border border-sf-border/50 transition-colors duration-300 hover:border-white/80 sm:flex-row sm:items-center sm:gap-5"
             >
-              <div className="relative aspect-[140/96] w-[140px] shrink-0 overflow-hidden bg-sf-surface">
+              <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface aspect-[140/96] hidden sm:block sm:w-[140px]">
                 <Image
                   src={venue.img}
                   alt={venue.name}
@@ -35,7 +35,7 @@ export function ContactVenuesSection() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 p-4 sm:p-0">
                 <Link href={`/venues/${venue.slug}`} className="w-fit">
                   <h3 className="font-syne text-2xl leading-tight text-white transition-colors duration-300 group-hover:text-sf-accent">
                     {venue.name}

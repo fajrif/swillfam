@@ -34,10 +34,10 @@ export function ArticlesBrowser({
               <Link
                 key={i}
                 href={article.href ?? "#"}
-                className="group flex gap-4 border border-sf-border/50 transition-colors duration-300 hover:border-white/80 animate-fade-up"
+                className="group flex flex-col gap-4 border border-sf-border/50 transition-colors duration-300 hover:border-white/80 animate-fade-up sm:flex-row"
                 style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
               >
-                <div className="relative w-[140px] shrink-0 overflow-hidden bg-sf-surface sm:w-[200px]">
+                <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface aspect-video sm:aspect-auto sm:w-[140px] lg:w-[200px] sm:h-full">
                   <Image
                     src={article.img}
                     alt=""
