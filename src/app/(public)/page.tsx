@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
+import { CategoryVenuesLogoSection, type CategoryVenuesTileData } from "@/components/shared/CategoryVenuesLogoSection";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { Experience } from "@/components/home/Experience";
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [settings, articles, events] = await Promise.all([
+  const [settings, articles, events, categories] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
     prisma.event.findMany({
@@ -33,7 +33,25 @@ export default async function Home() {
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
+    prisma.category.findMany({
+      include: { venues: true },
+      orderBy: { name: "asc" },
+    }),
   ]);
+
+  const categoryTiles: CategoryVenuesTileData[] = categories.map((cat, i) => ({
+    src: cat.image ?? "/home/hero.png",
+    label: cat.name,
+    labelAlign: i % 2 === 0 ? "top-left" : "bottom-right",
+    description: cat.shortDescription ?? undefined,
+    href: `/category/${cat.slug}`,
+    logos: cat.venues.filter((v) => v.logo).map((v) => ({ src: v.logo!, alt: v.name })),
+  }));
+
+  const nightlifeTile = categoryTiles.find((t) => t.label === "Nightlife");
+  if (nightlifeTile) {
+    nightlifeTile.logos.push({ src: "/logo-swillfam.png", alt: "SwillFam" });
+  }
 
   const upcomingEvents: OfferCardData[] = events.map((e) => ({
     id: e.id,
@@ -49,12 +67,9 @@ export default async function Home() {
   return (
     <Hero>
       <Reveal>
-        <DualImageColumnSection
+        <CategoryVenuesLogoSection
           parallax
-          tiles={[
-            { src: "/home/category-lifestyle.png", label: "Lifestyle", labelAlign: "top-left", href: "/category/lifestyle" },
-            { src: "/home/category-nightlife.png", label: "Nightlife", labelAlign: "bottom-right", href: "/category/nightlife" },
-          ]}
+          tiles={categoryTiles}
         />
       </Reveal>
       {upcomingEvents.length > 0 ? (
