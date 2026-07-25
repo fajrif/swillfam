@@ -46,18 +46,6 @@ export default async function ContactPage() {
       <Reveal>
         <ContactVenuesSection />
       </Reveal>
-
-      <Reveal>
-        <StandForColumnsSection />
-      </Reveal>
-
-      <Reveal>
-        <CareersSection />
-      </Reveal>
-
-      <Reveal>
-        <ArticleListSection articles={articles} />
-      </Reveal>
     </StickyHero>
   );
 }

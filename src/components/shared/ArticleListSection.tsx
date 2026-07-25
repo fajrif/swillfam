@@ -76,8 +76,8 @@ export function ArticleListSection({
 
         <div className="flex flex-col gap-4">
           {rows.map((article, i) => (
-            <Link key={i} href={article.href ?? "#"} className="group flex gap-2 border border-sf-border/50 transition-colors duration-300 hover:border-white/80">
-              <div className="relative w-[120px] shrink-0 overflow-hidden bg-sf-surface sm:w-[140px] h-full">
+            <Link key={i} href={article.href ?? "#"} className="group flex flex-col gap-2 border border-sf-border/50 transition-colors duration-300 hover:border-white/80 sm:flex-row">
+              <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface sm:w-[120px] lg:w-[140px] aspect-video sm:aspect-auto sm:h-full">
                 <Image
                   src={article.img}
                   alt=""

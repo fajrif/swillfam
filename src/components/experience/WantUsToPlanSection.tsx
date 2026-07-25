@@ -11,7 +11,7 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
     <section className="pt-8 pb-16">
       <Container>
         <div className="grid gap-8 p-4 lg:grid-cols-[1fr_1fr]">
-          <div className="flex flex-col justify-between">
+          <div className="order-2 flex flex-col justify-between lg:order-1">
             <div className="flex flex-col gap-6">
               <h2 className="font-syne text-[clamp(2.5rem,5vw,64px)] leading-tight text-white">
                 Want Us to Plan It for You?
@@ -21,7 +21,7 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
                 occasion, and our team can help guide you to the right SwillFam venues for your day
                 or night out.
               </p>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed text-white">
                 From dinner reservations to pre-drinks, nightlife plans, and private celebrations, we
                 can help you plan a route that fits your mood.
               </p>
@@ -31,7 +31,7 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
             </SpecularButton>
           </div>
 
-          <div className="relative aspect-[680/581] w-full overflow-hidden border border-sf-border/30">
+          <div className="order-1 relative aspect-[680/581] w-full overflow-hidden border border-sf-border/30 lg:order-2">
             <ParallaxImage>
               <Image
                 src="/experience/plan-for-event.png"
