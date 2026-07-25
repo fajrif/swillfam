@@ -128,14 +128,20 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               {FOOTER_COLS.map((col, i) => (
                 <ul key={i} className="flex flex-col">
                   {col.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="font-inter text-sm uppercase tracking-wide text-white transition-colors hover:text-sf-accent"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
+                    <li key={link.label} className="grid">
+                        <span
+                          className="invisible col-start-1 row-start-1 font-syne font-bold text-sm uppercase tracking-wide"
+                          aria-hidden="true"
+                        >
+                          {link.label}
+                        </span>
+                        <Link
+                          href={link.href}
+                          className="col-start-1 row-start-1 font-inter text-sm uppercase tracking-wide text-white hover:font-syne hover:font-bold"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
                   ))}
                 </ul>
               ))}
