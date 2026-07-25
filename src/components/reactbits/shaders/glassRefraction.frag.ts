@@ -1,33 +1,25 @@
 /**
- * GlassRefractionBackground fragment shader — a huge volumetric light seen
+ * GlassRefractionBackground fragment shader — a huge volumetric red light seen
  * through vertical ribbed glass, keyframed on /glass-refraction-banner.png.
  *
- * At t = 0 the frame reproduces the reference composition: a near-black field,
- * a wide arch cresting left of centre and sinking away to the lower right, and
- * ~28 full-height translucent glass slats laid over the whole thing. Each slat
- * is a thin cylindrical lens: it displaces the light behind it by a couple of
- * device pixels, shades its own body dark-to-bright across its width, and
- * throws a soft highlight.
- *
- * COLOUR — every stop below was sampled off the reference rather than taken
- * from a spec, and the reference turns out to be a *single* ramp rather than
- * three separable lights. Walking the normal outward-to-inward across the
- * contour gives dark purple -> violet -> magenta (the brightest point in the
- * whole image, #A400B0) -> pink -> crimson -> near-black. Green is 0-8 over the
- * entire frame and nothing ever approaches white, so the ramp is modelled as
- * one monotone interpolation keyed on distance from the contour. That also
- * makes the light physically consistent by construction: there is exactly one
- * value at each distance, so no band can leak onto the wrong side.
+ * At t = 0 the frame reproduces the reference composition: a near-black purple
+ * field, a wide red dome ("amplitude curve") cresting left of centre and
+ * sinking away to the lower right, a magenta rim tracing its contour with a
+ * violet halo wrapping just outside it, and ~28 full-height translucent glass
+ * slats laid over the whole thing. Each slat is a thin cylindrical lens: it
+ * displaces the light behind it by a couple of device pixels, shades its own
+ * body dark-to-bright across its width, and throws a soft purple highlight.
  *
  * The light itself barely moves — the *glass* is what animates. Every slat gets
- * its own phase, speed, amplitude and start delay, so the contour behind the
- * fins rises and falls like a very slow audio spectrum rather than a single
- * recognisable sine.
+ * its own phase, speed, amplitude and start delay, so the dome contour behind
+ * the fins rises and falls like a very slow audio spectrum rather than a single
+ * recognisable sine. Motion is deliberately subtle: at the default amplitude a
+ * slat travels ~3.5% of the frame height.
  *
- * Built as isolated layers (background -> contour -> light ramp -> per-slat
- * motion -> refraction -> glass body -> highlight -> grain + vignette), each in
- * its own helper below. One octave of value noise, no FBM, no raymarching, no
- * loops.
+ * Built as isolated layers (background ramp -> dome contour -> volumetric light
+ * -> per-slat motion -> refraction -> glass body -> highlight -> grain +
+ * vignette), each in its own helper below. One octave of value noise, no FBM,
+ * no raymarching, no loops.
  */
 export const glassRefractionFragment = /* glsl */ `#version 300 es
 precision highp float;
@@ -44,54 +36,39 @@ uniform float uSlatCount;        // number of vertical glass slats
 uniform float uRefraction;       // per-slat UV displacement, device px
 uniform float uAmplitude;        // per-slat breathing, fraction of frame height
 uniform float uBlur;             // slat edge softness (1 dissolves the ribs)
-uniform float uHighlight;        // per-slat highlight strength
+uniform float uHighlight;        // per-slat purple highlight strength
 uniform float uEdgeLight;        // specular seam brightness at each rib edge
 uniform float uGrain;            // film grain amount
-uniform float uGlow;             // light intensity
-uniform float uDomeCenter;       // x of the arch crest (0 = left, 1 = right)
-uniform float uDomeHeight;       // image-space y of the arch crest (0 = top)
+uniform float uGlow;             // volumetric light intensity
+uniform float uDomeCenter;       // x of the dome crest (0 = left, 1 = right)
+uniform float uDomeHeight;       // image-space y of the dome crest (0 = top)
 uniform vec3 uBgColors[3];       // background ramp, top -> bottom
-uniform vec3 uPurpleColors[3];   // ramp outside the contour, far -> near
-uniform vec3 uMagentaColors[2];  // ramp at the contour, outer -> inner
-uniform vec3 uRedColors[3];      // ramp inside the contour, near -> deep
-uniform vec3 uHighlightColor;    // per-slat highlight tint
+uniform vec3 uRedColors[3];      // dome core, rim-inward -> deep
+uniform vec3 uPurpleColors[3];   // halo, deep -> mid -> bright (bright sits at the rim)
+uniform vec3 uMagentaColors[2];  // contour rim, outer -> inner
+uniform vec3 uHighlightColor;    // brightest point of the per-slat highlight
 uniform vec2 uMouse;             // container-normalised mouse (uv space)
 uniform float uMouseInteractive; // 1.0 enables the parallax term
 
 const float TAU = 6.28318530718;
 const float HALF_PI = 1.57079632679;
 
-// -- arch shape --------------------------------------------------------------
+// -- dome shape --------------------------------------------------------------
 // Half-width of the arch in uv-x. Wider than the frame so the crest reads as
 // one continuous sweep rather than a bump with two visible feet.
-const float DOME_WIDTH = 0.95;
+const float DOME_WIDTH = 1.15;
 // How far the contour sinks between the crest and the edge of DOME_WIDTH.
-// Fitted by least-squares against the reference's brightest-pixel-per-column
-// trace, which runs y = 0.33 at x = 0, 0.22 at the crest (x ~ 0.27), 0.43 at
-// x = 0.64 and 0.85 at x = 1. Width and fall are coupled — widening one
-// without shortening the other flattens the descent and the arc stops
-// matching past x ~ 0.6.
-const float DOME_FALL = 0.78;
-// Shoulder sharpness. 1.0 is a plain raised cosine; 1.6 flattens the crest and
-// steepens the descent, which is what the trace shows.
+// 1.05 pushes the right-hand end just off the bottom of the frame, matching the
+// reference's fade to black in the lower right.
+const float DOME_FALL = 1.05;
+// Shoulder sharpness of the arch. 1.0 is a plain raised cosine; 1.6 flattens
+// the crest and steepens the descent, which is what the reference does.
 const float DOME_POW = 1.6;
-// Half-width of the central difference used to measure the arch's local slope.
-const float SLOPE_EPS = 0.01;
 
-// -- light ramp stops --------------------------------------------------------
-// Perpendicular distance from the contour, in fractions of frame height.
-// Negative is outside (above) the light, positive is inside it. Each stop is
-// the measured position of its colour along a vertical cut through the
-// reference at x = 0.02, converted to distance from the contour there.
-const float S_P0 = -0.272;  // deep outer purple
-const float S_P1 = -0.172;  // mid violet
-const float S_P2 = -0.085;  // bright violet, just clear of the rim
-const float S_M0 = -0.022;  // the contour itself — brightest point in the frame
-const float S_M1 = 0.028;   // inner magenta
-const float S_R0 = 0.078;   // pink
-const float S_R1 = 0.178;   // crimson
-const float S_R2 = 0.328;   // deep red
-
+// -- light falloffs (all in uv-y, i.e. fractions of frame height) ------------
+const float RED_SIGMA = 0.42;     // how deep into the dome the red stays lit
+const float RIM_SIGMA = 0.07;     // magenta band half-width at the contour
+const float HALO_SIGMA = 0.13;    // violet halo reach outside the contour
 const float HIGHLIGHT_SIGMA = 0.16; // per-slat highlight spread
 
 // -- motion ------------------------------------------------------------------
@@ -127,64 +104,57 @@ float vnoise(vec2 p) {
 }
 
 // -- Layer 1: background ------------------------------------------------------
-// Near-black throughout. In the reference every trace of colour in the "sky"
-// belongs to the light's own outer tail, not to the backdrop — the top-right
-// corner, far from the arch, is pure #000000 — so this stays a plain vertical
-// ramp from black to the faint neutral floor the bottom edge settles on.
+// Vertical three-stop ramp through the near-black purples, then a horizontal
+// multiply so the right-hand third falls away to black as it does in the
+// reference. \`p\` is image-space (y = 0 at the top).
 vec3 backgroundLayer(vec2 p) {
-  vec3 col = mix(uBgColors[0], uBgColors[1], smoothstep(0.0, 0.55, p.y));
-  return mix(col, uBgColors[2], smoothstep(0.55, 1.0, p.y));
+  vec3 col = mix(uBgColors[0], uBgColors[1], smoothstep(0.0, 0.5, p.y));
+  col = mix(col, uBgColors[2], smoothstep(0.5, 1.0, p.y));
+  return col * mix(1.0, 0.45, smoothstep(0.55, 1.0, p.x));
 }
 
-// -- Layer 2: the arch contour ------------------------------------------------
-// Image-space y of the crest of the light at horizontal position x — the
+// -- Layer 2: the dome contour ------------------------------------------------
+// Image-space y of the top of the red light at horizontal position x — the
 // "amplitude curve" everything else is measured against. A raised cosine
-// clamped to DOME_WIDTH, so outside that span the contour rests at its lowest
-// point instead of curving back up.
+// clamped to DOME_WIDTH, so outside that span the contour simply rests at its
+// lowest point instead of curving back up.
 float domeCrest(float x) {
   float k = clamp((x - uDomeCenter) / DOME_WIDTH, -1.0, 1.0);
   float arch = pow(max(cos(k * HALF_PI), 0.0), DOME_POW);
   return uDomeHeight + (1.0 - arch) * DOME_FALL;
 }
 
-// Signed perpendicular distance from the contour at \`p\`. Plain vertical
-// distance would overstate the gap wherever the arch is steep; dividing by the
-// local gradient is what compresses the colour bands toward the right of the
-// frame, exactly as the reference does.
-float contourDistance(vec2 p) {
-  float slope = (domeCrest(p.x + SLOPE_EPS) - domeCrest(p.x - SLOPE_EPS)) / (2.0 * SLOPE_EPS);
-  return (p.y - domeCrest(p.x)) / sqrt(1.0 + slope * slope);
-}
-
-// -- Layer 3: the light -------------------------------------------------------
-// One monotone ramp across the contour: outer purple -> violet -> magenta at
-// the rim -> pink -> crimson -> deep red. Chained smoothsteps, each saturating
-// before the next begins, give a C1-continuous curve with no visible stops and
-// no banding. Both ends fade to black so the light never tints the far
-// background — which is why this can simply be added to it.
-vec3 lightRamp(float s) {
-  vec3 c = uPurpleColors[0];
-  c = mix(c, uPurpleColors[1], smoothstep(S_P0, S_P1, s));
-  c = mix(c, uPurpleColors[2], smoothstep(S_P1, S_P2, s));
-  c = mix(c, uMagentaColors[0], smoothstep(S_P2, S_M0, s));
-  c = mix(c, uMagentaColors[1], smoothstep(S_M0, S_M1, s));
-  c = mix(c, uRedColors[0], smoothstep(S_M1, S_R0, s));
-  c = mix(c, uRedColors[1], smoothstep(S_R0, S_R1, s));
-  c = mix(c, uRedColors[2], smoothstep(S_R1, S_R2, s));
-  // Tail fades, fitted to the same cut: the outer tail is gone by ~0.46 above
-  // the contour, the inner one decays much further before reaching the black
-  // floor at the bottom of the frame.
-  c *= 1.0 - smoothstep(0.24, 0.46, max(-s, 0.0));
-  c *= 1.0 - smoothstep(0.30, 0.62, max(s, 0.0));
-  return c;
-}
-
-// The reference holds roughly full intensity across the left two thirds and
-// then falls to about 55% at the right edge. Starting the falloff late matters:
-// the arc is still descending through the right of the frame, and cutting it
-// sooner blacks out the bottom-right corner, which the reference does not do.
+// -- Layer 3: volumetric light ------------------------------------------------
+// Everything keys off \`s\`, the signed distance below the contour: s > 0 is
+// inside the dome, s < 0 is the sky above it. Each band is a gaussian in s so
+// the transitions are C-infinity — no stops, no banding — and the three are
+// summed *emissively* rather than mixed, so the result reads as light rather
+// than as paint. Red dies off toward the right much faster than the violet,
+// which is why the reference's right edge goes blue-purple before it goes black.
 vec3 volumetricLight(float s, vec2 p) {
-  return lightRamp(s) * mix(1.0, 0.55, smoothstep(0.65, 1.0, p.x)) * uGlow;
+  float inside = max(s, 0.0);
+  float outside = max(-s, 0.0);
+
+  // Core: brightest just under the rim, deepening with depth, and dimmed
+  // toward the bottom of the frame where the reference sinks into black.
+  vec3 red = mix(uRedColors[0], uRedColors[1], smoothstep(0.0, 0.22, inside));
+  red = mix(red, uRedColors[2], smoothstep(0.22, 0.55, inside));
+  float redFall = exp(-(inside * inside) / (RED_SIGMA * RED_SIGMA));
+  redFall *= 1.0 - 0.85 * smoothstep(0.55, 1.0, p.y);
+  red *= redFall * mix(1.05, 0.18, smoothstep(0.35, 0.92, p.x));
+
+  // Rim: a tight magenta band straddling the contour itself.
+  vec3 magenta = mix(uMagentaColors[0], uMagentaColors[1], smoothstep(-0.05, 0.05, s));
+  float rim = exp(-(s * s) / (RIM_SIGMA * RIM_SIGMA));
+  magenta *= rim * mix(1.0, 0.30, smoothstep(0.5, 1.0, p.x));
+
+  // Halo: broad violet wrap, brightest against the rim and cooling outward.
+  vec3 purple = mix(uPurpleColors[2], uPurpleColors[1], smoothstep(0.0, 0.08, outside));
+  purple = mix(purple, uPurpleColors[0], smoothstep(0.08, 0.20, outside));
+  float halo = exp(-(outside * outside) / (HALO_SIGMA * HALO_SIGMA));
+  purple *= halo * mix(1.0, 0.35, smoothstep(0.55, 1.05, p.x));
+
+  return (red * 1.15 + magenta * 0.85 + purple * 0.75) * uGlow;
 }
 
 // -- Layer 4: per-slat breathing ----------------------------------------------
@@ -235,10 +205,9 @@ vec2 slatRefract(float f, float scale) {
 // bright left shoulder, darkest around 69% of the way across, then a specular
 // seam at the right edge. The repeating light/dark/light cadence — and the
 // reset at each boundary — is what reads as bevelled vertical glass instead of
-// flat stripes. Kept gentle; in the reference the fins modulate the light
-// rather than striping it. \`luma\` is the slat's own static depth.
+// flat stripes. \`luma\` is the slat's own static depth.
 float slatShade(float f, float luma) {
-  float dip = mix(1.04, 0.88, smoothstep(0.0, 0.69, f));
+  float dip = mix(1.06, 0.84, smoothstep(0.0, 0.69, f));
   float edge = smoothstep(0.69, 1.0, f);
   return mix(dip, 1.0 + uEdgeLight, edge * edge) * luma;
 }
@@ -279,19 +248,20 @@ void main() {
 
   // Compose: background, then the light sampled through the glass.
   vec3 col = backgroundLayer(sp);
-  col += volumetricLight(contourDistance(sp), sp);
+  col += volumetricLight(sp.y - domeCrest(sp.x), sp);
 
   // Layer 6: the glass body itself.
   col *= slatShade(f, luma);
 
-  // Layer 7: soft highlight riding this slat's current contour position. Pure
-  // gaussian, so it can never produce a hard edge, and it follows the motion by
-  // construction. The squared envelope keeps it to the rim — the ramp above
-  // already carries most of the contour's brightness.
+  // Layer 7: soft purple highlight riding this slat's current contour position.
+  // Pure gaussian, so it can never produce a hard edge, and it follows the
+  // motion by construction.
   float hy = domeCrest(p.x) + breath;
   float d = (p.y - hy) / HIGHLIGHT_SIGMA;
   float hl = exp(-d * d);
-  col += uHighlightColor * hl * hl * uHighlight * tint;
+  // Squared envelope: only the few fragments sitting right on the contour reach
+  // the near-white tip, so the rim stays hot pink instead of blowing out.
+  col += mix(uPurpleColors[1], uHighlightColor, hl * hl) * hl * hl * uHighlight * tint;
 
   // Layer 8: grain (independent of uSpeed, so a frozen frame still breathes)
   // and vignette.

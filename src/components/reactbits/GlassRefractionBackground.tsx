@@ -8,22 +8,15 @@ import { glassRefractionFragment } from "./shaders/glassRefraction.frag";
 import "./GlassRefractionBackground.css";
 
 /**
- * Default palette, sampled directly off /glass-refraction-banner.png rather
- * than taken from a spec. Two things the measurement settles: the reference has
- * no blue-violet and no white — green sits at 0-8 across the entire frame and
- * the brightest pixel anywhere is #A400B0 — and the backdrop really is black,
- * with every trace of colour in the "sky" belonging to the light's outer tail.
- *
- * Read purple -> magenta -> red as one continuous ramp outward-to-inward across
- * the contour; that is how the shader consumes them. Each group is the fixed
- * length the shader's uniform holds, and the `fit` helper below pads a short
- * caller-supplied array back out with these.
+ * Default palette, read off /glass-refraction-banner.png. Each group maps to
+ * one layer of the composition and is a fixed length the shader expects — the
+ * `fit` helper below pads a short caller-supplied array back out with these.
  */
-const DEFAULT_BACKGROUND_COLORS = ["#000000", "#050406", "#0A0908"];
-const DEFAULT_PURPLE_COLORS = ["#1B0129", "#2D0046", "#5E0096"];
-const DEFAULT_MAGENTA_COLORS = ["#9F00AF", "#A00094"];
-const DEFAULT_RED_COLORS = ["#890060", "#500013", "#2E0002"];
-const DEFAULT_HIGHLIGHT_COLOR = "#A000B4";
+const DEFAULT_BACKGROUND_COLORS = ["#05030A", "#09040E", "#0D0715"];
+const DEFAULT_RED_COLORS = ["#B0002A", "#8A0022", "#620018"];
+const DEFAULT_PURPLE_COLORS = ["#5A1BA8", "#7B29FF", "#A53CFF"];
+const DEFAULT_MAGENTA_COLORS = ["#FF2AC8", "#FF3DA5"];
+const DEFAULT_HIGHLIGHT_COLOR = "#FFD4FF";
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -60,15 +53,15 @@ export type GlassRefractionBackgroundProps = {
   domeCenter?: number;
   /** Image-space y of the dome crest (0 = top of the frame). */
   domeHeight?: number;
-  /** 3 hex colours — background ramp, top to bottom. Near-black in the reference. */
+  /** 3 hex colours — background ramp, top to bottom. */
   backgroundColors?: string[];
-  /** 3 hex colours — ramp outside the contour, far from it to just clear of it. */
-  purpleColors?: string[];
-  /** 2 hex colours — ramp at the contour itself, outer to inner. The peak. */
-  magentaColors?: string[];
-  /** 3 hex colours — ramp inside the contour, nearest it to deepest. */
+  /** 3 hex colours — dome core, rim-inward to deep. */
   redColors?: string[];
-  /** Per-slat highlight tint. */
+  /** 3 hex colours — halo, deep to bright (the brightest sits against the rim). */
+  purpleColors?: string[];
+  /** 2 hex colours — the rim band straddling the dome contour. */
+  magentaColors?: string[];
+  /** Brightest point of the per-slat highlight. */
   highlightColor?: string;
   /** Enables a gentle mouse parallax on the whole composition. */
   mouseInteractive?: boolean;
@@ -86,17 +79,17 @@ export type GlassRefractionBackgroundProps = {
  */
 export function GlassRefractionBackground({
   opacity = 1,
-  speed = 1,
+  speed = 3,
   slatCount = 28,
-  refraction = 2.6,
-  amplitude = 0.028,
+  refraction = 3.6,
+  amplitude = 0.055,
   blur = 0.12,
-  highlight = 0.4,
-  edgeLight = 0.52,
-  grain = 0.012,
-  glow = 1,
-  domeCenter = 0.27,
-  domeHeight = 0.22,
+  highlight = 0.22,
+  edgeLight = 0.38,
+  grain = 0.035,
+  glow = 0.52,
+  domeCenter = 0.24,
+  domeHeight = 0.2,
   backgroundColors,
   redColors,
   purpleColors,
@@ -112,9 +105,9 @@ export function GlassRefractionBackground({
   // render. Unpacked back into groups inside the effect.
   const paletteKey = [
     ...fit(backgroundColors, DEFAULT_BACKGROUND_COLORS),
+    ...fit(redColors, DEFAULT_RED_COLORS),
     ...fit(purpleColors, DEFAULT_PURPLE_COLORS),
     ...fit(magentaColors, DEFAULT_MAGENTA_COLORS),
-    ...fit(redColors, DEFAULT_RED_COLORS),
     highlightColor ?? DEFAULT_HIGHLIGHT_COLOR,
   ].join("|");
 
@@ -122,8 +115,8 @@ export function GlassRefractionBackground({
     const containerEl = containerRef.current;
     if (!containerEl) return;
 
-    // Same order the key was packed in, which is ramp order: 3 background,
-    // 3 purple, 2 magenta, 3 red, 1 highlight.
+    // Same order the key was packed in: 3 background, 3 red, 3 purple,
+    // 2 magenta, 1 highlight.
     const palette = paletteKey.split("|");
     // Array uniforms (uBgColors[3] etc.) must be plain arrays — OGL only
     // recognises `Array.isArray` values when resolving `name[0]` active uniforms.
@@ -169,9 +162,9 @@ export function GlassRefractionBackground({
         uDomeCenter: { value: domeCenter },
         uDomeHeight: { value: domeHeight },
         uBgColors: { value: rgb(0, 3) },
-        uPurpleColors: { value: rgb(3, 6) },
-        uMagentaColors: { value: rgb(6, 8) },
-        uRedColors: { value: rgb(8, 11) },
+        uRedColors: { value: rgb(3, 6) },
+        uPurpleColors: { value: rgb(6, 9) },
+        uMagentaColors: { value: rgb(9, 11) },
         uHighlightColor: { value: hexToRgb(palette[11]) },
         uMouse: { value: new Float32Array([0.5, 0.5]) },
         uMouseInteractive: { value: mouseInteractive ? 1.0 : 0.0 },
