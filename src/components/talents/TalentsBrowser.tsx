@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { DropdownIcons } from "@/components/shared/DropdownIcons";
 import { cn } from "@/lib/utils";
 import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
 
@@ -89,8 +90,20 @@ export function TalentsBrowser({
         </nav>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr] lg:gap-12">
+          {/* Mobile dropdown */}
+          <div className="lg:hidden">
+            <DropdownIcons
+              options={[
+                { value: "", label: "All" },
+                ...items.map((it) => ({ value: it.id, label: it.name })),
+              ]}
+              value={selectedId ?? ""}
+              onValueChange={(v) => select(v || null)}
+            />
+          </div>
+
           {/* Sidebar: All + venues or categories */}
-          <aside className="flex flex-col gap-3 self-start lg:sticky lg:top-24">
+          <aside className="hidden flex-col gap-3 self-start lg:sticky lg:top-24 lg:flex">
             <SidebarItem label="All" active={selectedId === null} onClick={() => select(null)} />
             {items.map((it) => (
               <SidebarItem
