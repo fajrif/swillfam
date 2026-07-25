@@ -21,15 +21,15 @@ const WEEKDAY_BY_UTC_DAY = [
   "SATURDAY",
 ] as const;
 
-/** Short labels for `recurringDays`, in display order (Monday first). */
-const WEEKDAY_SHORT: Record<string, string> = {
-  MONDAY: "Mon",
-  TUESDAY: "Tue",
-  WEDNESDAY: "Wed",
-  THURSDAY: "Thu",
-  FRIDAY: "Fri",
-  SATURDAY: "Sat",
-  SUNDAY: "Sun",
+/** Full weekday labels for `recurringDays`, in display order (Monday first). */
+const WEEKDAY_LABEL: Record<string, string> = {
+  MONDAY: "Monday",
+  TUESDAY: "Tuesday",
+  WEDNESDAY: "Wednesday",
+  THURSDAY: "Thursday",
+  FRIDAY: "Friday",
+  SATURDAY: "Saturday",
+  SUNDAY: "Sunday",
 };
 
 const WEEKDAY_ORDER = [
@@ -265,7 +265,7 @@ export function formatMonthYear(year: number, month: number): string {
 
 /** `["FRIDAY", "SATURDAY"]` → `"Every Fri, Sat"`. */
 export function formatRecurringDays(days: string[]): string {
-  const labels = WEEKDAY_ORDER.filter((d) => days.includes(d)).map((d) => WEEKDAY_SHORT[d]);
+  const labels = WEEKDAY_ORDER.filter((d) => days.includes(d)).map((d) => WEEKDAY_LABEL[d]);
   return labels.length > 0 ? `Every ${labels.join(", ")}` : "Recurring";
 }
 
