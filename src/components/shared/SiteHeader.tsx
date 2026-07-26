@@ -105,8 +105,8 @@ export function SiteHeader() {
           className={cn(
             "transition-[background,border-color] duration-300",
             scrolled || open
-              ? "border-b border-sf-border/40 bg-sf-bg/70 backdrop-blur-md"
-              : "border-transparent bg-transparent",
+              ? "bg-sf-bg/20 backdrop-blur-md"
+              : "bg-transparent",
           )}
         >
           <Container className="flex items-center justify-between py-4">
