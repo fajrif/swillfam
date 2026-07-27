@@ -4,6 +4,7 @@ import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
 import { ReactLenis } from "lenis/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ScrollToTopOnNavigate } from "@/components/shared/ScrollToTopOnNavigate";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
         {/* Lenis owns scroll smoothing site-wide — CSS scroll-behavior:smooth is
             deliberately not used alongside it (the two fight each other). */}
         <ReactLenis root options={{ anchors: true }} />
+        <ScrollToTopOnNavigate />
         <NextTopLoader
           color="#c6387f"
           height={3}

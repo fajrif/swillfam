@@ -263,6 +263,12 @@ model Promotion {
   description         String
   caption             String
   terms               String // rich text (HTML)
+  // Per-promotion social links (admin-filled) — rendered as share icons on the
+  // public promotion page. Optional; any left blank simply isn't rendered.
+  instagramUrl        String?
+  xUrl                String?
+  threadsUrl          String?
+  facebookUrl         String?
   venueId             String?
   venue               Venue?             @relation(fields: [venueId], references: [id], onDelete: SetNull)
   promotionCategoryId String?

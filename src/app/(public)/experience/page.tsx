@@ -11,7 +11,12 @@ import { StickyHero } from "@/components/shared/StickyHero";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
-import { OneDaySection, ExperienceMap, WantUsToPlanSection } from "@/components/experience";
+import {
+  OneDaySection,
+  ExperienceMap,
+  MomentWeveHostedSection,
+  WantUsToPlanSection,
+} from "@/components/experience";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
@@ -84,6 +89,10 @@ export default async function ExperiencePage() {
 
       <Reveal>
         <ExperienceMap />
+      </Reveal>
+
+      <Reveal>
+        <MomentWeveHostedSection />
       </Reveal>
 
       <Reveal>

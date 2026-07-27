@@ -2,11 +2,11 @@ import { Container } from "@/components/shared/Container";
 import { FlowingMenu } from "@/components/reactbits/FlowingMenu";
 
 const FLOWING_ITEMS = [
-  { link: "#", text: "Experience", image: "/about/stand-for-1.jpg" },
-  { link: "#", text: "Innovation", image: "/about/stand-for-2.jpg" },
-  { link: "#", text: "Culture", image: "/about/stand-for-3.jpg" },
-  { link: "#", text: "Quality", image: "/about/stand-for-4.jpg" },
-  { link: "#", text: "Growth", image: "/about/stand-for-5.jpg" },
+  { link: "#", text: "Experience", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
+  { link: "#", text: "Innovation", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
+  { link: "#", text: "Culture", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
+  { link: "#", text: "Quality", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
+  { link: "#", text: "Growth", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
 ];
 
 export function WhatWeStandForFlowingSection() {

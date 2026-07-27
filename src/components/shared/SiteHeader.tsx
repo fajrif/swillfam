@@ -16,30 +16,28 @@ import type { SiteSettings } from "@/lib/site-settings";
  *  header's expanding panel so link positions stay identical. Stacks on mobile. */
 function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <nav className="flex flex-col gap-8 md:flex-row md:gap-10 text-right">
+    <nav
+      className="flex flex-col gap-8 md:flex-row md:gap-10 text-right md:text-start"
+      onMouseLeave={() => setHoveredHref(null)}
+    >
       {NAV_GROUPS.map((group, i) => (
         <ul key={i} className="flex flex-col">
           {group.map((link) => (
             <li key={link.label} className="grid">
-                <span
-                  className="invisible col-start-1 row-start-1 font-syne font-bold text-base uppercase tracking-wide"
-                  aria-hidden="true"
-                >
-                  {link.label}
-                </span>
                 <Link
                   href={link.href}
                   onClick={onNavigate}
+                  onMouseEnter={() => setHoveredHref(link.href)}
                   className={cn(
                     "col-start-1 row-start-1 font-inter text-base tracking-wide uppercase text-white",
-                    isActive(link.href)
-                      ? "font-syne font-bold"
-                      : "hover:font-syne hover:font-bold",
+                    isActive(link.href) && "font-bold",
+                    hoveredHref && hoveredHref !== link.href && !isActive(link.href) && "text-white/70",
                   )}
                 >
                   {link.label}

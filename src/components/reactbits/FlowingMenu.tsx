@@ -9,6 +9,8 @@ interface FlowingMenuItem {
   link: string;
   text: string;
   image: string;
+  /** Shown in the marquee instead of the image chip when `image` is blank. */
+  description?: string;
 }
 
 interface FlowingMenuProps {
@@ -25,6 +27,7 @@ function MenuItem({
   link,
   text,
   image,
+  description,
   speed,
   textColor,
   marqueeBgColor,
@@ -74,7 +77,7 @@ function MenuItem({
     calculateRepetitions();
     window.addEventListener("resize", calculateRepetitions);
     return () => window.removeEventListener("resize", calculateRepetitions);
-  }, [text, image]);
+  }, [text, image, description]);
 
   useEffect(() => {
     const setupMarquee = () => {
@@ -106,7 +109,7 @@ function MenuItem({
         animationRef.current.kill();
       }
     };
-  }, [text, image, repetitions, speed]);
+  }, [text, image, description, repetitions, speed]);
 
   const handleMouseEnter = (ev: React.MouseEvent) => {
     if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
@@ -135,14 +138,19 @@ function MenuItem({
       .to(marqueeInnerRef.current, { y: edge === "top" ? "101%" : "-101%" }, 0);
   };
 
+  // "#" is a placeholder for "no destination yet" — keep the hover marquee,
+  // but don't render it as an actual clickable link.
+  const isLink = Boolean(link) && link !== "#";
+
   return (
     <div className="menu__item" ref={itemRef} style={{ borderColor }}>
       <a
         className="menu__item-link"
-        href={link}
+        href={isLink ? link : undefined}
+        aria-disabled={isLink ? undefined : true}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{ color: textColor }}
+        style={{ color: textColor, cursor: isLink ? "pointer" : "default" }}
       >
         {text}
       </a>
@@ -152,7 +160,11 @@ function MenuItem({
             {[...Array(repetitions)].map((_, idx) => (
               <div className="marquee__part" key={idx} style={{ color: marqueeTextColor }}>
                 <span>{text}</span>
-                <div className="marquee__img" style={{ backgroundImage: `url(${image})` }} />
+                {image ? (
+                  <div className="marquee__img" style={{ backgroundImage: `url(${image})` }} />
+                ) : description ? (
+                  <div className="marquee__description">{description}</div>
+                ) : null}
               </div>
             ))}
           </div>
