@@ -7,7 +7,7 @@ export default async function PublicLayout({ children }: { children: React.React
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-text">
       <div className="relative">
-        <SiteHeader />
+        <SiteHeader settings={settings} />
       </div>
       {children}
       <SiteFooter settings={settings} />

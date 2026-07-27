@@ -8,7 +8,9 @@ import { Menu, X } from "lucide-react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
+import { SocialIcons } from "@/components/shared/SocialIcons";
 import { NAV_GROUPS } from "./nav-data";
+import type { SiteSettings } from "@/lib/site-settings";
 
 /** The three stacked link columns — shared by the top mega-nav and the compact
  *  header's expanding panel so link positions stay identical. Stacks on mobile. */
@@ -58,7 +60,7 @@ function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
  * 3-column links. Scrolling back to the top restores the mega-nav.
  * (On mobile the compact bar is always shown — there's no room for the mega-nav.)
  */
-export function SiteHeader() {
+export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -150,8 +152,20 @@ export function SiteHeader() {
               open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
             )}
           >
-            <Container className="flex justify-end pt-1 pb-8">
-              <NavColumns onNavigate={() => setOpen(false)} />
+            <Container className="pt-1 pb-6">
+              <div className="flex flex-col md:flex-row md:justify-between">
+                {/* Desktop: socials on the left */}
+                <div className="hidden md:flex">
+                  <SocialIcons settings={settings} />
+                </div>
+                <div className="flex justify-end">
+                  <NavColumns onNavigate={() => setOpen(false)} />
+                </div>
+                {/* Mobile: socials centered at the bottom */}
+                <div className="flex md:hidden justify-end pt-12">
+                  <SocialIcons settings={settings} className="items-end" />
+                </div>
+              </div>
             </Container>
           </div>
         </div>

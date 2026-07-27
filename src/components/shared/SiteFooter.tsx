@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Container } from "./Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import type { SiteSettings } from "@/lib/site-settings";
+import { SocialIcons } from "@/components/shared/SocialIcons";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
@@ -23,13 +24,6 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
     { label: "Guides/Journal", href: "/articles" },
     { label: "Contact", href: "/contact" },
   ],
-];
-
-const SOCIALS = [
-  { icon: "ph-linkedin-logo", label: "LinkedIn", key: "socialLinkedin" },
-  { icon: "ph-tiktok-logo", label: "TikTok", key: "socialTiktok" },
-  { icon: "ph-youtube-logo", label: "YouTube", key: "socialYoutube" },
-  { icon: "ph-instagram-logo", label: "Instagram", key: "socialInstagram" },
 ];
 
 /** Footer / Newsletter (Figma 831:313). */
@@ -85,26 +79,9 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
 
         {/* Contact (left) + WhatsApp & nav links (bottom-right) */}
         <Container className="grid grid-cols-1 gap-12 py-8 md:grid-cols-2 border-x border-sf-border/60 bg-sf-deep">
-          {/* Left: find us + socials + email + address */}
+          {/* Left: socials + email + address */}
           <div className="flex flex-col gap-4">
-            <p className="font-inter text-base text-white">Find us:</p>
-            <div className="flex gap-4">
-              {SOCIALS.map(({ icon, label, key }) => {
-                const href = settings[key] || "#";
-                return (
-                  <Link
-                    key={label}
-                    href={href}
-                    target={href !== "#" ? "_blank" : undefined}
-                    rel={href !== "#" ? "noopener noreferrer" : undefined}
-                    aria-label={label}
-                    className="text-white transition-colors hover:text-sf-accent"
-                  >
-                    <i className={`ph ${icon} text-xl`} aria-hidden />
-                  </Link>
-                );
-              })}
-            </div>
+            <SocialIcons settings={settings} />
             {settings.mainEmail && (
               <p className="font-inter text-base text-white">
                 Email:{" "}
@@ -123,7 +100,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </div>
 
           {/* Right: nav links anchored bottom-right */}
-          <div className="flex flex-col items-start md:items-end justify-between gap-2">
+          <div className="flex flex-col items-start md:items-end justify-end gap-2">
             <div className="flex gap-12 text-left md:text-right">
               {FOOTER_COLS.map((col, i) => (
                 <ul key={i} className="flex flex-col">
