@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import type { SegmentGallery } from "@/generated/prisma/client";
+import { Lightbox } from "@/components/shared/Lightbox";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
@@ -15,6 +19,8 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
     description: gallery.imageDescriptions[i] ?? "",
   }));
 
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   if (dishes.length === 0) return null;
 
   return (
@@ -23,7 +29,7 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
         <SectionHeading title={gallery.title} lead={gallery.description} align="center" />
 
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
-          {dishes.map((dish) => (
+          {dishes.map((dish, i) => (
             <div
               key={dish.src}
               className="group relative aspect-[4/5] overflow-hidden border border-sf-border/40"
@@ -33,10 +39,11 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
                 alt={dish.title}
                 fill
                 sizes="(max-width: 1024px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="cursor-zoom-in object-cover transition-transform duration-700 group-hover:scale-105"
+                onClick={() => setLightboxIndex(i)}
               />
               {/* Hover overlay: dark wash + title/description */}
-              <div className="absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <h3 className="font-syne text-lg font-bold leading-tight text-white">
                   {dish.title}
                 </h3>
@@ -50,6 +57,13 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
           ))}
         </div>
       </Container>
+
+      <Lightbox
+        images={dishes.map((dish) => dish.src)}
+        index={lightboxIndex ?? 0}
+        open={lightboxIndex !== null}
+        onClose={() => setLightboxIndex(null)}
+      />
     </section>
   );
 }

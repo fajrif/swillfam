@@ -34,6 +34,7 @@ export default async function VenuesPage() {
         operatingHours: true,
         lat: true,
         lng: true,
+        whatsapp: true,
       },
     }),
     getArticleRows(3),

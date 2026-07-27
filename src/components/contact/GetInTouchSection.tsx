@@ -1,4 +1,5 @@
 import { Container } from "@/components/shared/Container";
+import { whatsappHref } from "@/lib/whatsapp";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
@@ -21,8 +22,30 @@ export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
             the right department.
           </p>
           <div className="mt-2 flex flex-col gap-1 font-inter text-xl text-white">
-            {settings.mainWhatsapp && <p>WhatsApp: {settings.mainWhatsapp}</p>}
-            {settings.mainPhone && <p>Phone: {settings.mainPhone}</p>}
+            {settings.mainWhatsapp && (
+              <p>
+                WhatsApp:{" "}
+                <a
+                  href={whatsappHref(settings.mainWhatsapp)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-sf-accent"
+                >
+                  {settings.mainWhatsapp}
+                </a>
+              </p>
+            )}
+            {settings.mainPhone && (
+              <p>
+                Phone:{" "}
+                <a
+                  href={`tel:${settings.mainPhone}`}
+                  className="transition-colors hover:text-sf-accent"
+                >
+                  {settings.mainPhone}
+                </a>
+              </p>
+            )}
             {settings.mainEmail && (
               <p>
                 Email:{" "}

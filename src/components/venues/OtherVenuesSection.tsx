@@ -12,9 +12,11 @@ export function OtherVenuesSection({ venues }: { venues: Venue[] }) {
       <Container className="flex flex-col gap-8 lg:gap-12">
         <SectionHeading title="See Other Venues" align="center" />
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap justify-center gap-6">
           {venues.map((venue) => (
-            <VenueCard key={venue.id} venue={venue} disableHoverOverlay />
+            <div key={venue.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]">
+              <VenueCard venue={venue} disableHoverOverlay />
+            </div>
           ))}
         </div>
       </Container>

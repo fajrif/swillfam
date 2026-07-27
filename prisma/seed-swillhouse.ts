@@ -28,6 +28,7 @@ async function getOrCreateVenue() {
       logo: asset("logo.png"),
       categoryId: category?.id ?? null,
       operatingHours: "Wednesday - Sunday: 19:00 - 04:00",
+      whatsapp: "6287884288880",
       location: "SCBD, Jakarta",
       lat: -6.226764348529861,
       lng: 106.80725476681219,

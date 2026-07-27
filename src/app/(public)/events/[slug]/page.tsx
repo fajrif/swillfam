@@ -113,7 +113,7 @@ export default async function EventSlugPage({
   ]);
 
   const venue = event.venue;
-  const phone = event.waPhone ?? settings.mainWhatsapp;
+  const phone = event.waPhone ?? venue?.whatsapp ?? settings.mainWhatsapp;
   const timeLabel = `${formatHour(event.startHour)} – ${formatHour(event.endHour)}`;
 
   /** Same labelling rule as the /events listing: weekdays for recurring, dates otherwise. */

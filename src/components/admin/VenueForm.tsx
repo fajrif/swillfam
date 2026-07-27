@@ -64,6 +64,13 @@ export function VenueForm({
         <Field label="Latitude" name="lat" type="number" step="any" defaultValue={venue?.lat ?? ""} hint="For Google Maps" />
         <Field label="Longitude" name="lng" type="number" step="any" defaultValue={venue?.lng ?? ""} hint=" " />
       </div>
+      <Field label="Google Maps Place ID" name="placeId" defaultValue={venue?.placeId ?? ""} hint="From maps embed URL (pb=!1m18...)" />
+
+      <div className="grid grid-cols-3 gap-4">
+        <Field label="WhatsApp" name="whatsapp" defaultValue={venue?.whatsapp ?? ""} hint="Phone number only (digits)" />
+        <Field label="Phone" name="phone" defaultValue={venue?.phone ?? ""} />
+        <Field label="Email" name="email" type="email" defaultValue={venue?.email ?? ""} />
+      </div>
 
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={venue?.spotifyEmbed ?? ""} rows={2} />
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={venue?.youtubeEmbed ?? ""} rows={2} />

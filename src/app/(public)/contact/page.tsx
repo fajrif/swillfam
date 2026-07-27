@@ -12,6 +12,7 @@ import { StandForColumnsSection, CareersSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Contact SwillFam — Get in Touch",
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const [settings, articles] = await Promise.all([getSiteSettings(), getArticleRows(3)]);
+  const [settings, articles, venues] = await Promise.all([
+    getSiteSettings(),
+    getArticleRows(3),
+    prisma.venue.findMany({
+      select: { name: true, slug: true, image: true, whatsapp: true, placeId: true, lat: true, lng: true },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   return (
     <StickyHero
@@ -44,7 +52,7 @@ export default async function ContactPage() {
       </Reveal>
 
       <Reveal>
-        <ContactVenuesSection />
+        <ContactVenuesSection venues={venues} />
       </Reveal>
     </StickyHero>
   );

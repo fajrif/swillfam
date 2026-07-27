@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import {
   Carousel,
@@ -11,6 +11,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Container } from "@/components/shared/Container";
+import { Lightbox } from "@/components/shared/Lightbox";
 
 /**
  * Reusable titled image carousel — heading + description + looping slider.
@@ -28,6 +29,7 @@ export function GalleryCarousel({
   images: string[];
 }) {
   const apiRef = useRef<CarouselApi>(undefined);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Embla disables loop when there's too little content; wrap manually.
   const handlePrev = () => {
@@ -72,8 +74,9 @@ export function GalleryCarousel({
                     alt={`${title} (${i + 1})`}
                     fill
                     sizes="(max-width: 1024px) 85vw, 60vw"
-                    className="object-cover"
+                    className="cursor-zoom-in object-cover"
                     priority={i === 0}
+                    onClick={() => setLightboxIndex(i)}
                   />
                 </div>
               </CarouselItem>
@@ -91,6 +94,13 @@ export function GalleryCarousel({
           />
         </Carousel>
       </Container>
+
+      <Lightbox
+        images={images}
+        index={lightboxIndex ?? 0}
+        open={lightboxIndex !== null}
+        onClose={() => setLightboxIndex(null)}
+      />
     </section>
   );
 }

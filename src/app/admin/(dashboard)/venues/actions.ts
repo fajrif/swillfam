@@ -24,6 +24,10 @@ function parse(formData: FormData) {
     spotifyEmbed: String(formData.get("spotifyEmbed") ?? "").trim() || null,
     youtubeEmbed: String(formData.get("youtubeEmbed") ?? "").trim() || null,
     instagramEmbed: String(formData.get("instagramEmbed") ?? "").trim() || null,
+    whatsapp: String(formData.get("whatsapp") ?? "").trim() || null,
+    phone: String(formData.get("phone") ?? "").trim() || null,
+    email: String(formData.get("email") ?? "").trim() || null,
+    placeId: String(formData.get("placeId") ?? "").trim() || null,
   };
 }
 

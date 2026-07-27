@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { ZoomableImage } from "@/components/shared/ZoomableImage";
 import { PastEventStamp } from "./PastEventStamp";
 import { ReserveButton } from "./ReserveButton";
 import { EVENT_PROSE } from "./prose";
@@ -113,7 +113,7 @@ export function RecurringEventDetail({
 
           {image ? (
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
-              <Image
+              <ZoomableImage
                 src={image}
                 alt={name}
                 fill

@@ -39,9 +39,10 @@ export default async function Home() {
     }),
   ]);
 
-  const featuredEvent = await prisma.event.findFirst({
+  const featuredEvents = await prisma.event.findMany({
     where: { isPrivate: false, active: true, featured: true },
     orderBy: { startDate: "asc" },
+    take: 3,
     select: { image: true, name: true, shortDescription: true, caption: true, slug: true },
   });
 
@@ -72,7 +73,7 @@ export default async function Home() {
   }));
 
   return (
-    <Hero featuredEvent={featuredEvent}>
+    <Hero featuredEvents={featuredEvents}>
       <Reveal>
         <CategoryVenuesLogoSection
           parallax

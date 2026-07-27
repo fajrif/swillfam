@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { ZoomableImage } from "@/components/shared/ZoomableImage";
 import { PastEventStamp } from "./PastEventStamp";
 import { ReserveButton } from "./ReserveButton";
 import { EVENT_PROSE } from "./prose";
@@ -44,7 +44,7 @@ export function SingleEventDetail({
         <div className="flex flex-col gap-6">
           {poster ? (
             <div className="relative aspect-[4/5] w-full max-w-[280px] overflow-hidden bg-sf-surface">
-              <Image
+              <ZoomableImage
                 src={poster}
                 alt={name}
                 fill
