@@ -48,6 +48,15 @@ export function PromotionForm({
 
       <Field label="Caption" name="caption" defaultValue={promotion?.caption} required />
 
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Instagram URL" name="instagramUrl" type="url" defaultValue={promotion?.instagramUrl ?? ""} />
+        <Field label="X URL" name="xUrl" type="url" defaultValue={promotion?.xUrl ?? ""} />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Threads URL" name="threadsUrl" type="url" defaultValue={promotion?.threadsUrl ?? ""} />
+        <Field label="Facebook URL" name="facebookUrl" type="url" defaultValue={promotion?.facebookUrl ?? ""} />
+      </div>
+
       <TextareaField label="Short description" name="shortDescription" defaultValue={promotion?.shortDescription} rows={2} required />
       <TextareaField label="Description" name="description" defaultValue={promotion?.description} rows={4} required />
 

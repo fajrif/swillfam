@@ -74,6 +74,9 @@ type Size = "sm" | "md" | "lg";
 type SpecularButtonCommonProps = {
   children?: React.ReactNode;
   size?: Size;
+  /** "pill" (default) is the usual text button; "icon" renders a fixed-size
+   *  circle for a single icon child — same specular border, no text padding. */
+  variant?: "pill" | "icon";
   radius?: number;
   tint?: string;
   tintOpacity?: number;
@@ -96,6 +99,8 @@ type SpecularButtonCommonProps = {
   hoverBackgroundOpacity?: number;
   className?: string;
   disabled?: boolean;
+  /** Accessible name — required for icon-only buttons, which have no visible text. */
+  ariaLabel?: string;
 };
 
 type SpecularButtonAsButton = SpecularButtonCommonProps & {
@@ -126,7 +131,8 @@ export function SpecularButton(props: SpecularButtonProps) {
   const {
     children = "Get Started",
     size = "lg",
-    radius = 18,
+    variant = "pill",
+    radius,
     tint = "#ffffff",
     tintOpacity = 0,
     blur = 0,
@@ -147,14 +153,18 @@ export function SpecularButton(props: SpecularButtonProps) {
     onClick,
     className = "",
     href,
+    ariaLabel,
   } = props;
+  // Icon buttons default to a radius large enough that the shader's own
+  // clamp (min(radius, min(w,h)/2)) turns a square button into a circle.
+  const effectiveRadius = radius ?? (variant === "icon" ? 999 : 18);
   // `type` only applies to the <button> branch, `target`/`rel`/`scroll` only to the
   // <Link> branch — harmless to read both off the union at runtime via this cast.
   const { type = "button", target, rel, scroll } = props as SpecularButtonAsButton & SpecularButtonAsLink;
   const btnRef = useRef<HTMLButtonElement | HTMLAnchorElement | HTMLSpanElement>(null);
   const fxRef = useRef<HTMLSpanElement>(null);
   const propsRef = useRef({
-    radius,
+    radius: effectiveRadius,
     lineColor,
     baseColor,
     intensity,
@@ -171,7 +181,7 @@ export function SpecularButton(props: SpecularButtonProps) {
   // done in an effect (not during render) per the React Compiler's ref rules.
   useEffect(() => {
     propsRef.current = {
-      radius,
+      radius: effectiveRadius,
       lineColor,
       baseColor,
       intensity,
@@ -312,9 +322,9 @@ export function SpecularButton(props: SpecularButtonProps) {
     };
   }, []);
 
-  const sharedClassName = `specular-button specular-button--${size}${className ? ` ${className}` : ""}`;
+  const sharedClassName = `specular-button specular-button--${size}${variant === "icon" ? " specular-button--icon" : ""}${className ? ` ${className}` : ""}`;
   const sharedStyle = {
-    "--sb-radius": `${radius}px`,
+    "--sb-radius": `${effectiveRadius}px`,
     "--sb-tint": tint,
     "--sb-tint-opacity": tintOpacity,
     "--sb-blur": `${blur}px`,
@@ -336,6 +346,7 @@ export function SpecularButton(props: SpecularButtonProps) {
         <span
           ref={btnRef as React.Ref<HTMLSpanElement>}
           aria-disabled="true"
+          aria-label={ariaLabel}
           className={sharedClassName}
           style={sharedStyle}
         >
@@ -351,6 +362,7 @@ export function SpecularButton(props: SpecularButtonProps) {
         rel={rel}
         scroll={scroll}
         onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
+        aria-label={ariaLabel}
         className={sharedClassName}
         style={sharedStyle}
       >
@@ -365,6 +377,7 @@ export function SpecularButton(props: SpecularButtonProps) {
       type={type}
       disabled={disabled}
       onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+      aria-label={ariaLabel}
       className={sharedClassName}
       style={sharedStyle}
     >

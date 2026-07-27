@@ -5,6 +5,7 @@ import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { formatDateRange } from "@/lib/date";
 import { whatsappHref } from "@/lib/whatsapp";
 import { PromotionGallery } from "./PromotionGallery";
+import { PromotionSocialLinks } from "./PromotionSocialLinks";
 
 type PromotionWithVenue = Promotion & { venue: Venue | null };
 
@@ -18,7 +19,7 @@ export function PromotionDetailTop({
 }) {
   const images = [...new Set([promotion.posterImage, promotion.image, promotion.bannerImage].filter(Boolean))] as string[];
   const venue = promotion.venue;
-  const whatsapp = settings.mainWhatsapp;
+  const whatsapp = venue?.whatsapp ?? settings.mainWhatsapp;
 
   return (
     <section className="pt-8 pb-16 lg:pt-12">
@@ -73,7 +74,7 @@ export function PromotionDetailTop({
             </div>
           ) : null}
 
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-2 flex flex-wrap items-center gap-4">
             {whatsapp ? (
               <SpecularButton
                 href={whatsappHref(
@@ -92,6 +93,7 @@ export function PromotionDetailTop({
               <span />
             )}
 
+            <PromotionSocialLinks promotion={promotion} />
           </div>
         </div>
       </Container>

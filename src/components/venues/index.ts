@@ -7,3 +7,4 @@ export { TalentSection } from "./TalentSection";
 export { VenueLocationHours } from "./VenueLocationHours";
 export { OtherVenuesSection } from "./OtherVenuesSection";
 export { VenueSocialEmbeds } from "./VenueSocialEmbeds";
+export { SwillfamSpotlightSection } from "./SwillfamSpotlightSection";

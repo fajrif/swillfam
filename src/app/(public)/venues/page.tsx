@@ -8,7 +8,7 @@ import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
-import { VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
+import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection } from "@/components/venues";
 
 // Statically rendered but data-driven (categories, venues, articles) — revalidate
 // periodically so admin edits/seeds show up without a full rebuild.
@@ -69,6 +69,10 @@ export default async function VenuesPage() {
 
       <Reveal>
         <VenueLocator venues={venues} whatsapp={settings.mainWhatsapp} />
+      </Reveal>
+
+      <Reveal>
+        <SwillfamSpotlightSection settings={settings} />
       </Reveal>
 
       <Reveal>

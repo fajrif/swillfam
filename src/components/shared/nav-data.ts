@@ -5,11 +5,11 @@ export type NavLink = { label: string; href: string };
 export const NAV_GROUPS: NavLink[][] = [
   [
     { label: "About", href: "/about" },
-    { label: "The Swillfam Experience", href: "/experience" },
     { label: "Venues", href: "/venues" },
+    { label: "Events", href: "/events" },
   ],
   [
-    { label: "Events", href: "/events" },
+    { label: "The Swillfam Experience", href: "/experience" },
     { label: "Private Events", href: "/private-events" },
     { label: "Promotions", href: "/promotions" },
     { label: "Talents", href: "/talents" },

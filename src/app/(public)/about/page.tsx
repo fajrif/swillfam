@@ -4,7 +4,6 @@ import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { GlassRefractionBackground } from "@/components/reactbits/GlassRefractionBackground";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
-import { DualImageColumnSection } from "@/components/shared/DualImageColumnSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 import {
@@ -15,7 +14,6 @@ import {
   CareersSection,
   BrandResourcesSection,
   PRINCIPLES,
-  VISION_MISSION,
 } from "@/components/about";
 
 // Statically rendered but data-driven (articles) — revalidate periodically so
