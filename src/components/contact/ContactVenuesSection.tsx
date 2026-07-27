@@ -1,10 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
-import { VENUE_CONTACTS } from "./data";
+import { whatsappHref, formatPhone } from "@/lib/whatsapp";
+
+export type VenueContactRow = {
+  name: string;
+  slug: string;
+  image: string | null;
+  whatsapp: string | null;
+  placeId: string | null;
+  lat: number | null;
+  lng: number | null;
+};
 
 /** "Contact Our Venues Directly" — intro column + a list of venue contact rows. */
-export function ContactVenuesSection() {
+export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) {
   return (
     <section className="py-16 lg:py-24">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -21,19 +31,25 @@ export function ContactVenuesSection() {
 
         {/* Right: venue rows */}
         <div className="flex flex-col gap-4">
-          {VENUE_CONTACTS.map((venue) => (
+          {venues.map((venue) => (
             <div
-              key={venue.name}
+              key={venue.slug}
               className="group flex flex-col border border-sf-border/50 transition-colors duration-300 hover:border-white/80 sm:flex-row sm:items-center sm:gap-5"
             >
               <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface aspect-[140/96] hidden sm:block sm:w-[140px]">
-                <Image
-                  src={venue.img}
-                  alt={venue.name}
-                  fill
-                  sizes="140px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                {venue.image ? (
+                  <Image
+                    src={venue.image}
+                    alt={venue.name}
+                    fill
+                    sizes="140px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-sf-surface/50">
+                    <span className="font-inter text-xs text-white/40">No image</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-col gap-1 p-4 sm:p-0">
                 <Link href={`/venues/${venue.slug}`} className="w-fit">
@@ -41,13 +57,34 @@ export function ContactVenuesSection() {
                     {venue.name}
                   </h3>
                 </Link>
-                <p className="font-inter text-sm text-white">WhatsApp: {venue.whatsapp}</p>
                 <p className="font-inter text-sm text-white">
-                  Location:{" "}
-                  <Link href={venue.mapHref} className="transition-colors text-white/50 hover:text-sf-accent">
-                    View on Map
-                  </Link>
-                </p>
+                  WhatsApp:{" "}
+                  {venue.whatsapp ? (
+                    <a
+                      href={whatsappHref(venue.whatsapp)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-colors hover:text-sf-accent"
+                    >
+                    {formatPhone(venue.whatsapp)}
+                  </a>
+                ) : (
+                  <span>-</span>
+                )}
+              </p>
+                {venue.placeId && (
+                  <p className="font-inter text-sm text-white">
+                    Location:{" "}
+                    <a
+                      href={`https://www.google.com/maps/place/${encodeURIComponent(venue.name)}/data=!4m2!3m1!1s${venue.placeId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-colors text-white/50 hover:text-sf-accent"
+                    >
+                      View on Map
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           ))}

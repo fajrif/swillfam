@@ -195,7 +195,8 @@ export default async function VenueSlugPage({
           operatingHours={venue.operatingHours}
           lat={venue.lat}
           lng={venue.lng}
-          whatsapp={settings.mainWhatsapp}
+          whatsapp={venue.whatsapp ?? settings.mainWhatsapp}
+          placeId={venue.placeId}
         />
       </Reveal>
 

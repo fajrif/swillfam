@@ -176,6 +176,10 @@ model Venue {
   image           String?
   bannerImage     String?
   logo            String?
+  whatsapp        String?
+  phone           String?
+  email           String?
+  placeId         String?
   categoryId      String?
   category        Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   operatingHours  String

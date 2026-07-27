@@ -61,10 +61,6 @@ export default async function About() {
       </Reveal>
 
       <Reveal>
-        <DualImageColumnSection title="" parallax tiles={VISION_MISSION} />
-      </Reveal>
-
-      <Reveal>
         <WhatWeStandForFlowingSection />
       </Reveal>
 

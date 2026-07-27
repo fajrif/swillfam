@@ -21,6 +21,7 @@ export type VenuePin = {
   operatingHours: string;
   lat: number | null;
   lng: number | null;
+  whatsapp: string | null;
 };
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -117,9 +118,9 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
                     <SpecularButton href={`/venues/${venue.slug}`} size="lg" radius={30} className="w-full">
                       See Venue
                     </SpecularButton>
-                    {whatsapp ? (
+                    {venue.whatsapp ?? whatsapp ? (
                       <SpecularButton
-                        href={whatsappHref(whatsapp, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
+                        href={whatsappHref(venue.whatsapp ?? whatsapp!, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
                         target="_blank"
                         rel="noopener noreferrer"
                         size="lg"

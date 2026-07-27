@@ -18,6 +18,7 @@ export function VenueLocationHours({
   lat,
   lng,
   whatsapp,
+  placeId,
 }: {
   name: string;
   location: string;
@@ -25,14 +26,17 @@ export function VenueLocationHours({
   lat: number | null;
   lng: number | null;
   whatsapp?: string;
+  placeId?: string | null;
 }) {
   const longitude = lng ?? DEFAULT_CENTER.longitude;
   const latitude = lat ?? DEFAULT_CENTER.latitude;
   const hasCoords = lat != null && lng != null;
 
-  const googleMapsHref = hasCoords
-    ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  const googleMapsHref = placeId
+    ? `https://www.google.com/maps/place/${encodeURIComponent(name)}/data=!4m2!3m1!1s${placeId}`
+    : hasCoords
+      ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 
   return (
     <section className="py-16 lg:py-24">
