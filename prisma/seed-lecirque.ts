@@ -119,7 +119,10 @@ async function seedPromotions(venueId: string) {
 }
 
 async function seedVenueFaqs() {
-  await prisma.faq.deleteMany({ where: { segment: "venue" } });
+  // Scoped to this venue's slug — an unscoped delete would wipe every other
+  // venue's FAQs, which is what used to happen when seeds ran back to back.
+  const scope = { segment: "venue", refSlug: "lecirque" };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
       question: "Do I need to make a reservation?",
@@ -134,6 +137,16 @@ async function seedVenueFaqs() {
       answer: "Yes. Le Cirque can be booked for private events, brand activations, and full-venue buyouts. Reach out to our team to discuss availability.",
     },
     {
+      question: "Is there a dress code?",
+      answer:
+        "Smart casual is the baseline. Shorts, sandals, and sleeveless tops are generally not permitted on weekends or for guest-DJ nights.",
+    },
+    {
+      question: "How do table bookings and bottle service work?",
+      answer:
+        "Tables carry a minimum spend that varies by night and by position on the floor. Message our team with your date and group size and we will confirm what is available.",
+    },
+    {
       question: "Is there parking available?",
       answer: "Yes, valet and self-parking are available at the SCBD complex where the venue is located.",
     },
@@ -142,7 +155,7 @@ async function seedVenueFaqs() {
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "venue",
+      ...scope,
       sortOrder: i,
     })),
   });

@@ -87,7 +87,10 @@ async function seedGalleries(venueId: string) {
 }
 
 async function seedVenueFaqs() {
-  await prisma.faq.deleteMany({ where: { segment: "venue" } });
+  // Scoped to this venue's slug — an unscoped delete would wipe every other
+  // venue's FAQs, which is what used to happen when seeds ran back to back.
+  const scope = { segment: "venue", refSlug: "dualism" };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
       question: "Do I need to make a reservation?",
@@ -102,6 +105,16 @@ async function seedVenueFaqs() {
       answer: "Yes. Dualism can be booked for private events and cocktail experiences. Reach out to our team to discuss availability.",
     },
     {
+      question: "Does the cocktail menu change?",
+      answer:
+        "Yes. The list is rotated through the year alongside a set of house signatures that stay on permanently, and the bar team will build something off-menu if you tell them what you like.",
+    },
+    {
+      question: "Is there a non-alcoholic selection?",
+      answer:
+        "There is. The zero-proof list is built with the same technique as the rest of the menu rather than treated as an afterthought.",
+    },
+    {
       question: "Is there parking available?",
       answer: "Yes, valet and self-parking are available at the SCBD complex where the venue is located.",
     },
@@ -110,7 +123,7 @@ async function seedVenueFaqs() {
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "venue",
+      ...scope,
       sortOrder: i,
     })),
   });

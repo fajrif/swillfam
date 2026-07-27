@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
+import { getFaqs } from "@/lib/faqs";
 import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -85,10 +86,7 @@ export default async function VenueSlugPage({
           take: 3,
         })
       : Promise.resolve([]),
-    prisma.faq.findMany({
-      where: { published: true, segment: "venue" },
-      orderBy: { sortOrder: "asc" },
-    }),
+    getFaqs("venue", venue.slug),
     getArticleRows(3),
     getSiteSettings(),
   ]);

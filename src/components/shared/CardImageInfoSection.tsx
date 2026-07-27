@@ -32,14 +32,15 @@ export function CardImageInfoSection({
   align = "center",
 }: {
   title?: string;
-  lead?: string;
+  /** Pass `null` to render the heading with no lead — omitting it uses the default copy. */
+  lead?: string | null;
   cards?: TrustedCard[];
   align?: "left" | "center";
 }) {
   return (
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col items-center gap-12">
-        <SectionHeading align={align} title={title} lead={lead} />
+        <SectionHeading align={align} title={title} lead={lead ?? undefined} />
 
         <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3">
           {cards.map((card, i) => (

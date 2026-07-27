@@ -1,9 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
+import type { PrivateEvent } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
-import { EVENT_TYPES, type EventType } from "./data";
+
+const FALLBACK = "/private-events/Mask group.png";
 
 /** "Event Types:" — 2-col grid of tiles; hover reveals the description. */
-export function EventTypesSection() {
+export function EventTypesSection({ privateEvents }: { privateEvents: PrivateEvent[] }) {
+  if (privateEvents.length === 0) return null;
+
   return (
     <section>
       <Container className="flex flex-col gap-12">
@@ -11,13 +16,8 @@ export function EventTypesSection() {
           Event Types:
         </h2>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {EVENT_TYPES.map((type) => (
-            <EventTypeCard
-              key={type.key}
-              img={type.img}
-              title={type.title}
-              description={type.description}
-            />
+          {privateEvents.map((privateEvent) => (
+            <EventTypeCard key={privateEvent.id} privateEvent={privateEvent} />
           ))}
         </div>
       </Container>
@@ -25,11 +25,16 @@ export function EventTypesSection() {
   );
 }
 
-function EventTypeCard({ img, title, description }: Omit<EventType, "key">) {
+function EventTypeCard({ privateEvent }: { privateEvent: PrivateEvent }) {
+  const { title, shortDescription } = privateEvent;
+
   return (
-    <div className="group relative aspect-[683/520] w-full overflow-hidden border border-sf-border/40">
+    <Link
+      href={`/private-events/${privateEvent.slug}`}
+      className="group relative block aspect-[683/520] w-full overflow-hidden border border-sf-border/40"
+    >
       <Image
-        src={img}
+        src={privateEvent.image ?? privateEvent.bannerImage ?? FALLBACK}
         alt={title}
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
@@ -49,9 +54,9 @@ function EventTypeCard({ img, title, description }: Omit<EventType, "key">) {
           <h3 className="font-syne font-bold text-[clamp(1.5rem,2.5vw,32px)] leading-tight text-white">
             {title}
           </h3>
-          <p className="font-inter text-medium leading-relaxed text-white">{description}</p>
+          <p className="font-inter text-medium leading-relaxed text-white">{shortDescription}</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

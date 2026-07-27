@@ -501,38 +501,42 @@ async function seedMerchandise() {
 }
 
 async function seedFaqs() {
-  if (await prisma.faq.count()) return;
+  // Scoped to the archive segment: a global count() guard would skip this
+  // whenever any other FAQ existed, and a global delete would wipe every
+  // venue's own set.
+  const scope = { segment: "private_events", refSlug: null };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
-      question: "Do I need to make a reservation?",
+      question: "How do I start planning a private event with SwillFam?",
       answer:
-        "Walk-ins are welcome, but reservations are recommended for weekends, group bookings, and peak hours.",
+        "Send us an inquiry with your date, guest count, and the kind of event you have in mind. Our team will come back with the venues that fit and take it from there.",
     },
     {
-      question: "Can I host a private event at Atsumaru Izakaya?",
+      question: "Which venue should I choose?",
       answer:
-        "Yes. Atsumaru Izakaya can be booked for private events, from intimate gatherings to full-venue celebrations. Reach out to our team to discuss availability and setup.",
+        "It depends on the tone you are after — refined dining rooms, social bars, and full nightlife spaces all sit under SwillFam. Tell us about your guests and we will recommend the right setting.",
     },
     {
-      question: "Is Atsumaru Izakaya suitable for group dining?",
+      question: "Can a venue be booked exclusively?",
       answer:
-        "Yes. The venue is suitable for casual gatherings, celebrations, after-work meals, and group dining experiences.",
+        "Yes. Most venues can be booked for partial or full exclusive use depending on your guest count and the date you have in mind.",
     },
     {
-      question: "How do I reserve a table for a group, special occasion, or busy dining hours?",
+      question: "Do you arrange food and drinks for private events?",
       answer:
-        "Contact us via WhatsApp or the inquiry form with your date, group size, and occasion, and our team will help arrange the right table or space for your visit.",
+        "We do. Set menus, canape packages, and drink options are put together around your format and budget, including non-alcoholic selections.",
     },
   ];
   await prisma.faq.createMany({
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "private_events",
+      ...scope,
       sortOrder: i,
     })),
   });
-  console.log(`Seeded ${FAQS.length} FAQs.`);
+  console.log(`Seeded ${FAQS.length} private-events FAQs.`);
 }
 
 async function main() {

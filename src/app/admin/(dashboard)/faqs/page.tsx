@@ -38,7 +38,7 @@ export default async function FaqsPage(props: { searchParams: Promise<{ q?: stri
                 </Link>
               ),
             },
-            { header: "Segment", cell: (f) => f.segment },
+            { header: "Segment", cell: (f) => (f.refSlug ? `${f.segment} · ${f.refSlug}` : f.segment) },
             {
               header: "Status",
               cell: (f) => (f.published ? "Published" : "Draft"),

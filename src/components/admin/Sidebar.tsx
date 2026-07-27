@@ -33,6 +33,8 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
       { href: "/admin/events", label: "Events" },
       { href: "/admin/event-types", label: "Event Types" },
       { href: "/admin/private-events", label: "Private Events" },
+      { href: "/admin/private-event-occasions", label: "Private Event Occasions" },
+      { href: "/admin/private-event-testimonials", label: "Private Event Testimonials" },
     ],
   },
   {
