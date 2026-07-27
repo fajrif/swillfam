@@ -7,9 +7,13 @@ import { updatePrivateEventAction, deletePrivateEventAction } from "../actions";
 
 export default async function EditPrivateEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [privateEvent, eventTypes] = await Promise.all([
-    prisma.privateEvent.findUnique({ where: { id } }),
+  const [privateEvent, eventTypes, venues] = await Promise.all([
+    prisma.privateEvent.findUnique({
+      where: { id },
+      include: { venues: { select: { id: true } } },
+    }),
     prisma.privateEventType.findMany({ orderBy: { sortOrder: "asc" }, select: { id: true, title: true } }),
+    prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   if (!privateEvent) notFound();
 
@@ -21,6 +25,8 @@ export default async function EditPrivateEventPage({ params }: { params: Promise
           action={updatePrivateEventAction.bind(null, id)}
           privateEvent={privateEvent}
           eventTypes={eventTypes}
+          venues={venues}
+          selectedVenueIds={privateEvent.venues.map((v) => v.id)}
         />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deletePrivateEventAction.bind(null, id)} label="Delete private event" />

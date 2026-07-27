@@ -127,7 +127,10 @@ async function seedPromotions(venueId: string) {
 }
 
 async function seedVenueFaqs() {
-  await prisma.faq.deleteMany({ where: { segment: "venue" } });
+  // Scoped to this venue's slug — an unscoped delete would wipe every other
+  // venue's FAQs, which is what used to happen when seeds ran back to back.
+  const scope = { segment: "venue", refSlug: "truce" };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
       question: "Do I need to make a reservation?",
@@ -142,6 +145,16 @@ async function seedVenueFaqs() {
       answer: "Yes. Truce can be booked for private events and intimate gatherings. Reach out to our team to discuss availability.",
     },
     {
+      question: "Can you accommodate dietary requirements?",
+      answer:
+        "Yes. Tell us about allergies or vegetarian and halal preferences when you arrive and the bar snacks can be adjusted accordingly.",
+    },
+    {
+      question: "How large a group can Truce take?",
+      answer:
+        "The room is built for intimate visits, so smaller groups suit it best. For anything larger, message our team ahead and we will arrange the space around your booking.",
+    },
+    {
       question: "Is there parking available?",
       answer: "Yes, valet and self-parking are available at the SCBD complex where the venue is located.",
     },
@@ -150,7 +163,7 @@ async function seedVenueFaqs() {
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "venue",
+      ...scope,
       sortOrder: i,
     })),
   });

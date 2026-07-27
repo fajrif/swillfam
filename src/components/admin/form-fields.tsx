@@ -101,6 +101,51 @@ export function CheckboxField({
   );
 }
 
+/**
+ * Multi-select for a relation: one checkbox per option, all sharing `name`, so
+ * the server action reads them with `formData.getAll(name)`. Same idiom as
+ * EventScheduleFields' recurring-day checkboxes, generalised to any option list.
+ */
+export function CheckboxGroupField({
+  label,
+  name,
+  options,
+  defaultValues = [],
+  hint,
+}: {
+  label: string;
+  name: string;
+  options: { value: string; label: string }[];
+  defaultValues?: string[];
+  hint?: string;
+}) {
+  const selected = new Set(defaultValues);
+
+  return (
+    <div className="grid gap-1.5">
+      <Label>{label}</Label>
+      {options.length === 0 ? (
+        <p className="text-xs text-muted-foreground">Nothing to choose from yet.</p>
+      ) : (
+        <div className="grid max-h-64 gap-2 overflow-y-auto rounded-md border p-3 sm:grid-cols-2">
+          {options.map((o) => (
+            <Label key={o.value} htmlFor={`${name}-${o.value}`} className="cursor-pointer font-normal">
+              <Checkbox
+                id={`${name}-${o.value}`}
+                name={name}
+                value={o.value}
+                defaultChecked={selected.has(o.value)}
+              />
+              {o.label}
+            </Label>
+          ))}
+        </div>
+      )}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+    </div>
+  );
+}
+
 export function FormActions({ children }: { children?: ReactNode }) {
   return <div className="flex items-center gap-3 pt-2">{children}</div>;
 }

@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import {
   VisionSection,
   EventTypesSection,
@@ -15,6 +14,7 @@ import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
+import { getFaqs } from "@/lib/faqs";
 
 // Statically rendered but data-driven (FAQs, articles) — revalidate periodically
 // so admin edits/seeds show up without a full rebuild.
@@ -27,11 +27,12 @@ export const metadata: Metadata = {
 };
 
 export default async function PrivateEventsPage() {
-  const [faqs, articles] = await Promise.all([
-    prisma.faq.findMany({
-      where: { published: true, segment: "private_events" },
-      orderBy: { sortOrder: "asc" },
+  const [privateEvents, faqs, articles] = await Promise.all([
+    prisma.privateEvent.findMany({
+      where: { published: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     }),
+    getFaqs("private_events"),
     getArticleRows(3),
   ]);
 
@@ -53,7 +54,7 @@ export default async function PrivateEventsPage() {
       </Reveal>
 
       <Reveal>
-        <EventTypesSection />
+        <EventTypesSection privateEvents={privateEvents} />
       </Reveal>
 
       <Reveal>
@@ -68,9 +69,11 @@ export default async function PrivateEventsPage() {
         <PrivateEventsSection />
       </Reveal>
 
-      <Reveal>
-        <FaqSection faqs={faqs} />
-      </Reveal>
+      {faqs.length > 0 ? (
+        <Reveal>
+          <FaqSection faqs={faqs} />
+        </Reveal>
+      ) : null}
 
       <Reveal>
         <ArticleListSection articles={articles} />

@@ -157,7 +157,10 @@ async function seedPromotions(venueId: string) {
 }
 
 async function seedVenueFaqs() {
-  await prisma.faq.deleteMany({ where: { segment: "venue" } });
+  // Scoped to this venue's slug — an unscoped delete would wipe every other
+  // venue's FAQs, which is what used to happen when seeds ran back to back.
+  const scope = { segment: "venue", refSlug: "zoo" };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
       question: "Do I need to make a reservation?",
@@ -172,6 +175,16 @@ async function seedVenueFaqs() {
       answer: "Yes. Zoo can be booked for private events, from intimate gatherings to full-venue celebrations. Reach out to our team to discuss availability.",
     },
     {
+      question: "Is there a dress code?",
+      answer:
+        "Smart casual is the baseline. Shorts, sandals, and sleeveless tops are generally not permitted on weekends or for guest-DJ nights.",
+    },
+    {
+      question: "What kind of music does Zoo play?",
+      answer:
+        "Zoo leans on high-energy club sound — house, tech house, and open-format sets from resident DJs and visiting guests through the late hours.",
+    },
+    {
       question: "Is there parking available?",
       answer: "Yes, valet and self-parking are available at the SCBD complex where the venue is located.",
     },
@@ -180,7 +193,7 @@ async function seedVenueFaqs() {
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "venue",
+      ...scope,
       sortOrder: i,
     })),
   });

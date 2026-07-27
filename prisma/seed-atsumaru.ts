@@ -269,7 +269,10 @@ async function seedEvents(venueId: string) {
 }
 
 async function seedVenueFaqs() {
-  await prisma.faq.deleteMany({ where: { segment: "venue" } });
+  // Scoped to this venue's slug — an unscoped delete would wipe every other
+  // venue's FAQs, which is what used to happen when seeds ran back to back.
+  const scope = { segment: "venue", refSlug: "atsumaru-izakaya" };
+  await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {
       question: "Do I need to make a reservation?",
@@ -286,6 +289,16 @@ async function seedVenueFaqs() {
         "Yes. Atsumaru Izakaya can be booked for private events, from intimate gatherings to full-venue celebrations. Reach out to our team to discuss availability.",
     },
     {
+      question: "Can you accommodate dietary requirements?",
+      answer:
+        "Yes. Tell us about allergies or vegetarian, pescatarian, and halal preferences when you book and the kitchen will adjust the sharing plates around them.",
+    },
+    {
+      question: "When is Atsumaru Izakaya busiest?",
+      answer:
+        "Weekday evenings from 7pm, and all of Friday and Saturday night. Earlier in the week is noticeably quieter if you would prefer a relaxed table.",
+    },
+    {
       question: "Is there parking available?",
       answer: "Yes, valet and self-parking are available at the SCBD complex where the venue is located.",
     },
@@ -294,7 +307,7 @@ async function seedVenueFaqs() {
     data: FAQS.map((f, i) => ({
       question: f.question,
       answer: `<p>${f.answer}</p>`,
-      segment: "venue",
+      ...scope,
       sortOrder: i,
     })),
   });
