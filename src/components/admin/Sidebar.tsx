@@ -46,6 +46,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
       { href: "/admin/videos", label: "Videos" },
       { href: "/admin/merchandises", label: "Merchandises" },
       { href: "/admin/faqs", label: "FAQs" },
+      { href: "/admin/media-mentions", label: "Media Mentions" },
     ],
   },
   {

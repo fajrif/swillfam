@@ -107,6 +107,22 @@ model Application {
 }
 
 // ---------------------------------------------------------------------------
+// Media Mentions (articles online that mention SwillFam).
+// ---------------------------------------------------------------------------
+
+model MediaMention {
+  id               String   @id @default(uuid())
+  title            String
+  articleTitle     String
+  publicationName  String
+  publishedDate    DateTime
+  shortDescription String
+  link             String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
 // Merchandise.
 // ---------------------------------------------------------------------------
 

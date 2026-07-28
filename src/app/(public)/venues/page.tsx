@@ -72,7 +72,7 @@ export default async function VenuesPage() {
       </Reveal>
 
       <Reveal>
-        <SwillfamSpotlightSection settings={settings} />
+        <SwillfamSpotlightSection />
       </Reveal>
 
       <Reveal>

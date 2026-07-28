@@ -36,7 +36,7 @@ export function OfferCardSection({
 
         <div className="flex flex-wrap justify-center gap-6">
           {offers.map((offer) => (
-            <div key={offer.id} className="w-full md:w-[calc((100%-3rem)/3)]">
+            <div key={offer.id} className="w-full max-w-sm">
               <OfferCard offer={offer} />
             </div>
           ))}

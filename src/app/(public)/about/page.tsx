@@ -5,6 +5,8 @@ import { StickyHero } from "@/components/shared/StickyHero";
 import { GlassRefractionBackground } from "@/components/reactbits/GlassRefractionBackground";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { SwillfamSpotlightSection } from "@/components/venues";
+
 import { getArticleRows } from "@/lib/articles";
 import {
   OurStorySection,
@@ -27,7 +29,9 @@ export const metadata: Metadata = {
 };
 
 export default async function About() {
-  const articles = await getArticleRows(3);
+  const [articles] = await Promise.all([
+    getArticleRows(3),
+  ]);
   return (
     <StickyHero
       backdrop={
@@ -60,6 +64,10 @@ export default async function About() {
 
       <Reveal>
         <WhatWeStandForFlowingSection />
+      </Reveal>
+
+      <Reveal>
+        <SwillfamSpotlightSection />
       </Reveal>
 
       <Reveal>
