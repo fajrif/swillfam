@@ -1,11 +1,8 @@
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
-import type { SiteSettings } from "@/lib/site-settings";
 
-/** "SwillFam in the Spotlight" — press/media mentions teaser linking out to Instagram. */
-export function SwillfamSpotlightSection({ settings }: { settings: SiteSettings }) {
-  const instagram = settings.socialInstagram || "#";
-
+/** "SwillFam in the Spotlight" — press/media mentions teaser linking to the /media-mentions page. */
+export function SwillfamSpotlightSection() {
   return (
     <section className="py-16 lg:py-24">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -20,7 +17,7 @@ export function SwillfamSpotlightSection({ settings }: { settings: SiteSettings 
             food, drink, music, and entertainment scene.
           </p>
           <div>
-            <SpecularButton href={instagram} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
+            <SpecularButton href="/media-mentions" size="lg" radius={30}>
               See All Mentions
             </SpecularButton>
           </div>

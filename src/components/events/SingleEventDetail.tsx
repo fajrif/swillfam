@@ -33,7 +33,7 @@ export function SingleEventDetail({
 }) {
   return (
     <section className="py-16 lg:py-20">
-      <Container className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
+      <Container className="flex flex-col gap-10 lg:gap-14">
         <div className="flex flex-col items-start gap-5">
           {!active && <PastEventStamp />}
           <h1 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
@@ -41,54 +41,56 @@ export function SingleEventDetail({
           </h1>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
           {poster ? (
-            <div className="relative aspect-[4/5] w-full max-w-[280px] overflow-hidden bg-sf-surface">
+            <div className="relative aspect-[4/4] w-full overflow-hidden bg-sf-surface">
               <ZoomableImage
                 src={poster}
                 alt={name}
                 fill
-                sizes="280px"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
                 priority
               />
             </div>
           ) : null}
 
-          <div className="flex flex-col gap-3">
-            <h2 className="font-syne text-xl font-bold text-white">About This Event</h2>
-            <div className={EVENT_PROSE} dangerouslySetInnerHTML={{ __html: description }} />
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <h2 className="font-syne text-xl font-bold text-white">About This Event</h2>
+              <div className={EVENT_PROSE} dangerouslySetInnerHTML={{ __html: description }} />
+            </div>
+
+            <dl className="flex flex-col gap-1 font-inter text-white mb-5">
+              {categoryName ? (
+                <div className="flex gap-2">
+                  <dt className="font-semibold">Category:</dt>
+                  <dd>{categoryName}</dd>
+                </div>
+              ) : null}
+              {venueName ? (
+                <div className="flex gap-2">
+                  <dt className="font-semibold">Venue:</dt>
+                  <dd>{venueName}</dd>
+                </div>
+              ) : null}
+              <div className="flex gap-2">
+                <dt className="font-semibold">Date:</dt>
+                <dd>{dateLabel}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="font-semibold">Time:</dt>
+                <dd>{timeLabel}</dd>
+              </div>
+            </dl>
+
+            <ReserveButton
+              eventName={name}
+              venueName={venueName}
+              phone={phone}
+              active={active}
+            />
           </div>
-
-          <dl className="flex flex-col gap-1 font-inter text-white mb-5">
-            {categoryName ? (
-              <div className="flex gap-2">
-                <dt className="font-semibold">Category:</dt>
-                <dd>{categoryName}</dd>
-              </div>
-            ) : null}
-            {venueName ? (
-              <div className="flex gap-2">
-                <dt className="font-semibold">Venue:</dt>
-                <dd>{venueName}</dd>
-              </div>
-            ) : null}
-            <div className="flex gap-2">
-              <dt className="font-semibold">Date:</dt>
-              <dd>{dateLabel}</dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="font-semibold">Time:</dt>
-              <dd>{timeLabel}</dd>
-            </div>
-          </dl>
-
-          <ReserveButton
-            eventName={name}
-            venueName={venueName}
-            phone={phone}
-            active={active}
-          />
         </div>
       </Container>
     </section>

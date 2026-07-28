@@ -4,7 +4,7 @@ import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { formatDateRange } from "@/lib/date";
 import { whatsappHref } from "@/lib/whatsapp";
-import { PromotionGallery } from "./PromotionGallery";
+import { PromotionImage } from "./PromotionImage";
 import { PromotionSocialLinks } from "./PromotionSocialLinks";
 
 type PromotionWithVenue = Promotion & { venue: Venue | null };
@@ -17,14 +17,14 @@ export function PromotionDetailTop({
   promotion: PromotionWithVenue;
   settings: SiteSettings;
 }) {
-  const images = [...new Set([promotion.posterImage, promotion.image, promotion.bannerImage].filter(Boolean))] as string[];
+  const image = promotion.image ?? null;
   const venue = promotion.venue;
   const whatsapp = venue?.whatsapp ?? settings.mainWhatsapp;
 
   return (
     <section className="pt-8 pb-16 lg:pt-12">
       <Container className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
-        <PromotionGallery images={images} alt={promotion.name} />
+        <PromotionImage src={image} alt={promotion.name} />
 
         <div className="flex flex-col gap-6">
           <h1 className="font-syne text-[clamp(2rem,4vw,52px)] leading-[1.05] text-white">
