@@ -126,7 +126,7 @@ export function EventsBrowser({
                 ))}
               </div>
             ) : (
-              <p className="w-full py-12 text-center font-inter text-white">No events found.</p>
+              <p className="w-full py-12 text-center font-inter">No events found.</p>
             )}
 
             {filtered.length > visible && (

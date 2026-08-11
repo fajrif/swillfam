@@ -14,7 +14,7 @@ export function OurStorySection() {
               More Than a Hospitality Group
             </h2>
           </div>
-          <p className="font-inter text-3xl leading-relaxed text-white">
+          <p className="font-inter text-3xl leading-relaxed">
             SwillFam began with a vision to redefine what nightlife could be.
           </p>
         </div>
@@ -33,22 +33,22 @@ export function OurStorySection() {
             </ParallaxImage>
           </div>
 
-          <div className="flex flex-col gap-6 font-inter text-white">
+          <div className="flex flex-col gap-6 font-inter">
             <p className="font-syne text-[clamp(1.75rem,3vw,40px)] font-semibold leading-tight italic">
               Not simply venues.
               <br />
               Not simply events.
             </p>
-            <p className="text-lg leading-relaxed text-white">
+            <p className="text-lg leading-relaxed">
               But destinations with personality, culture, and community at their core.
             </p>
-            <p className="leading-relaxed text-white">
+            <p className="leading-relaxed">
               What started as an ambition to create unique experiences has evolved into a growing
               portfolio of hospitality concepts that have become part of Jakarta&apos;s social
               landscape. Each venue is designed with its own identity, atmosphere, and purpose, while
               remaining connected through a shared commitment to exceptional experiences.
             </p>
-            <p className="leading-relaxed text-white">
+            <p className="leading-relaxed">
               Today, SwillFam continues to bring together music, design, food, drinks, entertainment,
               and people under one ecosystem, creating spaces where every visit feels memorable.
             </p>

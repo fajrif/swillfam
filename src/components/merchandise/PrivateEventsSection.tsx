@@ -13,13 +13,13 @@ export function PrivateEventsSection() {
               <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
                 Private Events at SwillFam
               </h2>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="font-inter leading-relaxed">
                 Plan your next corporate gathering, birthday, wedding, brand activation, or private
                 celebration with SwillFam&apos;s dedicated venue and event support. From intimate
                 occasions to large-scale functions, our team helps create seamless experiences
                 tailored to your vision, guests, and event goals.
               </p>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 With flexible spaces, curated food and beverage options, and experienced event
                 coordination, we work closely with you to ensure every detail comes together for a
                 memorable and successful occasion.

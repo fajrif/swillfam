@@ -70,7 +70,7 @@ export function EventSectionWithImage({
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-sf-text">
             {title}
           </h2>
-          <p className="font-inter max-w-[560px] text-base leading-relaxed text-white md:text-lg mb-5">
+          <p className="font-inter max-w-[560px] text-base leading-relaxed md:text-lg mb-5">
             {description}
           </p>
           {ctaHref && ctaText ? (
@@ -106,7 +106,7 @@ export function EventSectionWithImage({
                       <h3 className="font-syne text-base font-bold uppercase text-white">
                         {item.title}
                       </h3>
-                      <p className="line-clamp-2 font-inter text-sm text-white">
+                      <p className="line-clamp-2 font-inter text-sm">
                         {item.shortDescription}
                       </p>
                     </div>

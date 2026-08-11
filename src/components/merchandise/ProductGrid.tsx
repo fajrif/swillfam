@@ -56,7 +56,7 @@ function ProductCard({ img, title, description, price }: ProductRow) {
       </div>
       <div className="flex flex-col items-center gap-2 p-6 text-center bg-sf-surface">
         <h3 className="font-syne text-xl text-white">{title}</h3>
-        <p className="font-inter text-sm leading-relaxed text-white">{description}</p>
+        <p className="font-inter text-sm leading-relaxed">{description}</p>
         <p className="mt-2 font-syne text-lg font-bold text-white">{price}</p>
       </div>
     </article>

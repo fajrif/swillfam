@@ -35,7 +35,7 @@ export function PrivateEventIntro({
           </h2>
           <div className="flex flex-col justify-center gap-5">
             {paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="font-inter leading-relaxed text-white">
+              <p key={paragraph.slice(0, 40)} className="font-inter leading-relaxed">
                 {paragraph}
               </p>
             ))}

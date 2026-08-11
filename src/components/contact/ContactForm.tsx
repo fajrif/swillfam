@@ -9,7 +9,7 @@ import { SpecularButton } from "@/components/reactbits/SpecularButton";
 const initialState: ContactActionState = {};
 
 const fieldClass =
-  "h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0";
+  "h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-sf-body placeholder:text-sf-body/50 focus-visible:border-white focus-visible:ring-0";
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitInquiryAction, initialState);
@@ -20,7 +20,7 @@ export function ContactForm() {
         <h2 className="font-syne text-[clamp(1.75rem,4vw,40px)] leading-tight text-white">
           We&apos;ve got your message.
         </h2>
-        <p className="font-inter leading-relaxed text-white">
+        <p className="font-inter leading-relaxed">
           Thanks for reaching out — the SwillFam team will review your message and get back to you as
           soon as we can.
         </p>
@@ -48,7 +48,7 @@ export function ContactForm() {
         rows={4}
         required
         placeholder="Your Description Here"
-        className="resize-none rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0"
+        className="resize-none rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-sf-body placeholder:text-sf-body/50 focus-visible:border-white focus-visible:ring-0"
       />
 
       {state.error ? <p className="font-inter text-sm text-sf-accent">{state.error}</p> : null}

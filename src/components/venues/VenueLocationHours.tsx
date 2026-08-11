@@ -47,17 +47,17 @@ export function VenueLocationHours({
           {/* Info panel */}
           <div className="flex flex-col gap-6 p-8 lg:p-12">
             <h3 className="font-syne text-2xl font-bold text-white lg:text-3xl">Visit {name}</h3>
-            <p className="font-inter leading-relaxed text-white">
+            <p className="font-inter leading-relaxed">
               Find {name} and plan your visit. Check our location, opening hours, and contact
               details before you come.
             </p>
             <div className="flex flex-col gap-1">
               <p className="font-inter font-bold text-white">Location:</p>
-              <p className="font-inter leading-relaxed text-white">{location}</p>
+              <p className="font-inter leading-relaxed">{location}</p>
             </div>
             <div className="flex flex-col gap-1">
               <p className="font-inter font-bold text-white">Operating Hours:</p>
-              <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+              <p className="whitespace-pre-line font-inter leading-relaxed">
                 {operatingHours}
               </p>
             </div>
@@ -103,7 +103,7 @@ export function VenueLocationHours({
               </Map>
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-sf-surface p-8 text-center">
-                <p className="font-inter text-sm text-white">
+                <p className="font-inter text-sm">
                   Interactive map unavailable. Set NEXT_PUBLIC_MAPBOX_TOKEN to enable it.
                 </p>
               </div>

@@ -54,7 +54,7 @@ export function FeaturedEventSection({ event }: { event: FeaturedEventData | nul
               <span>{event.timeLabel}</span>
             </div>
 
-            <p className="font-inter leading-relaxed text-white">{event.shortDescription}</p>
+            <p className="font-inter leading-relaxed">{event.shortDescription}</p>
 
             <SpecularButton href={`/events/${event.slug}`} size="lg" radius={30} className="w-fit">
               See Event

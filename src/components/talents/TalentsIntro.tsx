@@ -11,13 +11,13 @@ export function TalentsIntro() {
           </h2>
         </div>
         <div className="flex flex-col gap-5">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Behind every unforgettable night, great dish, signature drink, and memorable event is a
             team of talents who understand how to create atmosphere. SwillFam talents bring their
             own style, skill, and personality into each venue, making every experience feel alive
             and distinct.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Whether they&apos;re behind the decks, behind the bar, in the kitchen, or on the floor,
             each talent plays a role in shaping the moments guests remember.
           </p>

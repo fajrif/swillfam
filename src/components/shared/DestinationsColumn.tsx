@@ -29,7 +29,7 @@ export function DestinationsColumn({
           <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
             Destinations with Distinct Personalities
           </h3>
-          <p className="mb-5 font-inter leading-relaxed text-white">
+          <p className="mb-5 font-inter leading-relaxed">
             Every SwillFam venue has its own concept and atmosphere. From dining and social spaces to
             nightlife and events, each offers a unique experience while reflecting the SwillFam
             identity. Our venues are designed to bring people together and create memorable moments.

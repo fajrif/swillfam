@@ -54,7 +54,7 @@ export function GalleryCarousel({
             {title}
           </h2>
           {description ? (
-            <p className="font-inter leading-relaxed text-white">{description}</p>
+            <p className="font-inter leading-relaxed">{description}</p>
           ) : null}
         </div>
 

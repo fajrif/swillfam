@@ -25,7 +25,7 @@ export function CategoryIntro({ category }: { category: Category }) {
             {category.headline ?? category.name}
           </h2>
           <div className="flex flex-col justify-center">
-            <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+            <p className="whitespace-pre-line font-inter leading-relaxed">
               {category.description}
             </p>
           </div>

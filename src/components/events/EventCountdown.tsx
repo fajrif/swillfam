@@ -84,7 +84,7 @@ export function EventCountdown({
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
             Countdown to the Event
           </h2>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             The countdown is on. Reserve your spot and get ready for {eventName}
             {venueName ? ` at ${venueName}` : ""}.
           </p>

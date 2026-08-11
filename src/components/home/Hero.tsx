@@ -83,7 +83,7 @@ export function Hero({
                             <p className="font-archivo text-[13px] font-semibold uppercase tracking-wide text-white">
                               {event.name}
                             </p>
-                            <p className="mt-1 font-inter text-xs leading-snug text-white">
+                            <p className="mt-1 font-inter text-xs leading-snug">
                               {event.caption}
                             </p>
                           </div>

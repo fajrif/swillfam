@@ -30,7 +30,7 @@ export function OfferCardSection({
             {title}
           </h2>
           {lead ? (
-            <p className="font-inter leading-relaxed text-white">{lead}</p>
+            <p className="font-inter leading-relaxed">{lead}</p>
           ) : null}
         </div>
 

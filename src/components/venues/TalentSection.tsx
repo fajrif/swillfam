@@ -85,7 +85,7 @@ export function TalentSection({
                   <p className="font-archivo text-xs uppercase tracking-[0.14em] text-white">
                     {talent.speciality}
                   </p>
-                  <p className="font-inter text-sm leading-relaxed text-white">
+                  <p className="font-inter text-sm leading-relaxed">
                     {talent.description}
                   </p>
                 </div>

@@ -34,7 +34,7 @@ export function ContinueExperience() {
                 <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                   Continue the Experience
                 </h3>
-                <p className="mb-5 font-inter leading-relaxed text-white">
+                <p className="mb-5 font-inter leading-relaxed">
                   There is more to discover across the SwillFam world. Explore our experiences,
                   upcoming events, and private event offerings to find the right moment for your next
                   visit, celebration, or gathering.
@@ -52,7 +52,7 @@ export function ContinueExperience() {
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 Explore Events
               </h3>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 Explore upcoming lifestyle and nightlife events happening across SwillFam venues,
                 from relaxed gatherings and social meetups to high-energy nights, live entertainment,
                 and special experiences designed to bring people together.
@@ -72,7 +72,7 @@ export function ContinueExperience() {
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 Explore Promotions
               </h3>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 SwillFam promotions bring the latest offers, specials, and venue deals together in
                 one place, making it easier to enjoy food, drinks, events, and nightlife experiences
                 across the SwillFam world.
@@ -90,7 +90,7 @@ export function ContinueExperience() {
                 <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                   Private Events at SwillFam
                 </h3>
-                <p className="mb-5 font-inter leading-relaxed text-white">
+                <p className="mb-5 font-inter leading-relaxed">
                   Plan your next corporate gathering, birthday, wedding, brand activation, or private
                   celebration with SwillFam. With flexible venues, curated food and beverage options,
                   and dedicated event support, our team helps create seamless experiences tailored to

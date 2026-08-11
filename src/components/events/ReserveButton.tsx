@@ -41,7 +41,7 @@ export function ReserveButton({
         >
           {label}
         </SpecularButton>
-        <p className="font-inter text-sm text-white">This event has ended.</p>
+        <p className="font-inter text-sm">This event has ended.</p>
       </div>
     );
   }

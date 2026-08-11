@@ -61,7 +61,7 @@ export function CardImageInfoSection({
               ) : null}
               <div className="flex flex-col items-center gap-3">
                 <h3 className="font-syne text-2xl font-bold text-white">{card.title}</h3>
-                <p className="font-inter text-sm leading-relaxed text-white">
+                <p className="font-inter text-sm leading-relaxed">
                   {card.description}
                 </p>
               </div>

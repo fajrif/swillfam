@@ -13,12 +13,12 @@ export function CareersSection() {
               <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
                 Careers at SwillFam
               </h2>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="font-inter leading-relaxed">
                 Behind every SwillFam experience is a team of people who bring the energy to life. From
                 venue operations and hospitality to marketing, events, creative, and management, our
                 team plays an important role in shaping every guest experience.
               </p>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 If you are passionate about lifestyle, hospitality, nightlife, food and beverage, or
                 creative experiences, SwillFam is always open to discovering people who want to grow
                 with us.

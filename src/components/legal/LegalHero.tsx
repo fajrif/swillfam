@@ -28,7 +28,7 @@ export function LegalHero({
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
             {title}
           </h1>
-          <div className="mt-6 flex flex-col gap-3 font-inter text-sm text-white sm:flex-row sm:items-center">
+          <div className="mt-6 flex flex-col gap-3 font-inter text-sm sm:flex-row sm:items-center">
             <span>Last Updated: {lastUpdated}</span>
             <span className="hidden sm:inline-block size-1 rounded-full bg-white/30" />
             <span>Effective: {effectiveDate}</span>

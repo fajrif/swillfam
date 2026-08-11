@@ -29,7 +29,7 @@ export function PastEditionsSection({
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
             Past Editions
           </h2>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Explore previous editions of {seriesName} and see how the event has grown over time. Each
             past edition may include the event date, poster thumbnail, featured talent, recap video,
             gallery, or short highlight from the night.

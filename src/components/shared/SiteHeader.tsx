@@ -50,6 +50,20 @@ function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
+/** Label of the nav item matching the current pathname — shown in the compact
+ *  bar before the hamburger so the visitor always knows where they are. */
+function useActiveNavLabel(): string | null {
+  const pathname = usePathname();
+  for (const group of NAV_GROUPS) {
+    for (const link of group) {
+      if (pathname === link.href || pathname.startsWith(link.href + "/")) {
+        return link.label;
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * Scroll-transforming nav (Figma mega-nav, node 231:100). At the very top:
  * the transparent mega-nav (logo-left / 3-column nav-right). As the user
@@ -61,6 +75,7 @@ function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
 export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const activeLabel = useActiveNavLabel();
 
   const { scrollY } = useScroll();
   const topOpacity = useTransform(scrollY, [0, 120], [1, 0]);
@@ -120,27 +135,39 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               <Image src="/logo-swillfam.png" alt="SwillFam" width={93} height={41} className="h-8 w-auto" />
             </Link>
 
-            {/* Hamburger / close — right. */}
-            <button
-              type="button"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              onClick={() => setOpen((o) => !o)}
-              className="relative size-7 text-white"
-            >
-              <Menu
-                className={cn(
-                  "absolute inset-0 m-auto size-7 transition-all duration-300",
-                  open ? "rotate-90 opacity-0" : "rotate-0 opacity-100",
-                )}
-              />
-              <X
-                className={cn(
-                  "absolute inset-0 m-auto size-7 transition-all duration-300",
-                  open ? "rotate-0 opacity-100" : "-rotate-90 opacity-0",
-                )}
-              />
-            </button>
+            {/* Active page label (desktop only) + hamburger / close — right. */}
+            <div className="flex items-center gap-4">
+              {activeLabel ? (
+                <span
+                  className={cn(
+                    "hidden lg:block font-inter text-sm uppercase tracking-wide font-bold text-white transition-opacity duration-300",
+                    open && "opacity-0 pointer-events-none",
+                  )}
+                >
+                  {activeLabel}
+                </span>
+              ) : null}
+              <button
+                type="button"
+                aria-label={open ? "Close menu" : "Open menu"}
+                aria-expanded={open}
+                onClick={() => setOpen((o) => !o)}
+                className="relative size-7 text-white"
+              >
+                <Menu
+                  className={cn(
+                    "absolute inset-0 m-auto size-7 transition-all duration-300",
+                    open ? "rotate-90 opacity-0" : "rotate-0 opacity-100",
+                  )}
+                />
+                <X
+                  className={cn(
+                    "absolute inset-0 m-auto size-7 transition-all duration-300",
+                    open ? "rotate-0 opacity-100" : "-rotate-90 opacity-0",
+                  )}
+                />
+              </button>
+            </div>
           </Container>
 
           {/* Expanding menu panel — same 3-column layout as the top mega-nav. */}

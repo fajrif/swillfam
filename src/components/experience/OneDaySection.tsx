@@ -13,12 +13,12 @@ export function OneDaySection() {
         </div>
 
         <div className="flex flex-col justify-center gap-6">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             The SwillFam Experience is designed as a journey through the city. Each part of the day
             connects to a different venue, mood, and moment, giving guests a simple way to explore
             where to go, what to do, and how to plan their next visit.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Whether you are starting slow, meeting friends for lunch, setting the tone with dinner,
             or heading into a late-night event, SwillFam offers a venue for every kind of plan.
           </p>

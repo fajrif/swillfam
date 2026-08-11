@@ -62,7 +62,7 @@ export function LegalDocument({
             <h4 className="font-syne font-semibold text-sm uppercase tracking-widest text-white mb-6 flex items-center gap-2">
               <i className="ph-fill ph-list-dashes text-sf-accent" /> Table of Contents
             </h4>
-            <nav className="flex flex-col gap-4 text-sm font-inter text-white/50">
+            <nav className="flex flex-col gap-4 text-sm font-inter text-sf-body/50">
               {sections.map((section) => (
                 <a
                   key={section.id}
@@ -77,12 +77,12 @@ export function LegalDocument({
         </aside>
 
         <div className="col-span-1 lg:col-span-8 order-1 lg:order-2 legal-doc max-w-none">
-          <div className="bg-sf-surface text-white p-6 font-inter text-lg border-l-4 border-sf-accent mb-12">
+          <div className="bg-sf-surface p-6 font-inter text-lg border-l-4 border-sf-accent mb-12">
             <strong className="font-syne uppercase text-sf-accent tracking-widest text-sm flex items-center gap-2 mb-2">
               <i className="ph-fill ph-warning-circle text-xl" /> {noticeTitle}
             </strong>
             {noticeBody}
-            <p className="mt-4 font-inter text-sm text-white">
+            <p className="mt-4 font-inter text-sm">
               Questions? Contact us at{" "}
               <a href={`mailto:${contactEmail}`} className="underline">
                 {contactEmail}

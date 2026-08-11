@@ -66,7 +66,7 @@ export function ArticleListSection({
           >
             {title}
           </h2>
-          <p className="font-inter text-base leading-relaxed text-white md:text-lg">{lead}</p>
+          <p className="font-inter text-base leading-relaxed md:text-lg">{lead}</p>
           {ctaLabel ? (
             <SpecularButton href={ctaHref} size="lg" radius={30} className="w-fit">
               {ctaLabel}
@@ -87,11 +87,11 @@ export function ArticleListSection({
                 />
               </div>
               <div className="flex flex-col gap-2 p-2">
-                <span className="font-inter text-xs text-white/50">{article.date}</span>
+                <span className="font-inter text-xs text-sf-body/50">{article.date}</span>
                 <h3 className="font-syne text-xl leading-snug text-white transition-colors duration-300 group-hover:text-sf-accent lg:text-[22px]">
                   {article.title}
                 </h3>
-                <p className="line-clamp-2 font-inter text-sm leading-relaxed text-white">
+                <p className="line-clamp-2 font-inter text-sm leading-relaxed">
                   {article.excerpt}
                 </p>
               </div>

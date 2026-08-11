@@ -10,7 +10,7 @@ export function SwillfamSpotlightSection() {
           SwillFam in the Spotlight
         </h2>
         <div className="flex flex-col gap-8 justify-center">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Explore selected media features, press mentions, and editorial coverage about SwillFam
             and our venues. From lifestyle stories and nightlife highlights to event coverage and
             venue features, these mentions capture how SwillFam continues to shape Jakarta&apos;s

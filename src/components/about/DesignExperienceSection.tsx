@@ -14,7 +14,7 @@ export function DesignExperienceSection() {
             </h2>
           </div>
           <div className="flex items-center">
-            <p className="text-xl font-inter leading-relaxed text-white">
+            <p className="text-xl font-inter leading-relaxed">
               We believe the best venues are more than places to eat or drink, they become part of
               people&apos;s lives. Every SwillFam concept is built around a unique identity,
               carefully shaped through design, atmosphere, music, culinary direction, and service. We

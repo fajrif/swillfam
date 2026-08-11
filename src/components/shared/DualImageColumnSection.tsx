@@ -72,7 +72,7 @@ function CategoryTile({ src, label, labelAlign, description, href }: CategoryTil
           {label}
         </span>
         {description ? (
-          <p className="font-inter text-sm leading-relaxed text-white md:text-base">
+          <p className="font-inter text-sm leading-relaxed md:text-base">
             {description}
           </p>
         ) : null}

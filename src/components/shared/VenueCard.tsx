@@ -62,7 +62,7 @@ export function VenueCard({
                 <Image src={venue.logo} alt="" fill sizes="(max-width: 768px) 55vw, 27vw" className="object-contain" />
               </div>
             ) : null}
-            <p className="font-inter text-sm leading-relaxed text-white lg:text-base">
+            <p className="font-inter text-sm leading-relaxed lg:text-base">
               {venue.description}
             </p>
           </div>

@@ -48,7 +48,7 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
                   {dish.title}
                 </h3>
                 {dish.description ? (
-                  <p className="font-inter text-sm leading-relaxed text-white">
+                  <p className="font-inter text-sm leading-relaxed">
                     {dish.description}
                   </p>
                 ) : null}

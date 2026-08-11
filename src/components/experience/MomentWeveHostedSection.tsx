@@ -59,7 +59,7 @@ export function MomentWeveHostedSection() {
         <h2 className="text-center font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
           Moments We&apos;ve Hosted
         </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-center font-inter leading-relaxed text-white">
+        <p className="mx-auto mt-6 max-w-2xl text-center font-inter leading-relaxed">
           Explore a selection of celebrations, corporate functions, launches, and special occasions
           hosted across the SwillFam family of venues.
         </p>

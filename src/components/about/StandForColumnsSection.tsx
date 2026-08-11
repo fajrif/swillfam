@@ -15,11 +15,11 @@ export function StandForColumnsSection() {
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 Our Experiences
               </h3>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="font-inter leading-relaxed">
                 SwillFam brings together food, drinks, music, entertainment, and community to
                 create memorable moments.
               </p>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 From events and celebrations to collaborations and nights out, every experience is
                 designed to connect people and leave a lasting impression.
               </p>

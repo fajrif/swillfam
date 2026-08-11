@@ -12,7 +12,7 @@ export function EssentialsSection({ settings }: { settings: SiteSettings }) {
         <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
           SwillFam Essentials
         </h2>
-        <p className="max-w-[640px] font-inter leading-relaxed text-white">
+        <p className="max-w-[640px] font-inter leading-relaxed">
           SwillFam merchandise is made for those who live the scene beyond the venue. Explore
           selected pieces inspired by our venues, events, and lifestyle culture. All merchandise are
           available at our venues or kindly DM us to order.

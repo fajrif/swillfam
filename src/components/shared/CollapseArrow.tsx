@@ -9,7 +9,7 @@ export function CollapseArrow({ open, className }: { open?: boolean; className?:
   return (
     <PlayIcon
       className={cn(
-        "size-6 shrink-0 text-white/40 transition-transform duration-200",
+        "size-6 shrink-0 text-sf-body/40 transition-transform duration-200",
         open && "rotate-90",
         className
       )}

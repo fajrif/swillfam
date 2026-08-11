@@ -25,10 +25,10 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
               value={faq.id}
               className="border border-sf-border/60 px-8 last:border-b"
             >
-              <AccordionTrigger className="items-center gap-6 py-7 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:size-6 [&>svg]:text-white/40">
+              <AccordionTrigger className="items-center gap-6 py-7 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:size-6 [&>svg]:text-sf-body/40">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed text-white">
+              <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed">
                 <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
               </AccordionContent>
             </AccordionItem>

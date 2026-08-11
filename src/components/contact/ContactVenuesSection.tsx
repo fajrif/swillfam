@@ -23,7 +23,7 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
             Contact Our Venues Directly
           </h2>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Looking to make a reservation or ask about a specific outlet? Choose the SwillFam venue
             you want to contact and connect directly through its WhatsApp or location details.
           </p>
@@ -47,7 +47,7 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-sf-surface/50">
-                    <span className="font-inter text-xs text-white/40">No image</span>
+                    <span className="font-inter text-xs text-sf-body/40">No image</span>
                   </div>
                 )}
               </div>
@@ -57,7 +57,7 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                     {venue.name}
                   </h3>
                 </Link>
-                <p className="font-inter text-sm text-white">
+                <p className="font-inter text-sm">
                   WhatsApp:{" "}
                   {venue.whatsapp ? (
                     <a
@@ -73,13 +73,13 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                 )}
               </p>
                 {venue.placeId && (
-                  <p className="font-inter text-sm text-white">
+                  <p className="font-inter text-sm">
                     Location:{" "}
                     <a
                       href={`https://www.google.com/maps/place/${encodeURIComponent(venue.name)}/data=!4m2!3m1!1s${venue.placeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="transition-colors text-white/50 hover:text-sf-accent"
+                      className="transition-colors text-sf-body/50 hover:text-sf-accent"
                     >
                       View on Map
                     </a>
