@@ -135,7 +135,7 @@ export function PromotionsBrowser({
                 ))}
               </div>
             ) : (
-              <p className="w-full py-12 text-center font-inter text-white">No promotions found.</p>
+              <p className="w-full py-12 text-center font-inter">No promotions found.</p>
             )}
 
             {filtered.length > visible && (

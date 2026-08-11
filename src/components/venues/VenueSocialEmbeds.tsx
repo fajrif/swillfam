@@ -62,7 +62,7 @@ export function VenueSocialEmbeds({
                 >
                   <div className="flex flex-col gap-3">
                     <h3 className="font-syne text-2xl font-bold text-white">{block.title}</h3>
-                    <p className="font-inter leading-relaxed text-white">{block.description}</p>
+                    <p className="font-inter leading-relaxed">{block.description}</p>
                   </div>
                   <SocialEmbed html={block.html} className={block.embedClassName} />
                 </div>

@@ -51,14 +51,14 @@ export function RecurringEventDetail({
           </div>
 
           <div className="flex flex-col gap-5">
-            <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+            <p className="whitespace-pre-line font-inter leading-relaxed">
               {shortDescription}
             </p>
 
             {nextDateLabel ? (
-              <dl className="flex flex-col gap-1 font-inter text-white">
+              <dl className="flex flex-col gap-1 font-inter">
                 <div className="flex gap-2">
-                  <dt className="font-semibold">Next Date &amp; Time:</dt>
+                  <dt className="font-semibold text-white">Next Date &amp; Time:</dt>
                   <dd>{nextDateLabel}</dd>
                 </div>
               </dl>
@@ -84,20 +84,20 @@ export function RecurringEventDetail({
 
             <div className={EVENT_PROSE} dangerouslySetInnerHTML={{ __html: description }} />
 
-            <dl className="flex flex-col gap-1 font-inter text-white">
+            <dl className="flex flex-col gap-1 font-inter">
               <div className="flex gap-2">
-                <dt className="font-semibold">Day:</dt>
+                <dt className="font-semibold text-white">Day:</dt>
                 <dd>{dayLabel}</dd>
               </div>
               {venueName ? (
                 <div className="flex gap-2">
-                  <dt className="font-semibold">Venue:</dt>
+                  <dt className="font-semibold text-white">Venue:</dt>
                   <dd>{venueName}</dd>
                 </div>
               ) : null}
               {categoryName ? (
                 <div className="flex gap-2">
-                  <dt className="font-semibold">Category:</dt>
+                  <dt className="font-semibold text-white">Category:</dt>
                   <dd>{categoryName}</dd>
                 </div>
               ) : null}

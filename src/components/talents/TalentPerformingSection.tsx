@@ -17,7 +17,7 @@ export function TalentPerformingSection({ venue }: { venue: Venue }) {
               <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
                 Performing at {venue.name}
               </h2>
-              <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+              <p className="whitespace-pre-line font-inter leading-relaxed">
                 {venue.shortDescription ?? venue.description}
               </p>
             </div>

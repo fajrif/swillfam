@@ -25,6 +25,7 @@
   --color-sf-border: #3b3a35;
   --color-sf-accent: #c6387f;
   --color-sf-text: #ffffff;
+  --color-sf-body: #eceae4;
 
   --leading-relaxed: 1.5;
   --leading-tight: 1.1;
@@ -170,7 +171,7 @@ body {
 
 .legal-doc p {
   margin-bottom: 1.5rem;
-  color: #ffffff;
+  color: var(--color-sf-body);
   line-height: 1.8;
   font-size: 1.125rem;
 }
@@ -178,7 +179,7 @@ body {
 .legal-doc ul {
   margin-bottom: 1.5rem;
   padding-left: 1.5rem;
-  color: #ffffff;
+  color: var(--color-sf-body);
 }
 
 .legal-doc li {

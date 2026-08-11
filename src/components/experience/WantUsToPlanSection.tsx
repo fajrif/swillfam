@@ -16,12 +16,12 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
               <h2 className="font-syne text-[clamp(2.5rem,5vw,64px)] leading-tight text-white">
                 Want Us to Plan It for You?
               </h2>
-              <p className="font-inter leading-relaxed text-white">
+              <p className="font-inter leading-relaxed">
                 Not sure where to start? Tell us your preferred vibe, group size, date, and
                 occasion, and our team can help guide you to the right SwillFam venues for your day
                 or night out.
               </p>
-              <p className="mb-5 font-inter leading-relaxed text-white">
+              <p className="mb-5 font-inter leading-relaxed">
                 From dinner reservations to pre-drinks, nightlife plans, and private celebrations, we
                 can help you plan a route that fits your mood.
               </p>

@@ -26,7 +26,7 @@ export function WhatWeStandForSection() {
 
       {/* Magenta culture marquee band */}
       <div className="relative flex items-center overflow-hidden bg-sf-accent py-6">
-        <div className="absolute inset-0 flex items-center whitespace-nowrap font-syne text-[clamp(3rem,8vw,96px)] font-bold uppercase leading-none text-white/25">
+        <div className="absolute inset-0 flex items-center whitespace-nowrap font-syne text-[clamp(3rem,8vw,96px)] font-bold uppercase leading-none text-sf-body/25">
           <div className="animate-marquee flex shrink-0">
             {Array.from({ length: 8 }).map((_, i) => (
               <span key={i} className="px-8">
@@ -36,7 +36,7 @@ export function WhatWeStandForSection() {
           </div>
         </div>
         <Container className="relative z-10">
-          <p className="mx-auto max-w-2xl text-center font-inter text-sm leading-relaxed text-white md:text-base">
+          <p className="mx-auto max-w-2xl text-center font-inter text-sm leading-relaxed md:text-base">
             SwillFam is built around culture, connection, and shared experiences. Through food,
             drinks, music, venues, and events, SwillFam creates spaces where people come together,
             express themselves, and become part of the city&apos;s lifestyle scene.

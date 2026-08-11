@@ -11,17 +11,17 @@ export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
         </h2>
 
         <div className="flex flex-col gap-6">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             For general inquiries, business opportunities, collaborations, media requests, private
             events, and other questions, you can contact the SwillFam team through our form,
             WhatsApp, email, or location details.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Whether you are planning a visit, organizing an event, looking for venue information, or
             reaching out on behalf of a brand or media partner, our team will direct your message to
             the right department.
           </p>
-          <div className="mt-2 flex flex-col gap-1 font-inter text-xl text-white">
+          <div className="mt-2 flex flex-col gap-1 font-inter text-xl">
             {settings.mainWhatsapp && (
               <p>
                 WhatsApp:{" "}

@@ -61,25 +61,25 @@ export function SingleEventDetail({
               <div className={EVENT_PROSE} dangerouslySetInnerHTML={{ __html: description }} />
             </div>
 
-            <dl className="flex flex-col gap-1 font-inter text-white mb-5">
+            <dl className="flex flex-col gap-1 font-inter mb-5">
               {categoryName ? (
                 <div className="flex gap-2">
-                  <dt className="font-semibold">Category:</dt>
+                  <dt className="font-semibold text-white">Category:</dt>
                   <dd>{categoryName}</dd>
                 </div>
               ) : null}
               {venueName ? (
                 <div className="flex gap-2">
-                  <dt className="font-semibold">Venue:</dt>
+                  <dt className="font-semibold text-white">Venue:</dt>
                   <dd>{venueName}</dd>
                 </div>
               ) : null}
               <div className="flex gap-2">
-                <dt className="font-semibold">Date:</dt>
+                <dt className="font-semibold text-white">Date:</dt>
                 <dd>{dateLabel}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="font-semibold">Time:</dt>
+                <dt className="font-semibold text-white">Time:</dt>
                 <dd>{timeLabel}</dd>
               </div>
             </dl>

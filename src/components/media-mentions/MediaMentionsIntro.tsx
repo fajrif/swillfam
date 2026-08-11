@@ -12,12 +12,12 @@ export function MediaMentionsIntro() {
         </div>
 
         <div className="flex flex-col justify-center gap-6">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             From venue features and event highlights to lifestyle stories and nightlife coverage,
             SwillFam&rsquo;s media mentions capture how our venues and experiences continue to be
             seen across the city&rsquo;s cultural scene.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Browse past articles, interviews, features, and external links to discover how SwillFam
             has been covered by media partners and publications over time.
           </p>

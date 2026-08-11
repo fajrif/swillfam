@@ -9,7 +9,7 @@ import { SpecularButton } from "@/components/reactbits/SpecularButton";
 const initialState: ApplicationActionState = {};
 
 const fieldClass =
-  "h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0";
+  "h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-sf-body placeholder:text-sf-body/50 focus-visible:border-white focus-visible:ring-0";
 
 export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: string }[] }) {
   const [state, formAction, pending] = useActionState(submitApplicationAction, initialState);
@@ -21,7 +21,7 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
         <h2 className="font-syne text-[clamp(1.75rem,4vw,40px)] leading-tight text-white">
           Application received.
         </h2>
-        <p className="font-inter leading-relaxed text-white">
+        <p className="font-inter leading-relaxed">
           Thanks for applying — the SwillFam team will review your submission and reach out if
           there&apos;s a fit.
         </p>
@@ -34,7 +34,7 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
       <h2 className="font-syne text-[clamp(1.75rem,4vw,40px)] leading-tight text-white">
         Apply Now
       </h2>
-      <p className="font-inter leading-relaxed text-white">
+      <p className="font-inter leading-relaxed">
         Interested in joining SwillFam? Fill in the application form below and our team will review
         your submission.
       </p>
@@ -51,7 +51,7 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
       <select
         name="careerId"
         defaultValue=""
-        className="h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-white focus-visible:border-white focus-visible:outline-none [&>option]:bg-sf-surface [&>option]:text-white"
+        className="h-[50px] rounded-none border-0 border-b border-sf-border bg-transparent px-0 font-inter text-sf-body focus-visible:border-white focus-visible:outline-none [&>option]:bg-sf-surface [&>option]:text-white"
       >
         <option value="">Position Applied For</option>
         {careers.map((career) => (
@@ -62,7 +62,7 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
       </select>
 
       {/* Upload CV */}
-      <label className="flex h-[50px] cursor-pointer items-center gap-3 border-b border-sf-border font-inter text-white/50 transition-colors hover:text-white">
+      <label className="flex h-[50px] cursor-pointer items-center gap-3 border-b border-sf-border font-inter text-sf-body/50 transition-colors hover:text-sf-body">
         <UploadCloud className="size-5" />
         <span>{fileName ?? "Upload CV"}</span>
         <input

@@ -41,13 +41,13 @@ export function JobListings({ careers }: { careers: Career[] }) {
               </Tooltip>
 
               <h3 className="font-syne text-2xl text-white pr-8">{job.jobTitle}</h3>
-              <div className="flex flex-col gap-1 font-inter text-sm text-white">
+              <div className="flex flex-col gap-1 font-inter text-sm">
                 <p>Department / Venue: {job.department}</p>
                 <p>Employment Type: {EMPLOYMENT_TYPE_LABELS[job.employmentType]}</p>
                 <p>Location: {job.location}</p>
               </div>
               <p
-                className={`font-inter leading-relaxed text-white ${isOpen ? "" : "line-clamp-3"}`}
+                className={`font-inter leading-relaxed ${isOpen ? "" : "line-clamp-3"}`}
               >
                 {job.description}
               </p>

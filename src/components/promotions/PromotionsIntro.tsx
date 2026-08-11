@@ -11,12 +11,12 @@ export function PromotionsIntro() {
           </h2>
         </div>
         <div className="flex flex-col gap-5">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             SwillFam promotions are created for different moments, whether you are planning dinner,
             drinks with friends, a casual gathering, or a full night out. Each promotion is designed
             to make your experience more exciting, accessible, and worth coming back for.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Browse available offers by venue or category, check the valid dates, and choose the
             promotion that fits your next SwillFam moment.
           </p>

@@ -31,7 +31,7 @@ export function DestinationsFeatureBand({
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 {rightTitle}
               </h3>
-              <p className="font-inter leading-relaxed text-white">{rightBody}</p>
+              <p className="font-inter leading-relaxed">{rightBody}</p>
             </div>
             <SpecularButton href={rightCtaHref} size="lg" radius={30} className="w-fit">
               {rightCtaLabel}

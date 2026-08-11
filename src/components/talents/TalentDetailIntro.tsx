@@ -25,21 +25,21 @@ export function TalentDetailIntro({ talent }: { talent: TalentWithVenue }) {
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-1 font-inter text-lg text-white">
+          <div className="flex flex-col gap-1 font-inter text-lg">
             <p>
-              <span className="font-semibold">Name:</span> {talent.name}
+              <span className="font-semibold text-white">Name:</span> {talent.name}
             </p>
             <p>
-              <span className="font-semibold">Role:</span> {talent.speciality}
+              <span className="font-semibold text-white">Role:</span> {talent.speciality}
             </p>
             {talent.venue ? (
               <p>
-                <span className="font-semibold">Home Venue:</span> {talent.venue.name}
+                <span className="font-semibold text-white">Home Venue:</span> {talent.venue.name}
               </p>
             ) : null}
           </div>
 
-          <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+          <p className="whitespace-pre-line font-inter leading-relaxed">
             {talent.description}
           </p>
         </div>

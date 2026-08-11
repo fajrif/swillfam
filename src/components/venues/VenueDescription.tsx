@@ -35,7 +35,7 @@ export function VenueDescription({
               <Link href={`/category/${venue.category.slug}`}>{venue.category.name}</Link>
             </Button>
           ) : null}
-            <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+            <p className="whitespace-pre-line font-inter leading-relaxed">
               {venue.description}
             </p>
           </div>

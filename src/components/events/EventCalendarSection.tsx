@@ -84,7 +84,7 @@ export function EventCalendarSection({
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
             Event Calendar
           </h2>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Browse SwillFam events through a monthly calendar view. Select a date to see what is
             happening across our venues and plan your visit based on your schedule.
           </p>

@@ -11,7 +11,7 @@ export function BrandResourcesSection() {
         </h2>
 
         <div className="flex flex-col">
-          <p className="mb-10 font-inter leading-relaxed text-white">
+          <p className="mb-10 font-inter leading-relaxed">
             Access official SwillFam brand assets for media, partners, collaborators, and event
             organizers. Download approved logos, brand guidelines, venue imagery, press kits, and
             other resources for editorial and promotional use.

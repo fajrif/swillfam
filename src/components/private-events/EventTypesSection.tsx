@@ -54,7 +54,7 @@ function EventTypeCard({ privateEvent }: { privateEvent: PrivateEvent }) {
           <h3 className="font-syne font-bold text-[clamp(1.5rem,2.5vw,32px)] leading-tight text-white">
             {title}
           </h3>
-          <p className="font-inter text-medium leading-relaxed text-white">{shortDescription}</p>
+          <p className="font-inter text-medium leading-relaxed">{shortDescription}</p>
         </div>
       </div>
     </Link>

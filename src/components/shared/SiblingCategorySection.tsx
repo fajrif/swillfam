@@ -37,7 +37,7 @@ export function SiblingCategorySection({
               <h2 className="font-syne text-[clamp(2rem,4vw,64px)] leading-tight text-white mb-4">
                 {category.name}
               </h2>
-              <p className="whitespace-pre-line font-inter leading-relaxed text-white">
+              <p className="whitespace-pre-line font-inter leading-relaxed">
                 {category.shortDescription ?? category.caption}
               </p>
             </div>

@@ -31,18 +31,18 @@ export function MediaMentionsList({
               <h3 className="font-syne text-2xl leading-tight text-white">
                 {m.title}
               </h3>
-              <div className="flex flex-col gap-1 font-inter text-sm text-white">
+              <div className="flex flex-col gap-1 font-inter text-sm">
                 <p>
-                  <span className="font-semibold">Article name:</span> {m.articleTitle}
+                  <span className="font-semibold text-white">Article name:</span> {m.articleTitle}
                 </p>
                 <p>
-                  <span className="font-semibold">Publication name:</span> {m.publicationName}
+                  <span className="font-semibold text-white">Publication name:</span> {m.publicationName}
                 </p>
                 <p>
-                  <span className="font-semibold">Published date:</span> {formatDay(m.publishedDate)}
+                  <span className="font-semibold text-white">Published date:</span> {formatDay(m.publishedDate)}
                 </p>
               </div>
-              <p className="line-clamp-3 font-inter leading-relaxed text-white">
+              <p className="line-clamp-3 font-inter leading-relaxed">
                 {m.shortDescription}
               </p>
               <div className="mt-auto pt-2">

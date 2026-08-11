@@ -32,10 +32,10 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
 
   return (
     <>
-      <footer className="border-t border-sf-border/60 bg-sf-deep text-white">
+      <footer className="border-t border-sf-border/60 bg-sf-deep">
         {/* Newsletter */}
-        <Container className="border-x border-sf-border/60 bg-sf-deep flex flex-col items-center gap-8 py-16 text-center">
-          <h2 className="font-syne text-[clamp(1.75rem,4vw,48px)] uppercase text-white">
+        <Container className="border-x border-sf-border/60 bg-sf-deep flex flex-col items-center gap-4 py-8 text-center">
+          <h2 className="font-syne text-[clamp(1.5rem,3.5vw,40px)] uppercase text-white">
             Stay in the Loop!
           </h2>
           <form
@@ -43,7 +43,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               e.preventDefault();
               setEmail("");
             }}
-            className="flex w-full max-w-[680px] flex-col items-center gap-8"
+            className="flex w-full max-w-[680px] flex-col items-center gap-4"
           >
             <Input
               type="email"
@@ -51,7 +51,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email here"
-              className="h-[50px] w-full rounded-none border-0 border-b border-white bg-transparent px-2 text-center font-inter text-white placeholder:text-white/50 focus-visible:border-white focus-visible:ring-0"
+              className="h-[50px] w-full rounded-none border-0 border-b border-white bg-transparent px-2 text-center font-inter text-sf-body placeholder:text-sf-body/50 focus-visible:border-white focus-visible:ring-0"
             />
             <SpecularButton
               type="submit"
@@ -73,7 +73,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             alt="SwillFam"
             width={269}
             height={118}
-            className="h-34 w-auto"
+            className="h-[6.8rem] w-auto"
           />
         </Container>
 
@@ -83,14 +83,14 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           <div className="flex flex-col gap-4">
             <SocialIcons settings={settings} />
             {settings.mainEmail && (
-              <p className="font-inter text-base text-white">
+              <p className="font-inter text-base">
                 Email:{" "}
                 <a href={`mailto:${settings.mainEmail}`} className="hover:text-sf-accent">
                   {settings.mainEmail}
                 </a>
               </p>
             )}
-            <div className="font-inter text-sm leading-relaxed text-white">
+            <div className="font-inter text-sm leading-relaxed">
               {settings.officeAddressLine1 && (
                 <p className="text-base font-semibold">{settings.officeAddressLine1}</p>
               )}
@@ -127,8 +127,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         </Container>
       </footer>
       {/* Legal bar */}
-      <footer className="border-t border-sf-border/60 bg-sf-deep text-white">
-        <Container className="flex flex-col items-center justify-between gap-3 py-6 border-x border-sf-border/60 bg-sf-deep text-center font-inter text-xs text-white sm:flex-row sm:text-left">
+      <footer className="border-t border-sf-border/60 bg-sf-deep">
+        <Container className="flex flex-col items-center justify-between gap-3 py-6 border-x border-sf-border/60 bg-sf-deep text-center font-inter text-xs sm:flex-row sm:text-left">
           <p>© {new Date().getFullYear()} Swillfam. All rights reserved</p>
           <p className="inline-flex items-center gap-4">
             <Link href="/privacy" className="hover:text-sf-accent">

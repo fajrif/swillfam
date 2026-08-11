@@ -133,7 +133,7 @@ export function TalentsBrowser({
                 ))}
               </div>
             ) : (
-              <p className="w-full py-12 text-center font-inter text-white">No talents found.</p>
+              <p className="w-full py-12 text-center font-inter">No talents found.</p>
             )}
 
             {filtered.length > visible && (

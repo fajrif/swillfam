@@ -47,7 +47,7 @@ export function EventDetailDialog({
     <Dialog open={occurrence !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         overlayClassName="backdrop-blur-sm"
-        className="max-h-[85dvh] gap-0 overflow-y-auto overflow-x-hidden border-sf-border/60 bg-sf-deep p-6 text-white shadow-[0_0_20px_rgba(255,255,255,0.16)] sm:max-w-[560px]"
+        className="max-h-[85dvh] gap-0 overflow-y-auto overflow-x-hidden border-sf-border/60 bg-sf-deep p-6 shadow-[0_0_20px_rgba(255,255,255,0.16)] sm:max-w-[560px]"
       >
         {occurrence && event && style && (
           <>
@@ -72,14 +72,14 @@ export function EventDetailDialog({
             <div className="mt-5">
               <p className="font-syne text-base font-bold text-white">Description</p>
               {/* Doubles as the dialog's accessible description for Radix. */}
-              <DialogDescription className="mt-2 font-inter text-sm leading-relaxed text-white">
+              <DialogDescription className="mt-2 font-inter text-sm leading-relaxed">
                 {event.shortDescription}
               </DialogDescription>
             </div>
 
             <div className="mt-5">
               <p className="font-syne text-base font-bold text-white">Date &amp; Time</p>
-              <p className="mt-2 font-inter text-sm text-white">
+              <p className="mt-2 font-inter text-sm">
                 {formatOccurrenceDateTime(occurrence.date, event.startHour)}
               </p>
             </div>

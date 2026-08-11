@@ -25,7 +25,7 @@ export function PrivateEventTestimonials({
               key={testimonial.id}
               className="flex flex-col items-center justify-center gap-6 border border-sf-border/50 bg-sf-surface px-8 py-12 text-center"
             >
-              <blockquote className="font-inter leading-relaxed text-white">
+              <blockquote className="font-inter leading-relaxed">
                 &ldquo;{testimonial.quote}&rdquo;
               </blockquote>
               <figcaption className="font-inter text-lg text-white">{testimonial.author}</figcaption>

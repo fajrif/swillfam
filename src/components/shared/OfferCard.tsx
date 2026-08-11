@@ -53,7 +53,7 @@ export function OfferCard({ offer }: { offer: OfferCardData }) {
         </div>
 
         <h3 className="font-syne text-2xl font-bold leading-tight text-white">{offer.title}</h3>
-        <p className="line-clamp-3 font-inter text-sm leading-relaxed text-white">{offer.description}</p>
+        <p className="line-clamp-3 font-inter text-sm leading-relaxed">{offer.description}</p>
       </div>
     </>
   );

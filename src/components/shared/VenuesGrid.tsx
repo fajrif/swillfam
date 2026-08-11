@@ -16,7 +16,7 @@ export function VenuesGrid({ category }: { category: Category & { venues: Venue[
         <SectionHeading title={`Explore Our ${category.name} Venues`} align="center" />
 
         {venues.length === 0 ? (
-          <p className="text-center font-inter text-white">No venues in this category yet.</p>
+          <p className="text-center font-inter">No venues in this category yet.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {venues.map((venue) => (

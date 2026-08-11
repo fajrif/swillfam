@@ -77,7 +77,7 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
             </Map>
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-sf-surface p-8 text-center">
-              <p className="font-inter text-sm text-white/60">
+              <p className="font-inter text-sm text-sf-body/60">
                 Interactive map unavailable. Set NEXT_PUBLIC_MAPBOX_TOKEN to enable it.
               </p>
             </div>
@@ -101,18 +101,18 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
               value={venue.slug}
               className="border border-sf-border/60 px-6 sm:px-8 last:border-b"
             >
-              <AccordionTrigger className="items-center gap-6 py-6 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:size-6 [&>svg]:text-white/40">
+              <AccordionTrigger className="items-center gap-6 py-6 font-syne text-xl font-bold text-white hover:no-underline [&>svg]:size-6 [&>svg]:text-sf-body/40">
                 {venue.name}
               </AccordionTrigger>
-              <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed text-white">
+              <AccordionContent className="pt-0 pb-7 font-inter text-sm leading-relaxed">
                 <div className="flex flex-col gap-5">
                   <div className="flex flex-col gap-1">
                     <p className="font-semibold text-white">Location:</p>
-                    <p className="text-white">{venue.location}</p>
+                    <p>{venue.location}</p>
                   </div>
                   <div className="flex flex-col gap-1">
                     <p className="font-semibold text-white">Operating Hours:</p>
-                    <p className="whitespace-pre-line text-white">{venue.operatingHours}</p>
+                    <p className="whitespace-pre-line">{venue.operatingHours}</p>
                   </div>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <SpecularButton href={`/venues/${venue.slug}`} size="lg" radius={30} className="w-full">

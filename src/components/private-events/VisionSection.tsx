@@ -14,17 +14,17 @@ export function VisionSection() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Whether you&apos;re organizing a corporate function, birthday celebration, brand launch,
             wedding reception, or private gathering, SwillFam provides distinctive venues and flexible
             event solutions across our portfolio.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Each space is designed with its own character, giving you the freedom to choose an
             atmosphere that matches the tone of your event, from relaxed and intimate to energetic,
             premium, and high-impact.
           </p>
-          <p className="font-inter leading-relaxed text-white">
+          <p className="font-inter leading-relaxed">
             Our team works closely with you to understand your objectives, guest list, preferred
             setup, food and beverage needs, entertainment direction, and overall event flow. From the
             first inquiry to the final execution, we help shape the experience so every detail feels

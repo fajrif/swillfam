@@ -25,7 +25,7 @@ export function EventVenueSection({
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
             Happening at {name}
           </h2>
-          <p className="whitespace-pre-line font-inter leading-relaxed text-white">{description}</p>
+          <p className="whitespace-pre-line font-inter leading-relaxed">{description}</p>
           <SpecularButton href={`/venues/${slug}`} size="lg" radius={30} className="w-fit">
             Discover {name}
           </SpecularButton>
