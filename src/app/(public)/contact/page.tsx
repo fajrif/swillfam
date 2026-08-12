@@ -8,10 +8,7 @@ import {
   LetsConnectSection,
   ContactVenuesSection,
 } from "@/components/contact";
-import { StandForColumnsSection, CareersSection } from "@/components/about";
-import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getSiteSettings } from "@/lib/site-settings";
-import { getArticleRows } from "@/lib/articles";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -21,9 +18,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const [settings, articles, venues] = await Promise.all([
+  const [settings, venues] = await Promise.all([
     getSiteSettings(),
-    getArticleRows(3),
     prisma.venue.findMany({
       select: { name: true, slug: true, image: true, whatsapp: true, placeId: true, lat: true, lng: true },
       orderBy: { name: "asc" },

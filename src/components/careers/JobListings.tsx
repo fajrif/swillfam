@@ -24,7 +24,7 @@ export function JobListings({ careers }: { careers: Career[] }) {
           return (
             <article
               key={job.id}
-              className="relative flex flex-col gap-4 border border-sf-border/50 p-8"
+              className="relative flex h-full flex-col gap-4 border border-sf-border/50 p-8"
             >
               <Tooltip>
                 <TooltipTrigger asChild>

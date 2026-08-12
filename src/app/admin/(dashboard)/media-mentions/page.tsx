@@ -21,7 +21,6 @@ export default async function MediaMentionsPage(props: {
     take: pageSize,
     orderBy: { publishedDate: "desc" },
   });
-  const total = await prisma.mediaMention.count({ where });
 
   return (
     <div>

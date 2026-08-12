@@ -40,7 +40,7 @@ export function ProductGrid({
 
 function ProductCard({ img, title, description, price }: ProductRow) {
   return (
-    <article className="flex flex-col border border-sf-border/50">
+    <article className="flex h-full flex-col border border-sf-border/50">
       <div className="relative aspect-square w-full overflow-hidden bg-sf-surface">
         {img ? (
           <Image

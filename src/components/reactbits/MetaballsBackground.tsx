@@ -371,7 +371,7 @@ export function MetaballsBackground({
         // already detached
       }
     };
-  }, [color, speed, direction, scale, opacity, mouseInteractive]);
+  }, [color, speed, direction, scale, scaleMobile, opacity, mouseInteractive]);
 
   return <div ref={containerRef} className={cn("metaballs-container", className)} />;
 }

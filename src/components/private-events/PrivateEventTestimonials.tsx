@@ -23,7 +23,7 @@ export function PrivateEventTestimonials({
           {testimonials.map((testimonial) => (
             <figure
               key={testimonial.id}
-              className="flex flex-col items-center justify-center gap-6 border border-sf-border/50 bg-sf-surface px-8 py-12 text-center"
+              className="flex h-full flex-col items-center justify-center gap-6 border border-sf-border/50 bg-sf-surface px-8 py-12 text-center"
             >
               <blockquote className="font-inter leading-relaxed">
                 &ldquo;{testimonial.quote}&rdquo;

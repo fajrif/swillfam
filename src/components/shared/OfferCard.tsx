@@ -14,8 +14,11 @@ export type OfferCardData = {
   href?: string;
 };
 
+type OfferCardProps = { offer: OfferCardData };
+
 /** Shared "venue offer" card: image, then [venue logo | meta label], title, description. */
-export function OfferCard({ offer }: { offer: OfferCardData }) {
+export function OfferCard(props: OfferCardProps) {
+  const { offer } = props;
   const inner = (
     <>
       <div className="p-3">
@@ -37,15 +40,16 @@ export function OfferCard({ offer }: { offer: OfferCardData }) {
       <div className="flex flex-col gap-3 p-5">
         <div className="flex items-center justify-between gap-4">
           {offer.venueLogo ? (
-            <div className="relative h-7 w-28">
-              <Image
-                src={offer.venueLogo}
-                alt={offer.venueName ?? ""}
-                fill
-                sizes="112px"
-                className="object-contain object-left"
-              />
-            </div>
+            // Intrinsic aspect ratio varies per venue (square marks vs. wide wordmarks)
+            // and isn't known to this component; native <img> auto-sizes width from a
+            // fixed height, which next/image's fill/width+height modes can't do without
+            // hardcoding per-logo dimensions that would go stale if a logo is replaced.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={offer.venueLogo}
+              alt={offer.venueName ?? ""}
+              className="h-8 w-auto max-w-[140px] shrink-0 object-contain object-left"
+            />
           ) : (
             <span className="font-syne text-sm font-bold uppercase text-white">{offer.venueName}</span>
           )}
@@ -58,7 +62,7 @@ export function OfferCard({ offer }: { offer: OfferCardData }) {
     </>
   );
 
-  const className = "group flex flex-col border border-sf-border/50 bg-sf-surface";
+  const className = "group flex h-full flex-col border border-sf-border/50 bg-sf-surface";
 
   if (offer.href) {
     return (

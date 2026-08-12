@@ -26,7 +26,7 @@ export function MediaMentionsList({
           {visible.map((m) => (
             <article
               key={m.id}
-              className="relative flex flex-col gap-4 border border-sf-border/50 p-8"
+              className="relative flex h-full flex-col gap-4 border border-sf-border/50 p-8"
             >
               <h3 className="font-syne text-2xl leading-tight text-white">
                 {m.title}
