@@ -50,7 +50,7 @@ export function TalentSection({
             return (
               <div
                 key={talent.id}
-                className="group flex flex-col gap-4 border border-sf-border/40 bg-sf-surface/20 p-4"
+                className="group flex h-full flex-col gap-4 border border-sf-border/40 bg-sf-surface/20 p-4"
               >
                 <Link
                   href={`/talents/${talent.slug}`}

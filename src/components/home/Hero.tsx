@@ -29,7 +29,6 @@ export function Hero({
     [Autoplay({ delay: 4000, stopOnInteraction: true })],
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -38,9 +37,7 @@ export function Hero({
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on("select", onSelect);
-    onSelect();
   }, [emblaApi, onSelect]);
 
   return (
@@ -93,9 +90,9 @@ export function Hero({
                   </div>
                 </div>
 
-                {scrollSnaps.length > 1 && (
+                {featuredEvents.length > 1 && (
                   <div className="pointer-events-auto flex justify-center gap-2">
-                    {scrollSnaps.map((_, i) => (
+                    {featuredEvents.map((_, i) => (
                       <button
                         key={i}
                         type="button"

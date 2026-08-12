@@ -46,7 +46,7 @@ export function CardImageInfoSection({
           {cards.map((card, i) => (
             <article
               key={i}
-              className="flex flex-col items-center gap-6 border border-sf-border/50 bg-sf-surface p-8 text-center"
+              className="flex h-full flex-col items-center gap-6 border border-sf-border/50 bg-sf-surface p-8 text-center"
             >
               {card.img ? (
                 <div className="relative aspect-square w-full max-w-[260px]">

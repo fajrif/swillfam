@@ -8,7 +8,6 @@ import { formatEventSchedule } from "@/lib/event-calendar";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import {
