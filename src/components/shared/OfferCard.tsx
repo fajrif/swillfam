@@ -40,15 +40,15 @@ export function OfferCard(props: OfferCardProps) {
       <div className="flex flex-col gap-3 p-5">
         <div className="flex items-center justify-between gap-4">
           {offer.venueLogo ? (
-            // Intrinsic aspect ratio varies per venue (square marks vs. wide wordmarks)
-            // and isn't known to this component; native <img> auto-sizes width from a
-            // fixed height, which next/image's fill/width+height modes can't do without
-            // hardcoding per-logo dimensions that would go stale if a logo is replaced.
+            // Venue logos are stored as the client's exact 1:1 square artwork
+            // (uncropped) — native <img> avoids next/image's fixed-box fill mode
+            // and auto-sizes width from height, which stays correct since every
+            // logo shares the same square aspect ratio.
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={offer.venueLogo}
               alt={offer.venueName ?? ""}
-              className="h-8 w-auto max-w-[140px] shrink-0 object-contain object-left"
+              className="h-16 w-auto shrink-0 object-contain object-left"
             />
           ) : (
             <span className="font-syne text-sm font-bold uppercase text-white">{offer.venueName}</span>

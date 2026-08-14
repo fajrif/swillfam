@@ -40,8 +40,8 @@ export function VenueCard({
         )}
       >
         {venue.logo ? (
-          <div className="relative h-24 w-[58%] lg:h-32">
-            <Image src={venue.logo} alt={venue.name} fill sizes="(max-width: 768px) 58vw, 29vw" className="object-contain" />
+          <div className="relative h-40 w-40 lg:h-56 lg:w-56">
+            <Image src={venue.logo} alt={venue.name} fill sizes="(max-width: 1024px) 160px, 224px" className="object-contain" />
           </div>
         ) : (
           <span className="text-center font-syne text-[clamp(1.5rem,2.5vw,32px)] font-bold leading-tight text-white">
@@ -58,8 +58,8 @@ export function VenueCard({
               {venue.name}
             </h3>
             {venue.logo ? (
-              <div className="relative h-20 w-[55%] lg:h-24">
-                <Image src={venue.logo} alt="" fill sizes="(max-width: 768px) 55vw, 27vw" className="object-contain" />
+              <div className="relative h-40 w-40 lg:h-56 lg:w-56">
+                <Image src={venue.logo} alt="" fill sizes="(max-width: 1024px) 160px, 224px" className="object-contain" />
               </div>
             ) : null}
             <p className="font-inter text-sm leading-relaxed lg:text-base">
