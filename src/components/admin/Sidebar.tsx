@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { LogOut } from "lucide-react";
+import { logoutAction } from "@/app/admin/logout/actions";
 
 const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] = [
   {
@@ -90,7 +91,7 @@ export function Sidebar({ email }: { email: string }) {
       <Separator />
       <div className="px-3 py-4 space-y-2">
         <div className="px-3 text-xs text-muted-foreground truncate">{email}</div>
-        <form action="/admin/logout" method="POST" onSubmit={(e) => { if (!confirm("Are you sure you want to logout?")) e.preventDefault(); }}>
+        <form action={logoutAction} onSubmit={(e) => { if (!confirm("Are you sure you want to logout?")) e.preventDefault(); }}>
           <Button type="submit" variant="ghost" size="sm" className="w-full justify-between">
             Log out
             <LogOut className="h-4 w-4 ml-2" />

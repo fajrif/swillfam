@@ -1,9 +1,11 @@
+"use server";
+
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 import { SESSION_COOKIE_NAME } from "@/lib/session";
 
-export async function POST(request: Request) {
+export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE_NAME);
-  return NextResponse.redirect(new URL("/admin/login", request.url));
+  redirect("/admin/login");
 }
