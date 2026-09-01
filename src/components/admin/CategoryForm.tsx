@@ -21,7 +21,8 @@ export function CategoryForm({
         <SlugField sourceName="name" defaultValue={category?.slug} />
       </div>
       <TextareaField label="Caption" name="caption" defaultValue={category?.caption} rows={3} required />
-      <Field label="Headline" name="headline" defaultValue={category?.headline ?? ""} hint="Banner + intro title, e.g. “Lifestyle Restaurants & Bars by SwillFam”." />
+      <Field label="Headline" name="headline" defaultValue={category?.headline ?? ""} hint="Hero banner title, e.g. “Dining, Cocktails, and Everything In Between”." />
+      <Field label="Intro title" name="introTitle" defaultValue={category?.introTitle ?? ""} hint="Title shown in the intro section below the hero, e.g. “Where Jakarta Comes to Gather”. Falls back to Headline if left blank." />
       <TextareaField label="Description" name="description" defaultValue={category?.description ?? ""} rows={6} hint="Long intro paragraph shown on the public category page." />
       <TextareaField label="Short description" name="shortDescription" defaultValue={category?.shortDescription ?? ""} rows={5} hint="Shown in the sibling-category section on the other category's page (e.g. promotes this category). Supports multiple paragraphs." />
       <SaveButton>Save category</SaveButton>

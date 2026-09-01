@@ -175,6 +175,7 @@ model Category {
   bannerImage String?
   caption     String
   headline    String?
+  introTitle  String?
   description String?
   shortDescription String?
   venues      Venue[]

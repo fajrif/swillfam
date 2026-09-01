@@ -36,8 +36,12 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         {/* Newsletter */}
         <Container className="border-x border-sf-border/60 bg-sf-deep flex flex-col items-center gap-4 py-8 text-center">
           <h2 className="font-syne text-[clamp(1.5rem,3.5vw,40px)] uppercase text-white">
-            Stay in the Loop!
+            In the Loop
           </h2>
+          <p className="max-w-[560px] font-inter text-base leading-relaxed text-white">
+            Be the first to know about upcoming events, exclusive deals, and what&rsquo;s
+            happening next across SwillFam.
+          </p>
           <form
             onSubmit={(e) => {
               e.preventDefault();

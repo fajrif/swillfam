@@ -52,10 +52,14 @@ export default async function VenuesPage() {
           />
       }
       heroContent={
-        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+        <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            Creating Jakarta&apos;s Most Memorable Nights
+            Spaces Made for Every Moment
           </h1>
+          <p className="max-w-2xl font-inter text-base leading-relaxed text-white md:text-lg">
+            Restaurants, bars, and nights out: eight SwillFam venues, each one built differently,
+            each one suits your everyday moment.
+          </p>
         </Container>
       }
     >

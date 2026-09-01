@@ -12,10 +12,14 @@ export type ArticleRow = {
   href?: string;
 };
 
-const DEFAULT_TITLE = "Guides & Journals";
+const DEFAULT_TITLE = "Notes from the scene";
+
+// Titles longer than this render at a smaller size so they don't wrap awkwardly
+// in the fixed-width intro column (short headings like "Notes from the scene" stay full-size).
+const SHORT_TITLE_MAX_LENGTH = 25;
 
 const DEFAULT_LEAD =
-  "Discover stories, recommendations, and insider guides from the SwillFam world. From where to go this weekend to what to try, what to book, and what not to miss, our guides help you experience the best of our venues.";
+  "Guides, stories, and insider notes from the venues shaping the city, where to go, what to try, and what's worth knowing to help you experience the best.";
 
 const DEFAULT_EXCERPT =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
@@ -51,17 +55,18 @@ export function ArticleListSection({
   ctaHref?: string;
 }) {
   const rows = articles ?? DEFAULT_ARTICLES.slice(0, limit);
-  const isLongTitle = title.length > "Guides & Journals".length;
+  const isLongTitle = title.length > SHORT_TITLE_MAX_LENGTH;
   return (
     <section className="py-16">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div className="flex max-w-[560px] flex-col gap-6">
           <h2
             className={cn(
-              "font-syne leading-[1.05] text-sf-text",
+              "font-syne text-sf-text",
               isLongTitle
                 ? "text-[clamp(1.75rem,3.5vw,40px)]"
                 : "text-[clamp(2.25rem,5vw,64px)]",
+              "leading-[0.95]",
             )}
           >
             {title}

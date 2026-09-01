@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Container } from "@/components/shared/Container";
+import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { whatsappHref } from "@/lib/whatsapp";
 
@@ -45,6 +46,12 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
 
   return (
     <section className="py-8 lg:py-16">
+      <Container className="mb-10">
+        <SectionHeading
+          title="Explore the Full Map"
+          lead="Every SwillFam venue, all in one place, see what's near you and plan your next stop."
+        />
+      </Container>
       <Container className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         {/* Map */}
         <div className="relative h-[420px] w-full overflow-hidden border border-sf-border/40 lg:sticky lg:top-24 lg:h-[600px]">

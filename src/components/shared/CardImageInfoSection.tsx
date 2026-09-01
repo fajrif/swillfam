@@ -9,7 +9,7 @@ export type TrustedCard = {
 };
 
 const DEFAULT_LEAD =
-  "SwillFam continues to grow through the people who visit, celebrate, dine, and create memories with us. Our venues are shaped by the energy of our guests, our teams, and the communities that make every experience feel alive.";
+  "Industry awards, distinguished features, recognition from the names that matter most in dining and nightlife, SwillFam's venues have earned their place among the city's best, and the credentials to prove it.";
 
 const DEFAULT_DESCRIPTION =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -26,7 +26,7 @@ const DEFAULT_CARDS: TrustedCard[] = [
  * the City's Crowd" section exactly when rendered with no props.
  */
 export function CardImageInfoSection({
-  title = "Trusted by the City's Crowd",
+  title = "Recognized by the Best",
   lead = DEFAULT_LEAD,
   cards = DEFAULT_CARDS,
   align = "center",
