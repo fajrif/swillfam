@@ -28,9 +28,14 @@ export function FeaturedEventSection({ event }: { event: FeaturedEventData | nul
   return (
     <section className="py-16 lg:py-20">
       <Container className="flex flex-col gap-8">
-        <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
-          Featured Events
-        </h2>
+        <div className="flex flex-col gap-3">
+          <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
+            Featured Events
+          </h2>
+          <p className="font-inter leading-relaxed">
+            A closer look at the nights currently taking center stage across every SwillFam venue.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7fr_4fr] lg:gap-12">
           <div className="relative aspect-[16/10] w-full overflow-hidden bg-sf-surface">

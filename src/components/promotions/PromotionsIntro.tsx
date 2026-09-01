@@ -5,9 +5,9 @@ export function PromotionsIntro() {
     <section className="py-16 lg:py-20">
       <Container className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col gap-4">
-          <span className="font-inter text-sm uppercase tracking-widest text-white">Our Promotions</span>
+          <span className="font-inter text-sm uppercase tracking-widest text-white">Our Current Offers</span>
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
-            Find Offers Made for Every Kind of Plan
+            The Full List Of Offers
           </h2>
         </div>
         <div className="flex flex-col gap-5">

@@ -100,10 +100,14 @@ export default async function EventsPage() {
           <Image src="/events/banner.png" alt="" fill className="object-cover" priority />
       }
       heroContent={
-        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+        <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            Discover What&rsquo;s Happening Next
+            Find Your Next Night Out
           </h1>
+          <p className="max-w-2xl font-inter text-base leading-relaxed text-white md:text-lg">
+            Explore what&apos;s on now, catch up on past events, and stay close to what&apos;s
+            coming next.
+          </p>
         </Container>
       }
     >

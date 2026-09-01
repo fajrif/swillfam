@@ -60,7 +60,7 @@ export default async function PromotionsPage() {
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            Food, Drinks, Ladies Night &amp; Venue Offers
+            Deals Worth Knowing About
           </h1>
         </Container>
       }

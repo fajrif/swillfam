@@ -139,6 +139,8 @@ export default async function TalentSlugPage({
             title={`Upcoming Events with ${talent.name}`}
             lead={`Catch ${talent.name} live at upcoming SwillFam events. Explore the latest event schedule, venue appearances, and special nights.`}
             offers={eventOffers}
+            ctaText="See all events"
+            ctaHref="/events"
           />
         </Reveal>
       ) : null}

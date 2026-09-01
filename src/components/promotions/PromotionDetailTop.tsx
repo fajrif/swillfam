@@ -32,7 +32,7 @@ export function PromotionDetailTop({
           </h1>
 
           <div className="flex flex-col gap-3">
-            <h2 className="font-syne text-xl font-bold text-white">About This Promotion</h2>
+            <h2 className="font-syne text-xl font-bold text-white">About This Offer</h2>
             <p className="whitespace-pre-line font-inter leading-relaxed">
               {promotion.description}
             </p>
