@@ -7,6 +7,7 @@ import {
   GetInTouchSection,
   LetsConnectSection,
   ContactVenuesSection,
+  ContactCtaSection,
 } from "@/components/contact";
 import { getSiteSettings } from "@/lib/site-settings";
 import { prisma } from "@/lib/prisma";
@@ -49,6 +50,10 @@ export default async function ContactPage() {
 
       <Reveal>
         <ContactVenuesSection venues={venues} />
+      </Reveal>
+
+      <Reveal>
+        <ContactCtaSection />
       </Reveal>
     </StickyHero>
   );

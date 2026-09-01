@@ -6,20 +6,15 @@ export function OurStorySection() {
   return (
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-12">
-        {/* Row 1: eyebrow + heading, vertically centered with the intro line */}
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div className="flex flex-col gap-2">
-            <p className="font-inter text-lg font-thin text-white">Our Story</p>
-            <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white mr-2">
-              More Than a Hospitality Group
-            </h2>
-          </div>
-          <p className="font-inter text-3xl leading-relaxed">
-            SwillFam began with a vision to redefine what nightlife could be.
-          </p>
+        {/* Row 1: eyebrow + heading */}
+        <div className="flex flex-col gap-2">
+          <p className="font-inter text-lg font-thin text-white">Our Story</p>
+          <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white mr-2">
+            More Than a Hospitality Group
+          </h2>
         </div>
 
-        {/* Row 2: image + remaining story text, "Not simply..." aligned to the image top */}
+        {/* Row 2: image + story text, "Not simply..." aligned to the image top */}
         <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
           <div className="relative aspect-[683/547] w-full overflow-hidden border border-sf-border/30">
             <ParallaxImage>
@@ -39,18 +34,23 @@ export function OurStorySection() {
               <br />
               Not simply events.
             </p>
-            <p className="text-lg leading-relaxed">
-              But destinations with personality, culture, and community at their core.
+            <p className="leading-relaxed">
+              Every SwillFam venue started the same way, with a gap we noticed in Jakarta&apos;s
+              dining and nightlife scene. Too many spaces felt interchangeable, built to a formula
+              rather than a feeling. So we set out to do it differently, treating each new concept as
+              its own world, shaped by its own music, menu, and mood, rather than a copy-paste of what
+              came before.
             </p>
             <p className="leading-relaxed">
-              What started as an ambition to create unique experiences has evolved into a growing
-              portfolio of hospitality concepts that have become part of Jakarta&apos;s social
-              landscape. Each venue is designed with its own identity, atmosphere, and purpose, while
-              remaining connected through a shared commitment to exceptional experiences.
+              That approach took us from a single hip-hop bar to a growing group of restaurants,
+              cocktail bars, and clubs across Jakarta, each with a distinct identity but the same
+              underlying standard: nothing generic, nothing half-considered. Chefs, bartenders, and
+              designers were given room to push their own ideas, which is why no two SwillFam spaces
+              look or feel alike.
             </p>
             <p className="leading-relaxed">
-              Today, SwillFam continues to bring together music, design, food, drinks, entertainment,
-              and people under one ecosystem, creating spaces where every visit feels memorable.
+              What hasn&apos;t changed is the reason people keep returning, spaces that feel made for
+              them, in a city that never runs out of reasons to go out.
             </p>
           </div>
         </div>

@@ -55,8 +55,8 @@ export default async function About() {
 
       <Reveal>
         <CardImageInfoSection
-          title="Our philosophy is grounded in three principles:"
-          lead=""
+          title="Our Philosophy"
+          lead="Rooted in a few core factors that shape every SwillFam venue, no matter how different they feel from one another."
           align="center"
           cards={PRINCIPLES}
         />
