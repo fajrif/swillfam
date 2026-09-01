@@ -5,10 +5,11 @@ export function TalentsIntro() {
     <section className="py-16 lg:py-20">
       <Container className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col gap-4">
-          <span className="font-inter text-sm uppercase tracking-widest text-white">The Talent</span>
-          <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
-            The People Who Create the Experience
-          </h2>
+          <span className="font-inter text-sm uppercase tracking-widest text-white">Our Talents</span>
+          <p className="max-w-2xl font-inter text-lg leading-relaxed text-white md:text-2xl">
+            From resident DJs to the chefs and bartenders shaping every plate and pour, meet the
+            people who bring the SwillFam experience to life.
+          </p>
         </div>
         <div className="flex flex-col gap-5">
           <p className="font-inter leading-relaxed">

@@ -68,8 +68,6 @@ export default async function PromotionSlugPage({
     getArticleRows(3),
   ]);
 
-  const venueName = promotion.venue?.name;
-
   const otherOffers: OfferCardData[] = otherPromotions.map((p) => ({
     id: p.id,
     image: p.image ?? p.posterImage,
@@ -100,12 +98,8 @@ export default async function PromotionSlugPage({
       {otherOffers.length > 0 ? (
         <Reveal>
           <OfferCardSection
-            title={venueName ? `Other Promotions at ${venueName}` : "Other Promotions"}
-            lead={
-              venueName
-                ? `Discover more active promotions currently available at ${venueName}. Explore the latest offers and find the promotion that best fits your next night out.`
-                : "Discover more active promotions currently available across SwillFam venues."
-            }
+            title="More Offers To Explore"
+            lead="Other promotions currently running across SwillFam venues that might be worth checking out."
             offers={otherOffers}
           />
         </Reveal>

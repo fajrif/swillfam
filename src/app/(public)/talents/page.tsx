@@ -57,9 +57,9 @@ export default async function TalentsPage() {
           <Image src="/talents/banner.png" alt="" fill className="object-cover" priority />
       }
       heroContent={
-        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
+        <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            Talents That Move the Scene
+            The People Behind the Experience
           </h1>
         </Container>
       }

@@ -82,11 +82,10 @@ export function EventCalendarSection({
         {/* Intro */}
         <div className="flex flex-col gap-5">
           <h2 className="font-syne text-[clamp(2rem,4vw,48px)] leading-tight text-white">
-            Event Calendar
+            Discover What&apos;s On and When
           </h2>
           <p className="font-inter leading-relaxed">
-            Browse SwillFam events through a monthly calendar view. Select a date to see what is
-            happening across our venues and plan your visit based on your schedule.
+            A running record of every SwillFam night, sorted, dated, and easy to plan around.
           </p>
 
           {venueOptions.length > 0 && (
