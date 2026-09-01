@@ -54,8 +54,8 @@ export function Hero({
       }
       heroContent={
         <Container className="relative z-10 grid h-full w-full grid-cols-1 items-end gap-8 pb-12 lg:grid-cols-[1fr_auto] lg:pb-16">
-          <h1 className="font-syne text-[clamp(3.25rem,13vw,130px)] font-bold uppercase leading-[0.9] tracking-tight text-white">
-            SwillFam
+          <h1 className="font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] tracking-tight text-white">
+            What&rsquo;s on the Radar
           </h1>
 
           <div className="flex max-w-[450px] flex-col gap-5">
@@ -110,8 +110,10 @@ export function Hero({
               </>
             )}
 
-            <p className="font-syne text-2xl font-semibold leading-snug text-white lg:text-[33px]">
-              Discover the City&rsquo;s Best Lifestyle &amp; Nightlife Experiences
+            <p className="font-inter text-base leading-relaxed text-white md:text-lg">
+              Check out what&rsquo;s drawing the city&rsquo;s attention right now. Immersive
+              spaces, unforgettable energy, and experiences built for those who want more than
+              just a night out.
             </p>
           </div>
         </Container>

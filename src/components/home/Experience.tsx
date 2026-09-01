@@ -10,8 +10,8 @@ export function Experience() {
       <Container className="flex flex-col items-center gap-10">
         <SectionHeading
           align="center"
-          title="The SwillFam Experience"
-          lead="Swillfam is designed to make discovery easier. We connect people with venues, events, and stories that match their lifestyle, from casual nights out to curated social experiences and exclusive gatherings."
+          title="The Swillfam Experience"
+          lead="Morning padel at Kilo Cafe. A long lunch at Atsumaru. Cocktails at Dualism or Truce as the sun goes down. Then Zoo, Le Cirque, or Swillhouse when the night really starts. SwillFam is built for the full day: eight venues, one uninterrupted experience, entirely yours."
         />
 
         <div className="relative w-full overflow-hidden bg-sf-surface">

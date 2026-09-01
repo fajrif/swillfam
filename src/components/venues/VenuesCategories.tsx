@@ -9,7 +9,8 @@ export function VenuesCategories({ categories }: { categories: Category[] }) {
     <section className="pt-8 lg:pt-16">
       <Container>
         <SectionHeading
-          title="Explore by Category"
+          title="Two Sides of the Same City"
+          lead="Good company by day, real energy after dark. Every mood, covered."
           titleClassName="mb-4"
         />
       </Container>

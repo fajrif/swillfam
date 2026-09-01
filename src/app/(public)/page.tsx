@@ -83,8 +83,8 @@ export default async function Home() {
       {upcomingEvents.length > 0 ? (
         <Reveal>
           <OfferCardSection
-            title="Upcoming Events"
-            lead="Stay updated with upcoming events, special programs, parties, collaborations, and community gatherings happening across Swillfam's network."
+            title="On the Calendar"
+            lead="New nights, new lineups, new reasons to show up. Here's what's happening across SwillFam venues."
             offers={upcomingEvents}
             ctaText="See all events"
             ctaHref="/events"

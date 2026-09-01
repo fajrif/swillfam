@@ -32,12 +32,12 @@ export function ContinueExperience() {
             <div className="flex flex-1 flex-col justify-between gap-6">
               <div className="flex flex-col gap-4">
                 <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                  Continue the Experience
+                  Plan Your Swillfam Day
                 </h3>
                 <p className="mb-5 font-inter leading-relaxed">
-                  There is more to discover across the SwillFam world. Explore our experiences,
-                  upcoming events, and private event offerings to find the right moment for your next
-                  visit, celebration, or gathering.
+                  Morning coffee, an easy lunch, sundown drinks, or a night that runs late, every
+                  part of the day has a space made for it. Discover where to go, and when, so every
+                  hour feels like the right one.
                 </p>
               </div>
               <SpecularButton href="/experience" size="lg" radius={30} className="w-fit">
@@ -50,12 +50,12 @@ export function ContinueExperience() {
           <div className="flex flex-col justify-between gap-6 p-4 lg:border-l lg:border-sf-border/40">
             <div className="flex flex-col gap-4">
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                Explore Events
+                See What&apos;s Happening
               </h3>
               <p className="mb-5 font-inter leading-relaxed">
-                Explore upcoming lifestyle and nightlife events happening across SwillFam venues,
-                from relaxed gatherings and social meetups to high-energy nights, live entertainment,
-                and special experiences designed to bring people together.
+                New nights, featured collaborations, and moments worth showing up for. Stay close
+                to what&apos;s currently on across every SwillFam venue and catch the next one
+                before it passes.
               </p>
             </div>
             <SpecularButton href="/events" size="lg" radius={30} className="w-fit">
@@ -70,12 +70,12 @@ export function ContinueExperience() {
           <div className="flex flex-col justify-between gap-6 border-b border-sf-border/40 p-4 lg:border-b-0">
             <div className="flex flex-col gap-4">
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                Explore Promotions
+                What&apos;s On Offer
               </h3>
               <p className="mb-5 font-inter leading-relaxed">
-                SwillFam promotions bring the latest offers, specials, and venue deals together in
-                one place, making it easier to enjoy food, drinks, events, and nightlife experiences
-                across the SwillFam world.
+                Limited offers, seasonal specials, and perks worth knowing about. Keep an eye on
+                what&apos;s currently available across SwillFam venues and make the most of your
+                next visit.
               </p>
             </div>
             <SpecularButton href="/promotions" size="lg" radius={30} className="w-fit">
@@ -88,13 +88,12 @@ export function ContinueExperience() {
             <div className="flex flex-1 flex-col justify-between gap-6">
               <div className="flex flex-col gap-4">
                 <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                  Private Events at SwillFam
+                  Host Your Moments
                 </h3>
                 <p className="mb-5 font-inter leading-relaxed">
-                  Plan your next corporate gathering, birthday, wedding, brand activation, or private
-                  celebration with SwillFam. With flexible venues, curated food and beverage options,
-                  and dedicated event support, our team helps create seamless experiences tailored to
-                  your guests, goals, and occasion.
+                  Celebrations, gatherings, and occasions that deserve a space of their own. Our
+                  venues can be shaped around your event, giving you the setting and the atmosphere
+                  to match.
                 </p>
               </div>
               <SpecularButton href="/private-events" size="lg" radius={30} className="w-fit">

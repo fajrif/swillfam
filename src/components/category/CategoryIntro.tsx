@@ -22,7 +22,7 @@ export function CategoryIntro({ category }: { category: Category }) {
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
-            {category.headline ?? category.name}
+            {category.introTitle ?? category.headline ?? category.name}
           </h2>
           <div className="flex flex-col justify-center">
             <p className="whitespace-pre-line font-inter leading-relaxed">
