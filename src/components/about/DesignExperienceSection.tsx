@@ -15,11 +15,13 @@ export function DesignExperienceSection() {
           </div>
           <div className="flex items-center">
             <p className="text-xl font-inter leading-relaxed">
-              We believe the best venues are more than places to eat or drink, they become part of
-              people&apos;s lives. Every SwillFam concept is built around a unique identity,
-              carefully shaped through design, atmosphere, music, culinary direction, and service. We
-              pay attention to every detail because great experiences are created through thousands
-              of thoughtful decisions.
+              At SwillFam, every venue is judged by one question: does it earn its place in the room?
+              That belief shapes everything from a menu&apos;s first draft to the last detail of a
+              room&apos;s lighting, nothing added just to fill space, nothing left generic because it
+              was easier. Concepts are built from the ground up rather than adapted from a template,
+              which is why a night at Atsumaru feels nothing like a night at Zoo, even though both
+              carry the same underlying standard, craft, character, and consistency in every room we
+              build.
             </p>
           </div>
         </div>

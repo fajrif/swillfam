@@ -2,11 +2,11 @@ import { Container } from "@/components/shared/Container";
 import { FlowingMenu } from "@/components/reactbits/FlowingMenu";
 
 const FLOWING_ITEMS = [
-  { link: "#", text: "Experience", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
-  { link: "#", text: "Innovation", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
-  { link: "#", text: "Culture", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
-  { link: "#", text: "Quality", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
-  { link: "#", text: "Growth", image: "", description: "SwillFam is built around culture, connection, and shared experiences. Through food, drinks, music, venues, and events, SwillFam creates spaces where people come together, express themselves, and become part of the city’s lifestyle scene.", },
+  { link: "#", text: "Experience", image: "", description: "Every SwillFam venue is built around how it makes guests feel, not just what it looks like." },
+  { link: "#", text: "Innovation", image: "", description: "We treat every new concept as a chance to push past what's already been done, rather than repeat it." },
+  { link: "#", text: "Culture", image: "", description: "Our venues are shaped by the people, music, and moments that define Jakarta's evolving identity." },
+  { link: "#", text: "Quality", image: "", description: "Every detail, from the menu to the room, is held to a standard that doesn't get compromised." },
+  { link: "#", text: "Growth", image: "", description: "We expand only when a new concept has something genuinely different to offer, not just to grow bigger." },
 ];
 
 export function WhatWeStandForFlowingSection() {

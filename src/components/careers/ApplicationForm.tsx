@@ -32,11 +32,10 @@ export function ApplicationForm({ careers }: { careers: { id: string; jobTitle: 
   return (
     <form action={formAction} className="flex flex-col gap-8">
       <h2 className="font-syne text-[clamp(1.75rem,4vw,40px)] leading-tight text-white">
-        Apply Now
+        Thinking about a career in SwillFam?
       </h2>
       <p className="font-inter leading-relaxed">
-        Interested in joining SwillFam? Fill in the application form below and our team will review
-        your submission.
+        Fill out the form below and we&apos;ll get back to you.
       </p>
 
       {/* Honeypot — visually hidden from sighted users, not display:none, so it still trips up bots. */}
