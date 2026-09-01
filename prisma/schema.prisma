@@ -187,6 +187,10 @@ model Venue {
   id              String           @id @default(uuid())
   name            String
   slug            String           @unique
+  heroTitle       String?
+  heroDescription String?
+  talentSectionTitle       String?
+  talentSectionDescription String?
   description     String
   shortDescription String?
   caption         String?

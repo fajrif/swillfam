@@ -131,8 +131,13 @@ export default async function VenueSlugPage({
             </span>
           ) : null}
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            {venue.name}
+            {venue.heroTitle ?? venue.name}
           </h1>
+          {venue.heroDescription ? (
+            <p className="max-w-2xl font-inter text-base leading-relaxed text-white md:text-lg">
+              {venue.heroDescription}
+            </p>
+          ) : null}
         </Container>
       }
     >
@@ -158,15 +163,22 @@ export default async function VenueSlugPage({
 
       {venue.talents.length > 0 ? (
         <Reveal>
-          <TalentSection talents={venue.talents} />
+          <TalentSection
+            talents={venue.talents}
+            title={venue.talentSectionTitle ?? "Meet the Team"}
+            description={
+              venue.talentSectionDescription ??
+              `The chefs and crew behind every dish and drink at ${venue.name}.`
+            }
+          />
         </Reveal>
       ) : null}
 
       {eventItems.length > 0 ? (
         <Reveal>
           <OfferCardSection
-            title={`What's Happening at ${venue.name}`}
-            lead="Discover upcoming events, live performances, and special nights happening at this venue."
+            title="What's Coming Next"
+            lead={`Stay close to what's coming next at ${venue.name}.`}
             offers={eventItems}
             ctaText="See all events"
             ctaHref="/events"
@@ -177,8 +189,8 @@ export default async function VenueSlugPage({
       {promotionItems.length > 0 ? (
         <Reveal>
           <EventSectionWithImage
-            title="Current Promotions"
-            description="Make the most of your visit with the latest offers and promotions running at this venue."
+            title="Current Offers"
+            description={`Limited-time deals and seasonal specials worth checking before your next visit to ${venue.name}.`}
             ctaText="See all promotions"
             ctaHref="/promotions"
             items={promotionItems}

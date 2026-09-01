@@ -15,7 +15,12 @@ function parse(formData: FormData) {
   const lngRaw = String(formData.get("lng") ?? "").trim();
   return {
     name: String(formData.get("name") ?? "").trim(),
+    heroTitle: String(formData.get("heroTitle") ?? "").trim() || null,
+    heroDescription: String(formData.get("heroDescription") ?? "").trim() || null,
+    caption: String(formData.get("caption") ?? "").trim() || null,
     description: String(formData.get("description") ?? "").trim(),
+    talentSectionTitle: String(formData.get("talentSectionTitle") ?? "").trim() || null,
+    talentSectionDescription: String(formData.get("talentSectionDescription") ?? "").trim() || null,
     categoryId: categoryId || null,
     operatingHours: String(formData.get("operatingHours") ?? "").trim(),
     location: String(formData.get("location") ?? "").trim(),
