@@ -56,7 +56,16 @@ export function VenueForm({
         />
       </div>
 
+      <Field label="Hero title" name="heroTitle" defaultValue={venue?.heroTitle ?? ""} hint="Big hero headline, e.g. “Izakaya Culture, Reimagined”. Falls back to Name if left blank." />
+      <TextareaField label="Hero description" name="heroDescription" defaultValue={venue?.heroDescription ?? ""} rows={2} hint="Short paragraph shown under the hero title." />
+
+      <Field label="Caption" name="caption" defaultValue={venue?.caption ?? ""} hint="Overview section title, e.g. “Tokyo Roots, Jakarta Table”." />
       <TextareaField label="Description" name="description" defaultValue={venue?.description} rows={4} required />
+
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Talent section title" name="talentSectionTitle" defaultValue={venue?.talentSectionTitle ?? ""} hint="Team section heading, e.g. “Meet the Bar Team”. Falls back to “Meet the Team”." />
+        <Field label="Talent section description" name="talentSectionDescription" defaultValue={venue?.talentSectionDescription ?? ""} hint="e.g. “The mixologists and bartenders behind every pour at Dualism.”" />
+      </div>
 
       <Field label="Location / address" name="location" defaultValue={venue?.location} required />
 

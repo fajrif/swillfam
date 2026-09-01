@@ -10,7 +10,7 @@ import { whatsappHref } from "@/lib/whatsapp";
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 const DEFAULT_CENTER = { longitude: 106.809, latitude: -6.2249 }; // SCBD, Jakarta
 
-/** "Location & Operating Hours" — info panel + single-venue Mapbox map. */
+/** "Location Map & Operating Hours" — info panel + single-venue Mapbox map. */
 export function VenueLocationHours({
   name,
   location,
@@ -41,7 +41,10 @@ export function VenueLocationHours({
   return (
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-8 lg:gap-12">
-        <SectionHeading title="Location & Operating Hours" />
+        <SectionHeading
+          title="Location Map & Operating Hours"
+          lead={`Find ${name}, along with hours and directions to plan your visit ahead of time.`}
+        />
 
         <div className="grid grid-cols-1 divide-y divide-sf-border/40 border border-sf-border/40 lg:grid-cols-2 lg:divide-x lg:divide-y-0">
           {/* Info panel */}
