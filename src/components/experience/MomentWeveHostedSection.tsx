@@ -10,7 +10,7 @@ const MOMENT_STEPS: MomentStep[] = [
     title: "Kilo Padel Cafe [Coming Soon]",
     time: "9:00 AM – 12:00 PM",
     tags: "Padel, brunch, coffee",
-    cta: "Reserve a Court",
+    cta: "Reserve Now",
     image: "/experience/plan-1.png",
   },
   {
@@ -28,7 +28,7 @@ const MOMENT_STEPS: MomentStep[] = [
     title: "Kilo Jakarta",
     time: "7:00 PM – 9:30 PM",
     tags: "Dinner, cocktails, group dining",
-    cta: "Reserve Table",
+    cta: "Reserve Now",
     image: "/experience/plan-3.png",
   },
   {
@@ -37,7 +37,7 @@ const MOMENT_STEPS: MomentStep[] = [
     title: "Dualism / Bar Truce",
     time: "9:30 PM – 12:00 AM",
     tags: "Cocktails, lounge, pre-game drinks",
-    cta: "Reserve Table",
+    cta: "Reserve Now",
     image: "/experience/plan-4.png",
   },
   {
@@ -46,7 +46,7 @@ const MOMENT_STEPS: MomentStep[] = [
     title: "Swillhouse / Le Cirque / Zoo",
     time: "12:00 AM onwards",
     tags: "Nightlife, live DJs, bottle service, dancing",
-    cta: "See Lineup",
+    cta: "Reserve Now",
     image: "/experience/plan-5.png",
   },
 ];
@@ -57,11 +57,11 @@ export function MomentWeveHostedSection() {
     <section className="py-16 lg:py-24">
       <Container>
         <h2 className="text-center font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
-          Moments We&apos;ve Hosted
+          The Day, Mapped Out
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-center font-inter leading-relaxed">
-          Explore a selection of celebrations, corporate functions, launches, and special occasions
-          hosted across the SwillFam family of venues.
+          A visual look at how one day moves through SwillFam, from the first coffee to the last
+          call, and every venue in between.
         </p>
 
         <MomentJourneyTrack steps={MOMENT_STEPS} />

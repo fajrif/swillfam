@@ -77,7 +77,7 @@ export default async function ExperiencePage() {
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
           <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            Your Day, Our Way
+            From First Serve to Last Call.
           </h1>
         </Container>
       }
@@ -101,8 +101,8 @@ export default async function ExperiencePage() {
       {upcomingEvents.length > 0 ? (
         <Reveal>
           <OfferCardSection
-            title="What's Happening This Week"
-            lead="Explore upcoming events across SwillFam venues and see what is happening this week. From dining experiences and regular programs to music nights and special events, there is always something to discover."
+            title="This Week Across SwillFam"
+            lead="A running look at what's currently happening across every SwillFam venue this week."
             offers={upcomingEvents}
           />
         </Reveal>
@@ -111,8 +111,8 @@ export default async function ExperiencePage() {
       {currentPromotions.length > 0 ? (
         <Reveal>
           <OfferCardSection
-            title="Current Promotions"
-            lead="Make your next SwillFam visit even better with active promotions across our venues. Explore selected offers for food, drinks, ladies night, group packages, table deals, and seasonal specials."
+            title="Deals Worth Knowing About"
+            lead="Limited-time offers and seasonal specials currently available across SwillFam venues."
             offers={currentPromotions}
           />
         </Reveal>
