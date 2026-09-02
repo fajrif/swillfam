@@ -66,7 +66,10 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
 
   return (
     <>
-      <PrivateEventBanner image={privateEvent.bannerImage ?? privateEvent.image} title={privateEvent.title} />
+      <PrivateEventBanner
+        image={privateEvent.bannerImage ?? privateEvent.image}
+        title={privateEvent.heroTitle ?? privateEvent.title}
+      />
 
       <Reveal>
         <PrivateEventIntro caption={privateEvent.caption} description={privateEvent.description} />
@@ -97,6 +100,7 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
       <Reveal>
         <RecommendedVenuesSection
           title={privateEvent.venuesTitle ?? `Recommended Venues for ${privateEvent.title}`}
+          lead="Not sure where to start? Here are the venues best suited for your kind of event."
           venues={privateEvent.venues}
         />
       </Reveal>

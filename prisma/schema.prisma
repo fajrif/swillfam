@@ -415,6 +415,7 @@ model PrivateEvent {
   image              String?
   bannerImage        String?
   title              String
+  heroTitle          String?
   slug               String            @unique
   caption            String
   shortDescription   String

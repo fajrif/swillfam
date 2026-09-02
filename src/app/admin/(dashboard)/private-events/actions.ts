@@ -20,6 +20,7 @@ function parse(formData: FormData) {
 
   return {
     title: String(formData.get("title") ?? "").trim(),
+    heroTitle: optional("heroTitle"),
     caption: String(formData.get("caption") ?? "").trim(),
     shortDescription: String(formData.get("shortDescription") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
