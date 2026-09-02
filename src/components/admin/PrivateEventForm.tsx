@@ -35,9 +35,15 @@ export function PrivateEventForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Title" name="title" defaultValue={privateEvent?.title} required hint=" " />
+        <Field label="Title" name="title" defaultValue={privateEvent?.title} required hint="Short label used on the archive page's card." />
         <SlugField sourceName="title" defaultValue={privateEvent?.slug} />
       </div>
+      <Field
+        label="Hero title"
+        name="heroTitle"
+        defaultValue={privateEvent?.heroTitle ?? ""}
+        hint="Detail-page banner headline, e.g. “Corporate Events at SwillFam”. Falls back to Title if left blank."
+      />
 
       <SelectField
         label="Event type"

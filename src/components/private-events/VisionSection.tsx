@@ -9,26 +9,27 @@ export function VisionSection() {
         <div className="flex flex-col gap-6">
           <p className="font-inter text-lg font-thin text-white">Philosophy &amp; Experience</p>
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
-            Events Designed Around Your Vision
+            Host it with SwillFam
           </h2>
         </div>
 
         <div className="flex flex-col gap-6">
           <p className="font-inter leading-relaxed">
-            Whether you&apos;re organizing a corporate function, birthday celebration, brand launch,
-            wedding reception, or private gathering, SwillFam provides distinctive venues and flexible
-            event solutions across our portfolio.
+            SwillFam is home to some of Jakarta&apos;s most versatile private event venues, each one
+            built to fit the occasion. Planning a birthday party? Our birthday party venues range
+            from intimate rooms to full-scale takeovers, giving every celebration its own character.
+            For a graduation party, a private party, or simply a night to mark a milestone, our
+            venues offer the flexibility to shape the space around your guest list and vibe.
           </p>
           <p className="font-inter leading-relaxed">
-            Each space is designed with its own character, giving you the freedom to choose an
-            atmosphere that matches the tone of your event, from relaxed and intimate to energetic,
-            premium, and high-impact.
+            On the corporate side, SwillFam venues double as reliable spaces for corporate events,
+            office parties, and everything in between, from client dinners to full-scale corporate
+            parties. And for couples looking to keep the celebration going, our spaces make for one
+            of the city&apos;s most sought-after settings for a wedding after party, giving guests a
+            reason to stay out long after the reception ends.
           </p>
           <p className="font-inter leading-relaxed">
-            Our team works closely with you to understand your objectives, guest list, preferred
-            setup, food and beverage needs, entertainment direction, and overall event flow. From the
-            first inquiry to the final execution, we help shape the experience so every detail feels
-            aligned with your vision.
+            Whatever the occasion, SwillFam offers a private event venue built to match the moment.
           </p>
           <SpecularButton href="/venues" size="lg" radius={30} className="w-fit">
             View All Venues
