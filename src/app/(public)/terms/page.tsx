@@ -1,12 +1,16 @@
 import { Fragment } from "react";
 import type { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 import { LegalDocument, type LegalSection } from "@/components/legal/LegalDocument";
 import { LegalHero } from "@/components/legal/LegalHero";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions | Swillfam",
-  description: "Terms and conditions governing the use of Swillfam Group's website and venues.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "terms" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 const sections: LegalSection[] = [
   {

@@ -22,11 +22,13 @@ import { dateKey, formatEventSchedule, formatHour, type CalendarEvent } from "@/
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Events | SwillFam",
-  description:
-    "Stay updated with upcoming events, parties, and gatherings across SwillFam's network.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "events" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function EventsPage() {
   const [settings, articles, events, venues, categories] = await Promise.all([

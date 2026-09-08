@@ -3,6 +3,7 @@ import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
+import { SeoFields } from "./SeoFields";
 import { toDateInputValue } from "@/lib/date";
 
 export function PromotionForm({
@@ -70,6 +71,8 @@ export function PromotionForm({
         <Field label="Start time" name="startHour" type="time" defaultValue={promotion?.startHour} required />
         <Field label="End time" name="endHour" type="time" defaultValue={promotion?.endHour} required />
       </div>
+
+      <SeoFields titleValue={promotion?.metaTitle} descriptionValue={promotion?.metaDescription} />
 
       <SaveButton>Save promotion</SaveButton>
     </form>

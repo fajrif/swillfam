@@ -2,6 +2,7 @@ import type { Venue } from "@/generated/prisma/client";
 import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
+import { SeoFields } from "./SeoFields";
 
 const OPERATING_HOURS_PRESETS = [
   "Monday - Sunday: 12:00 - 03:00",
@@ -84,6 +85,8 @@ export function VenueForm({
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={venue?.spotifyEmbed ?? ""} rows={2} />
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={venue?.youtubeEmbed ?? ""} rows={2} />
       <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={venue?.instagramEmbed ?? ""} rows={2} />
+
+      <SeoFields titleValue={venue?.metaTitle} descriptionValue={venue?.metaDescription} />
 
       <SaveButton>Save venue</SaveButton>
     </form>

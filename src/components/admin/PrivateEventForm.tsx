@@ -9,6 +9,7 @@ import {
 } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
+import { SeoFields } from "./SeoFields";
 
 export function PrivateEventForm({
   action,
@@ -134,6 +135,8 @@ export function PrivateEventForm({
         <Field label="Sort order" name="sortOrder" type="number" defaultValue={privateEvent?.sortOrder ?? 0} />
         <CheckboxField label="Published" name="published" defaultChecked={privateEvent?.published ?? true} />
       </div>
+
+      <SeoFields titleValue={privateEvent?.metaTitle} descriptionValue={privateEvent?.metaDescription} />
 
       <SaveButton>Save private event</SaveButton>
     </form>

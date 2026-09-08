@@ -35,6 +35,8 @@ function parse(formData: FormData) {
     ticketInfo: String(formData.get("ticketInfo") ?? "").trim() || null,
     waPhone: String(formData.get("waPhone") ?? "").trim() || null,
     ticketLink: String(formData.get("ticketLink") ?? "").trim() || null,
+    metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
+    metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
 }
 

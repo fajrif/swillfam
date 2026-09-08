@@ -3,6 +3,7 @@ import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
+import { SeoFields } from "./SeoFields";
 import { toDateInputValue } from "@/lib/date";
 
 export function ArticleForm({
@@ -59,6 +60,8 @@ export function ArticleForm({
       />
 
       <RichTextEditor name="description" label="Content" defaultValue={article?.description ?? ""} />
+
+      <SeoFields titleValue={article?.metaTitle} descriptionValue={article?.metaDescription} />
 
       <SaveButton>Save article</SaveButton>
     </form>

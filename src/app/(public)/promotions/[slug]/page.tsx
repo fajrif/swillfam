@@ -41,8 +41,8 @@ export async function generateMetadata({
   const promotion = await getPromotionBySlug(slug);
   if (!promotion) return { title: "Promotion | SwillFam" };
   return {
-    title: `${promotion.name} | SwillFam`,
-    description: promotion.shortDescription,
+    title: promotion.metaTitle || `${promotion.name} | SwillFam`,
+    description: promotion.metaDescription || promotion.shortDescription,
   };
 }
 

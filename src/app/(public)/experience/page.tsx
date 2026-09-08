@@ -24,11 +24,13 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 // admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "The SwillFam Experience | SwillFam",
-  description:
-    "One day, different ways to experience SwillFam — a journey through the city from morning coffee to late-night events across our venues.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "experience" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function ExperiencePage() {
   const [settings, articles, promotions, events] = await Promise.all([

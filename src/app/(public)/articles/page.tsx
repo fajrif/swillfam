@@ -9,11 +9,13 @@ import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 
-export const metadata: Metadata = {
-  title: "Articles & Journals | SwillFam",
-  description:
-    "Stories, recommendations, and insider guides from the SwillFam world — nightlife, lifestyle, talents, and the people who make every night memorable.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "articles" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 const PAGE_SIZE = 9;

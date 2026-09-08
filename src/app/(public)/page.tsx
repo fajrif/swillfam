@@ -17,11 +17,13 @@ import { formatEventSchedule } from "@/lib/event-calendar";
 // admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
-  description:
-    "SwillFam connects people with the city's best venues, events, and stories — from casual nights out to curated social experiences and exclusive gatherings.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "home" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function Home() {
   const [settings, articles, events, categories] = await Promise.all([

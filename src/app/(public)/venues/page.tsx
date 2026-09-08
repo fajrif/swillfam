@@ -14,11 +14,13 @@ import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection }
 // periodically so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Venues | SwillFam",
-  description:
-    "Explore SwillFam's distinctive venues — each with its own concept, atmosphere, and experience. Browse by category and find every destination on the map.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "venues" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function VenuesPage() {
   const [settings, categories, venues, articles] = await Promise.all([
