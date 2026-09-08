@@ -38,6 +38,11 @@ function parse(formData: FormData) {
   };
 }
 
+/** The talent checkbox group posts one `talentIds` entry per ticked box. */
+function talentIds(formData: FormData) {
+  return formData.getAll("talentIds").map((id) => ({ id: String(id) }));
+}
+
 async function uniqueSlug(formData: FormData, excludeId?: string) {
   const base = String(formData.get("slug") ?? "").trim() || String(formData.get("name") ?? "").trim();
   return ensureUniqueSlug(base, async (s) => {
@@ -52,7 +57,17 @@ export async function createEventAction(formData: FormData) {
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: [] });
   const slug = await uniqueSlug(formData);
-  await prisma.event.create({ data: { ...parse(formData), slug, image, bannerImage, posterImage, galleries } });
+  await prisma.event.create({
+    data: {
+      ...parse(formData),
+      slug,
+      image,
+      bannerImage,
+      posterImage,
+      galleries,
+      talents: { connect: talentIds(formData) },
+    },
+  });
   revalidatePath(BASE);
   revalidatePath("/events");
   revalidatePath(`/events/${slug}`);
@@ -67,7 +82,19 @@ export async function updateEventAction(id: string, formData: FormData) {
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: current.galleries });
   const slug = await uniqueSlug(formData, id);
-  await prisma.event.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, posterImage, galleries } });
+  await prisma.event.update({
+    where: { id },
+    data: {
+      ...parse(formData),
+      slug,
+      image,
+      bannerImage,
+      posterImage,
+      galleries,
+      // `set` replaces the whole selection, so unticking a box unlinks it.
+      talents: { set: talentIds(formData) },
+    },
+  });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/events");

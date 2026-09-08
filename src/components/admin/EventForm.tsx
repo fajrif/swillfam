@@ -1,5 +1,5 @@
 import type { Event } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, CheckboxField, CheckboxGroupField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { RichTextEditor } from "./RichTextEditor";
 import { SlugField } from "./SlugField";
@@ -11,11 +11,15 @@ export function EventForm({
   event,
   venues,
   categories,
+  talents,
+  selectedTalentIds = [],
 }: {
   action: (formData: FormData) => void;
   event?: Event;
   venues: { id: string; name: string }[];
   categories: { id: string; name: string }[];
+  talents: { id: string; name: string }[];
+  selectedTalentIds?: string[];
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
@@ -54,6 +58,14 @@ export function EventForm({
           options={venues.map((v) => ({ value: v.id, label: v.name }))}
         />
       </div>
+
+      <CheckboxGroupField
+        label="Talents"
+        name="talentIds"
+        options={talents.map((t) => ({ value: t.id, label: t.name }))}
+        defaultValues={selectedTalentIds}
+        hint="Talents performing at this event."
+      />
 
       <Field label="Caption" name="caption" defaultValue={event?.caption} required />
       <TextareaField label="Short description" name="shortDescription" defaultValue={event?.shortDescription} rows={2} required />

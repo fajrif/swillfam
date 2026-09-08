@@ -19,6 +19,7 @@ import { type OfferCardData } from "@/components/shared/OfferCard";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { TalentSection } from "@/components/venues";
 import {
   EventCountdown,
   EventDetailBanner,
@@ -37,7 +38,7 @@ export const revalidate = 60;
 const getEventBySlug = cache((slug: string) =>
   prisma.event.findUnique({
     where: { slug },
-    include: { venue: true, eventCategory: true },
+    include: { venue: true, eventCategory: true, talents: { orderBy: { name: "asc" } } },
   }),
 );
 
@@ -232,6 +233,16 @@ export default async function EventSlugPage({
             venueName={venue?.name ?? null}
             phone={phone}
             active={event.active}
+          />
+        </Reveal>
+      ) : null}
+
+      {event.talents.length > 0 ? (
+        <Reveal>
+          <TalentSection
+            talents={event.talents}
+            title="Featured Talents"
+            description={`Meet the talents performing at ${event.name}.`}
           />
         </Reveal>
       ) : null}
