@@ -46,8 +46,8 @@ export async function generateMetadata({
   const talent = await getTalentBySlug(slug);
   if (!talent) return { title: "Talent | SwillFam" };
   return {
-    title: `${talent.name} | SwillFam`,
-    description: talent.description,
+    title: talent.metaTitle || `${talent.name} | SwillFam`,
+    description: talent.metaDescription || talent.description,
   };
 }
 

@@ -33,6 +33,8 @@ function parse(formData: FormData) {
     galleryLead: optional("galleryLead"),
     sortOrder: Number.parseInt(String(formData.get("sortOrder") ?? "0"), 10) || 0,
     published: formData.get("published") === "true",
+    metaTitle: optional("metaTitle"),
+    metaDescription: optional("metaDescription"),
   };
 }
 

@@ -28,6 +28,8 @@ function parse(formData: FormData) {
     endDate: new Date(String(formData.get("endDate"))),
     startHour: String(formData.get("startHour") ?? "").trim(),
     endHour: String(formData.get("endHour") ?? "").trim(),
+    metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
+    metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
 }
 

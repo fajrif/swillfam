@@ -15,11 +15,13 @@ import { StandForColumnsSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 
-export const metadata: Metadata = {
-  title: "Merchandise | SwillFam",
-  description:
-    "SwillFam merchandise made for those who live the scene beyond the venue — selected pieces inspired by our venues, events, and lifestyle culture.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "merchandise" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 const PAGE_SIZE = 9;
 

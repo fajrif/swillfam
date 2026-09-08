@@ -2,6 +2,7 @@ import type { Talent } from "@/generated/prisma/client";
 import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
+import { SeoFields } from "./SeoFields";
 
 export function TalentForm({
   action,
@@ -44,6 +45,8 @@ export function TalentForm({
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={talent?.spotifyEmbed ?? ""} rows={2} hint="Paste the full <iframe> embed code. Shown in the talent's Signature Sound section." />
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={talent?.youtubeEmbed ?? ""} rows={2} />
       <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={talent?.instagramEmbed ?? ""} rows={2} />
+
+      <SeoFields titleValue={talent?.metaTitle} descriptionValue={talent?.metaDescription} />
 
       <SaveButton>Save talent</SaveButton>
     </form>

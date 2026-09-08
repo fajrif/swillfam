@@ -27,8 +27,8 @@ export async function generateMetadata({
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "Article | SwillFam" };
   return {
-    title: `${article.title} | SwillFam`,
-    description: article.shortDescription,
+    title: article.metaTitle || `${article.title} | SwillFam`,
+    description: article.metaDescription || article.shortDescription,
   };
 }
 

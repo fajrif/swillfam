@@ -14,11 +14,13 @@ import { getArticleRows } from "@/lib/articles";
 // so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Careers | SwillFam",
-  description:
-    "Explore open roles across SwillFam venues and join a team that brings the city's best lifestyle and nightlife experiences to life.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "careers" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function CareersPage() {
   const [careers, articles] = await Promise.all([

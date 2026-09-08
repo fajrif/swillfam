@@ -18,6 +18,8 @@ function parse(formData: FormData) {
     articleCategoryId: categoryId || null,
     publishedDate: new Date(String(formData.get("publishedDate"))),
     status: Number.parseInt(String(formData.get("status") ?? "0"), 10) || 0,
+    metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
+    metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
 }
 

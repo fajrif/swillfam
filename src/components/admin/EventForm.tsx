@@ -4,6 +4,7 @@ import { ImageManager } from "./ImageManager";
 import { RichTextEditor } from "./RichTextEditor";
 import { SlugField } from "./SlugField";
 import { EventScheduleFields } from "./EventScheduleFields";
+import { SeoFields } from "./SeoFields";
 import { toDateInputValue } from "@/lib/date";
 
 export function EventForm({
@@ -93,6 +94,8 @@ export function EventForm({
         <Field label="Ticket link" name="ticketLink" type="url" defaultValue={event?.ticketLink ?? ""} />
       </div>
       <Field label="WhatsApp phone" name="waPhone" defaultValue={event?.waPhone ?? ""} placeholder="+62…" />
+
+      <SeoFields titleValue={event?.metaTitle} descriptionValue={event?.metaDescription} />
 
       <SaveButton>Save event</SaveButton>
     </form>

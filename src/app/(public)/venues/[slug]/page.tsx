@@ -64,8 +64,8 @@ export async function generateMetadata({
   const venue = await getVenueBySlug(slug);
   if (!venue) return { title: "Venue | SwillFam" };
   return {
-    title: `${venue.name} | SwillFam`,
-    description: venue.description,
+    title: venue.metaTitle || `${venue.name} | SwillFam`,
+    description: venue.metaDescription || venue.description,
   };
 }
 

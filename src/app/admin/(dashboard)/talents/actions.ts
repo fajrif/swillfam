@@ -22,6 +22,8 @@ function parse(formData: FormData) {
     spotifyEmbed: String(formData.get("spotifyEmbed") ?? "").trim() || null,
     youtubeEmbed: String(formData.get("youtubeEmbed") ?? "").trim() || null,
     instagramEmbed: String(formData.get("instagramEmbed") ?? "").trim() || null,
+    metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
+    metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
 }
 

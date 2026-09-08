@@ -20,11 +20,13 @@ import { getFaqs } from "@/lib/faqs";
 // so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Private Events | SwillFam",
-  description:
-    "Host corporate functions, birthdays, brand activations, and celebrations across SwillFam's distinctive venues — events designed around your vision.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "private-events" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function PrivateEventsPage() {
   const [privateEvents, faqs, articles] = await Promise.all([

@@ -65,6 +65,22 @@ model SiteSetting {
 }
 
 // ---------------------------------------------------------------------------
+// Meta title/description overrides for the singleton/archive pages that have
+// no other backing DB row (Home, About, Contact, the archive indexes, etc).
+// Per-record pages (Venue, Event, Talent, Promotion, PrivateEvent, Article,
+// Category) instead carry their own metaTitle/metaDescription columns.
+// ---------------------------------------------------------------------------
+
+model PageSeo {
+  id              String   @id @default(uuid())
+  pageKey         String   @unique
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
 // Public inbox: contact inquiries.
 // ---------------------------------------------------------------------------
 
@@ -159,6 +175,8 @@ model Article {
   articleCategory   ArticleCategory? @relation(fields: [articleCategoryId], references: [id], onDelete: SetNull)
   publishedDate     DateTime
   status            Int              @default(0) // 0 = Draft, 1 = Published
+  metaTitle         String?
+  metaDescription   String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 }
@@ -179,6 +197,8 @@ model Category {
   description String?
   shortDescription String?
   venues      Venue[]
+  metaTitle       String?
+  metaDescription String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -215,6 +235,8 @@ model Venue {
   promotions      Promotion[]
   events          Event[]
   privateEvents   PrivateEvent[]   // "Recommended Venues for …" — implicit m2m
+  metaTitle       String?
+  metaDescription String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
@@ -259,6 +281,8 @@ model Talent {
   youtubeEmbed     String?
   instagramEmbed   String?
   events           Event[]         // events this talent is performing at — implicit m2m
+  metaTitle        String?
+  metaDescription  String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
@@ -300,6 +324,8 @@ model Promotion {
   endDate             DateTime
   startHour           String // "HH:mm"
   endHour             String // "HH:mm"
+  metaTitle           String?
+  metaDescription     String?
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
 }
@@ -347,6 +373,8 @@ model Event {
   ticketInfo       String?
   waPhone          String?
   ticketLink       String?
+  metaTitle        String?
+  metaDescription  String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 }
@@ -441,6 +469,8 @@ model PrivateEvent {
 
   sortOrder Int      @default(0)
   published Boolean  @default(true)
+  metaTitle       String?
+  metaDescription String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

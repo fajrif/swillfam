@@ -8,11 +8,13 @@ import { MediaMentionsIntro, MediaMentionsList } from "@/components/media-mentio
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Media Mentions | SwillFam",
-  description:
-    "Browse past articles, interviews, features, and external links covering SwillFam venues, events, and experiences.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "media-mentions" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function MediaMentionsPage() {
   const mentions = await prisma.mediaMention.findMany({

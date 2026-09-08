@@ -43,8 +43,8 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "Category | SwillFam" };
   return {
-    title: `${category.name} | SwillFam`,
-    description: category.headline ?? category.caption,
+    title: category.metaTitle || `${category.name} | SwillFam`,
+    description: category.metaDescription || category.headline || category.caption,
   };
 }
 

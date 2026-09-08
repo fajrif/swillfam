@@ -12,11 +12,13 @@ import {
 import { getSiteSettings } from "@/lib/site-settings";
 import { prisma } from "@/lib/prisma";
 
-export const metadata: Metadata = {
-  title: "Contact SwillFam — Get in Touch",
-  description:
-    "Reach the SwillFam team for general inquiries, business opportunities, collaborations, private events, media requests, and venue reservations.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "contact" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function ContactPage() {
   const [settings, venues] = await Promise.all([

@@ -58,8 +58,8 @@ export async function generateMetadata({
   const event = await getEventBySlug(slug);
   if (!event) return { title: "Event | SwillFam" };
   return {
-    title: `${event.name} | SwillFam`,
-    description: event.shortDescription,
+    title: event.metaTitle || `${event.name} | SwillFam`,
+    description: event.metaDescription || event.shortDescription,
   };
 }
 

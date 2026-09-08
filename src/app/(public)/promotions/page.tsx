@@ -18,11 +18,13 @@ import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeature
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Promotions | SwillFam",
-  description:
-    "Check out the latest promotions, deals, and special offers across SwillFam venues.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "promotions" } });
+  return {
+    title: seo?.metaTitle ?? "SwillFam",
+    description: seo?.metaDescription ?? undefined,
+  };
+}
 
 export default async function PromotionsPage() {
   const [articles, promotions, venues, categories] = await Promise.all([

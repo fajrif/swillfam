@@ -56,7 +56,10 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
   },
   {
     label: "System",
-    items: [{ href: "/admin/settings", label: "Settings" }],
+    items: [
+      { href: "/admin/settings", label: "Settings" },
+      { href: "/admin/page-seo", label: "Page SEO" },
+    ],
   },
 ];
 
