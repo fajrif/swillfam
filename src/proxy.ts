@@ -20,8 +20,9 @@ function operatorRedirect(pathname: string, venueId: string | null): string | nu
   if (pathname === "/admin" || within(pathname, "/admin/profile")) return null;
   if (!venueId) return "/admin/profile";
   if (within(pathname, "/admin/venues")) {
+    // Their own Venue Info page and its /edit; any other venue path goes back to it.
     const own = `/admin/venues/${venueId}`;
-    return pathname === own ? null : own;
+    return within(pathname, own) ? null : own;
   }
   if (OPERATOR_SECTIONS.some((prefix) => within(pathname, prefix))) return null;
   return "/admin";

@@ -146,6 +146,9 @@ Every resource lives at `src/app/admin/(dashboard)/<resource>/` with the same sh
 
 - `page.tsx` — list via the generic `AdminTable` (`columns`/`getKey`/`empty`).
 - `new/page.tsx` — blank form. `[id]/page.tsx` — fetch-by-id-or-404, pre-filled form + delete.
+  Exception: **venues** — `[id]/page.tsx` is a read-only Venue Info page (`VenueDetails` + the
+  venue's events/promotions/talents tabs; operators land here after login), and the form + delete
+  live at `[id]/edit/page.tsx`.
 - `actions.ts` — colocated `"use server"` `createX`/`updateX`/`deleteX`, ending in
   `revalidatePath(...)` + `redirect(...)`. No REST layer — Server Actions only.
 - Form component in `src/components/admin/<Resource>Form.tsx`, composed from shared primitives.
@@ -155,7 +158,7 @@ Shared building blocks (use these instead of re-implementing inputs/tables):
 `AdminTable.tsx`, `PageHeader.tsx` (`PageHeader`/`EditHeader`/`Card`), `Thumb.tsx`, `NameForm.tsx`
 (name-only resources), `RichTextEditor.tsx` (Tiptap → hidden input HTML), `SlugField.tsx`
 (auto-fills from a sibling field until edited), `ConfirmDeleteButton.tsx`, `EventScheduleFields.tsx`.
-`/admin` redirects to `/admin/inquiries`.
+`/admin` redirects by role: administrators → `/admin/inquiries`, operators → their Venue Info page.
 
 **Every list page must include:**
 1. **Search** — `SearchInput` from `@/components/admin/SearchInput` above `<Card>`. It auto-filters
