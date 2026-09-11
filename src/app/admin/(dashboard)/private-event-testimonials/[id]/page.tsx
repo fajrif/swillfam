@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { PrivateEventTestimonialForm } from "@/components/admin/PrivateEventTestimonialForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
+import { requireAdministrator } from "@/lib/admin-auth";
 import {
   updatePrivateEventTestimonialAction,
   deletePrivateEventTestimonialAction,
@@ -13,6 +14,7 @@ export default async function EditPrivateEventTestimonialPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdministrator();
   const { id } = await params;
   const [testimonial, privateEvents] = await Promise.all([
     prisma.privateEventTestimonial.findUnique({ where: { id } }),

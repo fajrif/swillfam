@@ -4,12 +4,14 @@ import { MediaMentionForm } from "@/components/admin/MediaMentionForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateMediaMentionAction, deleteMediaMentionAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditMediaMentionPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdministrator();
   const { id } = await params;
   const mediaMention = await prisma.mediaMention.findUnique({ where: { id } });
   if (!mediaMention) notFound();

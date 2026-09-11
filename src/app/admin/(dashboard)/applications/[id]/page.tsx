@@ -3,8 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { deleteApplicationAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const application = await prisma.application.findUnique({
     where: { id },

@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import { requireAdmin, assertVenueOwnership, resolveVenueId, type CurrentAdmin } from "@/lib/admin-auth";
 
 const BASE = "/admin/promotions";
 const CATEGORY = "promotions";
 
-function parse(formData: FormData) {
+function parse(formData: FormData, admin: CurrentAdmin) {
   const venueId = String(formData.get("venueId") ?? "").trim();
   const promotionCategoryId = String(formData.get("promotionCategoryId") ?? "").trim();
   return {
@@ -18,7 +19,8 @@ function parse(formData: FormData) {
     description: String(formData.get("description") ?? "").trim(),
     caption: String(formData.get("caption") ?? "").trim(),
     terms: String(formData.get("terms") ?? ""),
-    venueId: venueId || null,
+    // Operators are pinned to their own venue, whatever was posted.
+    venueId: resolveVenueId(admin, venueId || null),
     promotionCategoryId: promotionCategoryId || null,
     startDate: new Date(String(formData.get("startDate"))),
     endDate: new Date(String(formData.get("endDate"))),
@@ -38,11 +40,12 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createPromotionAction(formData: FormData) {
+  const admin = await requireAdmin();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.promotion.create({ data: { ...parse(formData), slug, image, bannerImage, posterImage } });
+  await prisma.promotion.create({ data: { ...parse(formData, admin), slug, image, bannerImage, posterImage } });
   revalidatePath(BASE);
   revalidatePath("/promotions");
   revalidatePath(`/promotions/${slug}`);
@@ -50,13 +53,16 @@ export async function createPromotionAction(formData: FormData) {
 }
 
 export async function updatePromotionAction(id: string, formData: FormData) {
+  const admin = await requireAdmin();
   const current = await prisma.promotion.findUnique({ where: { id } });
   if (!current) redirect(BASE);
+  // Before any upload/unlink below.
+  assertVenueOwnership(admin, current.venueId);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
   const slug = await uniqueSlug(formData, id);
-  await prisma.promotion.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, posterImage } });
+  await prisma.promotion.update({ where: { id }, data: { ...parse(formData, admin), slug, image, bannerImage, posterImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/promotions");
@@ -65,8 +71,10 @@ export async function updatePromotionAction(id: string, formData: FormData) {
 }
 
 export async function deletePromotionAction(id: string) {
+  const admin = await requireAdmin();
   const current = await prisma.promotion.findUnique({ where: { id } });
   if (current) {
+    assertVenueOwnership(admin, current.venueId);
     await prisma.promotion.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.posterImage));
     revalidatePath("/promotions");

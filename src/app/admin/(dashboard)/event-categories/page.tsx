@@ -4,8 +4,10 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { Pagination } from "@/components/admin/Pagination";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EventCategoriesPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  await requireAdministrator();
   const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
   const p = Math.max(1, Number(page) || 1);

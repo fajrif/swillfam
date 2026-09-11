@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { EmploymentType } from "@/generated/prisma/client";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/careers";
 
@@ -18,6 +19,7 @@ function parse(formData: FormData) {
 }
 
 export async function createCareerAction(formData: FormData) {
+  await requireAdministrator();
   await prisma.career.create({ data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath("/careers");
@@ -25,6 +27,7 @@ export async function createCareerAction(formData: FormData) {
 }
 
 export async function updateCareerAction(id: string, formData: FormData) {
+  await requireAdministrator();
   await prisma.career.update({ where: { id }, data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
@@ -33,6 +36,7 @@ export async function updateCareerAction(id: string, formData: FormData) {
 }
 
 export async function deleteCareerAction(id: string) {
+  await requireAdministrator();
   // Applications reference careerId with onDelete: SetNull — they survive the delete.
   await prisma.career.delete({ where: { id } });
   revalidatePath(BASE);

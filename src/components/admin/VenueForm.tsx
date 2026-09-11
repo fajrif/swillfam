@@ -1,5 +1,5 @@
 import type { Venue } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, ReadOnlyField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { SeoFields } from "./SeoFields";
@@ -17,10 +17,13 @@ export function VenueForm({
   action,
   venue,
   categories,
+  lockIdentity = false,
 }: {
   action: (formData: FormData) => void;
   venue?: Venue;
   categories: { id: string; name: string }[];
+  /** Operators: slug (venue FAQs are keyed by it) and category are read-only. */
+  lockIdentity?: boolean;
 }) {
   // Preserve a previously-saved custom value that isn't one of the presets.
   const hoursOptions = [...OPERATING_HOURS_PRESETS];
@@ -38,17 +41,29 @@ export function VenueForm({
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Name" name="name" defaultValue={venue?.name} required hint=" " />
-        <SlugField sourceName="name" defaultValue={venue?.slug} />
+        {lockIdentity ? (
+          <ReadOnlyField label="Slug" value={venue?.slug ?? ""} hint="Only administrators can change the URL." />
+        ) : (
+          <SlugField sourceName="name" defaultValue={venue?.slug} />
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <SelectField
-          label="Category"
-          name="categoryId"
-          defaultValue={venue?.categoryId ?? ""}
-          blankLabel="— None —"
-          options={categories.map((c) => ({ value: c.id, label: c.name }))}
-        />
+        {lockIdentity ? (
+          <ReadOnlyField
+            label="Category"
+            value={categories.find((c) => c.id === venue?.categoryId)?.name ?? "—"}
+            hint="Only administrators can change the category."
+          />
+        ) : (
+          <SelectField
+            label="Category"
+            name="categoryId"
+            defaultValue={venue?.categoryId ?? ""}
+            blankLabel="— None —"
+            options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          />
+        )}
         <SelectField
           label="Operating hours"
           name="operatingHours"

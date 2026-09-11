@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin, venueWhere } from "@/lib/admin-auth";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
@@ -12,7 +13,11 @@ export default async function SegmentGalleriesPage(props: { searchParams: Promis
   const p = Math.max(1, Number(page) || 1);
   const pageSize = 20;
   const skip = (p - 1) * pageSize;
-  const where = search ? { title: { contains: search, mode: "insensitive" as const } } : undefined;
+  const admin = await requireAdmin();
+  const where = {
+    ...venueWhere(admin),
+    ...(search ? { title: { contains: search, mode: "insensitive" as const } } : {}),
+  };
   const galleries = await prisma.segmentGallery.findMany({
     where,
     skip,

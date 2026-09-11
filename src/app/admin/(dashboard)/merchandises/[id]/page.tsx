@@ -4,8 +4,10 @@ import { MerchandiseForm } from "@/components/admin/MerchandiseForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateMerchandiseAction, deleteMerchandiseAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditMerchandisePage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const merchandise = await prisma.merchandise.findUnique({ where: { id } });
   if (!merchandise) notFound();

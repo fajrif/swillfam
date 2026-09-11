@@ -4,8 +4,10 @@ import { NameForm } from "@/components/admin/NameForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updatePromotionCategoryAction, deletePromotionCategoryAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditPromotionCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const category = await prisma.promotionCategory.findUnique({ where: { id } });
   if (!category) notFound();

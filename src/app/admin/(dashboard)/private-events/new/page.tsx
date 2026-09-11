@@ -2,8 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { PrivateEventForm } from "@/components/admin/PrivateEventForm";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { createPrivateEventAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function NewPrivateEventPage() {
+  await requireAdministrator();
   const [eventTypes, venues] = await Promise.all([
     prisma.privateEventType.findMany({
       orderBy: { sortOrder: "asc" },

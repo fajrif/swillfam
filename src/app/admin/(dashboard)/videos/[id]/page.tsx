@@ -4,8 +4,10 @@ import { VideoForm } from "@/components/admin/VideoForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateVideoAction, deleteVideoAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditVideoPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const video = await prisma.video.findUnique({ where: { id } });
   if (!video) notFound();

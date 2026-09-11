@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin, venueFaqWhere } from "@/lib/admin-auth";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
@@ -11,7 +12,11 @@ export default async function FaqsPage(props: { searchParams: Promise<{ q?: stri
   const p = Math.max(1, Number(page) || 1);
   const pageSize = 20;
   const skip = (p - 1) * pageSize;
-  const where = search ? { question: { contains: search, mode: "insensitive" as const } } : undefined;
+  const admin = await requireAdmin();
+  const where = {
+    ...venueFaqWhere(admin),
+    ...(search ? { question: { contains: search, mode: "insensitive" as const } } : {}),
+  };
   const faqs = await prisma.faq.findMany({
     where,
     skip,

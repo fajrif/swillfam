@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/videos";
 const CATEGORY = "videos";
@@ -17,6 +18,7 @@ function parse(formData: FormData) {
 }
 
 export async function createVideoAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   await prisma.video.create({ data: { ...parse(formData), image } });
   revalidatePath(BASE);
@@ -24,6 +26,7 @@ export async function createVideoAction(formData: FormData) {
 }
 
 export async function updateVideoAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.video.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -34,6 +37,7 @@ export async function updateVideoAction(id: string, formData: FormData) {
 }
 
 export async function deleteVideoAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.video.findUnique({ where: { id } });
   if (current) {
     await prisma.video.delete({ where: { id } });

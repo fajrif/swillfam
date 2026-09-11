@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { STATIC_PAGE_SEO_DEFS } from "@/lib/page-seo-registry";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export type PageSeoActionResult = { success: boolean; message: string };
 
@@ -10,6 +11,7 @@ export async function updatePageSeoAction(
   prevState: PageSeoActionResult | null,
   formData: FormData,
 ): Promise<PageSeoActionResult> {
+  await requireAdministrator();
   try {
     for (const { key } of STATIC_PAGE_SEO_DEFS) {
       const metaTitle = String(formData.get(`${key}__title`) ?? "").trim() || null;

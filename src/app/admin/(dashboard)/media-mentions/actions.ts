@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/media-mentions";
 
@@ -18,6 +19,7 @@ function parse(formData: FormData) {
 }
 
 export async function createMediaMentionAction(formData: FormData) {
+  await requireAdministrator();
   await prisma.mediaMention.create({ data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath("/media-mentions");
@@ -25,6 +27,7 @@ export async function createMediaMentionAction(formData: FormData) {
 }
 
 export async function updateMediaMentionAction(id: string, formData: FormData) {
+  await requireAdministrator();
   await prisma.mediaMention.update({ where: { id }, data: parse(formData) });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
@@ -33,6 +36,7 @@ export async function updateMediaMentionAction(id: string, formData: FormData) {
 }
 
 export async function deleteMediaMentionAction(id: string) {
+  await requireAdministrator();
   await prisma.mediaMention.delete({ where: { id } });
   revalidatePath(BASE);
   revalidatePath("/media-mentions");

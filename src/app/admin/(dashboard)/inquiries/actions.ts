@@ -4,8 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { InquiryStatus } from "@/generated/prisma/client";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export async function updateInquiryAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const status = String(formData.get("status")) as InquiryStatus;
   await prisma.inquiry.update({ where: { id }, data: { status } });
   revalidatePath("/admin/inquiries");
@@ -14,6 +16,7 @@ export async function updateInquiryAction(id: string, formData: FormData) {
 }
 
 export async function deleteInquiryAction(id: string) {
+  await requireAdministrator();
   await prisma.inquiry.delete({ where: { id } });
   revalidatePath("/admin/inquiries");
   redirect("/admin/inquiries");

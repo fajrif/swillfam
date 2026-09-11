@@ -4,8 +4,10 @@ import { GalleryForm } from "@/components/admin/GalleryForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateGalleryAction, deleteGalleryAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditGalleryPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const gallery = await prisma.gallery.findUnique({ where: { id } });
   if (!gallery) notFound();

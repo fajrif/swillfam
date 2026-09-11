@@ -2,8 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { PrivateEventTestimonialForm } from "@/components/admin/PrivateEventTestimonialForm";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { createPrivateEventTestimonialAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function NewPrivateEventTestimonialPage() {
+  await requireAdministrator();
   const privateEvents = await prisma.privateEvent.findMany({
     orderBy: { sortOrder: "asc" },
     select: { id: true, title: true },

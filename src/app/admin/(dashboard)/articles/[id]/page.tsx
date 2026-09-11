@@ -4,8 +4,10 @@ import { ArticleForm } from "@/components/admin/ArticleForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateArticleAction, deleteArticleAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const [article, categories] = await Promise.all([
     prisma.article.findUnique({ where: { id } }),

@@ -4,8 +4,10 @@ import { PrivateEventForm } from "@/components/admin/PrivateEventForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updatePrivateEventAction, deletePrivateEventAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditPrivateEventPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const [privateEvent, eventTypes, venues] = await Promise.all([
     prisma.privateEvent.findUnique({

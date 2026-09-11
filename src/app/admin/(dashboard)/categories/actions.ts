@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/categories";
 const CATEGORY = "categories";
@@ -18,6 +19,7 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createCategoryAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
@@ -43,6 +45,7 @@ export async function createCategoryAction(formData: FormData) {
 }
 
 export async function updateCategoryAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.category.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -72,6 +75,7 @@ export async function updateCategoryAction(id: string, formData: FormData) {
 }
 
 export async function deleteCategoryAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.category.findUnique({ where: { id } });
   if (current) {
     // Venues reference categoryId with onDelete: SetNull — they survive.

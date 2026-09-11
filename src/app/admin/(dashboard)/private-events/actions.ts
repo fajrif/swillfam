@@ -10,6 +10,7 @@ import {
   collectImagePaths,
 } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/private-events";
 const CATEGORY = "private-events";
@@ -57,6 +58,7 @@ function revalidatePublic(slug?: string) {
 }
 
 export async function createPrivateEventAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const galleries = await reconcileImageField({
@@ -82,6 +84,7 @@ export async function createPrivateEventAction(formData: FormData) {
 }
 
 export async function updatePrivateEventAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.privateEvent.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -113,6 +116,7 @@ export async function updatePrivateEventAction(id: string, formData: FormData) {
 }
 
 export async function deletePrivateEventAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.privateEvent.findUnique({
     where: { id },
     include: { occasions: { select: { image: true } } },

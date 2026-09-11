@@ -5,12 +5,19 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, reconcileImageField, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import {
+  requireAdmin,
+  assertVenueOwnership,
+  isAdministrator,
+  resolveVenueId,
+  type CurrentAdmin,
+} from "@/lib/admin-auth";
 import type { EventType, Weekday } from "@/generated/prisma/client";
 
 const BASE = "/admin/events";
 const CATEGORY = "events";
 
-function parse(formData: FormData) {
+function parse(formData: FormData, admin: CurrentAdmin, currentFeatured = false) {
   const eventCategoryId = String(formData.get("eventCategoryId") ?? "").trim();
   const venueId = String(formData.get("venueId") ?? "").trim();
   const endDateRaw = String(formData.get("endDate") ?? "").trim();
@@ -22,7 +29,8 @@ function parse(formData: FormData) {
     description: String(formData.get("description") ?? "").trim(),
     caption: String(formData.get("caption") ?? "").trim(),
     eventCategoryId: eventCategoryId || null,
-    venueId: venueId || null,
+    // Operators are pinned to their own venue, whatever was posted.
+    venueId: resolveVenueId(admin, venueId || null),
     eventType,
     startDate: new Date(String(formData.get("startDate"))),
     endDate: endDateRaw ? new Date(endDateRaw) : null,
@@ -33,7 +41,8 @@ function parse(formData: FormData) {
       eventType === "RECURRING"
         ? String(formData.get("nextEditionDescription") ?? "").trim() || null
         : null,
-    featured: formData.get("featured") === "true",
+    // Featured drives site-wide slots (home, the /events hero), so only administrators set it.
+    featured: isAdministrator(admin) ? formData.get("featured") === "true" : currentFeatured,
     active: formData.get("active") === "true",
     ticketInfo: String(formData.get("ticketInfo") ?? "").trim() || null,
     waPhone: String(formData.get("waPhone") ?? "").trim() || null,
@@ -57,6 +66,7 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createEventAction(formData: FormData) {
+  const admin = await requireAdmin();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
@@ -64,7 +74,7 @@ export async function createEventAction(formData: FormData) {
   const slug = await uniqueSlug(formData);
   await prisma.event.create({
     data: {
-      ...parse(formData),
+      ...parse(formData, admin),
       slug,
       image,
       bannerImage,
@@ -80,8 +90,11 @@ export async function createEventAction(formData: FormData) {
 }
 
 export async function updateEventAction(id: string, formData: FormData) {
+  const admin = await requireAdmin();
   const current = await prisma.event.findUnique({ where: { id } });
   if (!current) redirect(BASE);
+  // Before any upload/unlink below.
+  assertVenueOwnership(admin, current.venueId);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
@@ -90,7 +103,7 @@ export async function updateEventAction(id: string, formData: FormData) {
   await prisma.event.update({
     where: { id },
     data: {
-      ...parse(formData),
+      ...parse(formData, admin, current.featured),
       slug,
       image,
       bannerImage,
@@ -108,8 +121,10 @@ export async function updateEventAction(id: string, formData: FormData) {
 }
 
 export async function deleteEventAction(id: string) {
+  const admin = await requireAdmin();
   const current = await prisma.event.findUnique({ where: { id } });
   if (current) {
+    assertVenueOwnership(admin, current.venueId);
     await prisma.event.delete({ where: { id } });
     await deleteUploadedFiles(
       collectImagePaths(current.image, current.bannerImage, current.posterImage, current.galleries),
