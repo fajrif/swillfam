@@ -23,6 +23,7 @@ export function SelectField({
   options,
   blankLabel,
   hint,
+  onValueChange,
 }: {
   label: string;
   name: string;
@@ -32,6 +33,8 @@ export function SelectField({
   /** When set, prepends an empty "none" option with this label. */
   blankLabel?: string;
   hint?: string;
+  /** Optional listener for forms that react to the choice (receives "" for the blank option). */
+  onValueChange?: (value: string) => void;
 }) {
   const hasBlank = blankLabel !== undefined;
   const initial =
@@ -49,7 +52,13 @@ export function SelectField({
         {label}
         {required && <span className="text-destructive">*</span>}
       </Label>
-      <Select value={value} onValueChange={setValue}>
+      <Select
+        value={value}
+        onValueChange={(next) => {
+          setValue(next);
+          onValueChange?.(next === NONE ? "" : next);
+        }}
+      >
         <SelectTrigger id={name} className="w-full">
           <SelectValue />
         </SelectTrigger>

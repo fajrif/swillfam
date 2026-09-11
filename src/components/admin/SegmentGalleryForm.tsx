@@ -1,15 +1,18 @@
 import type { SegmentGallery } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, CheckboxField, ReadOnlyField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 
 export function SegmentGalleryForm({
   action,
   segmentGallery,
   venues,
+  operatorVenue,
 }: {
   action: (formData: FormData) => void;
   segmentGallery?: SegmentGallery;
   venues: { id: string; name: string }[];
+  /** Set for operators: the venue is fixed to theirs. */
+  operatorVenue?: { id: string; name: string };
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
@@ -25,13 +28,17 @@ export function SegmentGalleryForm({
       />
       <div className="grid grid-cols-2 gap-4">
         <Field label="Title" name="title" defaultValue={segmentGallery?.title} required />
-        <SelectField
-          label="Venue"
-          name="venueId"
-          defaultValue={segmentGallery?.venueId ?? ""}
-          blankLabel="— None —"
-          options={venues.map((v) => ({ value: v.id, label: v.name }))}
-        />
+        {operatorVenue ? (
+          <ReadOnlyField label="Venue" value={operatorVenue.name} />
+        ) : (
+          <SelectField
+            label="Venue"
+            name="venueId"
+            defaultValue={segmentGallery?.venueId ?? ""}
+            blankLabel="— None —"
+            options={venues.map((v) => ({ value: v.id, label: v.name }))}
+          />
+        )}
       </div>
       <TextareaField label="Description" name="description" defaultValue={segmentGallery?.description} rows={4} required />
       <CheckboxField

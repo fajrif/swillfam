@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const SETTINGS_KEYS = [
   "mainEmail",
@@ -19,6 +20,7 @@ const SETTINGS_KEYS = [
 export type SettingsActionResult = { success: boolean; message: string };
 
 export async function updateSettingsAction(prevState: SettingsActionResult | null, formData: FormData): Promise<SettingsActionResult> {
+  await requireAdministrator();
   try {
     for (const key of SETTINGS_KEYS) {
       const value = String(formData.get(key) ?? "").trim();

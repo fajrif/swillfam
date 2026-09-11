@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/private-event-occasions";
 const CATEGORY = "private-event-occasions";
@@ -30,6 +31,7 @@ async function revalidateParent(privateEventId: string | null) {
 }
 
 export async function createPrivateEventOccasionAction(formData: FormData) {
+  await requireAdministrator();
   const data = parse(formData);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   await prisma.privateEventOccasion.create({ data: { ...data, image } });
@@ -39,6 +41,7 @@ export async function createPrivateEventOccasionAction(formData: FormData) {
 }
 
 export async function updatePrivateEventOccasionAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.privateEventOccasion.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const data = parse(formData);
@@ -59,6 +62,7 @@ export async function updatePrivateEventOccasionAction(id: string, formData: For
 }
 
 export async function deletePrivateEventOccasionAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.privateEventOccasion.findUnique({ where: { id } });
   if (current) {
     await prisma.privateEventOccasion.delete({ where: { id } });

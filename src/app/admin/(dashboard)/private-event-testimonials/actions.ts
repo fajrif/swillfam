@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/private-event-testimonials";
 
@@ -28,6 +29,7 @@ async function revalidateParent(privateEventId: string | null) {
 }
 
 export async function createPrivateEventTestimonialAction(formData: FormData) {
+  await requireAdministrator();
   const data = parse(formData);
   await prisma.privateEventTestimonial.create({ data });
   revalidatePath(BASE);
@@ -36,6 +38,7 @@ export async function createPrivateEventTestimonialAction(formData: FormData) {
 }
 
 export async function updatePrivateEventTestimonialAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.privateEventTestimonial.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const data = parse(formData);
@@ -50,6 +53,7 @@ export async function updatePrivateEventTestimonialAction(id: string, formData: 
 }
 
 export async function deletePrivateEventTestimonialAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.privateEventTestimonial.findUnique({ where: { id } });
   if (current) {
     await prisma.privateEventTestimonial.delete({ where: { id } });

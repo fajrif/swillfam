@@ -4,8 +4,10 @@ import { CareerForm } from "@/components/admin/CareerForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateCareerAction, deleteCareerAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function EditCareerPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const career = await prisma.career.findUnique({ where: { id } });
   if (!career) notFound();

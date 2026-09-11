@@ -4,22 +4,25 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileImageFieldWithCaptions, deleteUploadedFiles } from "@/lib/upload";
+import { requireAdmin, assertVenueOwnership, resolveVenueId, type CurrentAdmin } from "@/lib/admin-auth";
 
 const BASE = "/admin/segment-galleries";
 const CATEGORY = "segment-galleries";
 
-function parse(formData: FormData) {
+function parse(formData: FormData, admin: CurrentAdmin) {
   const venueId = String(formData.get("venueId") ?? "").trim();
   return {
     title: String(formData.get("title") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
-    venueId: venueId || null,
+    // Operators are pinned to their own venue, whatever was posted.
+    venueId: resolveVenueId(admin, venueId || null),
     special: formData.get("special") === "true",
   };
 }
 
 export async function createSegmentGalleryAction(formData: FormData) {
-  const data = parse(formData);
+  const admin = await requireAdmin();
+  const data = parse(formData, admin);
   const { paths, titles, descriptions } = await reconcileImageFieldWithCaptions({
     formData,
     field: "images",
@@ -38,9 +41,12 @@ export async function createSegmentGalleryAction(formData: FormData) {
 }
 
 export async function updateSegmentGalleryAction(id: string, formData: FormData) {
+  const admin = await requireAdmin();
   const current = await prisma.segmentGallery.findUnique({ where: { id } });
   if (!current) redirect(BASE);
-  const data = parse(formData);
+  // Before any upload/unlink below.
+  assertVenueOwnership(admin, current.venueId);
+  const data = parse(formData, admin);
   const { paths, titles, descriptions } = await reconcileImageFieldWithCaptions({
     formData,
     field: "images",
@@ -62,8 +68,10 @@ export async function updateSegmentGalleryAction(id: string, formData: FormData)
 }
 
 export async function deleteSegmentGalleryAction(id: string) {
+  const admin = await requireAdmin();
   const current = await prisma.segmentGallery.findUnique({ where: { id } });
   if (current) {
+    assertVenueOwnership(admin, current.venueId);
     await prisma.segmentGallery.delete({ where: { id } });
     await deleteUploadedFiles(current.images);
     if (current.venueId) {

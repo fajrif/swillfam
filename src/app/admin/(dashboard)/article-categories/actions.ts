@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/article-categories";
 
 export async function createArticleCategoryAction(formData: FormData) {
+  await requireAdministrator();
   const name = String(formData.get("name") ?? "").trim();
   await prisma.articleCategory.create({ data: { name } });
   revalidatePath(BASE);
@@ -15,6 +17,7 @@ export async function createArticleCategoryAction(formData: FormData) {
 }
 
 export async function updateArticleCategoryAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const name = String(formData.get("name") ?? "").trim();
   await prisma.articleCategory.update({ where: { id }, data: { name } });
   revalidatePath(BASE);
@@ -23,6 +26,7 @@ export async function updateArticleCategoryAction(id: string, formData: FormData
 }
 
 export async function deleteArticleCategoryAction(id: string) {
+  await requireAdministrator();
   await prisma.articleCategory.delete({ where: { id } });
   revalidatePath(BASE);
   revalidatePath("/articles");

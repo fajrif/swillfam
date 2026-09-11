@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import { requireAdmin, requireAdministrator, assertVenueOwnership, isAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/venues";
 const CATEGORY = "venues";
@@ -47,6 +48,7 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createVenueAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const logo = await reconcileSingleImage({ formData, field: "logo", category: CATEGORY, previousPath: null });
@@ -59,25 +61,32 @@ export async function createVenueAction(formData: FormData) {
 }
 
 export async function updateVenueAction(id: string, formData: FormData) {
+  const admin = await requireAdmin();
+  assertVenueOwnership(admin, id);
   const current = await prisma.venue.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const logo = await reconcileSingleImage({ formData, field: "logo", category: CATEGORY, previousPath: current.logo });
-  const slug = await uniqueSlug(formData, id);
-  await prisma.venue.update({ where: { id }, data: { ...parse(formData), slug, image, bannerImage, logo } });
+  const data = parse(formData);
+  // Operators can't change the slug (venue FAQs are keyed by it) or the category taxonomy.
+  const slug = isAdministrator(admin) ? await uniqueSlug(formData, id) : current.slug;
+  if (!isAdministrator(admin)) data.categoryId = current.categoryId;
+  await prisma.venue.update({ where: { id }, data: { ...data, slug, image, bannerImage, logo } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/venues");
   revalidatePath(`/venues/${slug}`);
-  redirect(BASE);
+  // Operators have no venue list to return to — keep them on their venue.
+  redirect(isAdministrator(admin) ? BASE : `${BASE}/${id}`);
 }
 
 export async function deleteVenueAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.venue.findUnique({ where: { id } });
   if (current) {
-    // Segment galleries / talents / promotions / events reference venueId with
-    // onDelete: SetNull, so they survive (their own images aren't touched here).
+    // Segment galleries / talents / promotions / events / operator accounts reference
+    // venueId with onDelete: SetNull, so they survive (their own images aren't touched here).
     await prisma.venue.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.logo));
     revalidatePath("/venues");

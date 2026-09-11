@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/merchandises";
 const CATEGORY = "merchandises";
@@ -17,6 +18,7 @@ function parse(formData: FormData) {
 }
 
 export async function createMerchandiseAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   await prisma.merchandise.create({ data: { ...parse(formData), image } });
   revalidatePath(BASE);
@@ -25,6 +27,7 @@ export async function createMerchandiseAction(formData: FormData) {
 }
 
 export async function updateMerchandiseAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.merchandise.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -36,6 +39,7 @@ export async function updateMerchandiseAction(id: string, formData: FormData) {
 }
 
 export async function deleteMerchandiseAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.merchandise.findUnique({ where: { id } });
   if (current) {
     await prisma.merchandise.delete({ where: { id } });

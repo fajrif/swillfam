@@ -52,6 +52,17 @@ export function Field({
   );
 }
 
+/** A value shown for context but not editable here (the server enforces it too). Not submitted. */
+export function ReadOnlyField({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="grid gap-1.5">
+      <Label>{label}</Label>
+      <Input value={value} readOnly disabled />
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+    </div>
+  );
+}
+
 export function TextareaField({
   label,
   name,

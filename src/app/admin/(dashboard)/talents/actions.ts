@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
 import type { TalentStatus } from "@/generated/prisma/client";
+import { requireAdmin } from "@/lib/admin-auth";
 
 const BASE = "/admin/talents";
 const CATEGORY = "talents";
@@ -38,6 +39,7 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createTalentAction(formData: FormData) {
+  await requireAdmin();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
   await prisma.talent.create({ data: { ...parse(formData), slug, image } });
@@ -48,6 +50,7 @@ export async function createTalentAction(formData: FormData) {
 }
 
 export async function updateTalentAction(id: string, formData: FormData) {
+  await requireAdmin();
   const current = await prisma.talent.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -61,6 +64,7 @@ export async function updateTalentAction(id: string, formData: FormData) {
 }
 
 export async function deleteTalentAction(id: string) {
+  await requireAdmin();
   const current = await prisma.talent.findUnique({ where: { id } });
   if (current) {
     await prisma.talent.delete({ where: { id } });

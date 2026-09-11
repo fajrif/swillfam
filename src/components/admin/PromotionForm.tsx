@@ -1,5 +1,5 @@
 import type { Promotion } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, ReadOnlyField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
@@ -11,11 +11,14 @@ export function PromotionForm({
   promotion,
   venues,
   categories,
+  operatorVenue,
 }: {
   action: (formData: FormData) => void;
   promotion?: Promotion;
   venues: { id: string; name: string }[];
   categories: { id: string; name: string }[];
+  /** Set for operators: the venue is fixed to theirs. */
+  operatorVenue?: { id: string; name: string };
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
@@ -31,13 +34,17 @@ export function PromotionForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <SelectField
-          label="Venue"
-          name="venueId"
-          defaultValue={promotion?.venueId ?? ""}
-          blankLabel="— None —"
-          options={venues.map((v) => ({ value: v.id, label: v.name }))}
-        />
+        {operatorVenue ? (
+          <ReadOnlyField label="Venue" value={operatorVenue.name} />
+        ) : (
+          <SelectField
+            label="Venue"
+            name="venueId"
+            defaultValue={promotion?.venueId ?? ""}
+            blankLabel="— None —"
+            options={venues.map((v) => ({ value: v.id, label: v.name }))}
+          />
+        )}
         <SelectField
           label="Category"
           name="promotionCategoryId"

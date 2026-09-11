@@ -1,11 +1,9 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { signSession } from "@/lib/auth";
-import { SESSION_COOKIE_NAME, SESSION_COOKIE_OPTIONS } from "@/lib/session";
+import { setSessionCookie } from "@/lib/admin-auth";
 
 export type LoginActionState = {
   error?: string;
@@ -29,9 +27,8 @@ export async function loginAction(_prevState: LoginActionState, formData: FormDa
     return { error: "Invalid email or password." };
   }
 
-  const token = await signSession({ sub: admin.id, email: admin.email });
-  const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE_NAME, token, SESSION_COOKIE_OPTIONS);
+  await setSessionCookie(admin);
 
-  redirect("/admin/inquiries");
+  // /admin routes each role to its own landing page.
+  redirect("/admin");
 }

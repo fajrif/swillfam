@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin, assertVenueOwnership, lockedVenue } from "@/lib/admin-auth";
 import { SegmentGalleryForm } from "@/components/admin/SegmentGalleryForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
@@ -7,11 +8,13 @@ import { updateSegmentGalleryAction, deleteSegmentGalleryAction } from "../actio
 
 export default async function EditSegmentGalleryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const admin = await requireAdmin();
   const [segmentGallery, venues] = await Promise.all([
     prisma.segmentGallery.findUnique({ where: { id } }),
     prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   if (!segmentGallery) notFound();
+  assertVenueOwnership(admin, segmentGallery.venueId);
 
   return (
     <div>
@@ -21,6 +24,7 @@ export default async function EditSegmentGalleryPage({ params }: { params: Promi
           action={updateSegmentGalleryAction.bind(null, id)}
           segmentGallery={segmentGallery}
           venues={venues}
+          operatorVenue={lockedVenue(admin)}
         />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deleteSegmentGalleryAction.bind(null, id)} label="Delete segment gallery" />

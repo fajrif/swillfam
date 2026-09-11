@@ -1,5 +1,5 @@
 import type { Event, TalentStatus } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, CheckboxField, ReadOnlyField, SaveButton } from "./form-fields";
 import { MultiSelectField } from "./MultiSelectField";
 import { ImageManager } from "./ImageManager";
 import { RichTextEditor } from "./RichTextEditor";
@@ -17,6 +17,7 @@ export function EventForm({
   categories,
   talents,
   selectedTalentIds = [],
+  operatorVenue,
 }: {
   action: (formData: FormData) => void;
   event?: Event;
@@ -24,6 +25,8 @@ export function EventForm({
   categories: { id: string; name: string }[];
   talents: { id: string; name: string; status: TalentStatus }[];
   selectedTalentIds?: string[];
+  /** Set for operators: the venue is fixed to theirs and Featured is hidden. */
+  operatorVenue?: { id: string; name: string };
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
@@ -54,13 +57,17 @@ export function EventForm({
           blankLabel="— None —"
           options={categories.map((c) => ({ value: c.id, label: c.name }))}
         />
-        <SelectField
-          label="Venue"
-          name="venueId"
-          defaultValue={event?.venueId ?? ""}
-          blankLabel="— None —"
-          options={venues.map((v) => ({ value: v.id, label: v.name }))}
-        />
+        {operatorVenue ? (
+          <ReadOnlyField label="Venue" value={operatorVenue.name} />
+        ) : (
+          <SelectField
+            label="Venue"
+            name="venueId"
+            defaultValue={event?.venueId ?? ""}
+            blankLabel="— None —"
+            options={venues.map((v) => ({ value: v.id, label: v.name }))}
+          />
+        )}
       </div>
 
       <MultiSelectField
@@ -94,7 +101,8 @@ export function EventForm({
       />
 
       <div className="flex gap-8">
-        <CheckboxField label="Featured" name="featured" defaultChecked={event?.featured} />
+        {/* Featured drives site-wide slots (home, the /events hero) — administrators only. */}
+        {!operatorVenue && <CheckboxField label="Featured" name="featured" defaultChecked={event?.featured} />}
         {/* Uncheck to retire: hidden from the public calendar and listings, but
             the detail page still renders as a "Past Event". New events default on. */}
         <CheckboxField label="Active" name="active" defaultChecked={event?.active ?? true} />

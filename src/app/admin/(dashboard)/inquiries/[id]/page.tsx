@@ -4,8 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { InquiryForm } from "@/components/admin/InquiryForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { updateInquiryAction, deleteInquiryAction } from "../actions";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function InquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdministrator();
   const { id } = await params;
   const inquiry = await prisma.inquiry.findUnique({ where: { id } });
   if (!inquiry) notFound();

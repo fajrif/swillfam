@@ -50,13 +50,26 @@ enum TalentStatus {
 // Auth (internal admin accounts) — unchanged from the original project.
 // ---------------------------------------------------------------------------
 
+enum AdminRole {
+  ADMINISTRATOR // full access, including admin users
+  OPERATOR // manages only their own venue's data (+ all talents)
+}
+
 model AdminUser {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String
-  name         String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                String    @id @default(uuid())
+  email             String    @unique
+  passwordHash      String
+  fullName          String
+  position          String?
+  avatar            String?
+  role              AdminRole @default(OPERATOR)
+  // Operators only: the one venue they manage. Null for administrators.
+  venueId           String?
+  venue             Venue?    @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  // Sessions issued before this are rejected (set on any password change/reset).
+  passwordChangedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 // ---------------------------------------------------------------------------
@@ -240,6 +253,7 @@ model Venue {
   promotions               Promotion[]
   events                   Event[]
   privateEvents            PrivateEvent[] // "Recommended Venues for …" — implicit m2m
+  adminUsers               AdminUser[] // operators assigned to this venue
   metaTitle                String?
   metaDescription          String?
   createdAt                DateTime         @default(now())

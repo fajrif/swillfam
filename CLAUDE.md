@@ -78,14 +78,16 @@ npm run build && npm run lint     # build also runs the TS typecheck
 npx prisma generate               # after any schema change
 npx prisma migrate dev --name x   # create + apply a migration (needs a reachable Postgres)
 npx prisma migrate deploy         # apply existing migrations (e.g. the generated init) to a fresh DB
-npx tsx prisma/seed-admin.ts      # create/update the admin login from ADMIN_EMAIL/ADMIN_PASSWORD
+npx tsx prisma/seed-admin.ts      # create/update the administrator from ADMIN_EMAIL/ADMIN_PASSWORD
+npx tsx prisma/seed-admin-users.ts # one operator login per venue (OPERATOR_DEFAULT_PASSWORD)
 npm run seed:all                  # run all the seed scripts
 ```
 
 No automated tests — verify by building and exercising the admin UI under `npm run dev`.
 
 Env: copy `.env.example` → `.env`. Needs `DATABASE_URL` (Postgres), `ADMIN_SESSION_SECRET`
-(`openssl rand -base64 32`), and `ADMIN_EMAIL`/`ADMIN_PASSWORD` (read only by the seed script).
+(`openssl rand -base64 32`), `ADMIN_EMAIL`/`ADMIN_PASSWORD` (read only by `seed-admin.ts`), and
+`OPERATOR_DEFAULT_PASSWORD` (read only by `seed-admin-users.ts`).
 
 ## Public layout (`src/app/(public)/`)
 
@@ -111,15 +113,32 @@ followed by `<Reveal>`-wrapped sections.
 ## Auth (`/admin`)
 
 Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie
-(`swillfam_admin_session`, 7-day, stateless — no DB session/revocation).
+(`swillfam_admin_session`, 7-day). The token is stateless, but every request re-reads the
+`AdminUser` row, so deleting a user or changing their role/venue/password takes effect immediately.
 
-- `src/lib/auth.ts` — edge-safe `signSession`/`verifySession` (used by the login action **and**
-  `middleware.ts`). `src/lib/session.ts` — cookie name/options. `src/lib/get-admin-session.ts` —
-  Server Component/Action cookie reader, kept separate so `middleware.ts`'s edge bundle stays lean.
-- `middleware.ts` (repo root) gates `/admin/:path*` except `/admin/login`. The `(dashboard)` layout
-  re-checks the session (defense in depth) and renders `Sidebar`. `login`/`logout` live outside the
-  `(dashboard)` group so they aren't wrapped in the sidebar shell.
-- **No in-app admin signup** — accounts come only from `prisma/seed-admin.ts` (idempotent upsert).
+- **Roles** (`AdminRole`): `ADMINISTRATOR` — everything, including Admin Users (`/admin/users`,
+  create/edit/delete + reset anyone's password). `OPERATOR` — exactly one venue (`AdminUser.venueId`):
+  that venue's info (not its slug or category), its Events / Promotions / Segment Galleries / FAQs,
+  plus all Talents. Everyone gets `/admin/profile` (name, position, avatar, change password).
+- `src/lib/auth.ts` — `signSession`/`verifySession` + `isSessionRevoked`: a token whose `iat` predates
+  `passwordChangedAt` is rejected, so any password change/reset signs out other sessions.
+  `src/lib/session.ts` — cookie name/options.
+- `src/proxy.ts` (Next 16's replacement for `middleware.ts`; always runs on Node, so it can query
+  Prisma) gates every `/admin/:path*` page except `/admin/login`: invalid/revoked sessions go to
+  login, and operators are kept inside their allowlist (`OPERATOR_SECTIONS`, own venue, profile).
+  It **must live in `src/`** (same level as `app/`) — at the repo root Next silently ignores it.
+- `src/lib/admin-auth.ts` — the data-access layer: `getCurrentAdmin` (per-request `cache()`),
+  `requireAdmin`/`requireAdministrator`, and operator scoping: `venueWhere` (list filter),
+  `assertVenueOwnership` (per-row 404), `resolveVenueId` (forces the venue on write), `lockedVenue`
+  (form prop), `venueFaqWhere`/`assertFaqOwnership` (FAQs are keyed by `segment: "venue"` + `refSlug`).
+- **Every Server Action and every page must start with a guard** — `requireAdministrator()` for
+  administrator-only resources, `requireAdmin()` + the ownership helpers for venue-scoped ones. The
+  proxy is only the first line: Server Actions are separate entry points it can't scope, and pages
+  re-check so a proxy miss never exposes data. `events/` is the reference for scoped CRUD.
+- **No in-app signup** — `prisma/seed-admin.ts` (the administrator) and `prisma/seed-admin-users.ts`
+  (one operator per venue, `admin@<first slug segment>.com`; never overwrites an existing password)
+  bootstrap accounts; after that, administrators manage them in `/admin/users`. `login`/`logout` live
+  outside the `(dashboard)` group so they aren't wrapped in the sidebar shell.
 
 ## Admin CRUD pattern (the core thing to replicate)
 
@@ -193,6 +212,9 @@ do not add `loading.tsx`.
 - **All foreign keys are optional + `onDelete: SetNull`** — deleting a parent (venue, category,
   career) never cascades or fails; children just lose the association. Forms still mark the relevant
   select `required` at the UI layer.
+- `AdminUser.role` is the `AdminRole` enum (`ADMINISTRATOR`/`OPERATOR`, defaulting to the
+  least-privileged `OPERATOR`); `venueId` is set for operators only. If an operator's venue is
+  deleted (SetNull) they can only reach `/admin/profile` until an administrator reassigns them.
 - **Slugs** (`@unique`, auto-generated, editable) on `Article`, `Category`, `Venue`, `Promotion`,
   `Event`, via `src/lib/slug.ts` `ensureUniqueSlug` (appends `-2`/`-3` on collision; pass
   `excludeId` on update).

@@ -21,12 +21,29 @@ export async function signSession(payload: AdminSessionPayload) {
     .sign(getSecretKey());
 }
 
-export async function verifySession(token: string): Promise<AdminSessionPayload | null> {
+export async function verifySession(
+  token: string,
+): Promise<(AdminSessionPayload & { iat: number }) | null> {
   try {
     const { payload } = await jwtVerify(token, getSecretKey());
     if (typeof payload.sub !== "string" || typeof payload.email !== "string") return null;
-    return { sub: payload.sub, email: payload.email };
+    if (typeof payload.iat !== "number") return null;
+    return { sub: payload.sub, email: payload.email, iat: payload.iat };
   } catch {
     return null;
   }
+}
+
+/**
+ * A session issued (`iat`, seconds) before the user's last password change is
+ * revoked. `passwordChangedAt` is stored floored to the second — see
+ * `passwordChangeTimestamp` — so a token re-issued right after the change survives.
+ */
+export function isSessionRevoked(iat: number, passwordChangedAt: Date | null) {
+  return !!passwordChangedAt && iat * 1000 < passwordChangedAt.getTime();
+}
+
+/** "Now", floored to whole seconds to line up with JWT `iat` precision. */
+export function passwordChangeTimestamp() {
+  return new Date(Math.floor(Date.now() / 1000) * 1000);
 }

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const BASE = "/admin/articles";
 const CATEGORY = "articles";
@@ -32,6 +33,7 @@ async function uniqueSlug(formData: FormData, excludeId?: string) {
 }
 
 export async function createArticleAction(formData: FormData) {
+  await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
   await prisma.article.create({ data: { ...parse(formData), slug, image } });
@@ -42,6 +44,7 @@ export async function createArticleAction(formData: FormData) {
 }
 
 export async function updateArticleAction(id: string, formData: FormData) {
+  await requireAdministrator();
   const current = await prisma.article.findUnique({ where: { id } });
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
@@ -55,6 +58,7 @@ export async function updateArticleAction(id: string, formData: FormData) {
 }
 
 export async function deleteArticleAction(id: string) {
+  await requireAdministrator();
   const current = await prisma.article.findUnique({ where: { id } });
   if (current) {
     await prisma.article.delete({ where: { id } });

@@ -5,10 +5,12 @@ import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { Pagination } from "@/components/admin/Pagination";
 import { EMPLOYMENT_OPTIONS } from "@/components/admin/CareerForm";
+import { requireAdministrator } from "@/lib/admin-auth";
 
 const employmentLabel = (v: string) => EMPLOYMENT_OPTIONS.find((o) => o.value === v)?.label ?? v;
 
 export default async function CareersPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  await requireAdministrator();
   const { q, page } = await props.searchParams;
   const search = q && q.length >= 3 ? q : undefined;
   const p = Math.max(1, Number(page) || 1);
