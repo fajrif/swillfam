@@ -151,6 +151,19 @@ export default async function EditVenuePage({ params }: { params: Promise<{ id: 
                     ),
                   },
                   { header: "Category", cell: (t) => t.talentCategory?.name ?? "—" },
+                  {
+                    header: "Status",
+                    cell: (t) =>
+                      t.status === "RESIDENT" ? (
+                        <span className="inline-flex items-center rounded-full text-xs font-medium px-2.5 py-1 bg-green-100 text-green-700">
+                          Resident
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full text-xs font-medium px-2.5 py-1 bg-blue-100 text-blue-700">
+                          Guest
+                        </span>
+                      ),
+                  },
                 ]}
               />
             </TabsContent>

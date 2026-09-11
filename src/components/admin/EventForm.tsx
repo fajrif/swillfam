@@ -1,11 +1,14 @@
-import type { Event } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, CheckboxField, CheckboxGroupField, SaveButton } from "./form-fields";
+import type { Event, TalentStatus } from "@/generated/prisma/client";
+import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
+import { MultiSelectField } from "./MultiSelectField";
 import { ImageManager } from "./ImageManager";
 import { RichTextEditor } from "./RichTextEditor";
 import { SlugField } from "./SlugField";
 import { EventScheduleFields } from "./EventScheduleFields";
 import { SeoFields } from "./SeoFields";
 import { toDateInputValue } from "@/lib/date";
+
+const talentStatusLabel = (status: TalentStatus) => (status === "RESIDENT" ? "Resident" : "Guest");
 
 export function EventForm({
   action,
@@ -19,7 +22,7 @@ export function EventForm({
   event?: Event;
   venues: { id: string; name: string }[];
   categories: { id: string; name: string }[];
-  talents: { id: string; name: string }[];
+  talents: { id: string; name: string; status: TalentStatus }[];
   selectedTalentIds?: string[];
 }) {
   return (
@@ -60,11 +63,12 @@ export function EventForm({
         />
       </div>
 
-      <CheckboxGroupField
+      <MultiSelectField
         label="Talents"
         name="talentIds"
-        options={talents.map((t) => ({ value: t.id, label: t.name }))}
+        options={talents.map((t) => ({ value: t.id, label: `${t.name} (${talentStatusLabel(t.status)})` }))}
         defaultValues={selectedTalentIds}
+        placeholder="Search talents…"
         hint="Talents performing at this event."
       />
 

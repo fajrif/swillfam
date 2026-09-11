@@ -7,7 +7,7 @@ export default async function NewEventPage() {
   const [venues, categories, talents] = await Promise.all([
     prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     prisma.eventCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
-    prisma.talent.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.talent.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, status: true } }),
   ]);
 
   return (

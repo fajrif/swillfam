@@ -43,7 +43,7 @@ const getVenueBySlug = cache((slug: string) =>
     include: {
       category: true,
       segmentGalleries: { orderBy: { createdAt: "asc" } },
-      talents: { orderBy: { createdAt: "asc" } },
+      talents: { where: { status: "RESIDENT" }, orderBy: { createdAt: "asc" } },
       promotions: { orderBy: { startDate: "asc" } },
       events: { where: { active: true }, orderBy: { startDate: "asc" } },
     },

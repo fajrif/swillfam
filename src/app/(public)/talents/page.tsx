@@ -30,6 +30,7 @@ export default async function TalentsPage() {
   const [articles, talents, venues, categories] = await Promise.all([
     getArticleRows(3),
     prisma.talent.findMany({
+      where: { status: "RESIDENT" },
       orderBy: { name: "asc" },
       include: {
         venue: { select: { name: true, logo: true } },
