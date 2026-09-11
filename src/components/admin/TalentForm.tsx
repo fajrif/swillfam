@@ -23,7 +23,7 @@ export function TalentForm({
         <SlugField sourceName="name" defaultValue={talent?.slug} />
       </div>
       <Field label="Speciality / role" name="speciality" defaultValue={talent?.speciality} required />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <SelectField
           label="Venue"
           name="venueId"
@@ -37,6 +37,16 @@ export function TalentForm({
           defaultValue={talent?.talentCategoryId ?? ""}
           blankLabel="— None —"
           options={categories.map((c) => ({ value: c.id, label: c.name }))}
+        />
+        <SelectField
+          label="Status"
+          name="status"
+          defaultValue={talent?.status ?? "RESIDENT"}
+          options={[
+            { value: "RESIDENT", label: "Resident" },
+            { value: "GUEST", label: "Guest" },
+          ]}
+          hint="Resident talents show on their venue page and any event page. Guest talents show only on the event page(s) they're booked for."
         />
       </div>
       <Field label="Instagram URL" name="instagramUrl" type="url" defaultValue={talent?.instagramUrl ?? ""} />

@@ -26,14 +26,14 @@ export const revalidate = 60;
 
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getTalentBySlug = cache((slug: string) =>
-  prisma.talent.findUnique({
-    where: { slug },
+  prisma.talent.findFirst({
+    where: { slug, status: "RESIDENT" },
     include: { venue: true, talentCategory: true },
   }),
 );
 
 export async function generateStaticParams() {
-  const rows = await prisma.talent.findMany({ select: { slug: true } });
+  const rows = await prisma.talent.findMany({ where: { status: "RESIDENT" }, select: { slug: true } });
   return rows.map((t) => ({ slug: t.slug }));
 }
 
@@ -70,7 +70,7 @@ export default async function TalentSlugPage({
         })
       : Promise.resolve([]),
     prisma.talent.findMany({
-      where: { id: { not: talent.id } },
+      where: { id: { not: talent.id }, status: "RESIDENT" },
       orderBy: { name: "asc" },
       take: 3,
       include: {

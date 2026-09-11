@@ -11,7 +11,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
     prisma.event.findUnique({ where: { id }, include: { talents: { select: { id: true } } } }),
     prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     prisma.eventCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
-    prisma.talent.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.talent.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, status: true } }),
   ]);
   if (!event) notFound();
 

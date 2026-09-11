@@ -1,5 +1,7 @@
 import { Container } from "@/components/shared/Container";
 import { ZoomableImage } from "@/components/shared/ZoomableImage";
+import { ShareButtons } from "@/components/shared/ShareButtons";
+import { absoluteUrl } from "@/lib/site-url";
 import { PastEventStamp } from "./PastEventStamp";
 import { ReserveButton } from "./ReserveButton";
 import { EVENT_PROSE } from "./prose";
@@ -11,6 +13,7 @@ import { EVENT_PROSE } from "./prose";
  */
 export function SingleEventDetail({
   name,
+  slug,
   description,
   poster,
   categoryName,
@@ -21,6 +24,7 @@ export function SingleEventDetail({
   active,
 }: {
   name: string;
+  slug: string;
   /** Rich-text HTML from the admin editor. */
   description: string;
   poster: string | null;
@@ -84,12 +88,15 @@ export function SingleEventDetail({
               </div>
             </dl>
 
-            <ReserveButton
-              eventName={name}
-              venueName={venueName}
-              phone={phone}
-              active={active}
-            />
+            <div className="flex flex-wrap items-center gap-4">
+              <ReserveButton
+                eventName={name}
+                venueName={venueName}
+                phone={phone}
+                active={active}
+              />
+              <ShareButtons url={absoluteUrl(`/events/${slug}`)} title={name} />
+            </div>
           </div>
         </div>
       </Container>

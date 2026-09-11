@@ -159,6 +159,7 @@ export default async function EventSlugPage({
       {isRecurring ? (
         <RecurringEventDetail
           name={event.name}
+          slug={event.slug}
           nextEditionDescription={event.nextEditionDescription || event.shortDescription}
           description={event.description}
           image={event.image}
@@ -172,6 +173,7 @@ export default async function EventSlugPage({
       ) : (
         <SingleEventDetail
           name={event.name}
+          slug={event.slug}
           description={event.description}
           poster={event.posterImage}
           categoryName={event.eventCategory?.name ?? null}

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
+import type { TalentStatus } from "@/generated/prisma/client";
 
 const BASE = "/admin/talents";
 const CATEGORY = "talents";
@@ -18,6 +19,7 @@ function parse(formData: FormData) {
     description: String(formData.get("description") ?? "").trim(),
     venueId: venueId || null,
     talentCategoryId: talentCategoryId || null,
+    status: String(formData.get("status") ?? "RESIDENT") as TalentStatus,
     instagramUrl: String(formData.get("instagramUrl") ?? "").trim() || null,
     spotifyEmbed: String(formData.get("spotifyEmbed") ?? "").trim() || null,
     youtubeEmbed: String(formData.get("youtubeEmbed") ?? "").trim() || null,

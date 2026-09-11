@@ -2,10 +2,11 @@ import type { Promotion, Venue } from "@/generated/prisma/client";
 import type { SiteSettings } from "@/lib/site-settings";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ShareButtons } from "@/components/shared/ShareButtons";
 import { formatDateRange } from "@/lib/date";
 import { whatsappHref } from "@/lib/whatsapp";
+import { absoluteUrl } from "@/lib/site-url";
 import { PromotionImage } from "./PromotionImage";
-import { PromotionSocialLinks } from "./PromotionSocialLinks";
 
 type PromotionWithVenue = Promotion & { venue: Venue | null };
 
@@ -93,7 +94,7 @@ export function PromotionDetailTop({
               <span />
             )}
 
-            <PromotionSocialLinks promotion={promotion} />
+            <ShareButtons url={absoluteUrl(`/promotions/${promotion.slug}`)} title={promotion.name} />
           </div>
         </div>
       </Container>
