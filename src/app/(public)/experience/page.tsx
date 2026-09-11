@@ -42,7 +42,7 @@ export default async function ExperiencePage() {
       include: { venue: { select: { name: true, logo: true } } },
     }),
     prisma.event.findMany({
-      where: { isPrivate: false, active: true },
+      where: { active: true },
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },

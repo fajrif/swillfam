@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ export function EventScheduleFields({
   defaultStartHour = "",
   defaultEndHour = "",
   defaultRecurringDays = [],
+  defaultNextEditionDescription = "",
 }: {
   defaultEventType?: string;
   defaultStartDate?: string;
@@ -37,6 +39,7 @@ export function EventScheduleFields({
   defaultStartHour?: string;
   defaultEndHour?: string;
   defaultRecurringDays?: string[];
+  defaultNextEditionDescription?: string;
 }) {
   const [eventType, setEventType] = useState(defaultEventType);
   const recurring = eventType === "RECURRING";
@@ -87,27 +90,43 @@ export function EventScheduleFields({
       </div>
 
       {recurring && (
-        <div className="grid gap-1.5">
-          <Label>Repeats on</Label>
-          <div className="flex flex-wrap gap-2">
-            {WEEKDAYS.map((d) => (
-              <Label
-                key={d.value}
-                htmlFor={`day-${d.value}`}
-                className="cursor-pointer rounded-md border bg-background px-3 py-1.5 font-normal"
-              >
-                <Checkbox
-                  id={`day-${d.value}`}
-                  name="recurringDays"
-                  value={d.value}
-                  defaultChecked={defaultRecurringDays.includes(d.value)}
-                />
-                {d.label}
-              </Label>
-            ))}
+        <>
+          <div className="grid gap-1.5">
+            <Label>Repeats on</Label>
+            <div className="flex flex-wrap gap-2">
+              {WEEKDAYS.map((d) => (
+                <Label
+                  key={d.value}
+                  htmlFor={`day-${d.value}`}
+                  className="cursor-pointer rounded-md border bg-background px-3 py-1.5 font-normal"
+                >
+                  <Checkbox
+                    id={`day-${d.value}`}
+                    name="recurringDays"
+                    value={d.value}
+                    defaultChecked={defaultRecurringDays.includes(d.value)}
+                  />
+                  {d.label}
+                </Label>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">Pick one or more days (e.g. every Friday &amp; Saturday).</p>
           </div>
-          <p className="text-xs text-muted-foreground">Pick one or more days (e.g. every Friday &amp; Saturday).</p>
-        </div>
+
+          <div className="grid gap-1.5">
+            <Label htmlFor="nextEditionDescription">Next edition description</Label>
+            <Textarea
+              id="nextEditionDescription"
+              name="nextEditionDescription"
+              rows={4}
+              defaultValue={defaultNextEditionDescription}
+            />
+            <p className="text-xs text-muted-foreground">
+              Shown as the paragraph in the &quot;Next Edition Event&quot; section on the public event page.
+              Leave blank to fall back to the Short description above.
+            </p>
+          </div>
+        </>
       )}
     </div>
   );

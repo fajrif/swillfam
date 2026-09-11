@@ -34,11 +34,10 @@ export default async function EventsPage() {
   const [settings, articles, events, venues, categories] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
-    // `isPrivate` marks private bookings, not public programming — excluded here.
     // `active: false` events are retired: they drop out of the calendar, the
     // Upcoming grid, and the featured slot, but keep a reachable detail page.
     prisma.event.findMany({
-      where: { isPrivate: false, active: true },
+      where: { active: true },
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },

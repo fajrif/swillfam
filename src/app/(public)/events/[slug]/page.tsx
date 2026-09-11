@@ -80,7 +80,6 @@ export default async function EventSlugPage({
       where: {
         id: { not: event.id },
         active: true,
-        isPrivate: false,
         ...(event.venueId || event.eventCategoryId
           ? {
               OR: [
@@ -101,7 +100,6 @@ export default async function EventSlugPage({
           where: {
             id: { not: event.id },
             active: false,
-            isPrivate: false,
             ...(event.venueId ? { venueId: event.venueId } : {}),
             ...(event.eventCategoryId ? { eventCategoryId: event.eventCategoryId } : {}),
           },
@@ -161,7 +159,7 @@ export default async function EventSlugPage({
       {isRecurring ? (
         <RecurringEventDetail
           name={event.name}
-          shortDescription={event.shortDescription}
+          nextEditionDescription={event.nextEditionDescription || event.shortDescription}
           description={event.description}
           image={event.image}
           dayLabel={formatRecurringDays(event.recurringDays)}

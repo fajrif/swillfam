@@ -73,7 +73,6 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
                 <span className="text-xs text-zinc-500">
                   {[
                     e.featured ? "Featured" : null,
-                    e.isPrivate ? "Private" : null,
                     e.active ? null : "Past",
                   ]
                     .filter(Boolean)

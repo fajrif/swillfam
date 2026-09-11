@@ -25,9 +25,9 @@ export function EventForm({
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-3 gap-6">
-        <ImageManager name="image" label="Image" existing={event?.image ? [event.image] : []} />
-        <ImageManager name="bannerImage" label="Banner image" existing={event?.bannerImage ? [event.bannerImage] : []} />
-        <ImageManager name="posterImage" label="Poster image" existing={event?.posterImage ? [event.posterImage] : []} />
+        <ImageManager name="image" label="Image" existing={event?.image ? [event.image] : []} hint="Shown on the event card in listings." />
+        <ImageManager name="bannerImage" label="Banner image" existing={event?.bannerImage ? [event.bannerImage] : []} hint="Shown as the banner on the event page." />
+        <ImageManager name="posterImage" label="Poster image" existing={event?.posterImage ? [event.posterImage] : []} hint="Optional. Shown as the poster on the event page." />
       </div>
 
       <ImageManager
@@ -69,7 +69,14 @@ export function EventForm({
       />
 
       <Field label="Caption" name="caption" defaultValue={event?.caption} required />
-      <TextareaField label="Short description" name="shortDescription" defaultValue={event?.shortDescription} rows={2} required />
+      <TextareaField
+        label="Short description"
+        name="shortDescription"
+        defaultValue={event?.shortDescription}
+        rows={2}
+        required
+        hint="Shown on the event card in listings, and as a fallback for the page's meta description. For recurring events, this is also the fallback for the 'Next Edition Event' paragraph when the Next edition description field below is left blank."
+      />
       <RichTextEditor name="description" label="Description" defaultValue={event?.description ?? ""} />
 
       <EventScheduleFields
@@ -79,11 +86,11 @@ export function EventForm({
         defaultStartHour={event?.startHour}
         defaultEndHour={event?.endHour}
         defaultRecurringDays={event?.recurringDays ?? []}
+        defaultNextEditionDescription={event?.nextEditionDescription ?? ""}
       />
 
       <div className="flex gap-8">
         <CheckboxField label="Featured" name="featured" defaultChecked={event?.featured} />
-        <CheckboxField label="Private event" name="isPrivate" defaultChecked={event?.isPrivate} />
         {/* Uncheck to retire: hidden from the public calendar and listings, but
             the detail page still renders as a "Past Event". New events default on. */}
         <CheckboxField label="Active" name="active" defaultChecked={event?.active ?? true} />

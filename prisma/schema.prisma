@@ -186,75 +186,75 @@ model Article {
 // ---------------------------------------------------------------------------
 
 model Category {
-  id          String   @id @default(uuid())
-  name        String
-  slug        String   @unique
-  image       String?
-  bannerImage String?
-  caption     String
-  headline    String?
-  introTitle  String?
-  description String?
+  id               String   @id @default(uuid())
+  name             String
+  slug             String   @unique
+  image            String?
+  bannerImage      String?
+  caption          String
+  headline         String?
+  introTitle       String?
+  description      String?
   shortDescription String?
-  venues      Venue[]
-  metaTitle       String?
-  metaDescription String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  venues           Venue[]
+  metaTitle        String?
+  metaDescription  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Venue {
-  id              String           @id @default(uuid())
-  name            String
-  slug            String           @unique
-  heroTitle       String?
-  heroDescription String?
+  id                       String           @id @default(uuid())
+  name                     String
+  slug                     String           @unique
+  heroTitle                String?
+  heroDescription          String?
   talentSectionTitle       String?
   talentSectionDescription String?
-  description     String
-  shortDescription String?
-  caption         String?
-  image           String?
-  bannerImage     String?
-  logo            String?
-  whatsapp        String?
-  phone           String?
-  email           String?
-  placeId         String?
-  categoryId      String?
-  category        Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  operatingHours  String
-  location        String
-  lat             Float?
-  lng             Float?
-  spotifyEmbed    String?
-  youtubeEmbed    String?
-  instagramEmbed  String?
-  segmentGalleries SegmentGallery[]
-  talents         Talent[]
-  promotions      Promotion[]
-  events          Event[]
-  privateEvents   PrivateEvent[]   // "Recommended Venues for …" — implicit m2m
-  metaTitle       String?
-  metaDescription String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  description              String
+  shortDescription         String?
+  caption                  String?
+  image                    String?
+  bannerImage              String?
+  logo                     String?
+  whatsapp                 String?
+  phone                    String?
+  email                    String?
+  placeId                  String?
+  categoryId               String?
+  category                 Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  operatingHours           String
+  location                 String
+  lat                      Float?
+  lng                      Float?
+  spotifyEmbed             String?
+  youtubeEmbed             String?
+  instagramEmbed           String?
+  segmentGalleries         SegmentGallery[]
+  talents                  Talent[]
+  promotions               Promotion[]
+  events                   Event[]
+  privateEvents            PrivateEvent[] // "Recommended Venues for …" — implicit m2m
+  metaTitle                String?
+  metaDescription          String?
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
 }
 
 model SegmentGallery {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  images      String[] // multiple uploaded image paths, ordered
+  id                String   @id @default(uuid())
+  title             String
+  description       String
+  images            String[] // multiple uploaded image paths, ordered
   // Per-image caption arrays, index-aligned with `images`. Populated only for
   // `special` galleries (the "dishes" template); empty otherwise.
   imageTitles       String[]
   imageDescriptions String[]
-  special     Boolean  @default(false)
-  venueId     String?
-  venue       Venue?   @relation(fields: [venueId], references: [id], onDelete: SetNull)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  special           Boolean  @default(false)
+  venueId           String?
+  venue             Venue?   @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model TalentCategory {
@@ -280,7 +280,7 @@ model Talent {
   spotifyEmbed     String?
   youtubeEmbed     String?
   instagramEmbed   String?
-  events           Event[]         // events this talent is performing at — implicit m2m
+  events           Event[] // events this talent is performing at — implicit m2m
   metaTitle        String?
   metaDescription  String?
   createdAt        DateTime        @default(now())
@@ -343,40 +343,42 @@ model EventCategory {
 }
 
 model Event {
-  id               String         @id @default(uuid())
-  image            String?
-  bannerImage      String?
-  posterImage      String?
-  name             String
-  slug             String         @unique
-  shortDescription String
-  description      String
-  caption          String
-  eventCategoryId  String?
-  eventCategory    EventCategory? @relation(fields: [eventCategoryId], references: [id], onDelete: SetNull)
-  venueId          String?
-  venue            Venue?         @relation(fields: [venueId], references: [id], onDelete: SetNull)
-  talents          Talent[]       // talents performing at this event — implicit m2m
-  eventType        EventType      @default(FIXED)
-  startDate        DateTime
-  endDate          DateTime?
-  startHour        String // "HH:mm"
-  endHour          String // "HH:mm"
-  recurringDays    Weekday[] // used when eventType = RECURRING
-  featured         Boolean        @default(false)
+  id                     String         @id @default(uuid())
+  image                  String?
+  bannerImage            String?
+  posterImage            String?
+  name                   String
+  slug                   String         @unique
+  shortDescription       String
+  description            String
+  caption                String
+  eventCategoryId        String?
+  eventCategory          EventCategory? @relation(fields: [eventCategoryId], references: [id], onDelete: SetNull)
+  venueId                String?
+  venue                  Venue?         @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  talents                Talent[] // talents performing at this event — implicit m2m
+  eventType              EventType      @default(FIXED)
+  startDate              DateTime
+  endDate                DateTime?
+  startHour              String // "HH:mm"
+  endHour                String // "HH:mm"
+  recurringDays          Weekday[] // used when eventType = RECURRING
+  // "Next Edition Event" paragraph on the public page, recurring events only —
+  // replaces shortDescription there so the two can read differently.
+  nextEditionDescription String?
+  featured               Boolean        @default(false)
   // false = retired: hidden from the public calendar + listings, but its detail
   // page still renders (stamped "Past Event", reservations disabled) and it
   // feeds the "Past Editions" grid on recurring event pages.
-  active           Boolean        @default(true)
-  isPrivate        Boolean        @default(false) @map("private")
-  galleries        String[] // multiple uploaded image paths, ordered
-  ticketInfo       String?
-  waPhone          String?
-  ticketLink       String?
-  metaTitle        String?
-  metaDescription  String?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  active                 Boolean        @default(true)
+  galleries              String[] // multiple uploaded image paths, ordered
+  ticketInfo             String?
+  waPhone                String?
+  ticketLink             String?
+  metaTitle              String?
+  metaDescription        String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
 }
 
 // ---------------------------------------------------------------------------
@@ -409,7 +411,7 @@ model Video {
 model Faq {
   id        String   @id @default(uuid())
   question  String
-  answer    String   // rich text (HTML)
+  answer    String // rich text (HTML)
   // Plural segments ("venues", "private_events") are archive-wide and leave
   // `refSlug` null; singular ones ("venue", "private_event") target the single
   // row whose slug matches `refSlug`. See src/lib/faqs.ts.
@@ -467,12 +469,12 @@ model PrivateEvent {
   occasions    PrivateEventOccasion[]
   testimonials PrivateEventTestimonial[]
 
-  sortOrder Int      @default(0)
-  published Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  published       Boolean  @default(true)
   metaTitle       String?
   metaDescription String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 /// One "Suitable for Different … Occasions:" card.
