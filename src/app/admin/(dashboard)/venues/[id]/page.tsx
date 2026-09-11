@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin, assertVenueOwnership, isAdministrator } from "@/lib/admin-auth";
-import { VenueForm } from "@/components/admin/VenueForm";
-import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
-import { EditHeader, Card } from "@/components/admin/PageHeader";
+import { requireAdmin, assertVenueOwnership } from "@/lib/admin-auth";
+import { VenueDetails } from "@/components/admin/VenueDetails";
+import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { Thumb } from "@/components/admin/Thumb";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { updateVenueAction, deleteVenueAction } from "../actions";
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -23,47 +21,39 @@ const WEEKDAY_SHORT: Record<string, string> = {
   SUNDAY: "Sun",
 };
 
-export default async function EditVenuePage({ params }: { params: Promise<{ id: string }> }) {
+/**
+ * Read-only Venue Info page — where operators land after login. Editing lives
+ * at `./edit`; this page shows every field plus the venue's events/promotions/talents.
+ */
+export default async function VenueInfoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const admin = await requireAdmin();
   assertVenueOwnership(admin, id);
-  const [venue, categories] = await Promise.all([
-    prisma.venue.findUnique({
-      where: { id },
-      include: {
-        events: {
-          include: { eventCategory: { select: { name: true } } },
-          orderBy: { startDate: "desc" },
-        },
-        promotions: {
-          include: { promotionCategory: { select: { name: true } } },
-          orderBy: { startDate: "desc" },
-        },
-        talents: {
-          include: { talentCategory: { select: { name: true } } },
-          orderBy: { createdAt: "desc" },
-        },
+  const venue = await prisma.venue.findUnique({
+    where: { id },
+    include: {
+      category: { select: { name: true } },
+      events: {
+        include: { eventCategory: { select: { name: true } } },
+        orderBy: { startDate: "desc" },
       },
-    }),
-    prisma.category.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
-  ]);
+      promotions: {
+        include: { promotionCategory: { select: { name: true } } },
+        orderBy: { startDate: "desc" },
+      },
+      talents: {
+        include: { talentCategory: { select: { name: true } } },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
   if (!venue) notFound();
 
   return (
     <div>
-      <EditHeader title="Edit Venue" backHref="/admin/venues" />
+      <PageHeader title={venue.name} newHref={`/admin/venues/${id}/edit`} newLabel="Edit venue" />
       <Card>
-        <VenueForm
-          action={updateVenueAction.bind(null, id)}
-          venue={venue}
-          categories={categories}
-          lockIdentity={!isAdministrator(admin)}
-        />
-        {isAdministrator(admin) && (
-          <div className="mt-6 pt-6 border-t border-zinc-200">
-            <ConfirmDeleteButton action={deleteVenueAction.bind(null, id)} label="Delete venue" />
-          </div>
-        )}
+        <VenueDetails venue={venue} />
       </Card>
 
       <div className="mt-6">

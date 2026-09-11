@@ -77,8 +77,8 @@ export async function updateVenueAction(id: string, formData: FormData) {
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/venues");
   revalidatePath(`/venues/${slug}`);
-  // Operators have no venue list to return to — keep them on their venue.
-  redirect(isAdministrator(admin) ? BASE : `${BASE}/${id}`);
+  // Back to the Venue Info page the edit was opened from.
+  redirect(`${BASE}/${id}`);
 }
 
 export async function deleteVenueAction(id: string) {
