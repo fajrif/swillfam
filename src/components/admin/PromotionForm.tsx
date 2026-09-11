@@ -20,9 +20,9 @@ export function PromotionForm({
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-3 gap-6">
-        <ImageManager name="image" label="Image" existing={promotion?.image ? [promotion.image] : []} />
-        <ImageManager name="bannerImage" label="Banner image" existing={promotion?.bannerImage ? [promotion.bannerImage] : []} />
-        <ImageManager name="posterImage" label="Poster image" existing={promotion?.posterImage ? [promotion.posterImage] : []} />
+        <ImageManager name="image" label="Image" existing={promotion?.image ? [promotion.image] : []} hint="Shown on the promotion card in listings." />
+        <ImageManager name="bannerImage" label="Banner image" existing={promotion?.bannerImage ? [promotion.bannerImage] : []} hint="Shown as the banner on the promotion page." />
+        <ImageManager name="posterImage" label="Poster image" existing={promotion?.posterImage ? [promotion.posterImage] : []} hint="Optional. Shown as the poster on the promotion page." />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

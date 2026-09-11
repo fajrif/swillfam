@@ -96,7 +96,7 @@ export default async function EditVenuePage({ params }: { params: Promise<{ id: 
                     header: "Flags",
                     cell: (e) => (
                       <span className="text-xs text-zinc-500">
-                        {[e.featured ? "Featured" : null, e.isPrivate ? "Private" : null].filter(Boolean).join(", ") || "—"}
+                        {[e.featured ? "Featured" : null].filter(Boolean).join(", ") || "—"}
                       </span>
                     ),
                   },

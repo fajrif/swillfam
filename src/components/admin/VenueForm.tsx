@@ -31,8 +31,8 @@ export function VenueForm({
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-3 gap-6">
-        <ImageManager name="image" label="Image" existing={venue?.image ? [venue.image] : []} />
-        <ImageManager name="bannerImage" label="Banner image" existing={venue?.bannerImage ? [venue.bannerImage] : []} />
+        <ImageManager name="image" label="Image" existing={venue?.image ? [venue.image] : []} hint="Shown on the venue card in listings." />
+        <ImageManager name="bannerImage" label="Banner image" existing={venue?.bannerImage ? [venue.bannerImage] : []} hint="Shown as the banner on the venue page." />
         <ImageManager name="logo" label="Logo" existing={venue?.logo ? [venue.logo] : []} bgBlack />
       </div>
 

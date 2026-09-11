@@ -7,14 +7,14 @@ import { EVENT_PROSE } from "./prose";
 /**
  * The two body blocks of a recurring (series) event.
  *
- * "Next Edition Event" leads with the short description and the next computed
- * date; "About This Series Event" carries the full rich-text write-up — which is
- * also where an admin notes per-edition details like special guests or talents —
- * plus the recurring day, venue, and category.
+ * "Next Edition Event" leads with the dedicated next-edition description and
+ * the next computed date; "About This Series Event" carries the full rich-text
+ * write-up — which is also where an admin notes per-edition details like
+ * special guests or talents — plus the recurring day, venue, and category.
  */
 export function RecurringEventDetail({
   name,
-  shortDescription,
+  nextEditionDescription,
   description,
   image,
   dayLabel,
@@ -25,7 +25,8 @@ export function RecurringEventDetail({
   active,
 }: {
   name: string;
-  shortDescription: string;
+  /** Caller falls back to the event's shortDescription when this is unset. */
+  nextEditionDescription: string;
   /** Rich-text HTML from the admin editor. */
   description: string;
   image: string | null;
@@ -52,7 +53,7 @@ export function RecurringEventDetail({
 
           <div className="flex flex-col gap-5">
             <p className="whitespace-pre-line font-inter leading-relaxed">
-              {shortDescription}
+              {nextEditionDescription}
             </p>
 
             {nextDateLabel ? (

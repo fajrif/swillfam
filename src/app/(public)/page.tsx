@@ -30,7 +30,7 @@ export default async function Home() {
     getSiteSettings(),
     getArticleRows(3),
     prisma.event.findMany({
-      where: { isPrivate: false, active: true },
+      where: { active: true },
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
@@ -42,7 +42,7 @@ export default async function Home() {
   ]);
 
   const featuredEvents = await prisma.event.findMany({
-    where: { isPrivate: false, active: true, featured: true },
+    where: { active: true, featured: true },
     orderBy: { startDate: "asc" },
     take: 3,
     select: { image: true, name: true, shortDescription: true, caption: true, slug: true },
