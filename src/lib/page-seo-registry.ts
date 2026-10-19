@@ -15,7 +15,7 @@ export const STATIC_PAGE_SEO_DEFS = [
   { key: "talents", label: "Talents (archive)", path: "/talents" },
   { key: "venues", label: "Venues (archive)", path: "/venues" },
   { key: "private-events", label: "Private Events (archive)", path: "/private-events" },
-  { key: "articles", label: "Articles (archive)", path: "/articles" },
+  { key: "guides", label: "Guides (archive)", path: "/guides" },
 ] as const;
 
 export type StaticPageSeoKey = (typeof STATIC_PAGE_SEO_DEFS)[number]["key"];

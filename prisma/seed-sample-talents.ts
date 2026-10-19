@@ -27,8 +27,8 @@ type Sample = {
 
 const SAMPLES: Sample[] = [
   {
-    venueSlug: "kilo",
-    venueName: "Kilo",
+    venueSlug: "kilo-jakarta",
+    venueName: "Kilo Jakarta",
     name: "DJ Nova",
     speciality: "Resident DJ",
     description:
@@ -37,8 +37,8 @@ const SAMPLES: Sample[] = [
     image: IMG("sample-DJ-kilo.png"),
   },
   {
-    venueSlug: "lecirque",
-    venueName: "Lecirque",
+    venueSlug: "le-cirque",
+    venueName: "Le Cirque",
     name: "DJ Rae",
     speciality: "Resident DJ",
     description:

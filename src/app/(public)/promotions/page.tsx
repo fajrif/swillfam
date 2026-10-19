@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -30,13 +31,14 @@ export default async function PromotionsPage() {
   const [articles, promotions, venues, categories] = await Promise.all([
     getArticleRows(3),
     prisma.promotion.findMany({
+      where: publishedVenueScope,
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },
         promotionCategory: { select: { id: true, name: true } },
       },
     }),
-    prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.venue.findMany({ where: { published: true }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
     prisma.promotionCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
 

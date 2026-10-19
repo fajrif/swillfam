@@ -29,7 +29,7 @@ export function CategoryNav({
           ]}
           value={activeCategoryId ?? ""}
           onValueChange={(v) => {
-            router.push(v ? `/articles?category=${v}` : "/articles", { scroll: false });
+            router.push(v ? `/guides?category=${v}` : "/guides", { scroll: false });
           }}
         />
       </div>
@@ -37,7 +37,7 @@ export function CategoryNav({
       {/* Desktop sidebar */}
       <nav className="hidden flex-col gap-3 self-start lg:sticky lg:top-24 lg:flex">
         <Link
-          href="/articles"
+          href="/guides"
           scroll={false}
           className={cn(
             "font-syne text-2xl uppercase leading-tight transition-colors lg:text-[28px]",
@@ -49,7 +49,7 @@ export function CategoryNav({
         {categories.map((category) => (
           <Link
             key={category.id}
-            href={`/articles?category=${category.id}`}
+            href={`/guides?category=${category.id}`}
             scroll={false}
             className={cn(
               "font-syne text-2xl uppercase leading-tight transition-colors lg:text-[28px]",

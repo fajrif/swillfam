@@ -10,7 +10,7 @@ import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "articles" } });
+  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "guides" } });
   return {
     title: seo?.metaTitle ?? "SwillFam",
     description: seo?.metaDescription ?? undefined,
@@ -48,11 +48,11 @@ export default async function ArticlesPage({
     date: DATE_FMT.format(a.publishedDate),
     title: a.title,
     excerpt: a.shortDescription,
-    href: `/articles/${a.slug}`,
+    href: `/guides/${a.slug}`,
   }));
 
   const hasMore = articles.length < total;
-  const loadMoreHref = `/articles?${new URLSearchParams({
+  const loadMoreHref = `/guides?${new URLSearchParams({
     ...(category ? { category } : {}),
     page: String(page + 1),
   }).toString()}`;

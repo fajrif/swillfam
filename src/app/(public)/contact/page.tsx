@@ -24,6 +24,7 @@ export default async function ContactPage() {
   const [settings, venues] = await Promise.all([
     getSiteSettings(),
     prisma.venue.findMany({
+      where: { published: true },
       select: { name: true, slug: true, image: true, whatsapp: true, placeId: true, lat: true, lng: true },
       orderBy: { name: "asc" },
     }),

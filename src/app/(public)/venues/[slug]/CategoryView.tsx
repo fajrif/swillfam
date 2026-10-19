@@ -1,7 +1,6 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
@@ -17,46 +16,24 @@ import {
 
 const FALLBACK = "/home/hero.png";
 
-// SSG per known slug at build time, but data-driven — revalidate periodically so
-// admin edits/seeds show up without a full rebuild.
-export const revalidate = 60;
-
 /** Cached so generateMetadata and the page share a single DB read per request. */
-const getCategoryBySlug = cache((slug: string) =>
+export const getCategoryBySlug = cache((slug: string) =>
   prisma.category.findUnique({
     where: { slug },
-    include: { venues: { orderBy: { name: "asc" } } },
+    include: { venues: { where: { published: true }, orderBy: { name: "asc" } } },
   }),
 );
 
-export async function generateStaticParams() {
-  const categories = await prisma.category.findMany({ select: { slug: true } });
-  return categories.map((c) => ({ slug: c.slug }));
-}
+export type CategoryDetail = NonNullable<Awaited<ReturnType<typeof getCategoryBySlug>>>;
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
-  if (!category) return { title: "Category | SwillFam" };
+export function categoryMetadata(category: CategoryDetail): Metadata {
   return {
     title: category.metaTitle || `${category.name} | SwillFam`,
     description: category.metaDescription || category.headline || category.caption,
   };
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
-  if (!category) notFound();
-
+export async function CategoryView({ category }: { category: CategoryDetail }) {
   const [sibling, articles] = await Promise.all([
     prisma.category.findFirst({
       where: { id: { not: category.id } },

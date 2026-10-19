@@ -6,17 +6,17 @@ const FOLDER = "lecirque";
 const asset = (file: string) => `/categories/venues/${FOLDER}/${file}`;
 
 async function getOrCreateVenue() {
-  const existing = await prisma.venue.findUnique({ where: { slug: "lecirque" } });
+  const existing = await prisma.venue.findUnique({ where: { slug: "le-cirque" } });
   if (existing) return existing;
 
   const category = await prisma.category.findFirst({ where: { name: "Nightlife" } });
-  const slug = await ensureUniqueSlug("Lecirque", async (s) => {
+  const slug = await ensureUniqueSlug("Le Cirque", async (s) => {
     const found = await prisma.venue.findUnique({ where: { slug: s } });
     return !!found;
   });
   return prisma.venue.create({
     data: {
-      name: "Lecirque",
+      name: "Le Cirque",
       slug,
       description:
         "LE CIRQUE REPRESENTS A SHIFT TOWARD A BOLDER, MORE DYNAMIC AND MORE SOULFUL NIGHTLIFE CULTURE MIXED WITH MAD + FUN EXPERIENCE.\n\nA new cultural nightlife house built for Jakarta\u2019s growing community of music lovers. Designed as a playground of sound, style, and energy, Le Cirque brings an experience that blends intimacy, credibility, and modern nightlife culture \u2014 something truly different from anything currently offered in Indonesia. Powered by a custom lighting and visual system, the venue offers a dynamic, immersive atmosphere that moves in sync with the sound. Le Cirque champions a spectrum of unique house-driven styles \u2014 deep house, disco, minimal house, tech house, and modern club rhythms, presented by Indonesia\u2019s top talents and curated international guests. Built for tastemakers, dancers, and true music lovers, Le Cirque is where fun feels inevitable and every night feels alive.",
@@ -121,7 +121,7 @@ async function seedPromotions(venueId: string) {
 async function seedVenueFaqs() {
   // Scoped to this venue's slug — an unscoped delete would wipe every other
   // venue's FAQs, which is what used to happen when seeds ran back to back.
-  const scope = { segment: "venue", refSlug: "lecirque" };
+  const scope = { segment: "venue", refSlug: "le-cirque" };
   await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {

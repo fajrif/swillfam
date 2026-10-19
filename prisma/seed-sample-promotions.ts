@@ -59,8 +59,8 @@ const SAMPLES: Sample[] = [
   { slug: "ladies-night-zoo", venueSlug: "zoo", venueName: "Zoo", title: "Ladies Night", category: "Ladies Night", image: IMG("sample-promo-zoo.png") },
   { slug: "dinner-drinks-atsumaru", venueSlug: "atsumaru-izakaya", venueName: "Atsumaru Izakaya", title: "Dinner & Drinks Offer", category: "Food & Drink", image: IMG("sample-promo-atsumaru.png") },
   { slug: "group-table-swillhouse", venueSlug: "swillhouse", venueName: "Swillhouse", title: "Group Table Package", category: "Group & Table", image: IMG("sample-promo-swillhouse.png") },
-  { slug: "ladies-night-le-cirque", venueSlug: "lecirque", venueName: "Lecirque", title: "Ladies Night", category: "Ladies Night", image: IMG("sample-promo-lecirque.png") },
-  { slug: "dinner-drinks-kilo", venueSlug: "kilo", venueName: "Kilo", title: "Dinner & Drinks Offer", category: "Food & Drink", image: IMG("sample-promo-kilo.png") },
+  { slug: "ladies-night-le-cirque", venueSlug: "le-cirque", venueName: "Le Cirque", title: "Ladies Night", category: "Ladies Night", image: IMG("sample-promo-lecirque.png") },
+  { slug: "dinner-drinks-kilo", venueSlug: "kilo-jakarta", venueName: "Kilo Jakarta", title: "Dinner & Drinks Offer", category: "Food & Drink", image: IMG("sample-promo-kilo.png") },
   { slug: "group-table-truce", venueSlug: "truce", venueName: "Truce", title: "Group Table Package", category: "Group & Table", image: IMG("sample-promo-truce.png") },
 ];
 

@@ -282,7 +282,7 @@ async function seedVenues() {
     },
     {
       folder: "kilo",
-      name: "Kilo",
+      name: "Kilo Jakarta",
       category: "Lifestyle",
       hasBanner: false,
       operatingHours: "Daily: 10:00 - 22:00",
@@ -357,7 +357,7 @@ async function seedVenues() {
     },
     {
       folder: "lecirque",
-      name: "Lecirque",
+      name: "Le Cirque",
       category: "Nightlife",
       hasBanner: false,
       operatingHours: "Friday - Saturday: 21:00 - 05:00",

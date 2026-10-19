@@ -7,14 +7,16 @@ import { prisma } from "../src/lib/prisma";
 // line never touches an already-seeded row — and an admin may have since
 // replaced a venue's logo via the upload form, pointing it at /uploads/venues/
 // instead of this canonical path.
+// Slug and folder diverge for the two renamed venues: the asset folders keep
+// their original names (see seed-venue-slug-rename.ts) while the URL slug changed.
 const UPDATES = [
   { slug: "atsumaru-izakaya", folder: "atsumaru-izakaya" },
   { slug: "zoo", folder: "zoo" },
   { slug: "swillhouse", folder: "swillhouse" },
-  { slug: "kilo", folder: "kilo" },
+  { slug: "kilo-jakarta", folder: "kilo" },
   { slug: "dualism", folder: "dualism" },
   { slug: "truce", folder: "truce" },
-  { slug: "lecirque", folder: "lecirque" },
+  { slug: "le-cirque", folder: "lecirque" },
 ];
 
 async function main() {

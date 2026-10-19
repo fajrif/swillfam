@@ -2,6 +2,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange, formatDay } from "@/lib/date";
@@ -36,8 +37,9 @@ export const revalidate = 60;
 
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getEventBySlug = cache((slug: string) =>
-  prisma.event.findUnique({
-    where: { slug },
+  // findFirst, not findUnique: the venue scope is not part of the unique key.
+  prisma.event.findFirst({
+    where: { slug, ...publishedVenueScope },
     include: { venue: true, eventCategory: true, talents: { orderBy: { name: "asc" } } },
   }),
 );
@@ -45,7 +47,7 @@ const getEventBySlug = cache((slug: string) =>
 export async function generateStaticParams() {
   // Deactivated events are included: they drop out of the calendar and listings
   // but keep a reachable detail page (and are linked from "Past Editions").
-  const rows = await prisma.event.findMany({ select: { slug: true } });
+  const rows = await prisma.event.findMany({ where: publishedVenueScope, select: { slug: true } });
   return rows.map((e) => ({ slug: e.slug }));
 }
 
@@ -80,6 +82,8 @@ export default async function EventSlugPage({
       where: {
         id: { not: event.id },
         active: true,
+        // under AND: this query builds its own OR, which a spread would clobber
+        AND: [publishedVenueScope],
         ...(event.venueId || event.eventCategoryId
           ? {
               OR: [
@@ -100,6 +104,7 @@ export default async function EventSlugPage({
           where: {
             id: { not: event.id },
             active: false,
+            AND: [publishedVenueScope],
             ...(event.venueId ? { venueId: event.venueId } : {}),
             ...(event.eventCategoryId ? { eventCategoryId: event.eventCategoryId } : {}),
           },

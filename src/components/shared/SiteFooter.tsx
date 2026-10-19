@@ -21,7 +21,7 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
     { label: "Talents", href: "/talents" },
     { label: "Exclusive", href: "/exclusive" },
     { label: "Merchandise", href: "/merchandise" },
-    { label: "Guides/Journal", href: "/articles" },
+    { label: "Guides/Journal", href: "/guides" },
     { label: "Contact", href: "/contact" },
   ],
 ];

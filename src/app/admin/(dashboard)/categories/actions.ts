@@ -13,8 +13,13 @@ const CATEGORY = "categories";
 async function uniqueSlug(formData: FormData, excludeId?: string) {
   const base = String(formData.get("slug") ?? "").trim() || String(formData.get("name") ?? "").trim();
   return ensureUniqueSlug(base, async (s) => {
-    const found = await prisma.category.findUnique({ where: { slug: s }, select: { id: true } });
-    return !!found && found.id !== excludeId;
+    // Shares the /venues/[slug] segment with venues — see the venues action.
+    // A category taking a venue's slug would shadow that venue's page.
+    const [category, venue] = await Promise.all([
+      prisma.category.findUnique({ where: { slug: s }, select: { id: true } }),
+      prisma.venue.findUnique({ where: { slug: s }, select: { id: true } }),
+    ]);
+    return !!venue || (!!category && category.id !== excludeId);
   });
 }
 
@@ -39,7 +44,7 @@ export async function createCategoryAction(formData: FormData) {
     },
   });
   revalidatePath(BASE);
-  revalidatePath(`/category/${slug}`);
+  revalidatePath(`/venues/${slug}`);
   revalidatePath("/venues");
   redirect(BASE);
 }
@@ -69,7 +74,7 @@ export async function updateCategoryAction(id: string, formData: FormData) {
   });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
-  revalidatePath(`/category/${slug}`);
+  revalidatePath(`/venues/${slug}`);
   revalidatePath("/venues");
   redirect(BASE);
 }
@@ -81,7 +86,7 @@ export async function deleteCategoryAction(id: string) {
     // Venues reference categoryId with onDelete: SetNull — they survive.
     await prisma.category.delete({ where: { id } });
     await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage));
-    revalidatePath(`/category/${current.slug}`);
+    revalidatePath(`/venues/${current.slug}`);
     revalidatePath("/venues");
   }
   revalidatePath(BASE);
