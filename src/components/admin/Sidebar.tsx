@@ -107,7 +107,7 @@ export function Sidebar({ admin }: { admin: SidebarAdmin }) {
         <Link href="/"><Image src="/logo-swillfam.png" alt="Swillfam" width={100} height={44} className="cursor-pointer" /></Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm font-medium">
+      <nav data-lenis-prevent className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm font-medium">
         {groups.map((group) => (
           <div key={group.label}>
             <div className="px-3 mb-1 text-[10px] uppercase tracking-widest text-muted-foreground">
