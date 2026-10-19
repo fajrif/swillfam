@@ -89,6 +89,12 @@ Env: copy `.env.example` → `.env`. Needs `DATABASE_URL` (Postgres), `ADMIN_SES
 (`openssl rand -base64 32`), `ADMIN_EMAIL`/`ADMIN_PASSWORD` (read only by `seed-admin.ts`), and
 `OPERATOR_DEFAULT_PASSWORD` (read only by `seed-admin-users.ts`).
 
+**`SITE_INDEXABLE` — production must set this to `"true"`.** `src/app/robots.ts` reads it per
+request; anything else serves a blanket `Disallow: /`. Indexing is opt-in so a staging box that
+forgets the variable stays out of search results. After any production deploy, confirm with
+`curl -s https://swillfam.com/robots.txt`. `NEXT_PUBLIC_SITE_URL` must also be the real origin —
+it is the base for canonicals, the sitemap and the JSON-LD `@id`s.
+
 ## Public layout (`src/app/(public)/`)
 
 Every public route lives under the `(public)` route group so `src/app/(public)/layout.tsx` can own
