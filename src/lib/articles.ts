@@ -16,6 +16,6 @@ export async function getArticleRows(limit: number): Promise<ArticleRow[]> {
     date: DATE_FMT.format(a.publishedDate),
     title: a.title,
     excerpt: a.shortDescription,
-    href: `/articles/${a.slug}`,
+    href: `/guides/${a.slug}`,
   }));
 }

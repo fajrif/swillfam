@@ -6,7 +6,7 @@ import { prisma } from "../../src/lib/prisma";
  * Run with: npx tsx prisma/copy-updates/venue-kilo.ts
  */
 
-const SLUG = "kilo";
+const SLUG = "kilo-jakarta";
 
 const HERO_TITLE = "Flavor without Borders";
 const HERO_DESCRIPTION =

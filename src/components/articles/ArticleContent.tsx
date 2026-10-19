@@ -19,7 +19,7 @@ export function ArticleContent({
     <article className="py-12 lg:py-16">
       <Container className="flex flex-col gap-12">
         <Link
-          href="/articles"
+          href="/guides"
           className="font-inter text-sm text-white transition-colors hover:text-sf-accent"
         >
           ← Back to All Articles

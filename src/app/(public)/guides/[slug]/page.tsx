@@ -52,7 +52,7 @@ export default async function ArticlePage({
     date: DATE_FMT.format(a.publishedDate),
     title: a.title,
     excerpt: a.shortDescription,
-    href: `/articles/${a.slug}`,
+    href: `/guides/${a.slug}`,
   }));
 
   return (
@@ -87,7 +87,7 @@ export default async function ArticlePage({
           lead="Continue exploring stories, recommendations, and insider guides from the SwillFam world."
           articles={otherRows}
           ctaLabel="See All Articles"
-          ctaHref="/articles"
+          ctaHref="/guides"
         />
       </Reveal>
 

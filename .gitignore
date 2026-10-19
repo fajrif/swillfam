@@ -51,3 +51,5 @@ next-env.d.ts
 # copywriting working files (not app code)
 /Swillfam.xlsx
 /TASK_COPY.md
+/requests/
+ROADMAP_PLAN.md

@@ -42,8 +42,15 @@ function parse(formData: FormData) {
 async function uniqueSlug(formData: FormData, excludeId?: string) {
   const base = String(formData.get("slug") ?? "").trim() || String(formData.get("name") ?? "").trim();
   return ensureUniqueSlug(base, async (s) => {
-    const found = await prisma.venue.findUnique({ where: { slug: s }, select: { id: true } });
-    return !!found && found.id !== excludeId;
+    // /venues/[slug] serves venues and venue categories from one segment, and a
+    // category wins the dispatch — so a venue may not take a slug a category
+    // already holds, or its page would be unreachable. Colliding slugs get the
+    // usual -2 suffix rather than an error.
+    const [venue, category] = await Promise.all([
+      prisma.venue.findUnique({ where: { slug: s }, select: { id: true } }),
+      prisma.category.findUnique({ where: { slug: s }, select: { id: true } }),
+    ]);
+    return !!category || (!!venue && venue.id !== excludeId);
   });
 }
 

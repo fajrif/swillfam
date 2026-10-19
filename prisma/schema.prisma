@@ -254,6 +254,9 @@ model Venue {
   events                   Event[]
   privateEvents            PrivateEvent[] // "Recommended Venues for …" — implicit m2m
   adminUsers               AdminUser[] // operators assigned to this venue
+  // Unpublishing hides the venue from the public site and drops it from the
+  // sitemap and Organization schema, without deleting its events/promotions.
+  published                Boolean          @default(true)
   metaTitle                String?
   metaDescription          String?
   createdAt                DateTime         @default(now())

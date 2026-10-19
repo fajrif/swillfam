@@ -27,6 +27,7 @@ export default async function VenuesPage() {
     getSiteSettings(),
     prisma.category.findMany({ orderBy: { name: "asc" } }),
     prisma.venue.findMany({
+      where: { published: true },
       orderBy: { name: "asc" },
       select: {
         id: true,

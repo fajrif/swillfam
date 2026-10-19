@@ -12,7 +12,7 @@ export async function createArticleCategoryAction(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   await prisma.articleCategory.create({ data: { name } });
   revalidatePath(BASE);
-  revalidatePath("/articles");
+  revalidatePath("/guides");
   redirect(BASE);
 }
 
@@ -21,7 +21,7 @@ export async function updateArticleCategoryAction(id: string, formData: FormData
   const name = String(formData.get("name") ?? "").trim();
   await prisma.articleCategory.update({ where: { id }, data: { name } });
   revalidatePath(BASE);
-  revalidatePath("/articles");
+  revalidatePath("/guides");
   redirect(BASE);
 }
 
@@ -29,6 +29,6 @@ export async function deleteArticleCategoryAction(id: string) {
   await requireAdministrator();
   await prisma.articleCategory.delete({ where: { id } });
   revalidatePath(BASE);
-  revalidatePath("/articles");
+  revalidatePath("/guides");
   redirect(BASE);
 }

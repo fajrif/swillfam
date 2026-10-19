@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
@@ -37,12 +38,13 @@ export default async function ExperiencePage() {
     getSiteSettings(),
     getArticleRows(3),
     prisma.promotion.findMany({
+      where: publishedVenueScope,
       orderBy: { startDate: "desc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
     prisma.event.findMany({
-      where: { active: true },
+      where: { active: true, ...publishedVenueScope },
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
@@ -126,7 +128,7 @@ export default async function ExperiencePage() {
           lead="Explore our guide to planning a night out around SCBD and nearby SwillFam venues. Discover where to start, where to eat, where to drink, and how to continue the night across our lifestyle and nightlife destinations."
           articles={articles}
           ctaLabel="See All Guides"
-          ctaHref="/articles"
+          ctaHref="/guides"
         />
       </Reveal>
 

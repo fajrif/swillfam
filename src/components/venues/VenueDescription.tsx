@@ -14,7 +14,7 @@ export function VenueDescription({
         {venue.category ? (
           <div className="flex flex-col gap-6">
             <Link
-              href={`/category/${venue.category.slug}`}
+              href={`/venues/${venue.category.slug}`}
               className="group inline-flex w-fit items-center gap-3 font-inter text-sm uppercase tracking-[0.06em] text-white"
             >
               <span aria-hidden className="transition-transform group-hover:-translate-x-1">
@@ -32,7 +32,7 @@ export function VenueDescription({
           <div className="flex flex-col justify-center">
           {venue.category ? (
             <Button asChild variant="swillfam" size="pill" className="w-fit mb-8">
-              <Link href={`/category/${venue.category.slug}`}>{venue.category.name}</Link>
+              <Link href={`/venues/${venue.category.slug}`}>{venue.category.name}</Link>
             </Button>
           ) : null}
             <p className="whitespace-pre-line font-inter leading-relaxed">

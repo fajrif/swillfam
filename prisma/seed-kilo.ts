@@ -6,17 +6,17 @@ const FOLDER = "kilo";
 const asset = (file: string) => `/categories/venues/${FOLDER}/${file}`;
 
 async function getOrCreateVenue() {
-  const existing = await prisma.venue.findUnique({ where: { slug: "kilo" } });
+  const existing = await prisma.venue.findUnique({ where: { slug: "kilo-jakarta" } });
   if (existing) return existing;
 
   const category = await prisma.category.findFirst({ where: { name: "Lifestyle" } });
-  const slug = await ensureUniqueSlug("Kilo", async (s) => {
+  const slug = await ensureUniqueSlug("Kilo Jakarta", async (s) => {
     const found = await prisma.venue.findUnique({ where: { slug: s } });
     return !!found;
   });
   return prisma.venue.create({
     data: {
-      name: "Kilo",
+      name: "Kilo Jakarta",
       slug,
       description:
         "Kilo Kitchen Jakarta is a standout culinary destination known for its modern comfort food rooted in a bold fusion of Latin and Asian flavors.\n\nLocated in the vibrant heart of Jakarta, Kilo offers a stylish yet relaxed atmosphere perfect for casual dining, date nights, or social gatherings. Blending Jakarta\u2019s fast-paced city life with Kilo\u2019s signature lifestyle approach, the venue creates an immersive experience where food, music, and culture converge. Guests can expect elevated dishes, handcrafted cocktails, and an inviting ambiance that redefines contemporary dining in Indonesia. Whether you\u2019re craving unique flavor combinations or a cozy escape with great vibes, Kilo Kitchen Jakarta is your go-to restaurant for unforgettable dining moments.",
@@ -211,7 +211,7 @@ async function seedPromotions(venueId: string) {
 async function seedVenueFaqs() {
   // Scoped to this venue's slug — an unscoped delete would wipe every other
   // venue's FAQs, which is what used to happen when seeds ran back to back.
-  const scope = { segment: "venue", refSlug: "kilo" };
+  const scope = { segment: "venue", refSlug: "kilo-jakarta" };
   await prisma.faq.deleteMany({ where: scope });
   const FAQS = [
     {

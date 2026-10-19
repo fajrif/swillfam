@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
 import { Reveal } from "@/components/Reveal";
@@ -27,13 +28,16 @@ export const revalidate = 60;
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getTalentBySlug = cache((slug: string) =>
   prisma.talent.findFirst({
-    where: { slug, status: "RESIDENT" },
+    where: { slug, status: "RESIDENT", ...publishedVenueScope },
     include: { venue: true, talentCategory: true },
   }),
 );
 
 export async function generateStaticParams() {
-  const rows = await prisma.talent.findMany({ where: { status: "RESIDENT" }, select: { slug: true } });
+  const rows = await prisma.talent.findMany({
+    where: { status: "RESIDENT", ...publishedVenueScope },
+    select: { slug: true },
+  });
   return rows.map((t) => ({ slug: t.slug }));
 }
 
@@ -70,7 +74,7 @@ export default async function TalentSlugPage({
         })
       : Promise.resolve([]),
     prisma.talent.findMany({
-      where: { id: { not: talent.id }, status: "RESIDENT" },
+      where: { id: { not: talent.id }, status: "RESIDENT", ...publishedVenueScope },
       orderBy: { name: "asc" },
       take: 3,
       include: {

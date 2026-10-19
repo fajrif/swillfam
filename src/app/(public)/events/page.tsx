@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getArticleRows } from "@/lib/articles";
 import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
@@ -37,7 +38,7 @@ export default async function EventsPage() {
     // `active: false` events are retired: they drop out of the calendar, the
     // Upcoming grid, and the featured slot, but keep a reachable detail page.
     prisma.event.findMany({
-      where: { active: true },
+      where: { active: true, ...publishedVenueScope },
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },
@@ -45,6 +46,7 @@ export default async function EventsPage() {
       },
     }),
     prisma.venue.findMany({
+      where: { published: true },
       orderBy: { name: "asc" },
       select: { id: true, slug: true, name: true, logo: true },
     }),

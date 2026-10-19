@@ -125,7 +125,7 @@ const PRIVATE_EVENTS: PrivateEventSeed[] = [
     galleryTitle: "Corporate Events We Can Host",
     galleryLead:
       "Explore examples of corporate event setups, dining moments, social gatherings, brand-hosted nights, and celebration formats across SwillFam venues.",
-    venueSlugs: ["dualism", "truce", "zoo", "lecirque"],
+    venueSlugs: ["dualism", "truce", "zoo", "le-cirque"],
     occasions: CORPORATE_OCCASIONS,
   },
   {
@@ -145,7 +145,7 @@ const PRIVATE_EVENTS: PrivateEventSeed[] = [
     galleryTitle: "Birthdays We Can Host",
     galleryLead:
       "Explore examples of birthday dinners, table celebrations, group nights, and full-venue parties across SwillFam venues.",
-    venueSlugs: ["kilo", "zoo", "lecirque", "swillhouse"],
+    venueSlugs: ["kilo-jakarta", "zoo", "le-cirque", "swillhouse"],
     occasions: [],
   },
   {
@@ -165,7 +165,7 @@ const PRIVATE_EVENTS: PrivateEventSeed[] = [
     galleryTitle: "Brand Activations We Can Host",
     galleryLead:
       "Explore examples of launches, press nights, product showcases, and brand-hosted evenings across SwillFam venues.",
-    venueSlugs: ["dualism", "kilo", "truce", "zoo"],
+    venueSlugs: ["dualism", "kilo-jakarta", "truce", "zoo"],
     occasions: [],
   },
   {
@@ -185,7 +185,7 @@ const PRIVATE_EVENTS: PrivateEventSeed[] = [
     galleryTitle: "Celebrations We Can Host",
     galleryLead:
       "Explore examples of anniversary dinners, engagement parties, wrap nights, and late after-parties across SwillFam venues.",
-    venueSlugs: ["swillhouse", "lecirque", "zoo", "dualism"],
+    venueSlugs: ["swillhouse", "le-cirque", "zoo", "dualism"],
     occasions: [],
   },
 ];

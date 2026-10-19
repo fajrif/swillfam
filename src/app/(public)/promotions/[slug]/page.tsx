@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
@@ -21,14 +22,15 @@ export const revalidate = 60;
 
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getPromotionBySlug = cache((slug: string) =>
-  prisma.promotion.findUnique({
-    where: { slug },
+  // findFirst, not findUnique: the venue scope is not part of the unique key.
+  prisma.promotion.findFirst({
+    where: { slug, ...publishedVenueScope },
     include: { venue: true, promotionCategory: true },
   }),
 );
 
 export async function generateStaticParams() {
-  const rows = await prisma.promotion.findMany({ select: { slug: true } });
+  const rows = await prisma.promotion.findMany({ where: publishedVenueScope, select: { slug: true } });
   return rows.map((p) => ({ slug: p.slug }));
 }
 

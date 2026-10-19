@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { CategoryVenuesLogoSection, type CategoryVenuesTileData } from "@/components/shared/CategoryVenuesLogoSection";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
@@ -30,19 +31,19 @@ export default async function Home() {
     getSiteSettings(),
     getArticleRows(3),
     prisma.event.findMany({
-      where: { active: true },
+      where: { active: true, ...publishedVenueScope },
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
     prisma.category.findMany({
-      include: { venues: true },
+      include: { venues: { where: { published: true } } },
       orderBy: { name: "asc" },
     }),
   ]);
 
   const featuredEvents = await prisma.event.findMany({
-    where: { active: true, featured: true },
+    where: { active: true, featured: true, ...publishedVenueScope },
     orderBy: { startDate: "asc" },
     take: 3,
     select: { image: true, name: true, shortDescription: true, caption: true, slug: true },
@@ -53,7 +54,7 @@ export default async function Home() {
     label: cat.name,
     labelAlign: i % 2 === 0 ? "top-left" : "bottom-right",
     description: cat.shortDescription ?? undefined,
-    href: `/category/${cat.slug}`,
+    href: `/venues/${cat.slug}`,
     logos: cat.venues.filter((v) => v.logo).map((v) => ({ src: v.logo!, alt: v.name })),
   }));
 

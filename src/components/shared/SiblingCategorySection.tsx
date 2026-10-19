@@ -41,7 +41,7 @@ export function SiblingCategorySection({
                 {category.shortDescription ?? category.caption}
               </p>
             </div>
-            <SpecularButton href={`/category/${category.slug}`} size="lg" radius={30} className="w-fit">
+            <SpecularButton href={`/venues/${category.slug}`} size="lg" radius={30} className="w-fit">
               See {category.name}
             </SpecularButton>
           </div>

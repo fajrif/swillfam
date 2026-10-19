@@ -6,7 +6,7 @@ import { prisma } from "../../src/lib/prisma";
  * Run with: npx tsx prisma/copy-updates/venue-lecirque.ts
  */
 
-const SLUG = "lecirque";
+const SLUG = "le-cirque";
 
 // Data-quality fix: Venue.name was "Lecirque" (no space) — leaks into every ${venue.name}
 // interpolated string (Upcoming Events, Location Map, etc). The venue's own gallery already used

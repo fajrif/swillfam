@@ -97,8 +97,8 @@ const ROWS: { pageKey: string; metaTitle: string; metaDescription: string }[] = 
       "Host corporate functions, birthdays, brand activations, and celebrations across SwillFam's distinctive venues — events designed around your vision.",
   },
   {
-    pageKey: "articles",
-    metaTitle: "Articles & Journals | SwillFam",
+    pageKey: "guides",
+    metaTitle: "Guides & Journal | SwillFam",
     metaDescription:
       "Stories, recommendations, and insider guides from the SwillFam world — nightlife, lifestyle, talents, and the people who make every night memorable.",
   },
