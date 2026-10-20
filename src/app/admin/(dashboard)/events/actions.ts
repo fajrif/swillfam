@@ -12,7 +12,9 @@ import {
   resolveVenueId,
   type CurrentAdmin,
 } from "@/lib/admin-auth";
-import type { EventType, Weekday } from "@/generated/prisma/client";
+import type { EventSchemaType, EventStatus, EventType, Weekday } from "@/generated/prisma/client";
+import { EVENT_SCHEMA_TYPES, EVENT_STATUSES, allowedValues } from "@/lib/schema-options";
+import { toIsoDuration } from "@/lib/duration";
 
 const BASE = "/admin/events";
 const CATEGORY = "events";
@@ -23,6 +25,14 @@ function parse(formData: FormData, admin: CurrentAdmin, currentFeatured = false)
   const endDateRaw = String(formData.get("endDate") ?? "").trim();
   const eventType = String(formData.get("eventType") ?? "FIXED") as EventType;
   const recurringDays = formData.getAll("recurringDays").map(String) as Weekday[];
+  // Fall back to the enum defaults rather than trusting the posted string: an
+  // unrecognised value would be a Postgres error mid-save.
+  const [schemaEventType = "Event"] = allowedValues(EVENT_SCHEMA_TYPES, [
+    String(formData.get("schemaEventType") ?? ""),
+  ]);
+  const [eventStatus = "EventScheduled"] = allowedValues(EVENT_STATUSES, [
+    String(formData.get("eventStatus") ?? ""),
+  ]);
   return {
     name: String(formData.get("name") ?? "").trim(),
     shortDescription: String(formData.get("shortDescription") ?? "").trim(),
@@ -44,9 +54,15 @@ function parse(formData: FormData, admin: CurrentAdmin, currentFeatured = false)
     // Featured drives site-wide slots (home, the /events hero), so only administrators set it.
     featured: isAdministrator(admin) ? formData.get("featured") === "true" : currentFeatured,
     active: formData.get("active") === "true",
+    schemaEventType: schemaEventType as EventSchemaType,
+    eventStatus: eventStatus as EventStatus,
     ticketInfo: String(formData.get("ticketInfo") ?? "").trim() || null,
     waPhone: String(formData.get("waPhone") ?? "").trim() || null,
     ticketLink: String(formData.get("ticketLink") ?? "").trim() || null,
+    recapVideoUrl: String(formData.get("recapVideoUrl") ?? "").trim() || null,
+    // Normalised to an ISO 8601 duration on the way in, so the column always
+    // holds what VideoObject requires whichever form was typed.
+    recapDuration: toIsoDuration(String(formData.get("recapDuration") ?? "")) || null,
     metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
     metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
@@ -71,6 +87,7 @@ export async function createEventAction(formData: FormData) {
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: [] });
+  const recapThumbnail = await reconcileSingleImage({ formData, field: "recapThumbnail", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
   const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
   await prisma.event.create({
@@ -81,6 +98,7 @@ export async function createEventAction(formData: FormData) {
       image,
       bannerImage,
       posterImage,
+      recapThumbnail,
       galleries,
       talents: { connect: talentIds(formData) },
     },
@@ -101,6 +119,7 @@ export async function updateEventAction(id: string, formData: FormData) {
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: current.galleries });
+  const recapThumbnail = await reconcileSingleImage({ formData, field: "recapThumbnail", category: CATEGORY, previousPath: current.recapThumbnail });
   const slug = await uniqueSlug(formData, id);
   const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
   await prisma.event.update({
@@ -112,6 +131,7 @@ export async function updateEventAction(id: string, formData: FormData) {
       image,
       bannerImage,
       posterImage,
+      recapThumbnail,
       galleries,
       // `set` replaces the whole selection, so unticking a box unlinks it.
       talents: { set: talentIds(formData) },
@@ -131,7 +151,14 @@ export async function deleteEventAction(id: string) {
     assertVenueOwnership(admin, current.venueId);
     await prisma.event.delete({ where: { id } });
     await deleteUploadedFiles(
-      collectImagePaths(current.image, current.bannerImage, current.posterImage, current.galleries, current.ogImage),
+      collectImagePaths(
+        current.image,
+        current.bannerImage,
+        current.posterImage,
+        current.recapThumbnail,
+        current.galleries,
+        current.ogImage,
+      ),
     );
     revalidatePath("/events");
     revalidatePath(`/events/${current.slug}`);

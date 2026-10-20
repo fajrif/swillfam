@@ -1,5 +1,6 @@
 import type { Article } from "@/generated/prisma/client";
 import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
+import { MultiSelectField } from "./MultiSelectField";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
@@ -10,10 +11,14 @@ export function ArticleForm({
   action,
   article,
   categories,
+  venues,
+  selectedVenueIds = [],
 }: {
   action: (formData: FormData) => void;
   article?: Article;
   categories: { id: string; name: string }[];
+  venues: { id: string; name: string }[];
+  selectedVenueIds?: string[];
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
@@ -43,12 +48,31 @@ export function ArticleForm({
         />
       </div>
 
-      <Field
-        label="Published date"
-        name="publishedDate"
-        type="date"
-        defaultValue={toDateInputValue(article?.publishedDate)}
-        required
+      <div className="grid grid-cols-2 gap-4">
+        <Field
+          label="Published date"
+          name="publishedDate"
+          type="date"
+          defaultValue={toDateInputValue(article?.publishedDate)}
+          required
+          hint=" "
+        />
+        <Field
+          label="Author"
+          name="author"
+          defaultValue={article?.author ?? ""}
+          placeholder="SwillFam Editorial"
+          hint="Credited as the article's author to search engines. Shown as the brand if left blank."
+        />
+      </div>
+
+      <MultiSelectField
+        label="Venues mentioned"
+        name="venueIds"
+        options={venues.map((v) => ({ value: v.id, label: v.name }))}
+        defaultValues={selectedVenueIds}
+        placeholder="Search venues…"
+        hint="Tells search engines which venues this guide is about, linking it to their pages."
       />
 
       <TextareaField

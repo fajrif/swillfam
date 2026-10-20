@@ -1,8 +1,18 @@
-import type { Venue } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, ReadOnlyField, SaveButton } from "./form-fields";
+import type { Venue, VenueHour } from "@/generated/prisma/client";
+import {
+  Field,
+  TextareaField,
+  SelectField,
+  CheckboxField,
+  CheckboxGroupField,
+  ReadOnlyField,
+  SaveButton,
+} from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { SeoFields } from "./SeoFields";
+import { OpeningHoursFields } from "./OpeningHoursFields";
+import { VENUE_SCHEMA_TYPES } from "@/lib/schema-options";
 
 const OPERATING_HOURS_PRESETS = [
   "Monday - Sunday: 12:00 - 03:00",
@@ -16,13 +26,16 @@ const OPERATING_HOURS_PRESETS = [
 export function VenueForm({
   action,
   venue,
+  hours = [],
   categories,
   lockIdentity = false,
 }: {
   action: (formData: FormData) => void;
   venue?: Venue;
+  /** Structured opening hours, in `sortOrder`. */
+  hours?: VenueHour[];
   categories: { id: string; name: string }[];
-  /** Operators: slug (venue FAQs are keyed by it) and category are read-only. */
+  /** Operators: slug (venue FAQs are keyed by it), category and Published are read-only. */
   lockIdentity?: boolean;
 }) {
   // Preserve a previously-saved custom value that isn't one of the presets.
@@ -65,12 +78,15 @@ export function VenueForm({
           />
         )}
         <SelectField
-          label="Operating hours"
+          label="Operating hours (free text)"
           name="operatingHours"
           defaultValue={venue?.operatingHours}
           options={hoursOptions.map((h) => ({ value: h, label: h }))}
+          hint="Fallback only — the structured rows below take over once filled in."
         />
       </div>
+
+      <OpeningHoursFields existing={hours} fallback={venue?.operatingHours} />
 
       <Field label="Hero title" name="heroTitle" defaultValue={venue?.heroTitle ?? ""} hint="Big hero headline, e.g. “Izakaya Culture, Reimagined”. Falls back to Name if left blank." />
       <TextareaField label="Hero description" name="heroDescription" defaultValue={venue?.heroDescription ?? ""} rows={2} hint="Short paragraph shown under the hero title." />
@@ -83,13 +99,23 @@ export function VenueForm({
         <Field label="Talent section description" name="talentSectionDescription" defaultValue={venue?.talentSectionDescription ?? ""} hint="e.g. “The mixologists and bartenders behind every pour at Dualism.”" />
       </div>
 
-      <Field label="Location / address" name="location" defaultValue={venue?.location} required />
+      <Field label="Location / address" name="location" defaultValue={venue?.location} required hint="Shown on the page, e.g. “SCBD Lot 14, Jakarta Selatan”." />
+
+      <div className="grid grid-cols-2 gap-4">
+        <Field
+          label="Street address"
+          name="streetAddress"
+          defaultValue={venue?.streetAddress ?? ""}
+          hint="Street line only — the city, region and country are the same for every venue and are added automatically."
+        />
+        <Field label="Postal code" name="postalCode" defaultValue={venue?.postalCode ?? ""} placeholder="12190" hint=" " />
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Latitude" name="lat" type="number" step="any" defaultValue={venue?.lat ?? ""} hint="For Google Maps" />
         <Field label="Longitude" name="lng" type="number" step="any" defaultValue={venue?.lng ?? ""} hint=" " />
       </div>
-      <Field label="Google Maps Place ID" name="placeId" defaultValue={venue?.placeId ?? ""} hint="From maps embed URL (pb=!1m18...)" />
+      <Field label="Google Maps Place ID" name="placeId" defaultValue={venue?.placeId ?? ""} hint="From maps embed URL (pb=!1m18...). Also builds the venue's map link for search engines." />
 
       <div className="grid grid-cols-3 gap-4">
         <Field label="WhatsApp" name="whatsapp" defaultValue={venue?.whatsapp ?? ""} hint="Phone number only (digits)" />
@@ -97,9 +123,53 @@ export function VenueForm({
         <Field label="Email" name="email" type="email" defaultValue={venue?.email ?? ""} />
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <Field
+          label="Instagram URL"
+          name="instagramUrl"
+          type="url"
+          defaultValue={venue?.instagramUrl ?? ""}
+          placeholder="https://www.instagram.com/…"
+          hint="The venue's own profile — tells search engines this page and that account are the same place."
+        />
+        <Field
+          label="Cuisine"
+          name="cuisine"
+          defaultValue={venue?.cuisine ?? ""}
+          placeholder="Japanese"
+          hint="Restaurants and cafés only. Leave blank for bars and clubs."
+        />
+      </div>
+
+      <CheckboxGroupField
+        label="Venue type"
+        name="schemaTypes"
+        options={VENUE_SCHEMA_TYPES.map((t) => ({ value: t.value, label: t.label }))}
+        defaultValues={venue?.schemaTypes ?? []}
+        hint="How search engines classify this venue. Tick more than one where both apply — Kilo Jakarta is a restaurant and a bar."
+      />
+
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={venue?.spotifyEmbed ?? ""} rows={2} />
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={venue?.youtubeEmbed ?? ""} rows={2} />
       <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={venue?.instagramEmbed ?? ""} rows={2} />
+
+      {/* Publishing is a launch-level decision, so it sits with slug and
+          category as administrator-only. Unpublishing is how Atsumaru stays off
+          the site: it also drops the venue from the sitemap and the schema. */}
+      {lockIdentity ? (
+        <ReadOnlyField
+          label="Published"
+          value={venue?.published ? "Yes" : "No"}
+          hint="Only administrators can publish or unpublish a venue."
+        />
+      ) : (
+        <CheckboxField
+          label="Published"
+          name="published"
+          defaultChecked={venue?.published ?? true}
+          hint="Unticking hides the venue from the public site and removes it from the sitemap and search-engine data. Its events and promotions are kept."
+        />
+      )}
 
       <SeoFields
         titleValue={venue?.metaTitle}

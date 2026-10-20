@@ -30,7 +30,10 @@ const getPromotionBySlug = cache((slug: string) =>
   // findFirst, not findUnique: the venue scope is not part of the unique key.
   prisma.promotion.findFirst({
     where: { slug, ...publishedVenueScope },
-    include: { venue: true, promotionCategory: true },
+    include: {
+      venue: { include: { hours: { orderBy: { sortOrder: "asc" } } } },
+      promotionCategory: true,
+    },
   }),
 );
 

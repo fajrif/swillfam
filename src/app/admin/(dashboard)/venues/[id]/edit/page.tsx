@@ -11,7 +11,10 @@ export default async function EditVenuePage({ params }: { params: Promise<{ id: 
   const admin = await requireAdmin();
   assertVenueOwnership(admin, id);
   const [venue, categories] = await Promise.all([
-    prisma.venue.findUnique({ where: { id } }),
+    prisma.venue.findUnique({
+      where: { id },
+      include: { hours: { orderBy: { sortOrder: "asc" } } },
+    }),
     prisma.category.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   if (!venue) notFound();
@@ -23,6 +26,7 @@ export default async function EditVenuePage({ params }: { params: Promise<{ id: 
         <VenueForm
           action={updateVenueAction.bind(null, id)}
           venue={venue}
+          hours={venue.hours}
           categories={categories}
           lockIdentity={!isAdministrator(admin)}
         />

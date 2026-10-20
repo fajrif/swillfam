@@ -33,6 +33,7 @@ export default async function VenueInfoPage({ params }: { params: Promise<{ id: 
     where: { id },
     include: {
       category: { select: { name: true } },
+      hours: { orderBy: { sortOrder: "asc" } },
       events: {
         include: { eventCategory: { select: { name: true } } },
         orderBy: { startDate: "desc" },

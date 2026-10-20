@@ -6,6 +6,7 @@ import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { whatsappHref } from "@/lib/whatsapp";
+import { googleMapsUrl } from "@/lib/maps";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 const DEFAULT_CENTER = { longitude: 106.809, latitude: -6.2249 }; // SCBD, Jakarta
@@ -32,11 +33,8 @@ export function VenueLocationHours({
   const latitude = lat ?? DEFAULT_CENTER.latitude;
   const hasCoords = lat != null && lng != null;
 
-  const googleMapsHref = placeId
-    ? `https://www.google.com/maps/place/${encodeURIComponent(name)}/data=!4m2!3m1!1s${placeId}`
-    : hasCoords
-      ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  // Shared with the schema's `hasMap`, so the button and the markup agree.
+  const googleMapsHref = googleMapsUrl({ name, placeId, lat, lng, location });
 
   return (
     <section className="py-16 lg:py-24">
