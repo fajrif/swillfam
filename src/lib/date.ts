@@ -1,3 +1,17 @@
+/**
+ * Strip the time component, keeping the UTC calendar day.
+ *
+ * Admin-typed dates (an event's `startDate`, a promotion's `endDate`) are
+ * stored at UTC midnight and mean a calendar day, not an instant — so "has it
+ * passed?" is a day comparison, and a row stays current for the whole of its
+ * final day. Every date test in `event-calendar.ts`, `event-scope.ts` and
+ * `promotion-scope.ts` goes through here, so they can't disagree about where a
+ * day ends.
+ */
+export function startOfUtcDay(date: Date): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
 /** Format a Date for an <input type="date"> value. */
 export function toDateInputValue(date: Date | null | undefined): string {
   if (!date) return "";

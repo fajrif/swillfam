@@ -10,9 +10,11 @@ import {
   formatHour,
   formatLongDate,
   formatRecurringDays,
+  isPastEvent,
   nextOccurrence,
   occurrenceStart,
 } from "@/lib/event-calendar";
+import { pastEventWhere, upcomingEventWhere } from "@/lib/event-scope";
 import { Reveal } from "@/components/Reveal";
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
@@ -25,12 +27,16 @@ import { JsonLd, eventGraph } from "@/lib/schema";
 import {
   EventCountdown,
   EventDetailBanner,
+  EventRecapSection,
   EventTicketsSection,
   EventVenueSection,
   PastEditionsSection,
+  RECAP_ANCHOR,
   RecurringEventDetail,
   SingleEventDetail,
 } from "@/components/events";
+import { formatIsoDuration } from "@/lib/duration";
+import { parseVideoUrl } from "@/lib/video";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { eventSeo } from "@/lib/seo/entities";
 
@@ -86,14 +92,19 @@ export default async function EventSlugPage({
 
   const isRecurring = event.eventType === "RECURRING";
 
+  // One "now" for every date comparison on this page — the queries below, the
+  // countdown gate, and the next-edition lookup. This is a Server Component,
+  // so it resolves once per render/revalidation.
+  const now = new Date();
+
   const [related, pastEditions, settings, articles] = await Promise.all([
-    // "More events like this": live events sharing this one's venue or category.
+    // "More events like this": upcoming events sharing this one's venue or
+    // category. Both scopes own `AND`, and this query adds its own top-level
+    // `OR`, which a spread would clobber.
     prisma.event.findMany({
       where: {
         id: { not: event.id },
-        active: true,
-        // under AND: this query builds its own OR, which a spread would clobber
-        AND: [publishedVenueScope],
+        ...upcomingEventWhere(now),
         ...(event.venueId || event.eventCategoryId
           ? {
               OR: [
@@ -107,14 +118,13 @@ export default async function EventSlugPage({
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
-    // "Past Editions" (recurring only): retired events from the same venue +
+    // "Past Editions" (recurring only): finished events from the same venue +
     // category, which is as close to "this series" as the schema can express.
     isRecurring
       ? prisma.event.findMany({
           where: {
             id: { not: event.id },
-            active: false,
-            AND: [publishedVenueScope],
+            ...pastEventWhere(now),
             ...(event.venueId ? { venueId: event.venueId } : {}),
             ...(event.eventCategoryId ? { eventCategoryId: event.eventCategoryId } : {}),
           },
@@ -153,15 +163,27 @@ export default async function EventSlugPage({
     href: `/events/${e.slug}`,
   });
 
-  // Single "now" for both the countdown gate and the next-edition lookup. This
-  // is a Server Component, so it resolves once per render/revalidation.
-  const now = new Date();
+  // The page stays a 200 either way — the brief wants a finished event
+  // reachable and recapped, not redirected — but everything that offers to book
+  // it switches off. `isPastEvent` also catches a one-off whose date has gone
+  // by while still flagged active, which is the state both seeded events were
+  // in.
+  const isPast = isPastEvent(event, now);
 
   // A countdown only makes sense for a live, one-off event that hasn't started.
   const startsAt = occurrenceStart(event.startDate, event.startHour);
-  const showCountdown = !isRecurring && event.active && startsAt > now;
+  const showCountdown = !isRecurring && !isPast && startsAt > now;
 
   const next = isRecurring ? nextOccurrence(event.recurringDays, now) : null;
+
+  // The recap: a video, a photo gallery, or both. `parseVideoUrl` returns null
+  // for a URL this page can't play, which is also the condition under which the
+  // schema omits the VideoObject — so the markup and the section appear and
+  // disappear together.
+  const recapSource = parseVideoUrl(event.recapVideoUrl);
+  const hasRecap = recapSource !== null || event.galleries.length > 0;
+  // Only a finished event's CTA is redirected; a live one still takes bookings.
+  const recapHref = isPast && hasRecap ? `#${RECAP_ANCHOR}` : undefined;
 
   return (
     <>
@@ -186,7 +208,8 @@ export default async function EventSlugPage({
           venueName={venue?.name ?? null}
           categoryName={event.eventCategory?.name ?? null}
           phone={phone}
-          active={event.active}
+          active={!isPast}
+          recapHref={recapHref}
         />
       ) : (
         <SingleEventDetail
@@ -199,7 +222,8 @@ export default async function EventSlugPage({
           dateLabel={scheduleLabel(event)}
           timeLabel={timeLabel}
           phone={phone}
-          active={event.active}
+          active={!isPast}
+          recapHref={recapHref}
         />
       )}
 
@@ -209,19 +233,36 @@ export default async function EventSlugPage({
           eventName={event.name}
           venueName={venue?.name ?? null}
           phone={phone}
-          active={event.active}
+          active={!isPast}
         />
       ) : null}
 
-      {/* Event Recap — sourced from the event's own gallery images. */}
-      {event.galleries.length > 0 ? (
-        <Reveal>
-          <GalleryCarousel
-            title="Event Recap"
-            description="Relive past SwillFam events through selected photos, videos, and highlight moments."
-            images={event.galleries}
-          />
-        </Reveal>
+      {/* The recap, video first. One anchor wraps both blocks so the past-event
+          CTA lands on whichever of them this event actually has. */}
+      {hasRecap ? (
+        <div id={RECAP_ANCHOR} className="scroll-mt-24">
+          {recapSource ? (
+            <Reveal>
+              <EventRecapSection
+                source={recapSource}
+                // The image the markup reports as `thumbnailUrl`, same order.
+                thumbnail={event.recapThumbnail ?? event.posterImage ?? event.image}
+                eventName={event.name}
+                durationLabel={formatIsoDuration(event.recapDuration)}
+              />
+            </Reveal>
+          ) : null}
+
+          {event.galleries.length > 0 ? (
+            <Reveal>
+              <GalleryCarousel
+                title="Event Recap"
+                description="Relive past SwillFam events through selected photos, videos, and highlight moments."
+                images={event.galleries}
+              />
+            </Reveal>
+          ) : null}
+        </div>
       ) : null}
 
       {isRecurring && pastEditions.length > 0 ? (
@@ -250,7 +291,8 @@ export default async function EventSlugPage({
             eventName={event.name}
             venueName={venue?.name ?? null}
             phone={phone}
-            active={event.active}
+            active={!isPast}
+            recapHref={recapHref}
           />
         </Reveal>
       ) : null}

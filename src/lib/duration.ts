@@ -37,3 +37,32 @@ export function toIsoDuration(input: string): string {
   // "0:00" carries no information — treat it as unset rather than emitting "PT".
   return parts ? `PT${parts}` : "";
 }
+
+/** Just the `T` part — days and up make no sense for a recap video's length. */
+const ISO_CLOCK = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+
+/**
+ * The stored ISO duration back as "2:15", or "" when it isn't one.
+ *
+ * The page has to show the length the markup reports, and the column holds the
+ * ISO form, so the label is derived from it rather than stored a second time —
+ * the rule that keeps opening hours honest applies to this field too. Returning
+ * "" for an unparseable value makes the display drop it on exactly the same
+ * condition `recapVideo()` drops `duration`, so the page and the markup never
+ * disagree about whether a length is known.
+ */
+export function formatIsoDuration(iso: string | null | undefined): string {
+  const match = ISO_CLOCK.exec(iso?.trim().toUpperCase() ?? "");
+  if (!match) return "";
+
+  const [, h, m, s] = match;
+  const hours = Number(h ?? 0);
+  const minutes = Number(m ?? 0);
+  const seconds = Number(s ?? 0);
+  if (hours === 0 && minutes === 0 && seconds === 0) return "";
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return hours > 0
+    ? `${hours}:${pad(minutes)}:${pad(seconds)}`
+    : `${minutes}:${pad(seconds)}`;
+}

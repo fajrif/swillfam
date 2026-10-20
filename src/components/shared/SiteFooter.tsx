@@ -130,8 +130,10 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </div>
         </Container>
       </footer>
-      {/* Legal bar */}
-      <footer className="border-t border-sf-border/60 bg-sf-deep">
+      {/* Legal bar — a div, not a second <footer>: it is the same region as
+          the footer above it, split only so each gets its own top border, and
+          two <footer>s at the top level mean two `contentinfo` landmarks. */}
+      <div className="border-t border-sf-border/60 bg-sf-deep">
         <Container className="flex flex-col items-center justify-between gap-3 py-6 border-x border-sf-border/60 bg-sf-deep text-center font-inter text-xs sm:flex-row sm:text-left">
           <p>© {new Date().getFullYear()} Swillfam. All rights reserved</p>
           <p className="inline-flex items-center gap-4">
@@ -144,7 +146,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             </Link>
           </p>
         </Container>
-      </footer>
+      </div>
 
       {settings.mainWhatsapp && (
         <Link

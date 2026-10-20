@@ -78,7 +78,7 @@ export function EventsBrowser({
         </h2>
 
         {/* VENUES / CATEGORIES toggle */}
-        <nav className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+        <nav aria-label="Group events by" className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           {(["venues", "categories"] as Mode[]).map((m) => (
             <button
               key={m}

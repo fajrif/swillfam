@@ -25,10 +25,17 @@ export function TalentDetailIntro({ talent }: { talent: TalentWithVenue }) {
         </div>
 
         <div className="flex flex-col gap-6">
+          {/* This page had no heading at all before: the talent's name appeared
+              only as a "Name:" row in the list below, so the one page about
+              this person never said whose page it was — while `talentGraph`
+              published a `Person` node naming them. The row is gone because
+              the heading now carries it; repeating it would just be the same
+              string twice. */}
+          <h1 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
+            {talent.name}
+          </h1>
+
           <div className="flex flex-col gap-1 font-inter text-lg">
-            <p>
-              <span className="font-semibold text-white">Name:</span> {talent.name}
-            </p>
             <p>
               <span className="font-semibold text-white">Role:</span> {talent.speciality}
             </p>

@@ -6,6 +6,7 @@ import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
+import { HeroTitle } from "@/components/shared/HeroTitle";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { JsonLd, categoryGraph } from "@/lib/schema";
 import {
@@ -63,10 +64,11 @@ export async function CategoryView({ category }: { category: CategoryDetail }) {
           />
       }
       heroContent={
-        <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
-          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            {category.headline ?? category.name}
-          </h1>
+        <Container className="relative z-10 flex h-full flex-col justify-end gap-4 pb-12">
+          {/* "Lifestyle Venues", not "Lifestyle" — the same phrasing
+              `categorySeo` already uses for this page's title, and the H1 of a
+              venue listing should say that it lists venues. */}
+          <HeroTitle name={`${category.name} Venues`} tagline={category.headline} />
         </Container>
       }
     >

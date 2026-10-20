@@ -13,8 +13,12 @@ import { NAV_GROUPS } from "./nav-data";
 import type { SiteSettings } from "@/lib/site-settings";
 
 /** The three stacked link columns — shared by the top mega-nav and the compact
- *  header's expanding panel so link positions stay identical. Stacks on mobile. */
-function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
+ *  header's expanding panel so link positions stay identical. Stacks on mobile.
+ *
+ *  `label` is required because both copies are in the DOM at the same time, and
+ *  two `navigation` landmarks with no accessible name are indistinguishable to
+ *  anyone listing a page's landmarks. */
+function NavColumns({ label, onNavigate }: { label: string; onNavigate?: () => void }) {
   const pathname = usePathname();
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
 
@@ -23,6 +27,7 @@ function NavColumns({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <nav
+      aria-label={label}
       className="flex flex-col gap-8 md:flex-row md:gap-10 text-right md:text-start"
       onMouseLeave={() => setHoveredHref(null)}
     >
@@ -87,8 +92,15 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
 
   return (
     <>
-      {/* Top mega-nav — desktop only, fades out on scroll. */}
-      <motion.header
+      {/* Top mega-nav — desktop only, fades out on scroll.
+
+          A div, not a second <header>: both bars are rendered at once (this one
+          fades out as the compact one fades in), and two <header>s at the top
+          level give the page two `banner` landmarks. The compact bar keeps the
+          landmark because it is the one that exists at every breakpoint — this
+          one is `hidden` below `lg`, so making it the banner would leave mobile
+          with none. */}
+      <motion.div
         className="absolute inset-x-0 top-0 z-50 hidden lg:block"
         style={{ opacity: topOpacity, pointerEvents: scrolled ? "none" : "auto" }}
       >
@@ -103,9 +115,9 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               className="h-9 w-auto lg:h-10"
             />
           </Link>
-          <NavColumns />
+          <NavColumns label="Primary" />
         </Container>
-      </motion.header>
+      </motion.div>
 
       {/* Compact bar — always visible on mobile; on desktop only once scrolled. */}
       <header
@@ -184,7 +196,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                   <SocialIcons settings={settings} />
                 </div>
                 <div className="flex justify-end">
-                  <NavColumns onNavigate={() => setOpen(false)} />
+                  <NavColumns label="Menu" onNavigate={() => setOpen(false)} />
                 </div>
                 {/* Mobile: socials centered at the bottom */}
                 <div className="flex md:hidden justify-end pt-12">

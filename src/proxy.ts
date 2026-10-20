@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isSessionRevoked, verifySession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isExpiredPromotion } from "@/lib/promotion-scope";
 import { SESSION_COOKIE_NAME } from "@/lib/session";
 
 /** Sections an operator may open (besides `/admin`, `/admin/profile`, and their own venue). */
@@ -29,12 +30,45 @@ function operatorRedirect(pathname: string, venueId: string | null): string | nu
 }
 
 /**
+ * 301 an expired promotion to the archive, per the brief.
+ *
+ * It lives here rather than in the page for two reasons. A page can only
+ * redirect through `permanentRedirect()`, which emits **308** and offers no way
+ * to choose the code — and the brief, the redirect map and the SEO team's curl
+ * checks all specify 301, which is why `next.config.ts` spells out
+ * `statusCode: 301` instead of using `permanent: true`. Next's own guidance is
+ * that a redirect decided before render belongs in the config or the proxy.
+ *
+ * Deciding it here also means it is evaluated per request against the real
+ * clock, instead of being frozen into a prerendered page until its next
+ * `revalidate`, and an expired offer never costs a render at all.
+ *
+ * The cost is one indexed `endDate` lookup per `/promotions/{slug}` hit, which
+ * is less work than the page it replaces.
+ */
+async function expiredPromotionRedirect(request: NextRequest): Promise<NextResponse | null> {
+  // The matcher below is `/promotions/:slug`, so there is exactly one segment.
+  const slug = request.nextUrl.pathname.split("/")[2];
+  if (!slug) return null;
+
+  const promotion = await prisma.promotion.findUnique({
+    where: { slug },
+    select: { endDate: true },
+  });
+  // Unknown slug: let the page 404 rather than redirecting a URL that never
+  // existed — a 301 to /promotions would be a soft 404 for a typo.
+  if (!promotion || !isExpiredPromotion(promotion, new Date())) return null;
+
+  return NextResponse.redirect(new URL("/promotions", request.url), 301);
+}
+
+/**
  * Page-level gate for `/admin`. Runs on Node (Next 16 proxy), so it can check
  * the user against the DB: deleted users and sessions older than a password
  * change are logged out, and operators are kept inside their allowed sections.
  * Row ownership and every Server Action are re-checked in `src/lib/admin-auth.ts`.
  */
-export async function proxy(request: NextRequest) {
+async function adminGate(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
   if (pathname === "/admin/login") {
     return NextResponse.next();
@@ -63,6 +97,16 @@ export async function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+export async function proxy(request: NextRequest) {
+  if (within(request.nextUrl.pathname, "/promotions")) {
+    return (await expiredPromotionRedirect(request)) ?? NextResponse.next();
+  }
+  return adminGate(request);
+}
+
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Keep this list tight: every matched path pays the proxy's cost, and
+  // `/promotions/:slug` is matched only because an expired offer has to 301
+  // before the page renders.
+  matcher: ["/admin/:path*", "/promotions/:slug"],
 };

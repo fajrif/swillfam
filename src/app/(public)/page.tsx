@@ -1,6 +1,6 @@
 import { staticPageMetadata } from "@/lib/seo/static-page";
 import { prisma } from "@/lib/prisma";
-import { publishedVenueScope } from "@/lib/venue-scope";
+import { upcomingEventWhere } from "@/lib/event-scope";
 import { CategoryVenuesLogoSection, type CategoryVenuesTileData } from "@/components/shared/CategoryVenuesLogoSection";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
@@ -21,11 +21,14 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("home");
 
 export default async function Home() {
+  const now = new Date();
+
   const [settings, articles, events, categories] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
+    // "On the Calendar" — upcoming only, by the same rule as /events.
     prisma.event.findMany({
-      where: { active: true, ...publishedVenueScope },
+      where: upcomingEventWhere(now),
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
@@ -37,7 +40,7 @@ export default async function Home() {
   ]);
 
   const featuredEvents = await prisma.event.findMany({
-    where: { active: true, featured: true, ...publishedVenueScope },
+    where: { featured: true, ...upcomingEventWhere(now) },
     orderBy: { startDate: "asc" },
     take: 3,
     select: { image: true, name: true, shortDescription: true, caption: true, slug: true },

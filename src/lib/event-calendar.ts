@@ -8,7 +8,7 @@
  * events a day for viewers west of Greenwich.
  */
 
-import { formatDay, formatDateRange } from "@/lib/date";
+import { formatDay, formatDateRange, startOfUtcDay } from "@/lib/date";
 
 /** Prisma `Weekday` values indexed by JS UTC day number (0 = Sunday). */
 const WEEKDAY_BY_UTC_DAY = [
@@ -104,9 +104,33 @@ export function dateKey(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-/** Strip the time component, keeping the UTC calendar day. */
-function startOfUtcDay(date: Date): Date {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+/**
+ * Has this event finished?
+ *
+ * Two ways it can have: an administrator retired it, or — for a one-off — its
+ * last day has gone by. The date half matters because nobody remembers to tick
+ * the box: both seeded one-off events were still flagged active months after
+ * they ran, which would have left them sitting in "Upcoming" and on the
+ * calendar. `RECURRING` nights have no last day and never expire this way; they
+ * end only when an administrator says so.
+ *
+ * Day-granular and UTC, the same contract as the rest of this file: the dates
+ * are admin-typed calendar days stored at UTC midnight, so an event stays
+ * current for the whole of its final day. `src/lib/event-scope.ts` holds the
+ * query form of this rule; keep the two in step.
+ */
+export function isPastEvent(
+  event: {
+    eventType: string;
+    active: boolean;
+    startDate: Date;
+    endDate: Date | null;
+  },
+  now: Date,
+): boolean {
+  if (!event.active) return true;
+  if (event.eventType === "RECURRING") return false;
+  return startOfUtcDay(event.endDate ?? event.startDate) < startOfUtcDay(now);
 }
 
 /**

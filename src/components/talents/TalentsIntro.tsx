@@ -5,7 +5,12 @@ export function TalentsIntro() {
     <section className="py-16 lg:py-20">
       <Container className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col gap-4">
-          <span className="font-inter text-sm uppercase tracking-widest text-white">Our Talents</span>
+          {/* A heading, not a span. `PromotionsIntro` and the events browser
+              both open their list with one; /talents was the only archive whose
+              cards sat straight under the h1, which is what made its outline
+              jump h1 → h3. Tailwind's preflight drops the default heading size
+              and weight, so this renders exactly as the span did. */}
+          <h2 className="font-inter text-sm uppercase tracking-widest text-white">Our Talents</h2>
           <p className="max-w-2xl font-inter text-lg leading-relaxed text-white md:text-2xl">
             From resident DJs to the chefs and bartenders shaping every plate and pour, meet the
             people who bring the SwillFam experience to life.

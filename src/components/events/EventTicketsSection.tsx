@@ -19,6 +19,7 @@ export function EventTicketsSection({
   venueName,
   phone,
   active,
+  recapHref,
 }: {
   image: string | null;
   ticketInfo: string | null;
@@ -27,6 +28,8 @@ export function EventTicketsSection({
   venueName?: string | null;
   phone?: string | null;
   active: boolean;
+  /** Set by the caller when a past event has a recap to send people to. */
+  recapHref?: string | null;
 }) {
   return (
     <section className="py-16 lg:py-24">
@@ -57,6 +60,7 @@ export function EventTicketsSection({
               venueName={venueName}
               phone={phone}
               active={active}
+              recapHref={recapHref}
             />
             {ticketLink && active ? (
               <SpecularButton

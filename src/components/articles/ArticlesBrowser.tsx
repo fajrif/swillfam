@@ -48,9 +48,12 @@ export function ArticlesBrowser({
                 </div>
                 <div className="flex flex-col gap-2 p-4">
                   <span className="font-inter text-xs text-sf-body/50">{article.date}</span>
-                  <h3 className="font-syne text-xl leading-snug text-white transition-colors duration-300 group-hover:text-sf-accent lg:text-2xl">
+                  {/* h2: this browser is only used on /guides, where the
+                      articles are the page's top-level list — there is no
+                      section heading between them and the h1. */}
+                  <h2 className="font-syne text-xl leading-snug text-white transition-colors duration-300 group-hover:text-sf-accent lg:text-2xl">
                     {article.title}
-                  </h3>
+                  </h2>
                   <p className="line-clamp-3 font-inter text-sm leading-relaxed">
                     {article.excerpt}
                   </p>

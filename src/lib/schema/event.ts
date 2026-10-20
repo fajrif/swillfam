@@ -6,12 +6,14 @@
 import type { Event, Talent, Venue } from "@/generated/prisma/client";
 import { dateKey, upcomingOccurrences } from "@/lib/event-calendar";
 import { ISO_DURATION } from "@/lib/duration";
+import { parseVideoUrl } from "@/lib/video";
 import { eventSeo } from "@/lib/seo/entities";
 import {
   ORG_ID,
   breadcrumb,
   eventId,
   graph,
+  imageUrl,
   imageUrls,
   jakartaDateTime,
   jakartaInstant,
@@ -114,35 +116,43 @@ function eventNode(event: EventForSchema, occurrence?: Date): JsonLdNode {
 }
 
 /**
- * `VideoObject` for a past event's recap, or undefined when there is none.
+ * `VideoObject` for an event's recap, or undefined when there is none.
+ *
+ * Emitted on exactly the condition `EventRecapSection` renders: `parseVideoUrl`
+ * decides both, so this can't end up describing a video the page doesn't play.
+ * That is the same rule the FAQ accordion had to be fixed for — markup for
+ * content a visitor can't see is markup Google's guidelines disallow.
+ *
+ * `embedUrl` is the **player** URL `parseVideoUrl` derives, not the watch page
+ * the admin pasted: the spec's sample asks for `{youtube_embed_url}`, and a
+ * `/watch?v=` link is not a player. `contentUrl` is used for a file we serve
+ * ourselves; schema.org requires one of the two.
  *
  * `duration` is only emitted when it really is an ISO 8601 duration —
  * `toIsoDuration` normalises on save but passes an unparseable value through
  * verbatim so the admin can see and fix it, and that value must not reach the
- * markup.
- *
- * schema.org requires `contentUrl` or `embedUrl`; the admin field is a single
- * URL, so a YouTube/Vimeo link is reported as `embedUrl` and anything else as
- * a direct `contentUrl`.
+ * markup. `formatIsoDuration` drops the on-page label on the same condition.
  */
 function recapVideo(event: EventForSchema): JsonLdNode | undefined {
-  const url = event.recapVideoUrl?.trim();
-  if (!url) return undefined;
+  const source = parseVideoUrl(event.recapVideoUrl);
+  if (!source) return undefined;
 
-  const isEmbed = /youtube\.com|youtu\.be|vimeo\.com/i.test(url);
   const duration = event.recapDuration?.trim();
 
   return {
     "@type": "VideoObject",
     name: `${event.name} — Recap`,
     description: eventSeo(event).description.value,
-    thumbnailUrl: imageUrls(event.recapThumbnail, event.posterImage, event.image),
+    // One image, in the page's own fallback order: `thumbnailUrl` may be a list
+    // only when the entries are the same still at different sizes, and these
+    // are three different pictures.
+    thumbnailUrl: imageUrl(event.recapThumbnail ?? event.posterImage ?? event.image),
     // No separate upload date column — the row's own last change is the
     // closest honest answer, and `uploadDate` is required.
     uploadDate: jakartaInstant(event.updatedAt),
     duration: duration && ISO_DURATION.test(duration) ? duration : undefined,
-    embedUrl: isEmbed ? url : undefined,
-    contentUrl: isEmbed ? undefined : url,
+    embedUrl: source.kind === "embed" ? source.embedUrl : undefined,
+    contentUrl: source.kind === "file" ? source.contentUrl : undefined,
     about: ref(eventId(event.slug)),
   };
 }

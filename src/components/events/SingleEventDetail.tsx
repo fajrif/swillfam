@@ -22,6 +22,7 @@ export function SingleEventDetail({
   timeLabel,
   phone,
   active,
+  recapHref,
 }: {
   name: string;
   slug: string;
@@ -34,6 +35,8 @@ export function SingleEventDetail({
   timeLabel: string;
   phone?: string | null;
   active: boolean;
+  /** Set by the caller when a past event has a recap to send people to. */
+  recapHref?: string | null;
 }) {
   return (
     <section className="py-16 lg:py-20">
@@ -94,6 +97,7 @@ export function SingleEventDetail({
                 venueName={venueName}
                 phone={phone}
                 active={active}
+                recapHref={recapHref}
               />
               <ShareButtons url={absoluteUrl(`/events/${slug}`)} title={name} />
             </div>

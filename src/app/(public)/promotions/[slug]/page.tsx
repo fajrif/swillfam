@@ -18,6 +18,7 @@ import { PromotionDetailTop } from "@/components/promotions";
 import { JsonLd, breadcrumbOnlyGraph } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { promotionSeo } from "@/lib/seo/entities";
+import { livePromotionWhere } from "@/lib/promotion-scope";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -36,7 +37,12 @@ const getPromotionBySlug = cache((slug: string) =>
 );
 
 export async function generateStaticParams() {
-  const rows = await prisma.promotion.findMany({ where: publishedVenueScope, select: { slug: true } });
+  // Expired slugs are left out: the proxy 301s them, so prerendering a page
+  // nobody will be served is wasted build time.
+  const rows = await prisma.promotion.findMany({
+    where: livePromotionWhere(new Date()),
+    select: { slug: true },
+  });
   return rows.map((p) => ({ slug: p.slug }));
 }
 
@@ -72,7 +78,12 @@ export default async function PromotionSlugPage({
   const [otherPromotions, settings, articles] = await Promise.all([
     promotion.venueId
       ? prisma.promotion.findMany({
-          where: { venueId: promotion.venueId, id: { not: promotion.id } },
+          // The lead below says "currently running", so it has to be true.
+          where: {
+            venueId: promotion.venueId,
+            id: { not: promotion.id },
+            ...livePromotionWhere(new Date()),
+          },
           orderBy: { startDate: "desc" },
           take: 3,
           include: { venue: { select: { name: true, logo: true } } },

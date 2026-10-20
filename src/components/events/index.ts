@@ -11,4 +11,5 @@ export { RecurringEventDetail } from "./RecurringEventDetail";
 export { EventCountdown } from "./EventCountdown";
 export { EventVenueSection } from "./EventVenueSection";
 export { EventTicketsSection } from "./EventTicketsSection";
+export { EventRecapSection, RECAP_ANCHOR } from "./EventRecapSection";
 export { PastEditionsSection } from "./PastEditionsSection";
