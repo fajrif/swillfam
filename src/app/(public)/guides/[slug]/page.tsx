@@ -1,6 +1,5 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -13,6 +12,8 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { JsonLd, articleGraph } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { articleSeo } from "@/lib/seo/entities";
+import { ContentImage } from "@/components/shared/ContentImage";
+import { getImageAlts } from "@/lib/image-alt";
 
 const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 
@@ -69,8 +70,10 @@ export default async function ArticlePage({
     take: 3,
   });
 
+  const articleAlts = await getImageAlts();
   const otherRows: ArticleRow[] = others.map((a) => ({
     img: a.image ?? "/articles/sample-banner.png",
+    alt: articleAlts.get(a.image ?? "")?.trim() ?? "",
     date: DATE_FMT.format(a.publishedDate),
     title: a.title,
     excerpt: a.shortDescription,
@@ -82,7 +85,7 @@ export default async function ArticlePage({
       <JsonLd data={articleGraph(article)} />
       <StickyHero
       backdrop={
-          <Image
+          <ContentImage
             src={article.image ?? "/articles/sample-banner.png"}
             alt=""
             fill

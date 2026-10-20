@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /**
  * "Happening at {venue}" — the venue's own story alongside its imagery, with a
@@ -33,7 +33,7 @@ export function EventVenueSection({
 
         {image ? (
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
-            <Image
+            <ContentImage
               src={image}
               alt={name}
               fill

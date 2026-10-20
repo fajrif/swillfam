@@ -5,8 +5,10 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateGalleryAction, deleteGalleryAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditGalleryPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const gallery = await prisma.gallery.findUnique({ where: { id } });
@@ -16,7 +18,8 @@ export default async function EditGalleryPage({ params }: { params: Promise<{ id
     <div>
       <EditHeader title="Edit Gallery" backHref="/admin/galleries" />
       <Card>
-        <GalleryForm action={updateGalleryAction.bind(null, id)} gallery={gallery} />
+        <GalleryForm
+          altsByPath={altsByPath} action={updateGalleryAction.bind(null, id)} gallery={gallery} />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deleteGalleryAction.bind(null, id)} label="Delete gallery" />
         </div>

@@ -5,8 +5,10 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateVideoAction, deleteVideoAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditVideoPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const video = await prisma.video.findUnique({ where: { id } });
@@ -16,7 +18,8 @@ export default async function EditVideoPage({ params }: { params: Promise<{ id: 
     <div>
       <EditHeader title="Edit Video" backHref="/admin/videos" />
       <Card>
-        <VideoForm action={updateVideoAction.bind(null, id)} video={video} />
+        <VideoForm
+          altsByPath={altsByPath} action={updateVideoAction.bind(null, id)} video={video} />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deleteVideoAction.bind(null, id)} label="Delete video" />
         </div>

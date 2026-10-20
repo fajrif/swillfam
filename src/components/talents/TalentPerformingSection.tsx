@@ -1,7 +1,7 @@
-import Image from "next/image";
 import type { Venue } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /** "Performing at <Venue>" — venue blurb + CTA (left) and venue image (right),
  *  boxed like CareersSection. Caller only renders this when the talent has a home venue. */
@@ -28,7 +28,7 @@ export function TalentPerformingSection({ venue }: { venue: Venue }) {
 
           <div className="relative aspect-square w-full overflow-hidden border border-sf-border/30">
             {image ? (
-              <Image
+              <ContentImage
                 src={image}
                 alt={venue.name}
                 fill

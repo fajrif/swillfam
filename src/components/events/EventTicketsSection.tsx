@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ReserveButton } from "./ReserveButton";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const DEFAULT_COPY =
   "For ticketed events, secure your place by purchasing your ticket through the official ticketing platform as early as possible. Popular SwillFam events can reach capacity quickly, especially for special performances and limited-capacity experiences.";
@@ -36,7 +36,7 @@ export function EventTicketsSection({
       <Container className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
         {image ? (
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
-            <Image
+            <ContentImage
               src={image}
               alt={eventName}
               fill

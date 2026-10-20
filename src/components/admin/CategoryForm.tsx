@@ -7,15 +7,18 @@ import { SeoFields } from "./SeoFields";
 export function CategoryForm({
   action,
   category,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   category?: Category;
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
       <div className="grid grid-cols-2 gap-4">
-        <ImageManager name="image" label="Image" existing={category?.image ? [category.image] : []} />
-        <ImageManager name="bannerImage" label="Banner image" existing={category?.bannerImage ? [category.bannerImage] : []} />
+        <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={category?.image ? [category.image] : []} />
+        <ImageManager altsByPath={altsByPath} name="bannerImage" label="Banner image" existing={category?.bannerImage ? [category.bannerImage] : []} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Field label="Name" name="name" defaultValue={category?.name} required hint=" " />

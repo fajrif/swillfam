@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { whatsappHref, formatPhone } from "@/lib/whatsapp";
 import { googleMapsUrl } from "@/lib/maps";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 export type VenueContactRow = {
   name: string;
@@ -39,7 +39,7 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
             >
               <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface aspect-[140/96] hidden sm:block sm:w-[140px]">
                 {venue.image ? (
-                  <Image
+                  <ContentImage
                     src={venue.image}
                     alt={venue.name}
                     fill

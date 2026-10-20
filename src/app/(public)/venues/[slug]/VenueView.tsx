@@ -1,6 +1,5 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { getFaqs } from "@/lib/faqs";
@@ -26,6 +25,8 @@ import { venueHoursText } from "@/lib/opening-hours";
 import { JsonLd, venueGraph } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { venueSeo } from "@/lib/seo/entities";
+import { ContentImage } from "@/components/shared/ContentImage";
+import { altFor, withAlts } from "@/lib/image-alt";
 import {
   VenueDescription,
   DishesSection,
@@ -89,8 +90,27 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
     getSiteSettings(),
   ]);
 
-  const galleries = venue.segmentGalleries.filter((g) => !g.special);
-  const dishGalleries = venue.segmentGalleries.filter((g) => g.special);
+  // Alt text is resolved here rather than inside the JSX: `GalleryCarousel`
+  // and `DishesSection` are Client Components, so the pairs have to be built
+  // on the server before they are handed over.
+  const galleries = await Promise.all(
+    venue.segmentGalleries
+      .filter((g) => !g.special)
+      .map(async (g) => ({
+        id: g.id,
+        title: g.title,
+        description: g.description,
+        images: await withAlts(g.images, (_, i) => `${g.title} (${i + 1})`),
+      })),
+  );
+  const dishGalleries = await Promise.all(
+    venue.segmentGalleries
+      .filter((g) => g.special)
+      .map(async (g) => ({
+        gallery: g,
+        alts: await withAlts(g.images, (_, i) => g.imageTitles[i] ?? g.title),
+      })),
+  );
 
   const eventItems: OfferCardData[] = venue.events.map((e) => ({
     id: e.id,
@@ -103,12 +123,18 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
     href: `/events/${e.slug}`,
   }));
 
-  const promotionItems: EventCarouselItem[] = venue.promotions.map((p) => ({
-    img: p.posterImage ?? p.image ?? p.bannerImage ?? POSTER_FALLBACK,
-    title: p.name,
-    shortDescription: p.shortDescription,
-    href: `/promotions/${p.slug}`,
-  }));
+  const promotionItems: EventCarouselItem[] = await Promise.all(
+    venue.promotions.map(async (p) => {
+      const img = p.posterImage ?? p.image ?? p.bannerImage ?? POSTER_FALLBACK;
+      return {
+        img,
+        alt: await altFor(img, p.name),
+        title: p.name,
+        shortDescription: p.shortDescription,
+        href: `/promotions/${p.slug}`,
+      };
+    }),
+  );
 
   return (
     <>
@@ -117,7 +143,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
       <JsonLd data={venueGraph(venue, faqs)} />
       <StickyHero
       backdrop={
-          <Image
+          <ContentImage
             src={venue.bannerImage ?? venue.image ?? FALLBACK}
             alt={venue.name}
             fill
@@ -149,15 +175,15 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
         <Reveal key={gallery.id}>
           <GalleryCarousel
             title={gallery.title}
-            description={gallery.description}
+            description={gallery.description ?? undefined}
             images={gallery.images}
           />
         </Reveal>
       ))}
 
-      {dishGalleries.map((gallery) => (
+      {dishGalleries.map(({ gallery, alts }) => (
         <Reveal key={gallery.id}>
-          <DishesSection gallery={gallery} />
+          <DishesSection gallery={gallery} alts={alts} />
         </Reveal>
       ))}
 

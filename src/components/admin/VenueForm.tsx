@@ -29,6 +29,7 @@ export function VenueForm({
   hours = [],
   categories,
   lockIdentity = false,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   venue?: Venue;
@@ -37,6 +38,8 @@ export function VenueForm({
   categories: { id: string; name: string }[];
   /** Operators: slug (venue FAQs are keyed by it), category and Published are read-only. */
   lockIdentity?: boolean;
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   // Preserve a previously-saved custom value that isn't one of the presets.
   const hoursOptions = [...OPERATING_HOURS_PRESETS];
@@ -47,9 +50,11 @@ export function VenueForm({
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-3 gap-6">
-        <ImageManager name="image" label="Image" existing={venue?.image ? [venue.image] : []} hint="Shown on the venue card in listings." />
-        <ImageManager name="bannerImage" label="Banner image" existing={venue?.bannerImage ? [venue.bannerImage] : []} hint="Shown as the banner on the venue page." />
-        <ImageManager name="logo" label="Logo" existing={venue?.logo ? [venue.logo] : []} bgBlack />
+        <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={venue?.image ? [venue.image] : []} hint="Shown on the venue card in listings." />
+        <ImageManager altsByPath={altsByPath} name="bannerImage" label="Banner image" existing={venue?.bannerImage ? [venue.bannerImage] : []} hint="Shown as the banner on the venue page." />
+        {/* No alt input: a logo's alt is the venue name, which the render sites
+            already pass and nobody should have to retype. */}
+        <ImageManager name="logo" label="Logo" existing={venue?.logo ? [venue.logo] : []} bgBlack alts={false} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

@@ -5,6 +5,7 @@ import { absoluteUrl } from "@/lib/site-url";
 import { PastEventStamp } from "./PastEventStamp";
 import { ReserveButton } from "./ReserveButton";
 import { EVENT_PROSE } from "./prose";
+import { altFor } from "@/lib/image-alt";
 
 /**
  * The two body blocks of a recurring (series) event.
@@ -14,7 +15,7 @@ import { EVENT_PROSE } from "./prose";
  * write-up — which is also where an admin notes per-edition details like
  * special guests or talents — plus the recurring day, venue, and category.
  */
-export function RecurringEventDetail({
+export async function RecurringEventDetail({
   name,
   slug,
   nextEditionDescription,
@@ -128,7 +129,7 @@ export function RecurringEventDetail({
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
               <ZoomableImage
                 src={image}
-                alt={name}
+                alt={await altFor(image, name)}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"

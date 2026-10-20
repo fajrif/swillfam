@@ -5,13 +5,16 @@ import { ImageManager } from "./ImageManager";
 export function VideoForm({
   action,
   video,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   video?: Video;
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
-      <ImageManager name="image" label="Thumbnail image" existing={video?.image ? [video.image] : []} />
+      <ImageManager altsByPath={altsByPath} name="image" label="Thumbnail image" existing={video?.image ? [video.image] : []} />
       <Field label="Title" name="title" defaultValue={video?.title} required />
       <Field
         label="YouTube URL"

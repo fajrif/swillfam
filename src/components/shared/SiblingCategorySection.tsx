@@ -1,9 +1,9 @@
-import Image from "next/image";
 import type { Category } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
 import { cn } from "@/lib/utils";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/home/hero.png";
 
@@ -53,7 +53,7 @@ export function SiblingCategorySection({
             )}
           >
             <ParallaxImage>
-              <Image
+              <ContentImage
                 src={category.image ?? FALLBACK}
                 alt={category.name}
                 fill

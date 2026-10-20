@@ -19,6 +19,7 @@ export function EventForm({
   talents,
   selectedTalentIds = [],
   operatorVenue,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   event?: Event;
@@ -28,16 +29,19 @@ export function EventForm({
   selectedTalentIds?: string[];
   /** Set for operators: the venue is fixed to theirs and Featured is hidden. */
   operatorVenue?: { id: string; name: string };
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-3 gap-6">
-        <ImageManager name="image" label="Image" existing={event?.image ? [event.image] : []} hint="Shown on the event card in listings." />
-        <ImageManager name="bannerImage" label="Banner image" existing={event?.bannerImage ? [event.bannerImage] : []} hint="Shown as the banner on the event page." />
-        <ImageManager name="posterImage" label="Poster image" existing={event?.posterImage ? [event.posterImage] : []} hint="Optional. Shown as the poster on the event page." />
+        <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={event?.image ? [event.image] : []} hint="Shown on the event card in listings." />
+        <ImageManager altsByPath={altsByPath} name="bannerImage" label="Banner image" existing={event?.bannerImage ? [event.bannerImage] : []} hint="Shown as the banner on the event page." />
+        <ImageManager altsByPath={altsByPath} name="posterImage" label="Poster image" existing={event?.posterImage ? [event.posterImage] : []} hint="Optional. Shown as the poster on the event page." />
       </div>
 
       <ImageManager
+        altsByPath={altsByPath}
         name="galleries"
         label="Gallery images"
         multiple
@@ -155,10 +159,14 @@ export function EventForm({
           />
         </div>
         <ImageManager
+        altsByPath={altsByPath}
           name="recapThumbnail"
           label="Recap thumbnail"
           existing={event?.recapThumbnail ? [event.recapThumbnail] : []}
           hint="Still frame for the recap video."
+          // No alt input: this is a poster behind a play button, and the
+          // button already carries the accessible name.
+          alts={false}
         />
       </div>
 

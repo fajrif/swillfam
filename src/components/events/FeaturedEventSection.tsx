@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /** Placeholder used until a featured event has its own artwork uploaded. */
 const FALLBACK_IMAGE = "/events/sample-featured-events.png";
@@ -39,7 +39,7 @@ export function FeaturedEventSection({ event }: { event: FeaturedEventData | nul
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7fr_4fr] lg:gap-12">
           <div className="relative aspect-[16/10] w-full overflow-hidden bg-sf-surface">
-            <Image
+            <ContentImage
               src={event.image ?? FALLBACK_IMAGE}
               alt={event.name}
               fill

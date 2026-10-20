@@ -1,6 +1,7 @@
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { prisma } from "@/lib/prisma";
 
 export const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
 
@@ -73,11 +74,54 @@ export async function deleteUploadedFile(publicPath: string | null | undefined):
   }
 }
 
-/** Delete many files by public path. */
+/**
+ * Delete many files by public path, and the alt text that described them.
+ *
+ * The alt rows are dropped here rather than in each `deleteX` action because
+ * every one of them already routes its cleanup through this function — and
+ * unlike the unlink, the delete is *not* limited to `/uploads/`: a venue whose
+ * seeded `/categories/...` photo is replaced by an upload leaves behind an alt
+ * row for a path the row no longer uses.
+ */
 export async function deleteUploadedFiles(
   paths: (string | null | undefined)[],
 ): Promise<void> {
   await Promise.all(paths.map((p) => deleteUploadedFile(p)));
+  const known = paths.filter((p): p is string => Boolean(p));
+  if (known.length > 0) {
+    await prisma.imageAlt.deleteMany({ where: { path: { in: known } } });
+  }
+}
+
+/**
+ * Store the alt text for the images a field just saved.
+ *
+ * Alt lives in `ImageAlt`, keyed by path, so it is written here rather than by
+ * each action: the call that saves the files is the only place that knows
+ * which paths a field ended up with. A blank alt deletes the row instead of
+ * storing `""` — "nobody has described this yet" and "this image is
+ * decorative" are different claims, and the render sites fall back on the
+ * first. Removed files take their alt with them via `deleteUploadedFiles`.
+ */
+async function saveImageAlts(entries: { path: string; alt: string }[]) {
+  const blank: string[] = [];
+
+  for (const { path: imagePath, alt } of entries) {
+    const trimmed = alt.trim();
+    if (!trimmed) {
+      blank.push(imagePath);
+      continue;
+    }
+    await prisma.imageAlt.upsert({
+      where: { path: imagePath },
+      create: { path: imagePath, alt: trimmed },
+      update: { alt: trimmed },
+    });
+  }
+
+  if (blank.length > 0) {
+    await prisma.imageAlt.deleteMany({ where: { path: { in: blank } } });
+  }
 }
 
 /** Flatten a mix of single paths / path arrays / nullish into a clean string[] (for record-delete cleanup). */
@@ -112,34 +156,40 @@ export async function reconcileImageField(opts: {
   const allowedTypes = opts.allowedTypes ?? IMAGE_MIME_TYPES;
   const maxBytes = opts.maxBytes ?? MAX_IMAGE_BYTES;
 
-  let tokens: string[] = [];
-  const orderRaw = String(formData.get(`${field}__order`) ?? "");
-  if (orderRaw) {
-    try {
-      const parsed = JSON.parse(orderRaw);
-      if (Array.isArray(parsed)) tokens = parsed.map(String);
-    } catch {
-      tokens = [];
-    }
-  }
+  const tokens = parseJsonStringArray(formData.get(`${field}__order`));
+  // Index-aligned with `__order`, same contract as `__titles`. A field
+  // rendered with `alts={false}` — a logo, an avatar, a share card — posts no
+  // array at all, and `hasAlts` keeps those saves from reading as "the admin
+  // cleared every description" and deleting rows they never owned.
+  const hasAlts = formData.has(`${field}__alts`);
+  const altsIn = parseJsonStringArray(formData.get(`${field}__alts`));
 
   const files = formData
     .getAll(`${field}__file`)
     .filter((f): f is File => f instanceof File && f.size > 0);
 
   const finalPaths: string[] = [];
-  for (const token of tokens) {
+  const alts: { path: string; alt: string }[] = [];
+
+  for (const [index, token] of tokens.entries()) {
+    let saved: string | null = null;
     if (token.startsWith("new:")) {
       const idx = Number.parseInt(token.slice(4), 10);
       const file = files[idx];
-      if (file) finalPaths.push(await saveUploadedFile(file, category, { allowedTypes, maxBytes }));
+      if (file) saved = await saveUploadedFile(file, category, { allowedTypes, maxBytes });
     } else if (previousPaths.includes(token)) {
-      finalPaths.push(token);
+      saved = token;
+    }
+    if (saved) {
+      finalPaths.push(saved);
+      // Read by index, not by path: a brand-new file has no path until the
+      // line above saved it, and the admin typed its alt before that existed.
+      alts.push({ path: saved, alt: altsIn[index] ?? "" });
     }
   }
 
-  const removed = previousPaths.filter((p) => !finalPaths.includes(p));
-  await deleteUploadedFiles(removed);
+  await deleteUploadedFiles(previousPaths.filter((p) => !finalPaths.includes(p)));
+  if (hasAlts) await saveImageAlts(alts);
 
   return finalPaths;
 }
@@ -177,6 +227,8 @@ export async function reconcileImageFieldWithCaptions(opts: {
   const tokens = parseJsonStringArray(formData.get(`${field}__order`));
   const titlesIn = parseJsonStringArray(formData.get(`${field}__titles`));
   const descriptionsIn = parseJsonStringArray(formData.get(`${field}__descriptions`));
+  const hasAlts = formData.has(`${field}__alts`);
+  const altsIn = parseJsonStringArray(formData.get(`${field}__alts`));
 
   const files = formData
     .getAll(`${field}__file`)
@@ -185,6 +237,7 @@ export async function reconcileImageFieldWithCaptions(opts: {
   const paths: string[] = [];
   const titles: string[] = [];
   const descriptions: string[] = [];
+  const alts: { path: string; alt: string }[] = [];
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
@@ -200,11 +253,12 @@ export async function reconcileImageFieldWithCaptions(opts: {
       paths.push(saved);
       titles.push(titlesIn[i] ?? "");
       descriptions.push(descriptionsIn[i] ?? "");
+      alts.push({ path: saved, alt: altsIn[i] ?? "" });
     }
   }
 
-  const removed = previousPaths.filter((p) => !paths.includes(p));
-  await deleteUploadedFiles(removed);
+  await deleteUploadedFiles(previousPaths.filter((p) => !paths.includes(p)));
+  if (hasAlts) await saveImageAlts(alts);
 
   return { paths, titles, descriptions };
 }

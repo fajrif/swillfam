@@ -6,8 +6,10 @@ import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateTalentAction, deleteTalentAction } from "../actions";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { talentSeo } from "@/lib/seo/entities";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditTalentPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   const { id } = await params;
   const [talent, venues, categories] = await Promise.all([
     prisma.talent.findUnique({
@@ -27,7 +29,8 @@ export default async function EditTalentPage({ params }: { params: Promise<{ id:
     <div>
       <EditHeader title="Edit Talent" backHref="/admin/talents" />
       <Card>
-        <TalentForm action={updateTalentAction.bind(null, id)} talent={talent} venues={venues} categories={categories} />
+        <TalentForm
+          altsByPath={altsByPath} action={updateTalentAction.bind(null, id)} talent={talent} venues={venues} categories={categories} />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deleteTalentAction.bind(null, id)} label="Delete talent" />
         </div>

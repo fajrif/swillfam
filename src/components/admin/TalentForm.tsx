@@ -9,15 +9,18 @@ export function TalentForm({
   talent,
   venues,
   categories,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   talent?: Talent;
   venues: { id: string; name: string }[];
   categories: { id: string; name: string }[];
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
-      <ImageManager name="image" label="Image" existing={talent?.image ? [talent.image] : []} />
+      <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={talent?.image ? [talent.image] : []} />
       <div className="grid grid-cols-2 gap-4">
         <Field label="Name" name="name" defaultValue={talent?.name} required />
         <SlugField sourceName="name" defaultValue={talent?.slug} />

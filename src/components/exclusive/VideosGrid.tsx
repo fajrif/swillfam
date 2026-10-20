@@ -14,18 +14,19 @@ const VIDEO_THUMBS = [
 export function VideosGrid() {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-      {VIDEO_THUMBS.map((src, i) => (
+      {VIDEO_THUMBS.map((src) => (
         <div
           key={src}
           className="relative aspect-[448/537] overflow-hidden border border-sf-border/50 bg-sf-surface"
         >
+          {/* No `priority`: below /exclusive's hero, and inside a tab panel
+              that is not even the one shown first. */}
           <Image
             src={src}
             alt=""
             fill
             sizes="(max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 hover:scale-105"
-            priority={i < 2}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-black/50">

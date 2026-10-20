@@ -30,7 +30,9 @@ const inter = Inter({
 });
 
 /**
- * Only `metadataBase` and `icons` live here.
+ * Only `metadataBase` and the fallback title/description live here; the icons
+ * come from the `favicon.ico` / `icon.png` / `apple-icon.png` files beside this
+ * one, and the manifest from `manifest.ts`.
  *
  * Next merges metadata shallowly, so any page that defines `openGraph` would
  * replace a root-level `openGraph` wholesale rather than extending it. Putting
@@ -43,7 +45,10 @@ const inter = Inter({
  */
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  icons: "/favicon.png",
+  // No `icons` key: `src/app/favicon.ico`, `icon.png` and `apple-icon.png` are
+  // file conventions, so Next emits the <link> tags — with the right `sizes`,
+  // `type` and a content hash — from the files themselves. Declaring them here
+  // as well would be a second list to keep in step.
   // A last-resort title/description for any route that ships no metadata of
   // its own (the admin section). Every public route overrides both.
   title: "SwillFam — Jakarta Lifestyle & Nightlife Venues",

@@ -13,16 +13,19 @@ export function ArticleForm({
   categories,
   venues,
   selectedVenueIds = [],
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   article?: Article;
   categories: { id: string; name: string }[];
   venues: { id: string; name: string }[];
   selectedVenueIds?: string[];
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
-      <ImageManager name="image" label="Cover image" existing={article?.image ? [article.image] : []} />
+      <ImageManager altsByPath={altsByPath} name="image" label="Cover image" existing={article?.image ? [article.image] : []} />
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Title" name="title" defaultValue={article?.title} required hint=" " />

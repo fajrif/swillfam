@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /**
  * Top of both event detail variants: a "Back to All Events" link over a wide
@@ -36,7 +36,7 @@ export function EventDetailBanner({
         <Container className="pt-6">
           <div className="relative aspect-[1440/500] w-full overflow-hidden bg-sf-surface">
             <ParallaxImage>
-              <Image src={image} alt={alt} fill sizes="100vw" className="object-cover" priority />
+              <ContentImage src={image} alt={alt} fill sizes="100vw" className="object-cover" priority />
             </ParallaxImage>
 
             {title ? (

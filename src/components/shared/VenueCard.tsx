@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { Venue } from "@/generated/prisma/client";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/home/hero.png";
 
@@ -22,7 +23,7 @@ export function VenueCard({
       href={`/venues/${venue.slug}`}
       className="group relative block aspect-square w-full overflow-hidden border border-sf-border/40"
     >
-      <Image
+      <ContentImage
         src={venue.image ?? FALLBACK}
         alt={venue.name}
         fill
@@ -41,7 +42,7 @@ export function VenueCard({
       >
         {venue.logo ? (
           <div className="relative h-40 w-40 lg:h-56 lg:w-56">
-            <Image src={venue.logo} alt={venue.name} fill sizes="(max-width: 1024px) 160px, 224px" className="object-contain" />
+            <ContentImage src={venue.logo} alt={venue.name} fill sizes="(max-width: 1024px) 160px, 224px" className="object-contain" />
           </div>
         ) : (
           <span className="text-center font-syne text-[clamp(1.5rem,2.5vw,32px)] font-bold leading-tight text-white">

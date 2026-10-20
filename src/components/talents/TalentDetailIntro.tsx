@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { Talent, Venue } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 type TalentWithVenue = Talent & { venue: Venue | null };
 
@@ -11,7 +11,7 @@ export function TalentDetailIntro({ talent }: { talent: TalentWithVenue }) {
       <Container className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
           {talent.image ? (
-            <Image
+            <ContentImage
               src={talent.image}
               alt={talent.name}
               fill

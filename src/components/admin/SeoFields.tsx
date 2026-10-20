@@ -116,6 +116,9 @@ export function SeoFields({
         label={ogImageLabel}
         existing={ogImageValue ? [ogImageValue] : []}
         hint="1200×630 works everywhere. Optional — falls back to this record's banner or poster image, then to the sitewide default."
+        // No alt input: a share card's alt is the page title, which
+        // `buildMetadata` already emits as `og:image:alt`.
+        alts={false}
       />
     </div>
   );

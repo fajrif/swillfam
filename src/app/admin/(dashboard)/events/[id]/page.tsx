@@ -7,8 +7,10 @@ import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateEventAction, deleteEventAction } from "../actions";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { eventSeo } from "@/lib/seo/entities";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   const { id } = await params;
   const admin = await requireAdmin();
   const [event, venues, categories, talents] = await Promise.all([
@@ -33,6 +35,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
       <EditHeader title="Edit Event" backHref="/admin/events" />
       <Card>
         <EventForm
+          altsByPath={altsByPath}
           action={updateEventAction.bind(null, id)}
           event={event}
           venues={venues}

@@ -20,6 +20,7 @@ import {
 } from "@/components/private-events";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { privateEventSeo } from "@/lib/seo/entities";
+import { withAlts } from "@/lib/image-alt";
 
 // Statically rendered but data-driven — revalidate periodically so admin edits
 // and seeds show up without a full rebuild.
@@ -133,7 +134,7 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
           <GalleryCarousel
             title={privateEvent.galleryTitle ?? `${privateEvent.title} We Can Host`}
             description={privateEvent.galleryLead ?? undefined}
-            images={privateEvent.galleries}
+            images={await withAlts(privateEvent.galleries, (_, i) => `${privateEvent.title} (${i + 1})`)}
           />
         </Reveal>
       ) : null}

@@ -39,6 +39,7 @@ import { formatIsoDuration } from "@/lib/duration";
 import { parseVideoUrl } from "@/lib/video";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { eventSeo } from "@/lib/seo/entities";
+import { withAlts } from "@/lib/image-alt";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -258,7 +259,7 @@ export default async function EventSlugPage({
               <GalleryCarousel
                 title="Event Recap"
                 description="Relive past SwillFam events through selected photos, videos, and highlight moments."
-                images={event.galleries}
+                images={await withAlts(event.galleries, (_, i) => `${event.name} (${i + 1})`)}
               />
             </Reveal>
           ) : null}

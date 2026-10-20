@@ -7,8 +7,10 @@ import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updatePromotionAction, deletePromotionAction } from "../actions";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { promotionSeo } from "@/lib/seo/entities";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditPromotionPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   const { id } = await params;
   const admin = await requireAdmin();
   const [promotion, venues, categories] = await Promise.all([
@@ -27,6 +29,7 @@ export default async function EditPromotionPage({ params }: { params: Promise<{ 
       <EditHeader title="Edit Promotion" backHref="/admin/promotions" />
       <Card>
         <PromotionForm
+          altsByPath={altsByPath}
           action={updatePromotionAction.bind(null, id)}
           promotion={promotion}
           venues={venues}

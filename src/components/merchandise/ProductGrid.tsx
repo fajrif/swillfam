@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 export type ProductRow = {
   img: string | null;
@@ -43,7 +43,7 @@ function ProductCard({ img, title, description, price }: ProductRow) {
     <article className="flex h-full flex-col border border-sf-border/50">
       <div className="relative aspect-square w-full overflow-hidden bg-sf-surface">
         {img ? (
-          <Image
+          <ContentImage
             src={img}
             alt={title}
             fill

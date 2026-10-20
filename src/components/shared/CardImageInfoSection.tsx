@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 export type TrustedCard = {
   img?: string;
@@ -50,7 +50,7 @@ export function CardImageInfoSection({
             >
               {card.img ? (
                 <div className="relative aspect-square w-full max-w-[260px]">
-                  <Image
+                  <ContentImage
                     src={card.img}
                     alt={card.title}
                     fill

@@ -7,8 +7,10 @@ import { updateArticleAction, deleteArticleAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { articleSeo } from "@/lib/seo/entities";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const [article, categories, venues] = await Promise.all([
@@ -26,6 +28,7 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
       <EditHeader title="Edit Article" backHref="/admin/articles" />
       <Card>
         <ArticleForm
+          altsByPath={altsByPath}
           action={updateArticleAction.bind(null, id)}
           article={article}
           categories={categories}

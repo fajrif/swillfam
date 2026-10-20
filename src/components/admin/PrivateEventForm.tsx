@@ -17,18 +17,22 @@ export function PrivateEventForm({
   eventTypes,
   venues,
   selectedVenueIds = [],
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   privateEvent?: PrivateEvent;
   eventTypes: { id: string; title: string }[];
   venues: { id: string; name: string }[];
   selectedVenueIds?: string[];
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
       <div className="grid grid-cols-2 gap-6">
-        <ImageManager name="image" label="Image" existing={privateEvent?.image ? [privateEvent.image] : []} />
+        <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={privateEvent?.image ? [privateEvent.image] : []} />
         <ImageManager
+        altsByPath={altsByPath}
           name="bannerImage"
           label="Banner image"
           existing={privateEvent?.bannerImage ? [privateEvent.bannerImage] : []}
@@ -80,6 +84,7 @@ export function PrivateEventForm({
       />
 
       <ImageManager
+        altsByPath={altsByPath}
         name="galleries"
         label="Gallery images"
         multiple

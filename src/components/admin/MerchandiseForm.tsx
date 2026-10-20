@@ -5,13 +5,17 @@ import { ImageManager } from "./ImageManager";
 export function MerchandiseForm({
   action,
   merchandise,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   merchandise?: Merchandise;
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
       <ImageManager
+        altsByPath={altsByPath}
         name="image"
         label="Image"
         existing={merchandise?.image ? [merchandise.image] : []}

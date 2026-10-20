@@ -35,8 +35,67 @@ const PATH_REDIRECTS: [source: string, destination: string][] = [
   ["/venues/atsumaru-izakaya", "/venues/lifestyle"],
 ];
 
+/**
+ * Response headers for every route.
+ *
+ * **No `Content-Security-Policy` here, deliberately.** The pages embed Mapbox,
+ * YouTube, Spotify and Instagram, render admin rich text through
+ * `dangerouslySetInnerHTML`, and get inline styles from Framer Motion — and
+ * GTM arrives in Fase 9. A policy loose enough to allow all that buys little,
+ * and a strict one would break the site in ways `npm run build` cannot catch.
+ * It wants a browser pass of its own.
+ *
+ * **No `Strict-Transport-Security` either**: HSTS belongs at the TLS
+ * terminator, which is also the only place that can honestly promise HTTPS for
+ * the whole apex. It is on the Fase 10 server checklist.
+ */
+const SECURITY_HEADERS = [
+  // Stops a browser from second-guessing our Content-Type — the upload folder
+  // serves admin-supplied files, so a .png that is really HTML must never be
+  // sniffed into one.
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  // Send the full URL to our own pages, origin-only cross-site: enough for
+  // analytics to attribute a referrer without leaking a path to third parties.
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Nothing on the site is meant to be framed. `frame-ancestors` would be the
+  // modern spelling, but it only exists inside a CSP (see above).
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // The site asks for none of these; saying so stops an embedded third party
+  // from prompting in our name. The venue locator draws a map but never asks
+  // where the visitor is.
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=()",
+  },
+];
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  images: {
+    // AVIF first, WebP for browsers that don't take it, original last. Next
+    // ships `['image/webp']` only.
+    //
+    // AVIF is not universally smaller — measured at w=1920 against the real
+    // art: the Le Cirque banner is 115 KB as AVIF vs 151 KB as WebP, the
+    // lifestyle banner 114 vs 125, but Zoo's venue photo goes the other way
+    // (99 vs 77), and small flat logos come out larger than the source PNG.
+    // Next serves the first format the browser accepts rather than the
+    // smallest, so this is a bet, and the bet is on the hero photographs:
+    // every page's LCP element is one, they are where AVIF wins by the widest
+    // margin, and the few KB it costs a logo are not on the critical path.
+    // The encode is slower, but happens once per (image, size) given the TTL
+    // below.
+    formats: ["image/avif", "image/webp"],
+    // 30 days instead of the 4-hour default. Safe because the paths are
+    // immutable in practice: `reconcileSingleImage` writes a fresh UUID
+    // filename on every replace, so a changed image is a changed URL. Only the
+    // committed `public/**` art is overwritable in place — if a designer swaps
+    // one of those, the file has to be renamed or the cache purged.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+  },
+  async headers() {
+    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+  },
   // Next normally injects its own `/:path+/` → `/:path+` redirect at the *front*
   // of the list (unshift + priority), which would turn every old slashed URL
   // into a two-hop chain: /brands/zoo/ → /brands/zoo → /venues/zoo. The brief
