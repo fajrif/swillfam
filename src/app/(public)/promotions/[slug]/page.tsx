@@ -15,6 +15,11 @@ import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeature
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { PromotionDetailTop } from "@/components/promotions";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -41,11 +46,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const promotion = await getPromotionBySlug(slug);
-  if (!promotion) return { title: "Promotion | SwillFam" };
-  return {
-    title: promotion.metaTitle || `${promotion.name} | SwillFam`,
-    description: promotion.metaDescription || promotion.shortDescription,
-  };
+  if (!promotion)
+    return { title: "Promotion Not Found", robots: { index: false, follow: true } };
+
+  return buildMetadata({
+    path: `/promotions/${promotion.slug}`,
+    title:
+      promotion.metaTitle ||
+      `${promotion.name}${promotion.venue ? ` at ${promotion.venue.name}` : ""}`,
+    description: resolveDescription(
+      promotion.metaDescription,
+      promotion.shortDescription,
+      promotion.caption,
+      promotion.description,
+    ),
+    image: resolveOgImage(
+      promotion.ogImage,
+      promotion.bannerImage,
+      promotion.posterImage,
+      promotion.image,
+    ),
+    imageAlt: promotion.name,
+  });
 }
 
 export default async function PromotionSlugPage({

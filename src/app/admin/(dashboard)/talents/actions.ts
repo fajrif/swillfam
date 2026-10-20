@@ -42,7 +42,8 @@ export async function createTalentAction(formData: FormData) {
   await requireAdmin();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.talent.create({ data: { ...parse(formData), slug, image } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
+  await prisma.talent.create({ data: { ...parse(formData), slug, image, ogImage } });
   revalidatePath(BASE);
   revalidatePath("/talents");
   revalidatePath(`/talents/${slug}`);
@@ -55,7 +56,8 @@ export async function updateTalentAction(id: string, formData: FormData) {
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const slug = await uniqueSlug(formData, id);
-  await prisma.talent.update({ where: { id }, data: { ...parse(formData), slug, image } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
+  await prisma.talent.update({ where: { id }, data: { ...parse(formData), slug, image, ogImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/talents");
@@ -68,7 +70,7 @@ export async function deleteTalentAction(id: string) {
   const current = await prisma.talent.findUnique({ where: { id } });
   if (current) {
     await prisma.talent.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.ogImage));
     revalidatePath("/talents");
     revalidatePath(`/talents/${current.slug}`);
   }

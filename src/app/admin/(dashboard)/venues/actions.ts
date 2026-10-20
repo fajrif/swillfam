@@ -60,7 +60,8 @@ export async function createVenueAction(formData: FormData) {
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const logo = await reconcileSingleImage({ formData, field: "logo", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.venue.create({ data: { ...parse(formData), slug, image, bannerImage, logo } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
+  await prisma.venue.create({ data: { ...parse(formData), slug, image, bannerImage, logo, ogImage } });
   revalidatePath(BASE);
   revalidatePath("/venues");
   revalidatePath(`/venues/${slug}`);
@@ -79,7 +80,8 @@ export async function updateVenueAction(id: string, formData: FormData) {
   // Operators can't change the slug (venue FAQs are keyed by it) or the category taxonomy.
   const slug = isAdministrator(admin) ? await uniqueSlug(formData, id) : current.slug;
   if (!isAdministrator(admin)) data.categoryId = current.categoryId;
-  await prisma.venue.update({ where: { id }, data: { ...data, slug, image, bannerImage, logo } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
+  await prisma.venue.update({ where: { id }, data: { ...data, slug, image, bannerImage, logo, ogImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/venues");
@@ -95,7 +97,7 @@ export async function deleteVenueAction(id: string) {
     // Segment galleries / talents / promotions / events / operator accounts reference
     // venueId with onDelete: SetNull, so they survive (their own images aren't touched here).
     await prisma.venue.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.logo));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.logo, current.ogImage));
     revalidatePath("/venues");
     revalidatePath(`/venues/${current.slug}`);
   }

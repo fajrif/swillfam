@@ -101,7 +101,11 @@ export function VenueForm({
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={venue?.youtubeEmbed ?? ""} rows={2} />
       <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={venue?.instagramEmbed ?? ""} rows={2} />
 
-      <SeoFields titleValue={venue?.metaTitle} descriptionValue={venue?.metaDescription} />
+      <SeoFields
+        titleValue={venue?.metaTitle}
+        descriptionValue={venue?.metaDescription}
+        ogImageValue={venue?.ogImage}
+      />
 
       <SaveButton>Save venue</SaveButton>
     </form>

@@ -18,6 +18,11 @@ import {
   TalentPerformingSection,
   TalentSignatureSound,
 } from "@/components/talents";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 const POSTER_FALLBACK = "/home/hero.png";
 
@@ -48,11 +53,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const talent = await getTalentBySlug(slug);
-  if (!talent) return { title: "Talent | SwillFam" };
-  return {
-    title: talent.metaTitle || `${talent.name} | SwillFam`,
-    description: talent.metaDescription || talent.description,
-  };
+  if (!talent)
+    return { title: "Talent Not Found", robots: { index: false, follow: true } };
+
+  return buildMetadata({
+    path: `/talents/${talent.slug}`,
+    title:
+      talent.metaTitle ||
+      `${talent.name}${talent.talentCategory ? ` — ${talent.talentCategory.name}` : ""}`,
+    // Talent has no shortDescription column, so the only fallback is the full
+    // bio. Truncation is doing real work here, not acting as a safety net.
+    description: resolveDescription(talent.metaDescription, talent.description),
+    image: resolveOgImage(talent.ogImage, talent.image),
+    imageAlt: talent.name,
+    ogType: "profile",
+  });
 }
 
 export default async function TalentSlugPage({

@@ -94,6 +94,9 @@ model PageSeo {
   pageKey         String   @unique
   metaTitle       String?
   metaDescription String?
+  // Social share image override. Falls back to the record's own banner/poster
+  // image, then to the sitewide /og-default.jpg — see src/lib/seo/metadata.ts.
+  ogImage         String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -195,6 +198,7 @@ model Article {
   status            Int              @default(0) // 0 = Draft, 1 = Published
   metaTitle         String?
   metaDescription   String?
+  ogImage           String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 }
@@ -217,6 +221,7 @@ model Category {
   venues           Venue[]
   metaTitle        String?
   metaDescription  String?
+  ogImage          String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -259,6 +264,7 @@ model Venue {
   published                Boolean          @default(true)
   metaTitle                String?
   metaDescription          String?
+  ogImage                  String?
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
 }
@@ -306,6 +312,7 @@ model Talent {
   events           Event[] // events this talent is performing at — implicit m2m
   metaTitle        String?
   metaDescription  String?
+  ogImage          String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
 }
@@ -343,6 +350,7 @@ model Promotion {
   endHour             String // "HH:mm"
   metaTitle           String?
   metaDescription     String?
+  ogImage             String?
   createdAt           DateTime           @default(now())
   updatedAt           DateTime           @updatedAt
 }
@@ -394,6 +402,7 @@ model Event {
   ticketLink             String?
   metaTitle              String?
   metaDescription        String?
+  ogImage                String?
   createdAt              DateTime       @default(now())
   updatedAt              DateTime       @updatedAt
 }
@@ -490,6 +499,7 @@ model PrivateEvent {
   published       Boolean  @default(true)
   metaTitle       String?
   metaDescription String?
+  ogImage         String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

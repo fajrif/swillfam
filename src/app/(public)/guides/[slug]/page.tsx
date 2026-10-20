@@ -10,6 +10,11 @@ import { ArticleContent } from "@/components/articles";
 import { ArticleListSection, type ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 
@@ -25,11 +30,27 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  if (!article) return { title: "Article | SwillFam" };
-  return {
-    title: article.metaTitle || `${article.title} | SwillFam`,
-    description: article.metaDescription || article.shortDescription,
-  };
+  // Same guard as the page body, which notFound()s a draft — so a draft never
+  // reaches the tags below and needs no noindex of its own.
+  if (!article || article.status !== 1)
+    return { title: "Guide Not Found", robots: { index: false, follow: true } };
+
+  return buildMetadata({
+    path: `/guides/${article.slug}`,
+    title: article.metaTitle || article.title,
+    // article.description is Tiptap HTML; plainText() inside resolveDescription
+    // is what keeps tags out of the meta tag if shortDescription is ever blank.
+    description: resolveDescription(
+      article.metaDescription,
+      article.shortDescription,
+      article.description,
+    ),
+    image: resolveOgImage(article.ogImage, article.image),
+    imageAlt: article.title,
+    ogType: "article",
+    publishedTime: article.publishedDate.toISOString(),
+    modifiedTime: article.updatedAt.toISOString(),
+  });
 }
 
 export default async function ArticlePage({

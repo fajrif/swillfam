@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -15,13 +15,7 @@ import { StandForColumnsSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "merchandise" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("merchandise");
 
 const PAGE_SIZE = 9;
 

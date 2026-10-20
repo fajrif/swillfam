@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
@@ -25,13 +25,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 // admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "experience" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("experience");
 
 export default async function ExperiencePage() {
   const [settings, articles, promotions, events] = await Promise.all([

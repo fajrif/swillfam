@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -12,13 +12,7 @@ import {
 import { getSiteSettings } from "@/lib/site-settings";
 import { prisma } from "@/lib/prisma";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "contact" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("contact");
 
 export default async function ContactPage() {
   const [settings, venues] = await Promise.all([

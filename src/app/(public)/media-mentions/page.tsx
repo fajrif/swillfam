@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -8,13 +8,7 @@ import { MediaMentionsIntro, MediaMentionsList } from "@/components/media-mentio
 
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "media-mentions" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("media-mentions");
 
 export default async function MediaMentionsPage() {
   const mentions = await prisma.mediaMention.findMany({

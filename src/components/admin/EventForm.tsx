@@ -114,7 +114,11 @@ export function EventForm({
       </div>
       <Field label="WhatsApp phone" name="waPhone" defaultValue={event?.waPhone ?? ""} placeholder="+62…" />
 
-      <SeoFields titleValue={event?.metaTitle} descriptionValue={event?.metaDescription} />
+      <SeoFields
+        titleValue={event?.metaTitle}
+        descriptionValue={event?.metaDescription}
+        ogImageValue={event?.ogImage}
+      />
 
       <SaveButton>Save event</SaveButton>
     </form>

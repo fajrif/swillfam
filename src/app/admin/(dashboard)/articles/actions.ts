@@ -36,7 +36,8 @@ export async function createArticleAction(formData: FormData) {
   await requireAdministrator();
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.article.create({ data: { ...parse(formData), slug, image } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
+  await prisma.article.create({ data: { ...parse(formData), slug, image, ogImage } });
   revalidatePath(BASE);
   revalidatePath("/guides");
   revalidatePath(`/guides/${slug}`);
@@ -49,7 +50,8 @@ export async function updateArticleAction(id: string, formData: FormData) {
   if (!current) redirect(BASE);
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const slug = await uniqueSlug(formData, id);
-  await prisma.article.update({ where: { id }, data: { ...parse(formData), slug, image } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
+  await prisma.article.update({ where: { id }, data: { ...parse(formData), slug, image, ogImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/guides");
@@ -62,7 +64,7 @@ export async function deleteArticleAction(id: string) {
   const current = await prisma.article.findUnique({ where: { id } });
   if (current) {
     await prisma.article.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.ogImage));
     revalidatePath("/guides");
     revalidatePath(`/guides/${current.slug}`);
   }

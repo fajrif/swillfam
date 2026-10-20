@@ -20,6 +20,11 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { formatEventSchedule } from "@/lib/event-calendar";
 import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
+import {
   VenueDescription,
   DishesSection,
   TalentSection,
@@ -49,10 +54,21 @@ export const getVenueBySlug = cache((slug: string) =>
 export type VenueDetail = NonNullable<Awaited<ReturnType<typeof getVenueBySlug>>>;
 
 export function venueMetadata(venue: VenueDetail): Metadata {
-  return {
-    title: venue.metaTitle || `${venue.name} | SwillFam`,
-    description: venue.metaDescription || venue.description,
-  };
+  return buildMetadata({
+    path: `/venues/${venue.slug}`,
+    title: venue.metaTitle || venue.name,
+    // `description` is the full body paragraph — around 700 characters on the
+    // live rows, which is what used to be emitted verbatim. shortDescription
+    // comes first now, and either way resolveDescription cuts it to 155.
+    description: resolveDescription(
+      venue.metaDescription,
+      venue.shortDescription,
+      venue.caption,
+      venue.description,
+    ),
+    image: resolveOgImage(venue.ogImage, venue.bannerImage, venue.image),
+    imageAlt: venue.name,
+  });
 }
 
 export async function VenueView({ venue }: { venue: VenueDetail }) {

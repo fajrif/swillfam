@@ -68,8 +68,10 @@ export async function createPrivateEventAction(formData: FormData) {
     previousPaths: [],
   });
   const slug = await uniqueSlug(formData);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
   await prisma.privateEvent.create({
     data: {
+      ogImage,
       ...parse(formData),
       slug,
       image,
@@ -96,9 +98,11 @@ export async function updatePrivateEventAction(id: string, formData: FormData) {
     previousPaths: current.galleries,
   });
   const slug = await uniqueSlug(formData, id);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
   await prisma.privateEvent.update({
     where: { id },
     data: {
+      ogImage,
       ...parse(formData),
       slug,
       image,
@@ -129,7 +133,7 @@ export async function deletePrivateEventAction(id: string) {
     await prisma.privateEventTestimonial.deleteMany({ where: { privateEventId: id } });
     await prisma.privateEvent.delete({ where: { id } });
     await deleteUploadedFiles(
-      collectImagePaths(current.image, current.bannerImage, current.galleries, ...occasionImages),
+      collectImagePaths(current.image, current.bannerImage, current.galleries, current.ogImage, ...occasionImages),
     );
   }
   revalidatePath(BASE);
