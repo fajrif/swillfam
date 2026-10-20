@@ -46,6 +46,39 @@ enum TalentStatus {
   GUEST
 }
 
+// --- schema.org vocabulary -------------------------------------------------
+//
+// The three enums below deliberately break this file's SCREAMING_SNAKE naming:
+// their values are schema.org tokens emitted *verbatim* into the JSON-LD
+// `@type` / `eventStatus`. Storing them in schema.org's own casing deletes the
+// mapping layer that would otherwise sit between the admin and the markup —
+// and that mapping layer would be the one place a typo could hide, since a
+// wrong `@type` is still syntactically valid JSON-LD and fails silently.
+// Adding a type here is a migration; that is the intended friction.
+
+/// Venue `@type`. A venue may carry several (Kilo Jakarta is Restaurant + BarOrPub).
+enum VenueSchemaType {
+  Restaurant
+  BarOrPub
+  CafeOrCoffeeShop
+  NightClub
+}
+
+/// Event `@type`. `Event` is the unspecific base type and the safe default.
+enum EventSchemaType {
+  MusicEvent
+  FoodEvent
+  Event
+}
+
+/// Event `eventStatus`, emitted as `https://schema.org/<value>`.
+enum EventStatus {
+  EventScheduled
+  EventCancelled
+  EventPostponed
+  EventRescheduled
+}
+
 // ---------------------------------------------------------------------------
 // Auth (internal admin accounts) — unchanged from the original project.
 // ---------------------------------------------------------------------------
@@ -196,6 +229,10 @@ model Article {
   articleCategory   ArticleCategory? @relation(fields: [articleCategoryId], references: [id], onDelete: SetNull)
   publishedDate     DateTime
   status            Int              @default(0) // 0 = Draft, 1 = Published
+  /// BlogPosting `author`. Plain text — there is no Author model to point at.
+  author            String?
+  /// "Venues mentioned" — BlogPosting `about`, referencing each venue by @id.
+  venues            Venue[] // implicit m2m, same pattern as Event.talents
   metaTitle         String?
   metaDescription   String?
   ogImage           String?
@@ -246,10 +283,26 @@ model Venue {
   placeId                  String?
   categoryId               String?
   category                 Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  // Free-text display hours ("Monday - Sunday: 12:00 - 03:00"). Kept as the
+  // fallback for venues with no `hours` rows yet; once `hours` is populated the
+  // public display string is *derived* from it (see src/lib/opening-hours.ts)
+  // so the page and the OpeningHoursSpecification markup cannot disagree.
   operatingHours           String
+  hours                    VenueHour[]
   location                 String
+  // Structured address, split out of the free-text `location` above because
+  // PostalAddress needs the parts separately. addressLocality/Region/Country
+  // are constants for every SwillFam venue and live in the schema builder.
+  streetAddress            String?
+  postalCode               String?
   lat                      Float?
   lng                      Float?
+  /// schema.org `@type`. Empty until the SEO side fills the fact sheet.
+  schemaTypes              VenueSchemaType[]
+  /// `servesCuisine` — restaurants and cafés only.
+  cuisine                  String?
+  /// `sameAs`. One URL for now; schema.org accepts an array if more are added.
+  instagramUrl             String?
   spotifyEmbed             String?
   youtubeEmbed             String?
   instagramEmbed           String?
@@ -258,6 +311,7 @@ model Venue {
   promotions               Promotion[]
   events                   Event[]
   privateEvents            PrivateEvent[] // "Recommended Venues for …" — implicit m2m
+  articles                 Article[] // "venues mentioned" in a guide — implicit m2m
   adminUsers               AdminUser[] // operators assigned to this venue
   // Unpublishing hides the venue from the public site and drops it from the
   // sitemap and Organization schema, without deleting its events/promotions.
@@ -267,6 +321,30 @@ model Venue {
   ogImage                  String?
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
+}
+
+/// One opening-hours group for a venue — maps 1:1 to an `OpeningHoursSpecification`.
+///
+/// A row per *group* rather than per day, because that is the shape schema.org
+/// wants: one object listing every day that shares the same open/close pair.
+/// Closing after midnight stays on the opening day (`closes: "02:00"`), which
+/// is valid and is what the brief specifies.
+///
+/// `venueId` is optional with `onDelete: SetNull` like every other FK in this
+/// file, so deleting a venue can never cascade or fail. Hours are an owned
+/// detail though, not an association, so an orphaned row is dead weight rather
+/// than a surviving relationship — `deleteVenueAction` clears them explicitly,
+/// the same way it unlinks the venue's uploaded files.
+model VenueHour {
+  id        String    @id @default(uuid())
+  venueId   String?
+  venue     Venue?    @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  days      Weekday[]
+  opens     String // "HH:mm"
+  closes    String // "HH:mm", may be earlier than `opens` when closing after midnight
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model SegmentGallery {
@@ -386,8 +464,12 @@ model Event {
   startDate              DateTime
   endDate                DateTime?
   startHour              String // "HH:mm"
-  endHour                String // "HH:mm"
+  endHour                String // "HH:mm" — the `endDate`/`endTime` pair the brief asks for
   recurringDays          Weekday[] // used when eventType = RECURRING
+  /// schema.org `@type` for this event. Defaults to the unspecific base type.
+  schemaEventType        EventSchemaType @default(Event)
+  /// A postponed or cancelled event keeps its page and dates — only this changes.
+  eventStatus            EventStatus     @default(EventScheduled)
   // "Next Edition Event" paragraph on the public page, recurring events only —
   // replaces shortDescription there so the two can read differently.
   nextEditionDescription String?
@@ -400,6 +482,13 @@ model Event {
   ticketInfo             String?
   waPhone                String?
   ticketLink             String?
+  // Recap video — a past event's CTA points here instead of at reservations
+  // (T12), and it feeds a VideoObject. `recapDuration` is stored as an ISO 8601
+  // duration ("PT2M15S"), which is what VideoObject requires; the admin form
+  // also accepts "2:15" and normalises on save (src/lib/duration.ts).
+  recapVideoUrl          String?
+  recapThumbnail         String?
+  recapDuration          String?
   metaTitle              String?
   metaDescription        String?
   ogImage                String?

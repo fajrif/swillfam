@@ -1,14 +1,15 @@
-import type { Promotion, Venue } from "@/generated/prisma/client";
+import type { Promotion, Venue, VenueHour } from "@/generated/prisma/client";
 import type { SiteSettings } from "@/lib/site-settings";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ShareButtons } from "@/components/shared/ShareButtons";
 import { formatDateRange } from "@/lib/date";
 import { whatsappHref } from "@/lib/whatsapp";
+import { venueHoursText } from "@/lib/opening-hours";
 import { absoluteUrl } from "@/lib/site-url";
 import { PromotionImage } from "./PromotionImage";
 
-type PromotionWithVenue = Promotion & { venue: Venue | null };
+type PromotionWithVenue = Promotion & { venue: (Venue & { hours: VenueHour[] }) | null };
 
 /** Top of the single-promotion page: poster (left) + details, terms, and actions (right). */
 export function PromotionDetailTop({
@@ -61,7 +62,9 @@ export function PromotionDetailTop({
           <div className="flex flex-col gap-1 font-inter">
             <p className="font-semibold text-white">Operating Hours:</p>
             <p className="whitespace-pre-line">
-              {venue?.operatingHours ?? `${promotion.startHour} – ${promotion.endHour}`}
+              {venue
+                ? venueHoursText(venue.hours, venue.operatingHours)
+                : `${promotion.startHour} – ${promotion.endHour}`}
             </p>
           </div>
 

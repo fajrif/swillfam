@@ -19,9 +19,15 @@ function parse(formData: FormData) {
     articleCategoryId: categoryId || null,
     publishedDate: new Date(String(formData.get("publishedDate"))),
     status: Number.parseInt(String(formData.get("status") ?? "0"), 10) || 0,
+    author: String(formData.get("author") ?? "").trim() || null,
     metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
     metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
+}
+
+/** The "venues mentioned" multi-select posts one `venueIds` entry per pick. */
+function venueIds(formData: FormData) {
+  return formData.getAll("venueIds").map((id) => ({ id: String(id) }));
 }
 
 async function uniqueSlug(formData: FormData, excludeId?: string) {
@@ -37,7 +43,9 @@ export async function createArticleAction(formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
   const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
-  await prisma.article.create({ data: { ...parse(formData), slug, image, ogImage } });
+  await prisma.article.create({
+    data: { ...parse(formData), slug, image, ogImage, venues: { connect: venueIds(formData) } },
+  });
   revalidatePath(BASE);
   revalidatePath("/guides");
   revalidatePath(`/guides/${slug}`);
@@ -51,7 +59,17 @@ export async function updateArticleAction(id: string, formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const slug = await uniqueSlug(formData, id);
   const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
-  await prisma.article.update({ where: { id }, data: { ...parse(formData), slug, image, ogImage } });
+  await prisma.article.update({
+    where: { id },
+    data: {
+      ...parse(formData),
+      slug,
+      image,
+      ogImage,
+      // `set` replaces the whole selection, so removing a pill unlinks it.
+      venues: { set: venueIds(formData) },
+    },
+  });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/guides");

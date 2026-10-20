@@ -1,8 +1,18 @@
 import type { ReactNode } from "react";
-import type { Venue } from "@/generated/prisma/client";
+import type { Venue, VenueHour } from "@/generated/prisma/client";
 import { ImageLightbox } from "./ImageLightbox";
+import { venueHoursText } from "@/lib/opening-hours";
+import { VENUE_SCHEMA_TYPES } from "@/lib/schema-options";
+import { googleMapsUrl } from "@/lib/maps";
 
-type VenueWithCategory = Venue & { category: { name: string } | null };
+type VenueWithCategory = Venue & {
+  category: { name: string } | null;
+  hours?: VenueHour[];
+};
+
+const SCHEMA_TYPE_LABEL = new Map<string, string>(
+  VENUE_SCHEMA_TYPES.map((t) => [t.value, t.label]),
+);
 
 /** Read-only view of every venue field, grouped in the same order as `VenueForm`. */
 export function VenueDetails({ venue }: { venue: VenueWithCategory }) {
@@ -33,10 +43,24 @@ export function VenueDetails({ venue }: { venue: VenueWithCategory }) {
             }
           />
           <Info label="Category" value={venue.category?.name} />
-          <Info label="Operating hours" value={venue.operatingHours} />
+          <Info
+            label="Published"
+            value={venue.published ? "Yes" : "No — hidden from the site, sitemap and search engines"}
+          />
           <Info label="Hero title" value={venue.heroTitle} />
           <Info label="Caption" value={venue.caption} />
         </div>
+        {/* The derived string, so this page shows what the venue page shows. */}
+        <Info
+          label="Operating hours"
+          value={venueHoursText(venue.hours, venue.operatingHours)}
+          multiline
+          hint={
+            venue.hours && venue.hours.length > 0
+              ? "From the structured hours rows."
+              : "From the free-text field — no structured rows yet."
+          }
+        />
         <Info label="Hero description" value={venue.heroDescription} multiline />
         <Info label="Description" value={venue.description} multiline />
       </Section>
@@ -51,12 +75,39 @@ export function VenueDetails({ venue }: { venue: VenueWithCategory }) {
       <Section title="Location & contact">
         <Info label="Location / address" value={venue.location} />
         <div className="grid grid-cols-3 gap-x-6 gap-y-4">
+          <Info label="Street address" value={venue.streetAddress} />
+          <Info label="Postal code" value={venue.postalCode} />
+          <Info label="Google Maps Place ID" value={venue.placeId} />
           <Info label="Latitude" value={venue.lat?.toString()} />
           <Info label="Longitude" value={venue.lng?.toString()} />
-          <Info label="Google Maps Place ID" value={venue.placeId} />
+          <Info
+            label="Map link"
+            value={
+              <a
+                href={googleMapsUrl(venue)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-900 underline underline-offset-2 hover:text-zinc-600"
+              >
+                Open in Google Maps ↗
+              </a>
+            }
+            hint="Built from the Place ID, or coordinates as a fallback."
+          />
           <Info label="WhatsApp" value={venue.whatsapp} />
           <Info label="Phone" value={venue.phone} />
           <Info label="Email" value={venue.email} />
+        </div>
+      </Section>
+
+      <Section title="Search engine data">
+        <div className="grid grid-cols-3 gap-x-6 gap-y-4">
+          <Info
+            label="Venue type"
+            value={venue.schemaTypes.map((t) => SCHEMA_TYPE_LABEL.get(t) ?? t).join(", ")}
+          />
+          <Info label="Cuisine" value={venue.cuisine} />
+          <Info label="Instagram URL" value={venue.instagramUrl} />
         </div>
       </Section>
 
@@ -88,6 +139,7 @@ function Info({
   value,
   multiline,
   code,
+  hint,
 }: {
   label: string;
   value: ReactNode;
@@ -95,6 +147,8 @@ function Info({
   multiline?: boolean;
   /** Raw embed markup: monospace, clamped to two lines. */
   code?: boolean;
+  /** Where a derived value came from. */
+  hint?: string;
 }) {
   const empty = value === null || value === undefined || value === "";
   return (
@@ -111,6 +165,7 @@ function Info({
           {value}
         </div>
       )}
+      {hint && !empty && <p className="mt-0.5 text-xs text-zinc-400">{hint}</p>}
     </div>
   );
 }

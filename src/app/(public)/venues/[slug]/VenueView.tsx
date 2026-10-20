@@ -19,6 +19,7 @@ import { FaqSection } from "@/components/shared/FaqSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { formatEventSchedule } from "@/lib/event-calendar";
+import { venueHoursText } from "@/lib/opening-hours";
 import {
   buildMetadata,
   resolveDescription,
@@ -43,6 +44,7 @@ export const getVenueBySlug = cache((slug: string) =>
     where: { slug, published: true },
     include: {
       category: true,
+      hours: { orderBy: { sortOrder: "asc" } },
       segmentGalleries: { orderBy: { createdAt: "asc" } },
       talents: { where: { status: "RESIDENT" }, orderBy: { createdAt: "asc" } },
       promotions: { orderBy: { startDate: "asc" } },
@@ -196,7 +198,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
         <VenueLocationHours
           name={venue.name}
           location={venue.location}
-          operatingHours={venue.operatingHours}
+          operatingHours={venueHoursText(venue.hours, venue.operatingHours)}
           lat={venue.lat}
           lng={venue.lng}
           whatsapp={venue.whatsapp ?? settings.mainWhatsapp}

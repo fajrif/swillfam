@@ -9,6 +9,7 @@ import { StickyHero } from "@/components/shared/StickyHero";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection } from "@/components/venues";
+import { venueHoursText } from "@/lib/opening-hours";
 
 // Statically rendered but data-driven (categories, venues, articles) — revalidate
 // periodically so admin edits/seeds show up without a full rebuild.
@@ -29,6 +30,7 @@ export default async function VenuesPage() {
         slug: true,
         location: true,
         operatingHours: true,
+        hours: { orderBy: { sortOrder: "asc" }, select: { days: true, opens: true, closes: true } },
         lat: true,
         lng: true,
         whatsapp: true,
@@ -36,6 +38,14 @@ export default async function VenuesPage() {
     }),
     getArticleRows(3),
   ]);
+
+  // The locator's hours come from the same structured rows as the venue page
+  // and the schema, so the three can't disagree. Falls back to the free-text
+  // field for venues whose hours aren't structured yet.
+  const locatorVenues = venues.map(({ hours, ...venue }) => ({
+    ...venue,
+    operatingHours: venueHoursText(hours, venue.operatingHours),
+  }));
 
   return (
     <StickyHero
@@ -69,7 +79,7 @@ export default async function VenuesPage() {
       </Reveal>
 
       <Reveal>
-        <VenueLocator venues={venues} whatsapp={settings.mainWhatsapp} />
+        <VenueLocator venues={locatorVenues} whatsapp={settings.mainWhatsapp} />
       </Reveal>
 
       <Reveal>

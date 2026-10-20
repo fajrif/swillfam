@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { whatsappHref, formatPhone } from "@/lib/whatsapp";
+import { googleMapsUrl } from "@/lib/maps";
 
 export type VenueContactRow = {
   name: string;
@@ -76,7 +77,7 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                   <p className="font-inter text-sm">
                     Location:{" "}
                     <a
-                      href={`https://www.google.com/maps/place/${encodeURIComponent(venue.name)}/data=!4m2!3m1!1s${venue.placeId}`}
+                      href={googleMapsUrl(venue)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="transition-colors text-sf-body/50 hover:text-sf-accent"

@@ -6,13 +6,16 @@ import { requireAdministrator } from "@/lib/admin-auth";
 
 export default async function NewArticlePage() {
   await requireAdministrator();
-  const categories = await prisma.articleCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } });
+  const [categories, venues] = await Promise.all([
+    prisma.articleCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+  ]);
 
   return (
     <div>
       <EditHeader title="New Article" backHref="/admin/articles" />
       <Card>
-        <ArticleForm action={createArticleAction} categories={categories} />
+        <ArticleForm action={createArticleAction} categories={categories} venues={venues} />
       </Card>
     </div>
   );

@@ -7,6 +7,7 @@ import { SlugField } from "./SlugField";
 import { EventScheduleFields } from "./EventScheduleFields";
 import { SeoFields } from "./SeoFields";
 import { toDateInputValue } from "@/lib/date";
+import { EVENT_SCHEMA_TYPES, EVENT_STATUSES } from "@/lib/schema-options";
 
 const talentStatusLabel = (status: TalentStatus) => (status === "RESIDENT" ? "Resident" : "Guest");
 
@@ -109,10 +110,57 @@ export function EventForm({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
+        <SelectField
+          label="Event type"
+          name="schemaEventType"
+          defaultValue={event?.schemaEventType ?? "Event"}
+          options={EVENT_SCHEMA_TYPES.map((t) => ({ value: t.value, label: t.label }))}
+          hint="How search engines classify this event."
+        />
+        <SelectField
+          label="Status"
+          name="eventStatus"
+          defaultValue={event?.eventStatus ?? "EventScheduled"}
+          options={EVENT_STATUSES.map((s) => ({ value: s.value, label: s.label }))}
+          hint="Cancelling or postponing keeps the page and its dates — only this changes. Don't delete the event."
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <Field label="Ticket info" name="ticketInfo" defaultValue={event?.ticketInfo ?? ""} />
         <Field label="Ticket link" name="ticketLink" type="url" defaultValue={event?.ticketLink ?? ""} />
       </div>
       <Field label="WhatsApp phone" name="waPhone" defaultValue={event?.waPhone ?? ""} placeholder="+62…" />
+
+      {/* A past event's CTA points at the recap instead of reservations. */}
+      <div className="space-y-4 rounded-md border bg-muted/40 p-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          Recap video
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          <Field
+            label="Recap video URL"
+            name="recapVideoUrl"
+            type="url"
+            defaultValue={event?.recapVideoUrl ?? ""}
+            placeholder="https://www.youtube.com/watch?v=…"
+            hint="Shown as the call to action once the event has passed."
+          />
+          <Field
+            label="Duration"
+            name="recapDuration"
+            defaultValue={event?.recapDuration ?? ""}
+            placeholder="2:15"
+            hint="Length of the video — type it as 2:15 or 1:02:30."
+          />
+        </div>
+        <ImageManager
+          name="recapThumbnail"
+          label="Recap thumbnail"
+          existing={event?.recapThumbnail ? [event.recapThumbnail] : []}
+          hint="Still frame for the recap video."
+        />
+      </div>
 
       <SeoFields
         titleValue={event?.metaTitle}

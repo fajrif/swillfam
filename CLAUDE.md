@@ -164,6 +164,39 @@ detail route needs its own `detail(prefix, rows)` line. Two rules it enforces:
   do not invent one. Google discounts a lastmod it finds untrustworthy, which would waste the
   58 genuine ones.
 
+## Fields that feed search engines
+
+The columns added for JSON-LD are ordinary admin fields, with one rule that matters more than the
+rest: **where a value is shown to visitors *and* emitted as structured data, the displayed string
+is derived from the structured source — never stored twice.** The old site's hours and its markup
+disagreed precisely because they were two fields.
+
+- **Opening hours** — `src/lib/opening-hours.ts` is the single source. `venueHoursText(rows,
+  fallback)` returns `formatOpeningHours(rows)` when a venue has `VenueHour` rows and the free-text
+  `operatingHours` otherwise. Every public surface showing hours calls it (`/venues/[slug]`,
+  the `/venues` locator, `PromotionDetailTop`) and so does the admin's read-only view, so all of
+  them — and the schema — read the same rows. `operatingHours` stays as the fallback for venues
+  whose hours aren't structured yet; don't delete it, and don't render it directly.
+  `parseHoursJson` lives in the same file as the formatter on purpose: it is the other half of
+  `OpeningHoursFields`' wire contract (one hidden field holding `JSON.stringify(rows)`), and
+  TypeScript can't connect the two across `JSON.stringify`.
+- **The Google Maps link** is built by `googleMapsUrl()` in `src/lib/maps.ts` — Place ID first,
+  then coordinates, then the address. The venue page's button and the schema's `hasMap` call it,
+  which is why there is no stored maps-URL column to drift from `placeId`.
+- **`recapDuration`** is normalised to an ISO 8601 duration by `toIsoDuration()` on save, so the
+  column always holds what `VideoObject` requires even though the form accepts "2:15". An
+  unparseable value round-trips verbatim rather than being discarded — validate the shape
+  (`ISO_DURATION`) before emitting it.
+- **Address**: `streetAddress` + `postalCode` are the only per-venue parts. `addressLocality`,
+  `addressRegion` and `addressCountry` are the same for every SwillFam venue and belong in the
+  schema builder, not in eight rows of the database.
+- `Venue.published` is **administrator-only** (like slug and category): `parse()` reads the
+  checkbox, and `updateVenueAction` restores `current.published` for operators, since a hidden
+  checkbox and an unticked one are indistinguishable in `FormData`.
+- A new schema-feeding field needs the column, the form field, the `parse()` line, *and* a line in
+  the resource's `VenueDetails`-style read-only view where one exists — a field the admin can't
+  see the saved value of gets filled in wrong.
+
 ## Auth (`/admin`)
 
 Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie
@@ -282,6 +315,18 @@ do not add `loading.tsx`.
 - `Merchandise.price` is `Decimal` — render with `.toString()`, never the raw object in JSX.
 - `String[]` uses native Postgres `text[]` (no join tables) for `SegmentGallery.images`,
   `Event.galleries`, `Event.recurringDays`.
+- **The schema.org enums store their tokens verbatim** — `VenueSchemaType`
+  (`Restaurant`/`BarOrPub`/…), `EventSchemaType`, `EventStatus` — deliberately breaking the file's
+  SCREAMING_SNAKE convention. The stored value *is* what the JSON-LD emits, which removes the
+  mapping layer that would otherwise be the only place a typo could hide (a wrong `@type` is still
+  valid JSON-LD and fails silently). Their option lists live in `src/lib/schema-options.ts`, kept
+  Prisma-free so the forms can import them; `allowedValues()` narrows a posted value before it
+  reaches Postgres.
+- `VenueHour` is the one **owned child** — one row per group of days sharing an open/close pair,
+  mapping 1:1 to an `OpeningHoursSpecification`. It still follows the optional-FK/`SetNull` rule so
+  venue deletion can't fail, so `deleteVenueAction` clears the rows explicitly (orphans would
+  otherwise be unreachable dead weight). Updates replace the set wholesale
+  (`hours: { deleteMany: {}, create: … }`) — nothing references an hours row by id.
 
 The public `/contact` form (`src/app/(public)/contact/actions.ts`) is the only public writer — it creates
 `Inquiry` rows behind a honeypot + an in-memory sliding-window rate limiter (`src/lib/rate-limit.ts`,
