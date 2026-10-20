@@ -151,6 +151,19 @@ title/description; it deliberately does not set share tags.
   delete passes `current.ogImage` to `collectImagePaths`, same as any other image field.
 - `src/app/admin/layout.tsx` exists only to mark the whole admin section `noindex, nofollow`.
 
+**`src/app/sitemap.ts` must stay in sync with the routes.** A new public route needs an entry
+there or it ships orphaned — static pages come along automatically via the registry, but a new
+detail route needs its own `detail(prefix, rows)` line. Two rules it enforces:
+
+- **Every query filter mirrors the guard on its page**, so the sitemap can't advertise a URL that
+  `notFound()`s. If you change a page's publish condition, change the sitemap's filter in the same
+  commit. The brief requires every URL in the sitemap to return 200 and to be neither noindexed
+  nor redirected.
+- **`lastModified` is only ever a real `updatedAt`** — a row's own, or `max(updatedAt)` of the
+  collection an archive page lists. Pages whose content isn't table-driven get no `lastmod` at all;
+  do not invent one. Google discounts a lastmod it finds untrustworthy, which would waste the
+  58 genuine ones.
+
 ## Auth (`/admin`)
 
 Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie

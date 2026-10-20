@@ -120,6 +120,10 @@ export function buildMetadata({
   return {
     title: resolvedTitle,
     description: desc,
+    // Resolved against metadataBase. Note that Next normalises the root to a
+    // bare origin with no path ("https://swillfam.com") and will not emit
+    // "https://swillfam.com/" even if handed that absolute URL — verified. It
+    // is sitemap.ts that matches this form, not the other way round.
     alternates: { canonical: path },
     openGraph: {
       type: ogType,
