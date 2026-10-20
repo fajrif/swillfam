@@ -21,11 +21,8 @@ import { ContinueExperience } from "@/components/category";
 import { formatEventSchedule } from "@/lib/event-calendar";
 import { venueHoursText } from "@/lib/opening-hours";
 import { JsonLd, venueGraph } from "@/lib/schema";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { venueSeo } from "@/lib/seo/entities";
 import {
   VenueDescription,
   DishesSection,
@@ -57,19 +54,12 @@ export const getVenueBySlug = cache((slug: string) =>
 export type VenueDetail = NonNullable<Awaited<ReturnType<typeof getVenueBySlug>>>;
 
 export function venueMetadata(venue: VenueDetail): Metadata {
+  const seo = venueSeo(venue);
   return buildMetadata({
     path: `/venues/${venue.slug}`,
-    title: venue.metaTitle || venue.name,
-    // `description` is the full body paragraph — around 700 characters on the
-    // live rows, which is what used to be emitted verbatim. shortDescription
-    // comes first now, and either way resolveDescription cuts it to 155.
-    description: resolveDescription(
-      venue.metaDescription,
-      venue.shortDescription,
-      venue.caption,
-      venue.description,
-    ),
-    image: resolveOgImage(venue.ogImage, venue.bannerImage, venue.image),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: venue.name,
   });
 }

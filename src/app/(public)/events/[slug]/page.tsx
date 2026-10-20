@@ -31,11 +31,8 @@ import {
   RecurringEventDetail,
   SingleEventDetail,
 } from "@/components/events";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { eventSeo } from "@/lib/seo/entities";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -68,21 +65,12 @@ export async function generateMetadata({
   // 404 out of the index should a crawler see it before the status code.
   if (!event) return { title: "Event Not Found", robots: { index: false, follow: true } };
 
+  const seo = eventSeo(event);
   return buildMetadata({
     path: `/events/${event.slug}`,
-    title: event.metaTitle || `${event.name}${event.venue ? ` at ${event.venue.name}` : ""}`,
-    description: resolveDescription(
-      event.metaDescription,
-      event.shortDescription,
-      event.caption,
-      event.description,
-    ),
-    image: resolveOgImage(
-      event.ogImage,
-      event.bannerImage,
-      event.posterImage,
-      event.image,
-    ),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: event.name,
   });
 }

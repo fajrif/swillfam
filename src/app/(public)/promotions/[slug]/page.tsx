@@ -16,11 +16,8 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { PromotionDetailTop } from "@/components/promotions";
 import { JsonLd, breadcrumbOnlyGraph } from "@/lib/schema";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { promotionSeo } from "@/lib/seo/entities";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -53,23 +50,12 @@ export async function generateMetadata({
   if (!promotion)
     return { title: "Promotion Not Found", robots: { index: false, follow: true } };
 
+  const seo = promotionSeo(promotion);
   return buildMetadata({
     path: `/promotions/${promotion.slug}`,
-    title:
-      promotion.metaTitle ||
-      `${promotion.name}${promotion.venue ? ` at ${promotion.venue.name}` : ""}`,
-    description: resolveDescription(
-      promotion.metaDescription,
-      promotion.shortDescription,
-      promotion.caption,
-      promotion.description,
-    ),
-    image: resolveOgImage(
-      promotion.ogImage,
-      promotion.bannerImage,
-      promotion.posterImage,
-      promotion.image,
-    ),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: promotion.name,
   });
 }

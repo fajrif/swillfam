@@ -4,7 +4,6 @@
  */
 
 import type { Faq, Merchandise, PrivateEvent } from "@/generated/prisma/client";
-import { resolveDescription } from "@/lib/seo/metadata";
 import {
   ORG_ID,
   breadcrumb,
@@ -168,7 +167,7 @@ export function merchandiseGraph({
         "@type": "Product",
         name: item.name,
         image: imageUrls(item.image),
-        description: resolveDescription(item.shortDescription),
+        description: item.shortDescription,
         brand: { "@type": "Brand", name: "SwillFam" },
         offers: {
           "@type": "Offer",

@@ -7,6 +7,8 @@ import { PageHeader, Card } from "@/components/admin/PageHeader";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { Thumb } from "@/components/admin/Thumb";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
+import { venueSeo } from "@/lib/seo/entities";
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -64,6 +66,7 @@ export default async function VenueInfoPage({ params }: { params: Promise<{ id: 
               <TabsTrigger value="events">Events ({venue.events.length})</TabsTrigger>
               <TabsTrigger value="promotions">Promotions ({venue.promotions.length})</TabsTrigger>
               <TabsTrigger value="talents">Talents ({venue.talents.length})</TabsTrigger>
+              <TabsTrigger value="seo">SEO Details</TabsTrigger>
             </TabsList>
 
             <TabsContent value="events">
@@ -166,6 +169,20 @@ export default async function VenueInfoPage({ params }: { params: Promise<{ id: 
                       ),
                   },
                 ]}
+              />
+            </TabsContent>
+            {/* Read-only: what this venue publishes to search engines, and the
+                live JSON-LD from its public page. Radix only mounts the active
+                tab, so the fetch inside the preview happens on first open. */}
+            <TabsContent value="seo">
+              <SeoDetailsPanel
+                seo={venueSeo(venue)}
+                publicPath={`/venues/${venue.slug}`}
+                unavailableReason={
+                  venue.published
+                    ? undefined
+                    : "This venue is unpublished, so it has no public page and no structured data yet. Publish it to see them."
+                }
               />
             </TabsContent>
           </Tabs>

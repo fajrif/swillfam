@@ -5,6 +5,8 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updatePrivateEventAction, deletePrivateEventAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
+import { privateEventSeo } from "@/lib/seo/entities";
 
 export default async function EditPrivateEventPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdministrator();
@@ -34,6 +36,21 @@ export default async function EditPrivateEventPage({ params }: { params: Promise
           <ConfirmDeleteButton action={deletePrivateEventAction.bind(null, id)} label="Delete private event" />
         </div>
       </Card>
+
+      <div className="mt-6">
+        <Card>
+          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
+          <SeoDetailsPanel
+            seo={privateEventSeo(privateEvent)}
+            publicPath={`/private-events/${privateEvent.slug}`}
+            unavailableReason={
+              privateEvent.published
+                ? undefined
+                : "This private event is unpublished, so it has no public page yet."
+            }
+          />
+        </Card>
+      </div>
     </div>
   );
 }

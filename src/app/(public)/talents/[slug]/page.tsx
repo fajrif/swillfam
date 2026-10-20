@@ -19,11 +19,8 @@ import {
   TalentPerformingSection,
   TalentSignatureSound,
 } from "@/components/talents";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { talentSeo } from "@/lib/seo/entities";
 
 const POSTER_FALLBACK = "/home/hero.png";
 
@@ -57,15 +54,12 @@ export async function generateMetadata({
   if (!talent)
     return { title: "Talent Not Found", robots: { index: false, follow: true } };
 
+  const seo = talentSeo(talent);
   return buildMetadata({
     path: `/talents/${talent.slug}`,
-    title:
-      talent.metaTitle ||
-      `${talent.name}${talent.talentCategory ? ` — ${talent.talentCategory.name}` : ""}`,
-    // Talent has no shortDescription column, so the only fallback is the full
-    // bio. Truncation is doing real work here, not acting as a safety net.
-    description: resolveDescription(talent.metaDescription, talent.description),
-    image: resolveOgImage(talent.ogImage, talent.image),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: talent.name,
     ogType: "profile",
   });

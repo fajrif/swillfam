@@ -1,14 +1,24 @@
 import type { Metadata } from "next";
-import { plainText, truncate } from "./text";
 
 export const SITE_NAME = "SwillFam";
 
 /**
  * Longest description we will emit for a *derived* fallback. Google renders
  * roughly 155–160 characters on desktop; anything past that is cut in the SERP.
- * Hand-written values are deliberately exempt — see `resolveDescription`.
+ * Hand-written values are deliberately exempt — see `resolve.ts`.
  */
 export const DESCRIPTION_MAX = 155;
+
+/**
+ * Where a value stops helping and starts getting cut off in search results.
+ *
+ * Shared by the admin's SEO form counters and its read-only SEO Details panel,
+ * so the two never disagree about what "too long" means. `min` is the point
+ * below which a field is too thin to earn a click. Advisory only — nothing here
+ * blocks a save.
+ */
+export const TITLE_RANGE = { min: 25, max: 60 };
+export const DESCRIPTION_RANGE = { min: 70, max: DESCRIPTION_MAX };
 
 /**
  * Sitewide share image. A 1200×630 crop of the homepage hero — the ratio every
@@ -31,37 +41,12 @@ export function pageTitle(title: string): string {
     : `${trimmed} | ${SITE_NAME}`;
 }
 
-/**
- * Picks the description for a page and cleans it up.
- *
- * `manual` is whatever an admin typed into Meta Description. It is returned
- * verbatim: they may have had a reason to run long, and the character counter
- * on the form already warns them. Everything after it is *derived* from body
- * copy, so it gets stripped of markup and cut to `DESCRIPTION_MAX` — this is
- * the fix for `/venues/[slug]`, which was emitting a 700-character meta
- * description by falling back to the full `venue.description` paragraph.
- */
-export function resolveDescription(
-  manual: string | null | undefined,
-  ...fallbacks: (string | null | undefined)[]
-): string | undefined {
-  const trimmedManual = manual?.trim();
-  if (trimmedManual) return trimmedManual;
-
-  for (const candidate of fallbacks) {
-    const cleaned = candidate ? plainText(candidate) : "";
-    if (cleaned) return truncate(cleaned, DESCRIPTION_MAX);
-  }
-
-  return undefined;
-}
-
-/** First non-empty image path in the chain, as a site-relative path. */
-export function resolveOgImage(
-  ...candidates: (string | null | undefined)[]
-): string | undefined {
-  return candidates.find((c) => !!c?.trim())?.trim();
-}
+// The fallback chains that used to live here are now declared per model in
+// `entities.ts` and resolved by `resolve.ts`, which also reports *where* each
+// value came from so the admin panel can show it. There is deliberately no
+// `resolveDescription`/`resolveOgImage` export any more: two ways to resolve
+// the same value is how the route's `<meta>` and the schema builder's
+// `description` drifted apart in the first place.
 
 export type PageMetadataInput = {
   /**

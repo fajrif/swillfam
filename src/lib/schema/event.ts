@@ -6,7 +6,7 @@
 import type { Event, Talent, Venue } from "@/generated/prisma/client";
 import { dateKey, upcomingOccurrences } from "@/lib/event-calendar";
 import { ISO_DURATION } from "@/lib/duration";
-import { resolveDescription } from "@/lib/seo/metadata";
+import { eventSeo } from "@/lib/seo/entities";
 import {
   ORG_ID,
   breadcrumb,
@@ -86,12 +86,7 @@ function eventNode(event: EventForSchema, occurrence?: Date): JsonLdNode {
     // than five conflicting copies of one.
     "@id": occurrence ? `${eventId(event.slug)}-${dateKey(startDay)}` : eventId(event.slug),
     name: event.name,
-    description: resolveDescription(
-      event.metaDescription,
-      event.shortDescription,
-      event.caption,
-      event.description,
-    ),
+    description: eventSeo(event).description.value,
     url: pageUrl(`/events/${event.slug}`),
     image: imageUrls(event.posterImage, event.bannerImage, event.image),
     startDate: jakartaDateTime(startDay, event.startHour),
@@ -140,7 +135,7 @@ function recapVideo(event: EventForSchema): JsonLdNode | undefined {
   return {
     "@type": "VideoObject",
     name: `${event.name} — Recap`,
-    description: resolveDescription(event.shortDescription, event.caption),
+    description: eventSeo(event).description.value,
     thumbnailUrl: imageUrls(event.recapThumbnail, event.posterImage, event.image),
     // No separate upload date column — the row's own last change is the
     // closest honest answer, and `uploadDate` is required.

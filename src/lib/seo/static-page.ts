@@ -1,43 +1,40 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import {
-  STATIC_PAGE_SEO_BY_KEY,
-  type StaticPageSeoKey,
-} from "@/lib/page-seo-registry";
-import { buildMetadata, resolveDescription } from "./metadata";
+import type { StaticPageSeoKey } from "@/lib/page-seo-registry";
+import { STATIC_PAGE_SEO_BY_KEY } from "@/lib/page-seo-registry";
+import { buildMetadata } from "./metadata";
+import { staticPageSeoValues } from "./entities";
+import type { EntitySeo } from "./entities";
 
 /**
- * cache() so a page that needs its PageSeo row for anything else — and the
- * admin SEO panel in Fase 6 — shares one read per request with this.
+ * cache() so a page that needs its PageSeo row for anything else — its JSON-LD
+ * name, or the admin SEO panel — shares one read per request with this.
  */
 export const getPageSeo = cache((pageKey: string) =>
   prisma.pageSeo.findUnique({ where: { pageKey } }),
 );
 
+/** Resolved title/description/image for one singleton page, with provenance. */
+export const resolveStaticPageSeo = cache(
+  async (key: StaticPageSeoKey): Promise<EntitySeo> =>
+    staticPageSeoValues(key, await getPageSeo(key)),
+);
+
 /**
- * The resolved name and description for one of the singleton/archive pages:
- * the admin's `PageSeo` row where it has one, the registry default otherwise.
+ * The page's own name and description, for its JSON-LD.
  *
- * Shared with `staticPageMetadata` so a page's JSON-LD `name`/`description` and
- * its `<title>`/`<meta>` are always the same strings — two independent
- * resolutions would eventually describe the same page two different ways, which
- * is the kind of mismatch a crawl reports and nobody can explain.
- *
- * The title keeps its own suffix handling out of it: `pageTitle()` adds the
- * brand for the `<title>` tag, while schema `name` wants the page's own name.
+ * Reads the same resolution as `staticPageMetadata`, so a page's markup and its
+ * `<title>`/`<meta>` are always the same strings. The title keeps its brand
+ * suffix out of it: `pageTitle()` adds that for the `<title>` tag, while schema
+ * `name` wants the page's own name.
  */
 export async function staticPageSeo(key: StaticPageSeoKey): Promise<{
   name: string;
   description: string | undefined;
 }> {
-  const def = STATIC_PAGE_SEO_BY_KEY[key];
-  const seo = await getPageSeo(key);
-
-  return {
-    name: seo?.metaTitle?.trim() || def.defaultTitle,
-    description: resolveDescription(seo?.metaDescription, def.defaultDescription),
-  };
+  const seo = await resolveStaticPageSeo(key);
+  return { name: seo.title.value, description: seo.description.value };
 }
 
 /**
@@ -52,16 +49,12 @@ export async function staticPageSeo(key: StaticPageSeoKey): Promise<{
 export async function staticPageMetadata(
   key: StaticPageSeoKey,
 ): Promise<Metadata> {
-  const def = STATIC_PAGE_SEO_BY_KEY[key];
-  const seo = await getPageSeo(key);
+  const seo = await resolveStaticPageSeo(key);
 
   return buildMetadata({
-    path: def.path,
-    title: seo?.metaTitle?.trim() || def.defaultTitle,
-    description: resolveDescription(
-      seo?.metaDescription,
-      def.defaultDescription,
-    ),
-    image: seo?.ogImage,
+    path: STATIC_PAGE_SEO_BY_KEY[key].path,
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
   });
 }
