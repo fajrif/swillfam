@@ -5,8 +5,10 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updatePrivateEventTypeAction, deletePrivateEventTypeAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditEventTypePage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const eventType = await prisma.privateEventType.findUnique({ where: { id } });
@@ -16,7 +18,8 @@ export default async function EditEventTypePage({ params }: { params: Promise<{ 
     <div>
       <EditHeader title="Edit Event Type" backHref="/admin/event-types" />
       <Card>
-        <PrivateEventTypeForm action={updatePrivateEventTypeAction.bind(null, id)} eventType={eventType} />
+        <PrivateEventTypeForm
+          altsByPath={altsByPath} action={updatePrivateEventTypeAction.bind(null, id)} eventType={eventType} />
         <div className="mt-6 pt-6 border-t border-zinc-200">
           <ConfirmDeleteButton action={deletePrivateEventTypeAction.bind(null, id)} label="Delete event type" />
         </div>

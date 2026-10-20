@@ -619,3 +619,27 @@ model PrivateEventTestimonial {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 }
+
+/// Alt text for one stored image, keyed by its public path.
+///
+/// Keyed by the file rather than by a column on each model, which is the one
+/// decision worth explaining. Alt text describes *the picture*, so the same
+/// file used as a venue's banner and again in a gallery should read the same
+/// either way — a `bannerImageAlt` column next to every `bannerImage` would be
+/// seventeen columns across eight models that each have to be filled in
+/// separately, and `String[]` gallery fields could not use them at all without
+/// a parallel array that drifts on every reorder.
+///
+/// `path` is the primary key because it is already unique: uploads are UUID
+/// filenames, and seeded art has one path each. `src/lib/upload.ts` writes
+/// these rows alongside the files and deletes them with the file, so an alt can
+/// never outlive the image it describes.
+///
+/// Empty until the content team fills it in; every render site keeps the
+/// fallback it has today, so a missing row is never a blank `alt`.
+model ImageAlt {
+  path      String   @id
+  alt       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

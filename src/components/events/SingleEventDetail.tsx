@@ -5,13 +5,14 @@ import { absoluteUrl } from "@/lib/site-url";
 import { PastEventStamp } from "./PastEventStamp";
 import { ReserveButton } from "./ReserveButton";
 import { EVENT_PROSE } from "./prose";
+import { altFor } from "@/lib/image-alt";
 
 /**
  * Top block of a one-off (`FIXED`) event: the name at large scale beside its
  * poster, with the "About This Event" write-up, the schedule facts, and the
  * reserve CTA.
  */
-export function SingleEventDetail({
+export async function SingleEventDetail({
   name,
   slug,
   description,
@@ -51,13 +52,15 @@ export function SingleEventDetail({
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
           {poster ? (
             <div className="relative aspect-[4/4] w-full overflow-hidden bg-sf-surface">
+              {/* No `priority`: `EventDetailBanner` above is the hero and
+                  already fills the first screen, so this poster is below the
+                  fold and was competing with it. */}
               <ZoomableImage
                 src={poster}
-                alt={name}
+                alt={await altFor(poster, name)}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
-                priority
               />
             </div>
           ) : null}

@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { CategoryNav } from "./CategoryNav";
 import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import type { ArticleCategory } from "@/generated/prisma/client";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /** Category nav (left) + article feed (right). Category/page state is server-driven via searchParams. */
 export function ArticlesBrowser({
@@ -38,7 +38,7 @@ export function ArticlesBrowser({
                 style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
               >
                 <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface aspect-video sm:aspect-auto sm:w-[140px] lg:w-[200px] sm:h-full">
-                  <Image
+                  <ContentImage
                     src={article.img}
                     alt=""
                     fill

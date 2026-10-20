@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 export type OfferCardData = {
   id: string;
@@ -23,6 +23,12 @@ export function OfferCard(props: OfferCardProps) {
     <>
       <div className="p-3">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
+          {/* Plain next/image, not ContentImage: this card is rendered from
+              inside the events / promotions / talents browsers, which are
+              Client Components and cannot await an alt lookup. The title is
+              right beside the picture anyway, so repeating it is the honest
+              fallback — stored alt text belongs on the detail page's own
+              photography, where the picture is the content. */}
           {offer.image ? (
             <Image
               src={offer.image}

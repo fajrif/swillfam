@@ -49,6 +49,9 @@ export function AdminUserForm({
           label="Avatar"
           existing={user?.avatar ? [user.avatar] : []}
           hint="Optional. A square image works best."
+          // No alt input: an avatar's alt is the person's name, and this image
+          // never appears on the public site.
+          alts={false}
         />
       </div>
 

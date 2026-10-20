@@ -7,16 +7,20 @@ export function SegmentGalleryForm({
   segmentGallery,
   venues,
   operatorVenue,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   segmentGallery?: SegmentGallery;
   venues: { id: string; name: string }[];
   /** Set for operators: the venue is fixed to theirs. */
   operatorVenue?: { id: string; name: string };
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-2xl">
       <ImageManager
+        altsByPath={altsByPath}
         name="images"
         label="Images"
         multiple

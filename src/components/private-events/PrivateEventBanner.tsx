@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/private-events/Mask group.png";
 
@@ -13,7 +13,7 @@ export function PrivateEventBanner({ image, title }: { image: string | null; tit
   return (
     <div className="relative aspect-[1440/700] max-h-[70svh] min-h-[420px] w-full overflow-hidden bg-sf-surface">
       <ParallaxImage>
-        <Image src={image ?? FALLBACK} alt={title} fill sizes="100vw" className="object-cover" priority />
+        <ContentImage src={image ?? FALLBACK} alt={title} fill sizes="100vw" className="object-cover" priority />
       </ParallaxImage>
 
       {/* Wash so the heading stays legible over any photograph */}

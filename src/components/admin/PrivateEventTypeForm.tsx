@@ -5,13 +5,16 @@ import { ImageManager } from "./ImageManager";
 export function PrivateEventTypeForm({
   action,
   eventType,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   eventType?: PrivateEventType;
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
-      <ImageManager name="image" label="Image" existing={eventType?.image ? [eventType.image] : []} />
+      <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={eventType?.image ? [eventType.image] : []} />
 
       <Field label="Title" name="title" defaultValue={eventType?.title} required />
       <TextareaField

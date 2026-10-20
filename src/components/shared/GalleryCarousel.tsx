@@ -26,7 +26,14 @@ export function GalleryCarousel({
 }: {
   title: string;
   description?: string;
-  images: string[];
+  /**
+   * `{ src, alt }`, not bare paths. This is a Client Component, so it cannot
+   * resolve stored alt text itself — the server builds the pairs with
+   * `withAlts()`. The fallback it passes has always been "Inside Zoo (3)",
+   * which is the weakest alt text on the site and the reason this prop
+   * changed shape.
+   */
+  images: { src: string; alt: string }[];
 }) {
   const apiRef = useRef<CarouselApi>(undefined);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -66,16 +73,18 @@ export function GalleryCarousel({
           className="relative min-w-0"
         >
           <CarouselContent>
-            {images.map((src, i) => (
-              <CarouselItem key={src} className="basis-[85%] md:basis-[62%]">
+            {images.map((image, i) => (
+              <CarouselItem key={image.src} className="basis-[85%] md:basis-[62%]">
                 <div className="relative aspect-[870/630] w-full overflow-hidden bg-sf-surface">
+                  {/* No `priority` on the first slide: a carousel is always
+                      below the hero, and preloading here competes with the
+                      real LCP element for bandwidth on first paint. */}
                   <Image
-                    src={src}
-                    alt={`${title} (${i + 1})`}
+                    src={image.src}
+                    alt={image.alt}
                     fill
                     sizes="(max-width: 1024px) 85vw, 60vw"
                     className="cursor-zoom-in object-cover"
-                    priority={i === 0}
                     onClick={() => setLightboxIndex(i)}
                   />
                 </div>
@@ -96,7 +105,7 @@ export function GalleryCarousel({
       </Container>
 
       <Lightbox
-        images={images}
+        images={images.map((image) => image.src)}
         index={lightboxIndex ?? 0}
         open={lightboxIndex !== null}
         onClose={() => setLightboxIndex(null)}

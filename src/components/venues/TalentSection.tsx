@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Talent } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/home/hero.png";
 
@@ -56,7 +56,7 @@ export function TalentSection({
                   href={`/talents/${talent.slug}`}
                   className="relative aspect-[4/5] w-full overflow-hidden bg-sf-surface"
                 >
-                  <Image
+                  <ContentImage
                     src={talent.image ?? FALLBACK}
                     alt={talent.name}
                     fill

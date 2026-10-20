@@ -19,6 +19,8 @@ import { SpecularButton } from "@/components/reactbits/SpecularButton";
 
 export type EventCarouselItem = {
   img: string;
+  /** Resolved by the caller with `altFor()` — this is a Client Component. */
+  alt: string;
   title: string;
   shortDescription: string;
   href?: string;
@@ -93,13 +95,13 @@ export function EventSectionWithImage({
                 const card = (
                   <div className="group flex flex-col gap-3">
                     <div className="relative aspect-[4/5] overflow-hidden bg-sf-surface">
+                      {/* No `priority`: this band is always below the hero. */}
                       <Image
                         src={item.img}
-                        alt={item.title}
+                        alt={item.alt}
                         fill
                         sizes="(max-width: 767px) 85vw, (max-width: 1024px) 66vw, 33vw"
                         className="object-cover"
-                        priority={i === 0}
                       />
                     </div>
                     <div>

@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 import { ImageLightbox } from "./ImageLightbox";
 
 type Item =
-  | { kind: "existing"; id: string; path: string; title: string; description: string }
-  | { kind: "new"; id: string; file: File; url: string; title: string; description: string };
+  | { kind: "existing"; id: string; path: string; title: string; description: string; alt: string }
+  | { kind: "new"; id: string; file: File; url: string; title: string; description: string; alt: string };
 
 let idCounter = 0;
 const nextId = () => `im-${idCounter++}`;
@@ -26,6 +26,13 @@ const nextId = () => `im-${idCounter++}`;
  * more hidden fields (`<name>__titles`, `<name>__descriptions`, JSON arrays aligned
  * to `__order`) read by `reconcileImageFieldWithCaptions`.
  *
+ * Every tile also carries an **alt text** input, posted as `<name>__alts` on the
+ * same index-aligned contract and stored by `reconcileImageField` in the
+ * `ImageAlt` table, keyed by the file's path. It is on by default because a
+ * picture of a venue or an event always needs describing; `alts={false}` turns
+ * it off for the few images whose alt is not the admin's to write — a logo, an
+ * avatar, a share card.
+ *
  * Supports reordering (multi), and checkbox selection → "Delete selected". Removing an
  * image simply omits it from the posted order, which makes the server unlink the file.
  */
@@ -36,9 +43,11 @@ export function ImageManager({
   existing = [],
   existingTitles = [],
   existingDescriptions = [],
+  altsByPath = {},
   accept = "image/*",
   hint,
   captions = false,
+  alts = true,
   bgBlack,
 }: {
   name: string;
@@ -47,9 +56,18 @@ export function ImageManager({
   existing?: string[];
   existingTitles?: string[];
   existingDescriptions?: string[];
+  /**
+   * Stored alt text keyed by image path, as loaded from `ImageAlt`. Keyed
+   * rather than index-aligned like `existingTitles`, so a call site passes the
+   * same value everywhere instead of repeating its `existing` expression to
+   * build a parallel array.
+   */
+  altsByPath?: Record<string, string>;
   accept?: string;
   hint?: string;
   captions?: boolean;
+  /** Show the alt-text input. Off only where the alt is derived, not written. */
+  alts?: boolean;
   bgBlack?: boolean;
 }) {
   const [items, setItems] = useState<Item[]>(() =>
@@ -59,6 +77,7 @@ export function ImageManager({
       path,
       title: existingTitles[i] ?? "",
       description: existingDescriptions[i] ?? "",
+      alt: altsByPath[path] ?? "",
     })),
   );
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -67,6 +86,7 @@ export function ImageManager({
   const orderInputRef = useRef<HTMLInputElement>(null); // hidden, submitted
   const titlesInputRef = useRef<HTMLInputElement>(null); // hidden, submitted (captions)
   const descriptionsInputRef = useRef<HTMLInputElement>(null); // hidden, submitted (captions)
+  const altsInputRef = useRef<HTMLInputElement>(null); // hidden, submitted (alts)
   const pickerRef = useRef<HTMLInputElement>(null); // visible picker
 
   // Keep the hidden submitted inputs in sync with the current item list/order.
@@ -91,6 +111,9 @@ export function ImageManager({
     if (descriptionsInputRef.current) {
       descriptionsInputRef.current.value = JSON.stringify(items.map((it) => it.description));
     }
+    if (altsInputRef.current) {
+      altsInputRef.current.value = JSON.stringify(items.map((it) => it.alt));
+    }
   }, [items]);
 
   // Revoke object URLs on unmount.
@@ -112,6 +135,7 @@ export function ImageManager({
       url: URL.createObjectURL(file),
       title: "",
       description: "",
+      alt: "",
     }));
     setItems((prev) => {
       if (multiple) return [...prev, ...additions];
@@ -153,7 +177,7 @@ export function ImageManager({
     });
   }
 
-  function updateCaption(id: string, field: "title" | "description", value: string) {
+  function updateText(id: string, field: "title" | "description" | "alt", value: string) {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [field]: value } : it)));
   }
 
@@ -177,7 +201,7 @@ export function ImageManager({
       </div>
 
       {items.length > 0 && (
-        <ul className={cn("flex flex-wrap gap-3", captions && "gap-4")}>
+        <ul className={cn("flex flex-wrap gap-3", (captions || alts) && "gap-4")}>
           {items.map((it, index) => {
             const src = it.kind === "existing" ? it.path : it.url;
             const isSelected = selected.has(it.id);
@@ -186,7 +210,7 @@ export function ImageManager({
                 key={it.id}
                 className={cn(
                   "relative rounded-md border bg-card p-1",
-                  captions ? "w-56" : "w-28",
+                  captions || alts ? "w-56" : "w-28",
                   isSelected && "border-destructive ring-2 ring-destructive/30",
                 )}
               >
@@ -230,17 +254,27 @@ export function ImageManager({
                     </Button>
                   </div>
                 )}
+                {alts && (
+                  <div className="mt-1.5">
+                    <Input
+                      value={it.alt}
+                      onChange={(e) => updateText(it.id, "alt", e.target.value)}
+                      placeholder="Alt text"
+                      className="h-8 text-xs"
+                    />
+                  </div>
+                )}
                 {captions && (
                   <div className="mt-1.5 grid gap-1.5">
                     <Input
                       value={it.title}
-                      onChange={(e) => updateCaption(it.id, "title", e.target.value)}
+                      onChange={(e) => updateText(it.id, "title", e.target.value)}
                       placeholder="Title"
                       className="h-8 text-xs"
                     />
                     <Textarea
                       value={it.description}
-                      onChange={(e) => updateCaption(it.id, "description", e.target.value)}
+                      onChange={(e) => updateText(it.id, "description", e.target.value)}
                       placeholder="Short description"
                       rows={2}
                       className="text-xs"
@@ -265,6 +299,9 @@ export function ImageManager({
 
       {/* Submitted to the server action. */}
       <input ref={orderInputRef} type="hidden" name={`${name}__order`} defaultValue="[]" />
+      {alts && (
+        <input ref={altsInputRef} type="hidden" name={`${name}__alts`} defaultValue="[]" />
+      )}
       {captions && (
         <>
           <input ref={titlesInputRef} type="hidden" name={`${name}__titles`} defaultValue="[]" />

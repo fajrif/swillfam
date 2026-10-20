@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 /** Single poster for a promotion — a static image filling the available height. */
 export function PromotionImage({ src, alt }: { src: string | null; alt: string }) {
@@ -8,7 +8,7 @@ export function PromotionImage({ src, alt }: { src: string | null; alt: string }
 
   return (
     <div className="relative aspect-[4/5] w-full overflow-hidden">
-      <Image
+      <ContentImage
         src={src}
         alt={alt}
         fill

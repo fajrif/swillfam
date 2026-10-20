@@ -1,6 +1,5 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
@@ -17,6 +16,7 @@ import {
 } from "@/components/category";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { categorySeo } from "@/lib/seo/entities";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/home/hero.png";
 
@@ -55,7 +55,7 @@ export async function CategoryView({ category }: { category: CategoryDetail }) {
       <JsonLd data={categoryGraph({ category, venues: category.venues })} />
       <StickyHero
       backdrop={
-          <Image
+          <ContentImage
             src={category.bannerImage ?? category.image ?? FALLBACK}
             alt={category.name}
             fill

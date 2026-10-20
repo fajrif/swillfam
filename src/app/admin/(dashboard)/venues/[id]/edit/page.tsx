@@ -5,8 +5,10 @@ import { VenueForm } from "@/components/admin/VenueForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateVenueAction, deleteVenueAction } from "../../actions";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditVenuePage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   const { id } = await params;
   const admin = await requireAdmin();
   assertVenueOwnership(admin, id);
@@ -24,6 +26,7 @@ export default async function EditVenuePage({ params }: { params: Promise<{ id: 
       <EditHeader title={`Edit ${venue.name}`} backHref={`/admin/venues/${id}`} />
       <Card>
         <VenueForm
+          altsByPath={altsByPath}
           action={updateVenueAction.bind(null, id)}
           venue={venue}
           hours={venue.hours}

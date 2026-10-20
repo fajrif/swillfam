@@ -4,6 +4,7 @@ import { PrivateEventOccasionForm } from "@/components/admin/PrivateEventOccasio
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { getImageAltRecord } from "@/lib/image-alt";
 import {
   updatePrivateEventOccasionAction,
   deletePrivateEventOccasionAction,
@@ -14,6 +15,7 @@ export default async function EditPrivateEventOccasionPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const [occasion, privateEvents] = await Promise.all([
@@ -27,6 +29,7 @@ export default async function EditPrivateEventOccasionPage({
       <EditHeader title="Edit Occasion" backHref="/admin/private-event-occasions" />
       <Card>
         <PrivateEventOccasionForm
+          altsByPath={altsByPath}
           action={updatePrivateEventOccasionAction.bind(null, id)}
           occasion={occasion}
           privateEvents={privateEvents}

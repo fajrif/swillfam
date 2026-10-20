@@ -6,14 +6,17 @@ export function PrivateEventOccasionForm({
   action,
   occasion,
   privateEvents,
+  altsByPath,
 }: {
   action: (formData: FormData) => void;
   occasion?: PrivateEventOccasion;
   privateEvents: { id: string; title: string }[];
+  /** Stored alt text by image path, from `getImageAltRecord()`. */
+  altsByPath?: Record<string, string>;
 }) {
   return (
     <form action={action} className="space-y-6 max-w-3xl">
-      <ImageManager name="image" label="Image" existing={occasion?.image ? [occasion.image] : []} />
+      <ImageManager altsByPath={altsByPath} name="image" label="Image" existing={occasion?.image ? [occasion.image] : []} />
 
       <Field label="Title" name="title" defaultValue={occasion?.title} required />
 

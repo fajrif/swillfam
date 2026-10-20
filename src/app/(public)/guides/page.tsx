@@ -9,6 +9,7 @@ import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { JsonLd, archiveGraph } from "@/lib/schema";
+import { getImageAlts } from "@/lib/image-alt";
 
 export const generateMetadata = () => staticPageMetadata("guides");
 
@@ -38,8 +39,10 @@ export default async function ArticlesPage({
     prisma.article.count({ where }),
   ]);
 
+  const articleAlts = await getImageAlts();
   const articleRows: ArticleRow[] = articles.map((a) => ({
     img: a.image ?? "/articles/sample-banner.png",
+    alt: articleAlts.get(a.image ?? "")?.trim() ?? "",
     date: DATE_FMT.format(a.publishedDate),
     title: a.title,
     excerpt: a.shortDescription,

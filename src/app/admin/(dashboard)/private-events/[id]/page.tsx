@@ -7,8 +7,10 @@ import { updatePrivateEventAction, deletePrivateEventAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { privateEventSeo } from "@/lib/seo/entities";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditPrivateEventPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   await requireAdministrator();
   const { id } = await params;
   const [privateEvent, eventTypes, venues] = await Promise.all([
@@ -26,6 +28,7 @@ export default async function EditPrivateEventPage({ params }: { params: Promise
       <EditHeader title="Edit Private Event" backHref="/admin/private-events" />
       <Card>
         <PrivateEventForm
+          altsByPath={altsByPath}
           action={updatePrivateEventAction.bind(null, id)}
           privateEvent={privateEvent}
           eventTypes={eventTypes}

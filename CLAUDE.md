@@ -81,7 +81,12 @@ npx prisma migrate deploy         # apply existing migrations (e.g. the generate
 npx tsx prisma/seed-admin.ts      # create/update the administrator from ADMIN_EMAIL/ADMIN_PASSWORD
 npx tsx prisma/seed-admin-users.ts # one operator login per venue (OPERATOR_DEFAULT_PASSWORD)
 npm run seed:all                  # run all the seed scripts
+npx tsx scripts/generate-icons.ts              # favicon / app icon / apple icon / manifest icons
+npx tsx --env-file=.env scripts/generate-og-images.ts   # 1200×630 share cards -> ogImage
 ```
+
+The two `scripts/` generators are one-off asset builders, not part of the build — their output is
+committed. `generate-og-images.ts` needs re-running after bulk uploads (see "Images").
 
 No automated tests — verify by building and exercising the admin UI under `npm run dev`.
 
@@ -309,6 +314,62 @@ of its final day. Three rules, each stated in exactly one place:
 - Verify against the built HTML with `<script>` blocks stripped. Next serialises client-component
   props into `self.__next_f.push(...)`, so text found inside a `<script>` is payload, not rendered
   markup — that is how the missing FAQ answers hid in Fase 5.
+
+## Images
+
+**Delivery** (`next.config.ts` `images`): AVIF first, WebP second, original last, with a 30-day
+`minimumCacheTTL`. The long TTL is safe because `reconcileSingleImage` writes a fresh UUID filename
+on every replace — a changed image is a changed URL. Only the committed `public/**` art is
+overwritable in place; swapping one of those needs a rename or a cache purge. AVIF is not always
+smaller (it loses to WebP on some flat PNGs and to the source on small logos) and Next serves the
+first format the browser accepts, not the smallest — the bet is on the hero photographs, which are
+every page's LCP element and where it wins widest.
+
+**`priority` belongs to the hero and nothing else.** A preloaded image below the fold competes with
+the real LCP element for first-paint bandwidth. Carousels, grids and tab panels are always below a
+hero, so they stay lazy. `fill` without `sizes` already defaults to `100vw`, which is correct for a
+full-bleed hero — don't add it for its own sake.
+
+**Share images** (`scripts/generate-og-images.ts`): the display art is sized for a full-bleed hero,
+not a 1200×630 card, and WhatsApp drops the preview for anything much past ~300 KB — so the most
+shared link is the most likely to arrive without a picture. The script fills each row's `ogImage`
+with a cropped derivative in `public/og/<model>/<slug>.jpg`, reading the source through the same
+`entities.ts` resolver the page uses. It skips a row that already has one, so a hand-picked card is
+never overwritten; `--force` regenerates only the files it made. **Re-run it after bulk uploads** —
+a photo uploaded through the admin gets no derivative on its own and that row falls back to the
+display image. `buildMetadata` declares `og:image:width`/`height` only for paths under `/og/`,
+because only those are known to be 1200×630. The schema's `image` deliberately stays the full-size
+original: a crawler wants the real photography, a chat preview wants the card.
+
+**Icons** (`scripts/generate-icons.ts`): `favicon.ico`, `icon.png` and `apple-icon.png` are file
+conventions in `src/app/`, so Next emits the tags with correct `sizes`/`type` — the root layout
+deliberately sets no `icons` key. The manifest's two icons live in `public/` instead, because Next
+serves the convention files from content-hashed URLs that a manifest must not hardcode. All of them
+are upscaled from an 84px source; a vector or 1024px master would be better and is on the blocked
+list.
+
+**Alt text** (`ImageAlt`, `src/lib/image-alt.ts`): keyed by image path, not by a column per field —
+alt describes the picture, so the same file reads the same wherever it appears, and `String[]`
+gallery fields get it for free. `src/lib/upload.ts` writes the rows with the files and deletes them
+with the files; a blank alt deletes the row rather than storing `""`, because "undescribed" and
+"decorative" are different claims.
+
+- **`<ContentImage>` is `next/image` for a picture that came out of the database.** It takes the
+  same props, but `alt` is the *fallback*: a stored description wins, otherwise the row's name is
+  used exactly as before. That is what made it safe to adopt one call site at a time.
+- It is async, so **a Client Component cannot render it**. There the server resolves first and
+  passes pairs down: `withAlts()` for galleries (`GalleryCarousel`, `DishesSection`), `altFor()` for
+  a single image (`EventSectionWithImage`, `ZoomableImage`), or a field on the row type
+  (`ArticleRow.alt`, filled by `getArticleRows`).
+- **Card thumbnails keep their title** and use plain `next/image`: `OfferCard` renders inside the
+  events / promotions / talents browsers, which are Client Components, and the title sits right
+  beside the picture. Stored alt belongs on the detail page's own photography.
+- `ImageManager` shows the alt input by default. `alts={false}` is for images whose alt is derived
+  rather than written — a logo (the venue name), an avatar (the person's name), a share card (the
+  page title). Those fields post no `__alts` array at all, and the reconcilers skip the alt write
+  entirely when it is absent so a save can't be read as "the admin cleared every description".
+- `altsByPath` reaches the forms from each `[id]/page.tsx`, never from the dashboard layout:
+  layouts don't re-render on client navigation, so an alt saved a moment ago would come back stale.
 
 ## Auth (`/admin`)
 

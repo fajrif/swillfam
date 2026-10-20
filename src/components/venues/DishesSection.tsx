@@ -12,9 +12,20 @@ import { SectionHeading } from "@/components/shared/SectionHeading";
  * zipping `images` with the index-aligned `imageTitles` / `imageDescriptions`.
  * Hovering a card reveals its title + short description (CSS group-hover only).
  */
-export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
+export function DishesSection({
+  gallery,
+  alts,
+}: {
+  gallery: SegmentGallery;
+  /**
+   * `{ src, alt }` in `gallery.images` order, built by the page with
+   * `withAlts()` — a Client Component cannot read stored alt text itself.
+   */
+  alts: { src: string; alt: string }[];
+}) {
   const dishes = gallery.images.map((src, i) => ({
     src,
+    alt: alts[i]?.alt ?? gallery.imageTitles[i] ?? "",
     title: gallery.imageTitles[i] ?? "",
     description: gallery.imageDescriptions[i] ?? "",
   }));
@@ -36,7 +47,7 @@ export function DishesSection({ gallery }: { gallery: SegmentGallery }) {
             >
               <Image
                 src={dish.src}
-                alt={dish.title}
+                alt={dish.alt}
                 fill
                 sizes="(max-width: 1024px) 50vw, 25vw"
                 className="cursor-zoom-in object-cover transition-transform duration-700 group-hover:scale-105"

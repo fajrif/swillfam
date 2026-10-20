@@ -6,6 +6,13 @@ import { cn } from "@/lib/utils";
 
 export type ArticleRow = {
   img: string;
+  /**
+   * Resolved by `getArticleRows()`. It travels with the row because this
+   * section renders inside `EditorialList`, a Client Component, which rules
+   * out the async `ContentImage`. Empty by default: the card's own title sits
+   * right beside the picture, so an undescribed cover is decorative.
+   */
+  alt?: string;
   date: string;
   title: string;
   excerpt: string;
@@ -85,7 +92,7 @@ export function ArticleListSection({
               <div className="relative w-full shrink-0 overflow-hidden bg-sf-surface sm:w-[120px] lg:w-[140px] aspect-video sm:aspect-auto sm:h-full">
                 <Image
                   src={article.img}
-                  alt=""
+                  alt={article.alt ?? ""}
                   fill
                   sizes="140px"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

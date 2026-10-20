@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { PrivateEvent } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
+import { ContentImage } from "@/components/shared/ContentImage";
 
 const FALLBACK = "/private-events/Mask group.png";
 
@@ -33,7 +33,7 @@ function EventTypeCard({ privateEvent }: { privateEvent: PrivateEvent }) {
       href={`/private-events/${privateEvent.slug}`}
       className="group relative block aspect-[683/520] w-full overflow-hidden border border-sf-border/40"
     >
-      <Image
+      <ContentImage
         src={privateEvent.image ?? privateEvent.bannerImage ?? FALLBACK}
         alt={title}
         fill

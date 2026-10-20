@@ -28,6 +28,19 @@ export const DESCRIPTION_RANGE = { min: 70, max: DESCRIPTION_MAX };
 const DEFAULT_OG_IMAGE = { url: "/og-default.jpg", width: 1200, height: 630 };
 
 /**
+ * Prefix owned by `scripts/generate-og-images.ts`, which writes every file
+ * under it at exactly 1200×630.
+ *
+ * That guarantee is the only reason `og:image:width`/`height` can be declared
+ * for a row's own image: a hand-picked `ogImage`, or a display photo reached
+ * further down the chain, could be any shape, and a platform told the wrong
+ * dimensions lays out a broken card. So the tags are emitted for these and
+ * withheld for everything else.
+ */
+const GENERATED_OG_PREFIX = "/og/";
+const OG_SIZE = { width: 1200, height: 630 };
+
+/**
  * Appends the brand to a title unless it is already there.
  *
  * The guard matters because admins type their own `metaTitle` in the SEO
@@ -98,8 +111,13 @@ export function buildMetadata({
   const resolvedTitle = pageTitle(title);
   const desc = description?.trim() || undefined;
 
-  const ogImage = image?.trim()
-    ? { url: image.trim(), alt: imageAlt ?? resolvedTitle }
+  const url = image?.trim();
+  const ogImage = url
+    ? {
+        url,
+        alt: imageAlt ?? resolvedTitle,
+        ...(url.startsWith(GENERATED_OG_PREFIX) ? OG_SIZE : {}),
+      }
     : { ...DEFAULT_OG_IMAGE, alt: imageAlt ?? SITE_NAME };
 
   return {

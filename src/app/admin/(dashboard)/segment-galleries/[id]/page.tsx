@@ -5,8 +5,10 @@ import { SegmentGalleryForm } from "@/components/admin/SegmentGalleryForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateSegmentGalleryAction, deleteSegmentGalleryAction } from "../actions";
+import { getImageAltRecord } from "@/lib/image-alt";
 
 export default async function EditSegmentGalleryPage({ params }: { params: Promise<{ id: string }> }) {
+  const altsByPath = await getImageAltRecord();
   const { id } = await params;
   const admin = await requireAdmin();
   const [segmentGallery, venues] = await Promise.all([
@@ -21,6 +23,7 @@ export default async function EditSegmentGalleryPage({ params }: { params: Promi
       <EditHeader title="Edit Segment Gallery" backHref="/admin/segment-galleries" />
       <Card>
         <SegmentGalleryForm
+          altsByPath={altsByPath}
           action={updateSegmentGalleryAction.bind(null, id)}
           segmentGallery={segmentGallery}
           venues={venues}
