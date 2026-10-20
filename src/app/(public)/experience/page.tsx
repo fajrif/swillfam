@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
@@ -20,6 +20,7 @@ import {
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { JsonLd, experienceGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (articles) — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -80,6 +81,7 @@ export default async function ExperiencePage() {
         </Container>
       }
     >
+      <JsonLd data={experienceGraph(await staticPageSeo("experience"))} />
       <Reveal>
         <OneDaySection />
       </Reveal>

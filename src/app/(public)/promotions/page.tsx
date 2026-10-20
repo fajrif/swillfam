@@ -14,6 +14,7 @@ import {
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
+import { JsonLd, breadcrumbOnlyGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (promotions, venues, categories, articles) —
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
@@ -63,6 +64,10 @@ export default async function PromotionsPage() {
         </Container>
       }
     >
+      {/* Breadcrumbs only: no schema.org type earns a rich result for a venue
+          offer, and the client decided not to show prices, so an Offer would
+          carry nothing a crawler can use. */}
+      <JsonLd data={breadcrumbOnlyGraph({ name: "Promotions" })} />
       <PromotionsIntro />
 
       <PromotionsBrowser promotions={promoCards} venues={venues} categories={categories} />

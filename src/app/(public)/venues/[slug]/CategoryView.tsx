@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { JsonLd, categoryGraph } from "@/lib/schema";
 import {
   CategoryIntro,
   VenuesGrid,
@@ -61,7 +62,9 @@ export async function CategoryView({ category }: { category: CategoryDetail }) {
   ]);
 
   return (
-    <StickyHero
+    <>
+      <JsonLd data={categoryGraph({ category, venues: category.venues })} />
+      <StickyHero
       backdrop={
           <Image
             src={category.bannerImage ?? category.image ?? FALLBACK}
@@ -100,6 +103,7 @@ export async function CategoryView({ category }: { category: CategoryDetail }) {
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </StickyHero>
+      </StickyHero>
+    </>
   );
 }

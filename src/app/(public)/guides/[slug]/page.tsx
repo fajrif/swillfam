@@ -10,6 +10,7 @@ import { ArticleContent } from "@/components/articles";
 import { ArticleListSection, type ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
+import { JsonLd, articleGraph } from "@/lib/schema";
 import {
   buildMetadata,
   resolveDescription,
@@ -20,7 +21,15 @@ const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getArticleBySlug = cache((slug: string) =>
-  prisma.article.findUnique({ where: { slug }, include: { articleCategory: true } }),
+  prisma.article.findUnique({
+    where: { slug },
+    include: {
+      articleCategory: true,
+      // "Venues mentioned" → BlogPosting `about`. `published` comes along so the
+      // builder can drop a venue whose page isn't live.
+      venues: { select: { slug: true, published: true } },
+    },
+  }),
 );
 
 export async function generateMetadata({
@@ -77,7 +86,9 @@ export default async function ArticlePage({
   }));
 
   return (
-    <StickyHero
+    <>
+      <JsonLd data={articleGraph(article)} />
+      <StickyHero
       backdrop={
           <Image
             src={article.image ?? "/articles/sample-banner.png"}
@@ -119,6 +130,7 @@ export default async function ArticlePage({
       <Reveal>
         <PrivateEventsSection />
       </Reveal>
-    </StickyHero>
+      </StickyHero>
+    </>
   );
 }

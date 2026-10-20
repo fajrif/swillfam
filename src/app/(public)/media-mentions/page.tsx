@@ -1,10 +1,11 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { MediaMentionsIntro, MediaMentionsList } from "@/components/media-mentions";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 export const revalidate = 60;
 
@@ -34,6 +35,15 @@ export default async function MediaMentionsPage() {
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/media-mentions",
+          ...(await staticPageSeo("media-mentions")),
+          crumbName: "Media Mentions",
+          // These link off-site, to the publications themselves.
+          items: mentions.map((m) => ({ name: m.articleTitle, path: m.link })),
+        })}
+      />
       <Reveal>
         <MediaMentionsIntro />
       </Reveal>

@@ -20,6 +20,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { formatEventSchedule } from "@/lib/event-calendar";
 import { venueHoursText } from "@/lib/opening-hours";
+import { JsonLd, venueGraph } from "@/lib/schema";
 import {
   buildMetadata,
   resolveDescription,
@@ -109,7 +110,11 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
   }));
 
   return (
-    <StickyHero
+    <>
+      {/* The venue node, its breadcrumb, and the FAQs this page renders — the
+          FAQPage block is built from the same `faqs` the accordion shows. */}
+      <JsonLd data={venueGraph(venue, faqs)} />
+      <StickyHero
       backdrop={
           <Image
             src={venue.bannerImage ?? venue.image ?? FALLBACK}
@@ -234,6 +239,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
-    </StickyHero>
+      </StickyHero>
+    </>
   );
 }

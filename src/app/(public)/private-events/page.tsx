@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -15,6 +15,7 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 import { getFaqs } from "@/lib/faqs";
+import { JsonLd, privateEventGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (FAQs, articles) — revalidate periodically
 // so admin edits/seeds show up without a full rebuild.
@@ -45,6 +46,13 @@ export default async function PrivateEventsPage() {
         </Container>
       }
     >
+      <JsonLd
+        data={privateEventGraph({
+          path: "/private-events",
+          faqs,
+          ...(await staticPageSeo("private-events")),
+        })}
+      />
       <Reveal>
         <VisionSection />
       </Reveal>

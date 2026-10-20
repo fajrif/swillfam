@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -8,6 +8,7 @@ import { ArticlesBrowser } from "@/components/articles";
 import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 export const generateMetadata = () => staticPageMetadata("guides");
 
@@ -62,6 +63,14 @@ export default async function ArticlesPage({
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/guides",
+          ...(await staticPageSeo("guides")),
+          crumbName: "Guides & Journal",
+          items: articles.map((a) => ({ name: a.title, path: `/guides/${a.slug}` })),
+        })}
+      />
       <Reveal>
         <ArticlesBrowser
           categories={categories}

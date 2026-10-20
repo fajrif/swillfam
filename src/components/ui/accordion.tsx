@@ -55,7 +55,24 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+      // Radix renders `isOpen && children`, so a collapsed panel shipped no
+      // content at all: FAQ answers reached the browser only inside the RSC
+      // payload, i.e. as script data rather than page text. Crawlers that
+      // don't run JavaScript — the AI assistants this whole phase is aimed at —
+      // never saw them, and FAQPage markup may only describe what the page
+      // actually contains. `forceMount` puts the answers in the server HTML.
+      forceMount
+      // With forceMount, Radix stops managing `hidden`, so the collapsed state
+      // is ours. `hidden` (display:none) reproduces exactly the semantics
+      // Radix's own attribute had — including keeping collapsed answers out of
+      // the accessibility tree — and is the pattern Google documents for
+      // accordion FAQs. A height-based hide would leave every answer exposed
+      // to screen readers.
+      //
+      // It can't be left to the animation: accordion-up ends at height 0 but
+      // its fill-mode is `none`, so the content would spring back open the
+      // instant the 200ms animation finished.
+      className="overflow-hidden text-sm data-[state=closed]:hidden data-[state=open]:animate-accordion-down"
       {...props}
     >
       <div className={cn("pt-0 pb-4", className)}>{children}</div>

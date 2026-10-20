@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -11,6 +11,7 @@ import {
 } from "@/components/contact";
 import { getSiteSettings } from "@/lib/site-settings";
 import { prisma } from "@/lib/prisma";
+import { JsonLd, contactGraph } from "@/lib/schema";
 
 export const generateMetadata = () => staticPageMetadata("contact");
 
@@ -37,6 +38,7 @@ export default async function ContactPage() {
         </Container>
       }
     >
+      <JsonLd data={contactGraph(await staticPageSeo("contact"))} />
       <Reveal>
         <GetInTouchSection settings={settings} />
       </Reveal>

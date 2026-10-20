@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -14,6 +14,7 @@ import {
 import { StandForColumnsSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
+import { JsonLd, merchandiseGraph } from "@/lib/schema";
 
 export const generateMetadata = () => staticPageMetadata("merchandise");
 
@@ -57,6 +58,8 @@ export default async function MerchandisePage({
         </Container>
       }
     >
+      {/* Product is valid here only because the grid shows a price. */}
+      <JsonLd data={merchandiseGraph({ items, ...(await staticPageSeo("merchandise")) })} />
       <Reveal>
         <EssentialsSection settings={settings} />
       </Reveal>

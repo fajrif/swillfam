@@ -15,6 +15,7 @@ import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeature
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { PromotionDetailTop } from "@/components/promotions";
+import { JsonLd, breadcrumbOnlyGraph } from "@/lib/schema";
 import {
   buildMetadata,
   resolveDescription,
@@ -108,6 +109,13 @@ export default async function PromotionSlugPage({
 
   return (
     <>
+      {/* Breadcrumbs only — see the /promotions archive for why. */}
+      <JsonLd
+        data={breadcrumbOnlyGraph(
+          { name: "Promotions", path: "/promotions" },
+          { name: promotion.name },
+        )}
+      />
       <Container className="pt-30 lg:pt-60">
         <Link
           href="/promotions"

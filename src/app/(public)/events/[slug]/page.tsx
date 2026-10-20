@@ -21,6 +21,7 @@ import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeature
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { TalentSection } from "@/components/venues";
+import { JsonLd, eventGraph } from "@/lib/schema";
 import {
   EventCountdown,
   EventDetailBanner,
@@ -176,6 +177,9 @@ export default async function EventSlugPage({
 
   return (
     <>
+      {/* A recurring night emits one Event per upcoming date: a single Event
+          with no concrete startDate is invalid markup. */}
+      <JsonLd data={eventGraph(event)} />
       <EventDetailBanner
         image={event.bannerImage ?? event.image}
         alt={event.name}
