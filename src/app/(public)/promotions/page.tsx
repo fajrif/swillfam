@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
@@ -19,13 +19,7 @@ import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeature
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "promotions" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("promotions");
 
 export default async function PromotionsPage() {
   const [articles, promotions, venues, categories] = await Promise.all([

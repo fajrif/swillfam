@@ -12,6 +12,7 @@ export default async function PageSeoPage() {
     ...def,
     metaTitle: byKey[def.key]?.metaTitle ?? "",
     metaDescription: byKey[def.key]?.metaDescription ?? "",
+    ogImage: byKey[def.key]?.ogImage ?? "",
   }));
 
   return (

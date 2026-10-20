@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -14,13 +14,7 @@ import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection }
 // periodically so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "venues" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("venues");
 
 export default async function VenuesPage() {
   const [settings, categories, venues, articles] = await Promise.all([

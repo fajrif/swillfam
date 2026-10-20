@@ -136,7 +136,11 @@ export function PrivateEventForm({
         <CheckboxField label="Published" name="published" defaultChecked={privateEvent?.published ?? true} />
       </div>
 
-      <SeoFields titleValue={privateEvent?.metaTitle} descriptionValue={privateEvent?.metaDescription} />
+      <SeoFields
+        titleValue={privateEvent?.metaTitle}
+        descriptionValue={privateEvent?.metaDescription}
+        ogImageValue={privateEvent?.ogImage}
+      />
 
       <SaveButton>Save private event</SaveButton>
     </form>

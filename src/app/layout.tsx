@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 import { ReactLenis } from "lenis/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollToTopOnNavigate } from "@/components/shared/ScrollToTopOnNavigate";
+import { siteUrl } from "@/lib/site-url";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -28,11 +29,26 @@ const inter = Inter({
   weight: ["300", "400", "500"],
 });
 
+/**
+ * Only `metadataBase` and `icons` live here.
+ *
+ * Next merges metadata shallowly, so any page that defines `openGraph` would
+ * replace a root-level `openGraph` wholesale rather than extending it. Putting
+ * share tags here would therefore make them silently disappear on exactly the
+ * pages that set their own — so every route composes a complete set through
+ * `buildMetadata()` instead, and this layout only supplies what is genuinely
+ * global. `metadataBase` is the one field pages never override: it turns the
+ * relative `canonical`, `og:url` and `og:image` paths they emit into absolute
+ * URLs.
+ */
 export const metadata: Metadata = {
-  title: "SwillFam — Discover the City's Best Lifestyle & Nightlife Experiences",
-  description:
-    "SwillFam connects people with the city's best venues, events, and stories — from casual nights out to curated social experiences and exclusive gatherings.",
+  metadataBase: new URL(siteUrl()),
   icons: "/favicon.png",
+  // A last-resort title/description for any route that ships no metadata of
+  // its own (the admin section). Every public route overrides both.
+  title: "SwillFam — Jakarta Lifestyle & Nightlife Venues",
+  description:
+    "SwillFam runs Jakarta's lifestyle and nightlife venues — restaurants, cafés, cocktail bars and clubs across SCBD, Senopati and Ashta District 8.",
 };
 
 export default function RootLayout({

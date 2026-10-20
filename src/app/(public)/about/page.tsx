@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
@@ -23,13 +22,7 @@ import {
 // admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "about" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("about");
 
 export default async function About() {
   const [articles] = await Promise.all([

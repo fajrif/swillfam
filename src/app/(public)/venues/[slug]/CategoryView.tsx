@@ -13,6 +13,11 @@ import {
   SiblingCategorySection,
   ContinueExperience,
 } from "@/components/category";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 const FALLBACK = "/home/hero.png";
 
@@ -27,10 +32,23 @@ export const getCategoryBySlug = cache((slug: string) =>
 export type CategoryDetail = NonNullable<Awaited<ReturnType<typeof getCategoryBySlug>>>;
 
 export function categoryMetadata(category: CategoryDetail): Metadata {
-  return {
-    title: category.metaTitle || `${category.name} | SwillFam`,
-    description: category.metaDescription || category.headline || category.caption,
-  };
+  return buildMetadata({
+    path: `/venues/${category.slug}`,
+    title: category.metaTitle || `${category.name} Venues in Jakarta`,
+    description: resolveDescription(
+      category.metaDescription,
+      category.shortDescription,
+      category.headline,
+      category.caption,
+      category.description,
+    ),
+    image: resolveOgImage(
+      category.ogImage,
+      category.bannerImage,
+      category.image,
+    ),
+    imageAlt: `${category.name} venues`,
+  });
 }
 
 export async function CategoryView({ category }: { category: CategoryDetail }) {

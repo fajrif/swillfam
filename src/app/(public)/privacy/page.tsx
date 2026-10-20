@@ -1,16 +1,9 @@
 import { Fragment } from "react";
-import type { Metadata } from "next";
-import { prisma } from "@/lib/prisma";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import { LegalDocument, type LegalSection } from "@/components/legal/LegalDocument";
 import { LegalHero } from "@/components/legal/LegalHero";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "privacy" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("privacy");
 
 const sections: LegalSection[] = [
   {

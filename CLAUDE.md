@@ -92,8 +92,15 @@ Env: copy `.env.example` → `.env`. Needs `DATABASE_URL` (Postgres), `ADMIN_SES
 **`SITE_INDEXABLE` — production must set this to `"true"`.** `src/app/robots.ts` reads it per
 request; anything else serves a blanket `Disallow: /`. Indexing is opt-in so a staging box that
 forgets the variable stays out of search results. After any production deploy, confirm with
-`curl -s https://swillfam.com/robots.txt`. `NEXT_PUBLIC_SITE_URL` must also be the real origin —
-it is the base for canonicals, the sitemap and the JSON-LD `@id`s.
+`curl -s https://swillfam.com/robots.txt`.
+
+**`NEXT_PUBLIC_SITE_URL` must be the real origin, and it is read at _build_ time.** It is the
+`metadataBase` behind every canonical, `og:url` and `og:image`, and it will be the base for the
+sitemap and the JSON-LD `@id`s. Because `NEXT_PUBLIC_*` is inlined by the bundler and most public
+routes are prerendered, a build is tied to the origin it was built with — rebuild for a different
+origin rather than changing the variable on the server. `SITE_INDEXABLE` is different: it is
+server-only and read per request, which is what keeps a staging box running a production-origin
+build out of the index.
 
 ## Public layout (`src/app/(public)/`)
 
@@ -115,6 +122,34 @@ followed by `<Reveal>`-wrapped sections.
   page's path changed when it moved into `(public)`.
 - `src/app/admin/**` is a sibling of `(public)`, not nested inside it, with its own separate
   `admin/(dashboard)/layout.tsx` (see "Admin CRUD pattern" below) — the two sections never share chrome.
+
+## SEO metadata (`src/lib/seo/`)
+
+**Every public route builds its metadata with `buildMetadata()` from `src/lib/seo/metadata.ts`.
+Never hand-write `openGraph` or `twitter` in a page.** Next merges metadata *shallowly*, so a page
+that defines `openGraph` replaces the parent's wholesale — a page setting only `openGraph.title`
+would silently drop `og:site_name`, `og:locale` and the image. `buildMetadata` composes the
+complete set (canonical, OG, Twitter) from one input, which is the only thing keeping all 23 routes
+consistent. `src/app/layout.tsx` therefore holds *only* `metadataBase` + `icons` + fallback
+title/description; it deliberately does not set share tags.
+
+- **Canonical and image paths are passed site-relative** (`/venues/kilo-jakarta`,
+  `/uploads/events/x.png`). `metadataBase` absolutises them. OG images must be the original file
+  path, never a `/_next/image?url=` URL — crawlers and chat previews fetch them directly.
+- **Descriptions go through `resolveDescription(manual, ...fallbacks)`.** A hand-written
+  `metaDescription` is emitted verbatim; derived fallbacks are stripped of HTML (`plainText`) and
+  cut to 155 chars at a word boundary. Order fallbacks shortest-first — `shortDescription` before
+  `description`, which is a full body paragraph on most rows.
+- **Images go through `resolveOgImage(ogImage, banner, poster, image)`** — first non-empty wins,
+  then `buildMetadata` falls back to `/og-default.jpg` (1200×630).
+- The 16 singleton/archive pages use `staticPageMetadata(key)` instead, which reads the admin's
+  `PageSeo` row over the `defaultTitle`/`defaultDescription` in `src/lib/page-seo-registry.ts`.
+  **A new static page needs an entry in that registry**, including real defaults — not a generic
+  brand string.
+- Every model with `metaTitle`/`metaDescription` also has `ogImage`, edited through the shared
+  `SeoFields` component. Its create/update actions call `reconcileSingleImage` for it and its
+  delete passes `current.ogImage` to `collectImagePaths`, same as any other image field.
+- `src/app/admin/layout.tsx` exists only to mark the whole admin section `noindex, nofollow`.
 
 ## Auth (`/admin`)
 

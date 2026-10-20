@@ -28,8 +28,10 @@ export async function createCategoryAction(formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: null });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
   await prisma.category.create({
     data: {
+      ogImage,
       name: String(formData.get("name") ?? "").trim(),
       caption: String(formData.get("caption") ?? "").trim(),
       headline: String(formData.get("headline") ?? "").trim() || null,
@@ -56,9 +58,11 @@ export async function updateCategoryAction(id: string, formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const slug = await uniqueSlug(formData, id);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
   await prisma.category.update({
     where: { id },
     data: {
+      ogImage,
       name: String(formData.get("name") ?? "").trim(),
       caption: String(formData.get("caption") ?? "").trim(),
       headline: String(formData.get("headline") ?? "").trim() || null,
@@ -85,7 +89,7 @@ export async function deleteCategoryAction(id: string) {
   if (current) {
     // Venues reference categoryId with onDelete: SetNull — they survive.
     await prisma.category.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.ogImage));
     revalidatePath(`/venues/${current.slug}`);
     revalidatePath("/venues");
   }

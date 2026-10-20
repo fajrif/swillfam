@@ -70,7 +70,11 @@ export function PromotionForm({
         <Field label="End time" name="endHour" type="time" defaultValue={promotion?.endHour} required />
       </div>
 
-      <SeoFields titleValue={promotion?.metaTitle} descriptionValue={promotion?.metaDescription} />
+      <SeoFields
+        titleValue={promotion?.metaTitle}
+        descriptionValue={promotion?.metaDescription}
+        ogImageValue={promotion?.ogImage}
+      />
 
       <SaveButton>Save promotion</SaveButton>
     </form>

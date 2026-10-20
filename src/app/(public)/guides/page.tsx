@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -9,13 +9,7 @@ import type { ArticleRow } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "guides" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("guides");
 
 const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 const PAGE_SIZE = 9;

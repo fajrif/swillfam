@@ -45,7 +45,8 @@ export async function createPromotionAction(formData: FormData) {
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: null });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
   const slug = await uniqueSlug(formData);
-  await prisma.promotion.create({ data: { ...parse(formData, admin), slug, image, bannerImage, posterImage } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
+  await prisma.promotion.create({ data: { ...parse(formData, admin), slug, image, bannerImage, posterImage, ogImage } });
   revalidatePath(BASE);
   revalidatePath("/promotions");
   revalidatePath(`/promotions/${slug}`);
@@ -62,7 +63,8 @@ export async function updatePromotionAction(id: string, formData: FormData) {
   const bannerImage = await reconcileSingleImage({ formData, field: "bannerImage", category: CATEGORY, previousPath: current.bannerImage });
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
   const slug = await uniqueSlug(formData, id);
-  await prisma.promotion.update({ where: { id }, data: { ...parse(formData, admin), slug, image, bannerImage, posterImage } });
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
+  await prisma.promotion.update({ where: { id }, data: { ...parse(formData, admin), slug, image, bannerImage, posterImage, ogImage } });
   revalidatePath(BASE);
   revalidatePath(`${BASE}/${id}`);
   revalidatePath("/promotions");
@@ -76,7 +78,7 @@ export async function deletePromotionAction(id: string) {
   if (current) {
     assertVenueOwnership(admin, current.venueId);
     await prisma.promotion.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.posterImage));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.bannerImage, current.posterImage, current.ogImage));
     revalidatePath("/promotions");
     revalidatePath(`/promotions/${current.slug}`);
   }

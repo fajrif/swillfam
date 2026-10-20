@@ -17,6 +17,11 @@ import {
   PrivateEventTestimonials,
   RecommendedVenuesSection,
 } from "@/components/private-events";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 // Statically rendered but data-driven — revalidate periodically so admin edits
 // and seeds show up without a full rebuild.
@@ -50,11 +55,26 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const privateEvent = await getPrivateEventBySlug(slug);
-  if (!privateEvent) return { title: "Private Events | SwillFam" };
-  return {
-    title: privateEvent.metaTitle || `${privateEvent.title} | SwillFam`,
-    description: privateEvent.metaDescription || privateEvent.shortDescription,
-  };
+  // Same guard as the page body, which notFound()s an unpublished row.
+  if (!privateEvent || !privateEvent.published)
+    return { title: "Private Event Not Found", robots: { index: false, follow: true } };
+
+  return buildMetadata({
+    path: `/private-events/${privateEvent.slug}`,
+    title: privateEvent.metaTitle || privateEvent.title,
+    description: resolveDescription(
+      privateEvent.metaDescription,
+      privateEvent.shortDescription,
+      privateEvent.caption,
+      privateEvent.description,
+    ),
+    image: resolveOgImage(
+      privateEvent.ogImage,
+      privateEvent.bannerImage,
+      privateEvent.image,
+    ),
+    imageAlt: privateEvent.title,
+  });
 }
 
 export default async function PrivateEventPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -56,7 +56,11 @@ export function TalentForm({
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={talent?.youtubeEmbed ?? ""} rows={2} />
       <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={talent?.instagramEmbed ?? ""} rows={2} />
 
-      <SeoFields titleValue={talent?.metaTitle} descriptionValue={talent?.metaDescription} />
+      <SeoFields
+        titleValue={talent?.metaTitle}
+        descriptionValue={talent?.metaDescription}
+        ogImageValue={talent?.ogImage}
+      />
 
       <SaveButton>Save talent</SaveButton>
     </form>

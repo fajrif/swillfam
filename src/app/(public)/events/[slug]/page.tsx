@@ -30,6 +30,11 @@ import {
   RecurringEventDetail,
   SingleEventDetail,
 } from "@/components/events";
+import {
+  buildMetadata,
+  resolveDescription,
+  resolveOgImage,
+} from "@/lib/seo/metadata";
 
 // SSG per known slug at build time, but data-driven — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -58,11 +63,27 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
-  if (!event) return { title: "Event | SwillFam" };
-  return {
-    title: event.metaTitle || `${event.name} | SwillFam`,
-    description: event.metaDescription || event.shortDescription,
-  };
+  // The page itself calls notFound() for this; the tags only need to keep the
+  // 404 out of the index should a crawler see it before the status code.
+  if (!event) return { title: "Event Not Found", robots: { index: false, follow: true } };
+
+  return buildMetadata({
+    path: `/events/${event.slug}`,
+    title: event.metaTitle || `${event.name}${event.venue ? ` at ${event.venue.name}` : ""}`,
+    description: resolveDescription(
+      event.metaDescription,
+      event.shortDescription,
+      event.caption,
+      event.description,
+    ),
+    image: resolveOgImage(
+      event.ogImage,
+      event.bannerImage,
+      event.posterImage,
+      event.image,
+    ),
+    imageAlt: event.name,
+  });
 }
 
 export default async function EventSlugPage({

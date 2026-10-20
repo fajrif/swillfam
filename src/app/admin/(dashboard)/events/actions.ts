@@ -72,8 +72,10 @@ export async function createEventAction(formData: FormData) {
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: null });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: [] });
   const slug = await uniqueSlug(formData);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: null });
   await prisma.event.create({
     data: {
+      ogImage,
       ...parse(formData, admin),
       slug,
       image,
@@ -100,9 +102,11 @@ export async function updateEventAction(id: string, formData: FormData) {
   const posterImage = await reconcileSingleImage({ formData, field: "posterImage", category: CATEGORY, previousPath: current.posterImage });
   const galleries = await reconcileImageField({ formData, field: "galleries", category: CATEGORY, previousPaths: current.galleries });
   const slug = await uniqueSlug(formData, id);
+  const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
   await prisma.event.update({
     where: { id },
     data: {
+      ogImage,
       ...parse(formData, admin, current.featured),
       slug,
       image,
@@ -127,7 +131,7 @@ export async function deleteEventAction(id: string) {
     assertVenueOwnership(admin, current.venueId);
     await prisma.event.delete({ where: { id } });
     await deleteUploadedFiles(
-      collectImagePaths(current.image, current.bannerImage, current.posterImage, current.galleries),
+      collectImagePaths(current.image, current.bannerImage, current.posterImage, current.galleries, current.ogImage),
     );
     revalidatePath("/events");
     revalidatePath(`/events/${current.slug}`);

@@ -61,7 +61,11 @@ export function ArticleForm({
 
       <RichTextEditor name="description" label="Content" defaultValue={article?.description ?? ""} />
 
-      <SeoFields titleValue={article?.metaTitle} descriptionValue={article?.metaDescription} />
+      <SeoFields
+        titleValue={article?.metaTitle}
+        descriptionValue={article?.metaDescription}
+        ogImageValue={article?.ogImage}
+      />
 
       <SaveButton>Save article</SaveButton>
     </form>

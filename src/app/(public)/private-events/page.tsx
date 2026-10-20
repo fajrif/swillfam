@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -20,13 +20,7 @@ import { getFaqs } from "@/lib/faqs";
 // so admin edits/seeds show up without a full rebuild.
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = await prisma.pageSeo.findUnique({ where: { pageKey: "private-events" } });
-  return {
-    title: seo?.metaTitle ?? "SwillFam",
-    description: seo?.metaDescription ?? undefined,
-  };
-}
+export const generateMetadata = () => staticPageMetadata("private-events");
 
 export default async function PrivateEventsPage() {
   const [privateEvents, faqs, articles] = await Promise.all([
