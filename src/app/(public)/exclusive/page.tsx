@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -8,6 +8,7 @@ import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (articles) — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -39,6 +40,16 @@ export default async function ExclusivePage() {
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/exclusive",
+          ...(await staticPageSeo("exclusive")),
+          crumbName: "Exclusive",
+          // The editorial pieces the page lists — this page shows articles,
+          // not videos, whatever its name suggests.
+          items: editorialArticles.flatMap((a) => (a.href ? [{ name: a.title, path: a.href }] : [])),
+        })}
+      />
       <Reveal>
         <ExclusiveSection editorialArticles={editorialArticles} />
       </Reveal>

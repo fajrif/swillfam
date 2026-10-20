@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
@@ -18,6 +18,7 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
 import { dateKey, formatEventSchedule, formatHour, type CalendarEvent } from "@/lib/event-calendar";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (events, venues, categories, articles) —
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
@@ -108,6 +109,14 @@ export default async function EventsPage() {
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/events",
+          ...(await staticPageSeo("events")),
+          crumbName: "Events",
+          items: events.map((e) => ({ name: e.name, path: `/events/${e.slug}` })),
+        })}
+      />
       <FeaturedEventSection event={featured} />
 
       <EventsBrowser events={eventCards} venues={venues} categories={categories} />

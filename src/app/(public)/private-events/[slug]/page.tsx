@@ -11,6 +11,7 @@ import { FaqSection } from "@/components/shared/FaqSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
+import { JsonLd, privateEventGraph } from "@/lib/schema";
 import {
   PrivateEventBanner,
   PrivateEventIntro,
@@ -86,6 +87,20 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
 
   return (
     <>
+      <JsonLd
+        data={privateEventGraph({
+          privateEvent,
+          faqs,
+          path: `/private-events/${privateEvent.slug}`,
+          name: privateEvent.metaTitle?.trim() || privateEvent.title,
+          description: resolveDescription(
+            privateEvent.metaDescription,
+            privateEvent.shortDescription,
+            privateEvent.caption,
+            privateEvent.description,
+          ),
+        })}
+      />
       <PrivateEventBanner
         image={privateEvent.bannerImage ?? privateEvent.image}
         title={privateEvent.heroTitle ?? privateEvent.title}

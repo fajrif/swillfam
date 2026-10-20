@@ -13,6 +13,7 @@ import { type OfferCardData } from "@/components/shared/OfferCard";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
+import { JsonLd, talentGraph } from "@/lib/schema";
 import {
   TalentDetailIntro,
   TalentPerformingSection,
@@ -124,6 +125,7 @@ export default async function TalentSlugPage({
 
   return (
     <>
+      <JsonLd data={talentGraph(talent)} />
       <Container className="pt-30 lg:pt-60">
         <Link
           href="/talents"

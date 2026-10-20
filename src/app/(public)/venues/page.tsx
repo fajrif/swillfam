@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/site-settings";
@@ -10,6 +10,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection } from "@/components/venues";
 import { venueHoursText } from "@/lib/opening-hours";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (categories, venues, articles) — revalidate
 // periodically so admin edits/seeds show up without a full rebuild.
@@ -70,6 +71,18 @@ export default async function VenuesPage() {
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/venues",
+          ...(await staticPageSeo("venues")),
+          crumbName: "Venues",
+          // The category tiles and the locator, in the order the page shows them.
+          items: [
+            ...categories.map((c) => ({ name: c.name, path: `/venues/${c.slug}` })),
+            ...venues.map((v) => ({ name: v.name, path: `/venues/${v.slug}` })),
+          ],
+        })}
+      />
       <Reveal>
         <VenuesIntro />
       </Reveal>

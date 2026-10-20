@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
@@ -14,6 +14,7 @@ import {
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (talents, venues, categories, articles) —
 // revalidate periodically so admin edits/seeds show up without a full rebuild.
@@ -62,6 +63,14 @@ export default async function TalentsPage() {
         </Container>
       }
     >
+      <JsonLd
+        data={archiveGraph({
+          path: "/talents",
+          ...(await staticPageSeo("talents")),
+          crumbName: "Talents",
+          items: talents.map((t) => ({ name: t.name, path: `/talents/${t.slug}` })),
+        })}
+      />
       <TalentsIntro />
 
       <TalentsBrowser talents={talentCards} venues={venues} categories={categories} />

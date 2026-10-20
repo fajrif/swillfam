@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
@@ -8,6 +8,7 @@ import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { SwillfamSpotlightSection } from "@/components/venues";
 
 import { getArticleRows } from "@/lib/articles";
+import { JsonLd, aboutGraph } from "@/lib/schema";
 import {
   OurStorySection,
   DesignExperienceSection,
@@ -41,6 +42,7 @@ export default async function About() {
         </Container>
       }
     >
+      <JsonLd data={aboutGraph(await staticPageSeo("about"))} />
       <Reveal>
         <OurStorySection />
       </Reveal>

@@ -1,4 +1,4 @@
-import { staticPageMetadata } from "@/lib/seo/static-page";
+import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Reveal } from "@/components/Reveal";
@@ -9,6 +9,7 @@ import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
+import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (careers, articles) — revalidate periodically
 // so admin edits/seeds show up without a full rebuild.
@@ -37,6 +38,16 @@ export default async function CareersPage() {
         </Container>
       }
     >
+      {/* No JobPosting: the roles have no individual pages, and expired
+          job markup is actively penalised. */}
+      <JsonLd
+        data={archiveGraph({
+          path: "/careers",
+          ...(await staticPageSeo("careers")),
+          crumbName: "Careers",
+          items: [],
+        })}
+      />
       <Reveal>
         <BePartSection />
       </Reveal>

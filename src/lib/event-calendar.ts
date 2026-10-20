@@ -230,6 +230,35 @@ export function nextOccurrence(recurringDays: string[], from: Date): Date | null
   return null;
 }
 
+/**
+ * The next `count` UTC days matching `recurringDays`, on or after `from`.
+ *
+ * A recurring event has no single date, and a schema.org `Event` without a
+ * concrete `startDate` is invalid — so the JSON-LD builder emits one Event per
+ * upcoming occurrence instead. Built on `nextOccurrence` so the dates the
+ * markup advertises are the same ones the calendar draws.
+ */
+export function upcomingOccurrences(
+  recurringDays: string[],
+  from: Date,
+  count: number,
+): Date[] {
+  const dates: Date[] = [];
+  let cursor = from;
+
+  for (let i = 0; i < count; i++) {
+    const next = nextOccurrence(recurringDays, cursor);
+    if (!next) break;
+    dates.push(next);
+    // Resume the day after, or `nextOccurrence` would return the same day.
+    cursor = new Date(
+      Date.UTC(next.getUTCFullYear(), next.getUTCMonth(), next.getUTCDate() + 1),
+    );
+  }
+
+  return dates;
+}
+
 /** `"20:00"` → `"8:00 PM"`. Returns the input unchanged if it isn't `HH:mm`. */
 export function formatHour(hhmm: string): string {
   const match = /^(\d{1,2}):(\d{2})$/.exec(hhmm.trim());

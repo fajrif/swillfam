@@ -164,6 +164,47 @@ detail route needs its own `detail(prefix, rows)` line. Two rules it enforces:
   do not invent one. Google discounts a lastmod it finds untrustworthy, which would waste the
   58 genuine ones.
 
+## JSON-LD (`src/lib/schema/`)
+
+**Every public route emits exactly one `@graph` block, server-rendered.** That is the whole point:
+AI crawlers don't run JavaScript, so schema added client-side or through GTM is invisible to them —
+and the Rich Results Test *does* run JS, so it can't prove the markup is really in the HTML. The
+check that can is `curl -s <url> | grep -c 'application/ld+json'`.
+
+- `<JsonLd data={…} />` (`src/components/shared/JsonLd.tsx`) renders the block and escapes `<`, so
+  copy containing a closing script tag can't break out of it. Never hand-write the script tag.
+- **One builder per page template**, in `src/lib/schema/`: `core.ts` (shared primitives),
+  `organization.ts`, `venue.ts`, `event.ts`, `talent.ts`, `article.ts`, `page.ts`. Builders are
+  **pure** — they take rows the page already fetched, so markup never costs an extra query.
+  Compose the result with `graph(...nodes)`, which drops any node a builder returned as empty.
+- **Never emit `""` or `null`.** `graph()` runs everything through `compactDeep`, so an unfilled
+  field simply disappears. This is what lets a builder be written as if every field were present —
+  do not add your own emptiness checks.
+- **Link entities by `@id`, never duplicate them.** The ids are fixed (`venueId(slug)`,
+  `talentId`, `eventId`, `articleId`, `ORG_ID`, `WEBSITE_ID`), so an event's `location` and a
+  guide's `about` point at the node the venue page defines. The one deliberate exception is
+  `Event.location`, which embeds name + address as well: Google's Event check wants the address on
+  the event page itself.
+- **The root is the bare origin** (`https://swillfam.com`), matching the canonical and the sitemap.
+  The spec's samples write it with a trailing slash; three spellings of the homepage in our own
+  output is what invites a crawler to treat them as separate URLs.
+- **Image URLs must be the original file** — `imageUrl`/`imageUrls` absolutise paths, and a
+  `/_next/image?url=…` URL is a QA failure.
+- **Dates carry `+07:00`.** `jakartaDateTime(date, "HH:mm", dayOffset)` for an admin-typed calendar
+  day (stored as UTC midnight — read it with UTC getters, same contract as `event-calendar.ts`);
+  `jakartaInstant(date)` for a real timestamp like `updatedAt`.
+- **Static pages take their `name`/`description` from `staticPageSeo(key)`** — the same resolution
+  `staticPageMetadata` uses, so a page's markup and its `<title>`/`<meta>` can't describe it
+  differently.
+- **Only mark up what the page shows.** `faqPage()` is built from the same `faqs` the accordion
+  renders; `openingHoursSpecification` comes from `VenueHour` rows and is omitted entirely when a
+  venue has only free-text hours, because parsing that string back into days would be guessing.
+  `/experience` deliberately ships no `itinerary`, and `/promotions` only breadcrumbs — see the
+  comments at each.
+- `AccordionContent` uses `forceMount`: Radix renders `isOpen && children`, which kept FAQ answers
+  out of the HTML entirely (they reached the browser only inside the RSC payload). **FAQPage markup
+  depends on that `forceMount` — if it goes, the FAQPage builders have to go with it.**
+
 ## Fields that feed search engines
 
 The columns added for JSON-LD are ordinary admin fields, with one rule that matters more than the

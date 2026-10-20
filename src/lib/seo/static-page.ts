@@ -16,6 +16,31 @@ export const getPageSeo = cache((pageKey: string) =>
 );
 
 /**
+ * The resolved name and description for one of the singleton/archive pages:
+ * the admin's `PageSeo` row where it has one, the registry default otherwise.
+ *
+ * Shared with `staticPageMetadata` so a page's JSON-LD `name`/`description` and
+ * its `<title>`/`<meta>` are always the same strings — two independent
+ * resolutions would eventually describe the same page two different ways, which
+ * is the kind of mismatch a crawl reports and nobody can explain.
+ *
+ * The title keeps its own suffix handling out of it: `pageTitle()` adds the
+ * brand for the `<title>` tag, while schema `name` wants the page's own name.
+ */
+export async function staticPageSeo(key: StaticPageSeoKey): Promise<{
+  name: string;
+  description: string | undefined;
+}> {
+  const def = STATIC_PAGE_SEO_BY_KEY[key];
+  const seo = await getPageSeo(key);
+
+  return {
+    name: seo?.metaTitle?.trim() || def.defaultTitle,
+    description: resolveDescription(seo?.metaDescription, def.defaultDescription),
+  };
+}
+
+/**
  * Metadata for one of the 16 singleton/archive pages.
  *
  * These pages had 16 identical copies of a four-line `generateMetadata` that
