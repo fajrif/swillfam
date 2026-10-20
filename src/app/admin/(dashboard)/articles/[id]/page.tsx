@@ -5,6 +5,8 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateArticleAction, deleteArticleAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
+import { articleSeo } from "@/lib/seo/entities";
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdministrator();
@@ -34,6 +36,21 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
           <ConfirmDeleteButton action={deleteArticleAction.bind(null, id)} label="Delete article" />
         </div>
       </Card>
+
+      <div className="mt-6">
+        <Card>
+          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
+          <SeoDetailsPanel
+            seo={articleSeo(article)}
+            publicPath={`/guides/${article.slug}`}
+            unavailableReason={
+              article.status === 1
+                ? undefined
+                : "This guide is still a draft, so it has no public page yet. Set Status to Published to see it."
+            }
+          />
+        </Card>
+      </div>
     </div>
   );
 }

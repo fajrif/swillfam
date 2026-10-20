@@ -1,7 +1,7 @@
 /** Guide page: `BlogPosting` + breadcrumb. */
 
 import type { Article, Venue } from "@/generated/prisma/client";
-import { resolveDescription } from "@/lib/seo/metadata";
+import { articleSeo } from "@/lib/seo/entities";
 import { truncate } from "@/lib/seo/text";
 import {
   ORG_ID,
@@ -28,11 +28,7 @@ export function articleGraph(article: ArticleForSchema): Record<string, unknown>
     "@type": "BlogPosting",
     "@id": articleId(article.slug),
     headline: truncate(article.title, HEADLINE_MAX),
-    description: resolveDescription(
-      article.metaDescription,
-      article.shortDescription,
-      article.description,
-    ),
+    description: articleSeo(article).description.value,
     image: imageUrls(article.ogImage, article.image),
     datePublished: jakartaInstant(article.publishedDate),
     dateModified: jakartaInstant(article.updatedAt),

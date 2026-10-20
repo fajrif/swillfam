@@ -133,15 +133,34 @@ complete set (canonical, OG, Twitter) from one input, which is the only thing ke
 consistent. `src/app/layout.tsx` therefore holds *only* `metadataBase` + `icons` + fallback
 title/description; it deliberately does not set share tags.
 
+**Each model's fallback chain is declared exactly once, in `src/lib/seo/entities.ts`.**
+`venueSeo(venue)`, `eventSeo(event)`, `articleSeo(article)` … each return
+`{ title, description, image }`, where every value carries `{ value, source, fieldLabel }`.
+`generateMetadata`, the JSON-LD builders and the admin's SEO Details panel all read from there, so
+the `<title>`, the OG tags, the schema `name`/`description` and what the admin is shown cannot
+disagree. **Never spell a chain out at a call site** — that is how the category page ended up with
+`headline` in its `<meta>` but not in its markup. Adding a field to a chain means editing one
+function. `resolveDescription`/`resolveOgImage` no longer exist; `resolve.ts` is the only primitive.
+
+- The `source` is what makes the admin panel honest: `manual` (typed into the SEO fields),
+  `derived` (taken from the row's own copy, and `fieldLabel` names which field), `default` (a
+  built-in). Without it, an admin who left Meta Description blank has no way to tell which field
+  to edit to change the snippet.
+- `TITLE_RANGE`/`DESCRIPTION_RANGE` in `metadata.ts` are shared by the form's live counters and the
+  panel's read-only ones, so the two can't disagree about what "too long" means.
+- The panel's JSON-LD preview (`JsonLdPreview`) **fetches the public page and parses its HTML**
+  rather than re-running the builders. That makes it identical to what a crawler receives instead
+  of a second implementation that could drift, needs no upkeep when a builder changes, and catches
+  what a re-render can't: a stale cached page, a block that didn't render, broken escaping.
 - **Canonical and image paths are passed site-relative** (`/venues/kilo-jakarta`,
   `/uploads/events/x.png`). `metadataBase` absolutises them. OG images must be the original file
   path, never a `/_next/image?url=` URL — crawlers and chat previews fetch them directly.
-- **Descriptions go through `resolveDescription(manual, ...fallbacks)`.** A hand-written
-  `metaDescription` is emitted verbatim; derived fallbacks are stripped of HTML (`plainText`) and
-  cut to 155 chars at a word boundary. Order fallbacks shortest-first — `shortDescription` before
-  `description`, which is a full body paragraph on most rows.
-- **Images go through `resolveOgImage(ogImage, banner, poster, image)`** — first non-empty wins,
-  then `buildMetadata` falls back to `/og-default.jpg` (1200×630).
+- **Descriptions**: a hand-written `metaDescription` is emitted verbatim; derived fallbacks are
+  stripped of HTML (`plainText`) and cut to 155 chars at a word boundary. Order fallbacks
+  shortest-first in the entity resolver — `shortDescription` before `description`, which is a full
+  body paragraph on most rows.
+- **Images**: first non-empty in the chain wins, then `buildMetadata` falls back to
+  `/og-default.jpg` (1200×630).
 - The 16 singleton/archive pages use `staticPageMetadata(key)` instead, which reads the admin's
   `PageSeo` row over the `defaultTitle`/`defaultDescription` in `src/lib/page-seo-registry.ts`.
   **A new static page needs an entry in that registry**, including real defaults — not a generic

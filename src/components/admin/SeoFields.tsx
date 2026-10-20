@@ -6,14 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ImageManager } from "./ImageManager";
 import { cn } from "@/lib/utils";
+import { TITLE_RANGE, DESCRIPTION_RANGE } from "@/lib/seo/metadata";
 
-/**
- * Where a value stops helping and starts getting cut off in search results.
- * `max` mirrors DESCRIPTION_MAX in src/lib/seo/metadata.ts; `min` is the point
- * below which a field is too thin to earn a click.
- */
-const TITLE_RANGE = { min: 25, max: 60 };
-const DESCRIPTION_RANGE = { min: 70, max: 155 };
+// Length guidance lives in src/lib/seo/metadata.ts, shared with the read-only
+// SEO Details panel so the form and the panel can't disagree about it.
 
 /**
  * Live length readout for one SEO field.

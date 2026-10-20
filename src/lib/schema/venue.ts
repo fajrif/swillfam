@@ -6,7 +6,7 @@
 import type { Venue, VenueHour, Faq, Category } from "@/generated/prisma/client";
 import { googleMapsUrl } from "@/lib/maps";
 import { WEEKDAY_ORDER } from "@/lib/opening-hours";
-import { resolveDescription } from "@/lib/seo/metadata";
+import { venueSeo, categorySeo } from "@/lib/seo/entities";
 import {
   ORG_ID,
   breadcrumb,
@@ -90,14 +90,9 @@ export function venueNode(venue: VenueForSchema): JsonLdNode {
     "@type": types.length === 0 ? DEFAULT_TYPE : types.length === 1 ? types[0] : types,
     "@id": venueId(venue.slug),
     name: venue.name,
-    // `description` is the full body paragraph; the short one is what the
-    // schema wants, and it is the same text the meta description uses.
-    description: resolveDescription(
-      venue.metaDescription,
-      venue.shortDescription,
-      venue.caption,
-      venue.description,
-    ),
+    // The same resolution the page's meta description uses — one chain,
+    // declared in seo/entities.ts.
+    description: venueSeo(venue).description.value,
     url: pageUrl(`/venues/${venue.slug}`),
     image: imageUrls(venue.bannerImage, venue.image, ...galleryImages.slice(0, 4)),
     telephone: venue.whatsapp ?? venue.phone,
@@ -146,18 +141,13 @@ export function categoryGraph({
   venues: { name: string; slug: string }[];
 }): Record<string, unknown> {
   const path = `/venues/${category.slug}`;
+  const seo = categorySeo(category);
   return graph(
     collectionPage({
       path,
-      // Same title the page's own <title> resolves to, so the markup and the
-      // metadata never describe the page differently.
-      name: category.metaTitle?.trim() || `${category.name} Venues in Jakarta`,
-      description: resolveDescription(
-        category.metaDescription,
-        category.shortDescription,
-        category.caption,
-        category.description,
-      ),
+      // Same strings the page's own <title>/<meta> resolve to.
+      name: seo.title.value,
+      description: seo.description.value,
       items: venues.map((venue) => ({ name: venue.name, path: `/venues/${venue.slug}` })),
     }),
     breadcrumb({ name: "Venues", path: "/venues" }, { name: category.name }),

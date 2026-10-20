@@ -1,7 +1,7 @@
 /** Talent page: `Person` + breadcrumb. */
 
 import type { Talent, Venue } from "@/generated/prisma/client";
-import { resolveDescription } from "@/lib/seo/metadata";
+import { talentSeo } from "@/lib/seo/entities";
 import {
   breadcrumb,
   graph,
@@ -21,9 +21,7 @@ export function talentGraph(talent: TalentForSchema): Record<string, unknown> {
     "@id": talentId(talent.slug),
     name: talent.name,
     jobTitle: talent.speciality,
-    // Talent has no shortDescription column, so the bio is the only source —
-    // resolveDescription strips markup and trims it to a usable length.
-    description: resolveDescription(talent.metaDescription, talent.description),
+    description: talentSeo(talent).description.value,
     image: imageUrl(talent.image),
     url: pageUrl(`/talents/${talent.slug}`),
     worksFor: talent.venue ? ref(venueId(talent.venue.slug)) : undefined,

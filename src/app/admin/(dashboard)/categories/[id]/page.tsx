@@ -5,6 +5,8 @@ import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateCategoryAction, deleteCategoryAction } from "../actions";
 import { requireAdministrator } from "@/lib/admin-auth";
+import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
+import { categorySeo } from "@/lib/seo/entities";
 
 export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdministrator();
@@ -21,6 +23,16 @@ export default async function EditCategoryPage({ params }: { params: Promise<{ i
           <ConfirmDeleteButton action={deleteCategoryAction.bind(null, id)} label="Delete category" />
         </div>
       </Card>
+
+      <div className="mt-6">
+        <Card>
+          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
+          <SeoDetailsPanel
+            seo={categorySeo(category)}
+            publicPath={`/venues/${category.slug}`}
+          />
+        </Card>
+      </div>
     </div>
   );
 }

@@ -11,11 +11,8 @@ import { ArticleListSection, type ArticleRow } from "@/components/shared/Article
 import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { JsonLd, articleGraph } from "@/lib/schema";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { articleSeo } from "@/lib/seo/entities";
 
 const DATE_FMT = new Intl.DateTimeFormat("en-GB");
 
@@ -44,17 +41,12 @@ export async function generateMetadata({
   if (!article || article.status !== 1)
     return { title: "Guide Not Found", robots: { index: false, follow: true } };
 
+  const seo = articleSeo(article);
   return buildMetadata({
     path: `/guides/${article.slug}`,
-    title: article.metaTitle || article.title,
-    // article.description is Tiptap HTML; plainText() inside resolveDescription
-    // is what keeps tags out of the meta tag if shortDescription is ever blank.
-    description: resolveDescription(
-      article.metaDescription,
-      article.shortDescription,
-      article.description,
-    ),
-    image: resolveOgImage(article.ogImage, article.image),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: article.title,
     ogType: "article",
     publishedTime: article.publishedDate.toISOString(),

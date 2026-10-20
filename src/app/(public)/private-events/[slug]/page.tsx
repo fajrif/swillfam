@@ -18,11 +18,8 @@ import {
   PrivateEventTestimonials,
   RecommendedVenuesSection,
 } from "@/components/private-events";
-import {
-  buildMetadata,
-  resolveDescription,
-  resolveOgImage,
-} from "@/lib/seo/metadata";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { privateEventSeo } from "@/lib/seo/entities";
 
 // Statically rendered but data-driven — revalidate periodically so admin edits
 // and seeds show up without a full rebuild.
@@ -60,20 +57,12 @@ export async function generateMetadata({
   if (!privateEvent || !privateEvent.published)
     return { title: "Private Event Not Found", robots: { index: false, follow: true } };
 
+  const seo = privateEventSeo(privateEvent);
   return buildMetadata({
     path: `/private-events/${privateEvent.slug}`,
-    title: privateEvent.metaTitle || privateEvent.title,
-    description: resolveDescription(
-      privateEvent.metaDescription,
-      privateEvent.shortDescription,
-      privateEvent.caption,
-      privateEvent.description,
-    ),
-    image: resolveOgImage(
-      privateEvent.ogImage,
-      privateEvent.bannerImage,
-      privateEvent.image,
-    ),
+    title: seo.title.value,
+    description: seo.description.value,
+    image: seo.image.value,
     imageAlt: privateEvent.title,
   });
 }
@@ -85,6 +74,10 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
 
   const [faqs, articles] = await Promise.all([getFaqs("private_event", slug), getArticleRows(3)]);
 
+  // The same resolution generateMetadata above uses, so the Service node and
+  // the <title>/<meta> can't describe this page differently.
+  const seo = privateEventSeo(privateEvent);
+
   return (
     <>
       <JsonLd
@@ -92,13 +85,8 @@ export default async function PrivateEventPage({ params }: { params: Promise<{ s
           privateEvent,
           faqs,
           path: `/private-events/${privateEvent.slug}`,
-          name: privateEvent.metaTitle?.trim() || privateEvent.title,
-          description: resolveDescription(
-            privateEvent.metaDescription,
-            privateEvent.shortDescription,
-            privateEvent.caption,
-            privateEvent.description,
-          ),
+          name: seo.title.value,
+          description: seo.description.value,
         })}
       />
       <PrivateEventBanner

@@ -5,12 +5,22 @@ import { EventForm } from "@/components/admin/EventForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
 import { EditHeader, Card } from "@/components/admin/PageHeader";
 import { updateEventAction, deleteEventAction } from "../actions";
+import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
+import { eventSeo } from "@/lib/seo/entities";
 
 export default async function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const admin = await requireAdmin();
   const [event, venues, categories, talents] = await Promise.all([
-    prisma.event.findUnique({ where: { id }, include: { talents: { select: { id: true } } } }),
+    prisma.event.findUnique({
+      where: { id },
+      include: {
+        talents: { select: { id: true } },
+        // The venue is part of the event's resolved title, and its
+        // published state decides whether this event has a public page.
+        venue: { select: { name: true, published: true } },
+      },
+    }),
     prisma.venue.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     prisma.eventCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
     prisma.talent.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, status: true } }),
@@ -35,6 +45,21 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
           <ConfirmDeleteButton action={deleteEventAction.bind(null, id)} label="Delete event" />
         </div>
       </Card>
+
+      <div className="mt-6">
+        <Card>
+          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
+          <SeoDetailsPanel
+            seo={eventSeo(event)}
+            publicPath={`/events/${event.slug}`}
+            unavailableReason={
+              event.venue && !event.venue.published
+                ? "This event's venue is unpublished, so the event has no public page yet."
+                : undefined
+            }
+          />
+        </Card>
+      </div>
     </div>
   );
 }
