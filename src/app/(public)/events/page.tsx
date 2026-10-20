@@ -1,7 +1,7 @@
 import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { publishedVenueScope } from "@/lib/venue-scope";
+import { upcomingEventWhere } from "@/lib/event-scope";
 import { getArticleRows } from "@/lib/articles";
 import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
@@ -27,13 +27,18 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("events");
 
 export default async function EventsPage() {
+  // One "now" for the whole render, so the grid and the calendar can't land on
+  // opposite sides of a midnight.
+  const now = new Date();
+
   const [settings, articles, events, venues, categories] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
-    // `active: false` events are retired: they drop out of the calendar, the
-    // Upcoming grid, and the featured slot, but keep a reachable detail page.
+    // Finished events — retired by hand, or past their last day — drop out of
+    // the calendar, the Upcoming grid, and the featured slot, but keep a
+    // reachable detail page.
     prisma.event.findMany({
-      where: { active: true, ...publishedVenueScope },
+      where: upcomingEventWhere(now),
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },

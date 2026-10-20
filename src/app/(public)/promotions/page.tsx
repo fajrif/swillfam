@@ -1,7 +1,7 @@
 import { staticPageMetadata } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { publishedVenueScope } from "@/lib/venue-scope";
+import { livePromotionWhere } from "@/lib/promotion-scope";
 import { getArticleRows } from "@/lib/articles";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
@@ -25,8 +25,9 @@ export const generateMetadata = () => staticPageMetadata("promotions");
 export default async function PromotionsPage() {
   const [articles, promotions, venues, categories] = await Promise.all([
     getArticleRows(3),
+    // Expired offers 301 to this page, so a card here would link to a redirect.
     prisma.promotion.findMany({
-      where: publishedVenueScope,
+      where: livePromotionWhere(new Date()),
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },

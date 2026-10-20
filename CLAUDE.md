@@ -256,6 +256,59 @@ disagreed precisely because they were two fields.
 - A new schema-feeding field needs the column, the form field, the `parse()` line, *and* a line in
   the resource's `VenueDetails`-style read-only view where one exists — a field the admin can't
   see the saved value of gets filled in wrong.
+- **The recap video URL is parsed, never passed through.** `parseVideoUrl()` (`src/lib/video.ts`)
+  turns whatever the admin pasted into either a player `embedUrl` or a file `contentUrl`, and both
+  `EventRecapVideo`'s `<iframe src>` and the `VideoObject`'s `embedUrl` come from that one call.
+  `VideoObject.embedUrl` has to be a *player* URL — a `youtube.com/watch?v=` link is not one — and
+  a URL the function can't read returns `null`, which is what makes the section and the markup
+  appear and vanish together.
+
+## Expiry: what "over" means (`event-scope.ts`, `promotion-scope.ts`)
+
+Admin-typed dates land in Postgres as **UTC midnight** and mean a calendar day, so "has it passed?"
+is a day comparison through `startOfUtcDay()` (`src/lib/date.ts`) — a row is current for the whole
+of its final day. Three rules, each stated in exactly one place:
+
+- **An event is over when an administrator retired it *or* its last day has gone by.** The date
+  half is not optional: both seeded one-off events were still flagged `active` months after they
+  ran, which left them sitting in "Upcoming" and on the calendar. `RECURRING` nights have no last
+  day and end only by hand. Use `upcomingEventWhere(now)` in any query feeding a list that says
+  upcoming / next / current (`/events`, the home calendar, `/experience`, a venue's "What's Coming
+  Next", a talent's "Upcoming Events", related events), `pastEventWhere(now)` for "Past Editions",
+  and `isPastEvent(event, now)` for a row already fetched.
+- **A finished event keeps its page.** It stays a 200 with a "Past Event" stamp, and its reserve CTA
+  becomes "Watch the Recap" when there is a recap to point at — never a redirect, never a 404.
+  `generateStaticParams` and `sitemap.ts` therefore do *not* filter events by date.
+- **An expired promotion 301s to `/promotions`**, from `src/proxy.ts`. It is there and not in the
+  page because `permanentRedirect()` emits 308 with no way to choose the code, while the brief, the
+  redirect map and the SEO team's curl checks all specify 301 — the same reason `next.config.ts`
+  writes `statusCode: 301` instead of `permanent: true`. Deciding it in the proxy also evaluates it
+  per request against the real clock instead of freezing it into a prerendered page. An unknown slug
+  is left to 404; redirecting it would be a soft 404. Everything that could link to one —
+  `livePromotionWhere(now)` in the listing, the sitemap, `generateStaticParams`, a venue's "Current
+  Offers", `/experience`, "More Offers To Explore" — filters expired rows out, because a link to a
+  redirect is what a crawl reports.
+
+## Headings and landmarks
+
+- **One `<h1>` per page, naming the page's subject.** A venue's H1 is `venue.name`, not its
+  `heroTitle` tagline; `HeroTitle` (`src/components/shared/HeroTitle.tsx`) holds that rule for the
+  venue and category pages. Taglines are paragraphs.
+- **One `<main>`, one `<header>`, one `<footer>` per page.** The `(public)` layout owns the `<main>`;
+  a component that adds its own gives the page two competing landmarks (`LegalDocument` did).
+  `SiteHeader` renders two bars and `SiteFooter` two rows, but only one of each is the landmark.
+- **Every `<nav>` needs an `aria-label`** — the header renders its links twice (mega-nav + compact
+  panel), so unnamed navigation landmarks are indistinguishable. The browser filter toggles are
+  still `<nav>`s wrapping buttons that don't navigate; a `role="tablist"` would be more honest and
+  is not done.
+- **Don't skip heading levels.** Section headings are `h2` throughout, including the shared promo
+  bands (`DestinationsColumn`, `DestinationsFeatureBand`, `StandForColumnsSection`) — they are
+  top-level sections wherever they appear, so an `h3` there has no `h2` to sit under. Cards are `h3`
+  *inside* a titled section (`OfferCardSection`) and `h2` when they are the page's top-level list
+  (`ArticlesBrowser` on `/guides`).
+- Verify against the built HTML with `<script>` blocks stripped. Next serialises client-component
+  props into `self.__next_f.push(...)`, so text found inside a `<script>` is payload, not rendered
+  markup — that is how the missing FAQ answers hid in Fase 5.
 
 ## Auth (`/admin`)
 
@@ -274,6 +327,9 @@ Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie
   Prisma) gates every `/admin/:path*` page except `/admin/login`: invalid/revoked sessions go to
   login, and operators are kept inside their allowlist (`OPERATOR_SECTIONS`, own venue, profile).
   It **must live in `src/`** (same level as `app/`) — at the repo root Next silently ignores it.
+  Its matcher also carries `/promotions/:slug`, the one public path it touches, for the expired-offer
+  301 described under "Expiry" above; `proxy()` dispatches on prefix. Keep the matcher tight — every
+  matched path pays for the proxy on every request.
 - `src/lib/admin-auth.ts` — the data-access layer: `getCurrentAdmin` (per-request `cache()`),
   `requireAdmin`/`requireAdministrator`, and operator scoping: `venueWhere` (list filter),
   `assertVenueOwnership` (per-row 404), `resolveVenueId` (forces the venue on write), `lockedVenue`

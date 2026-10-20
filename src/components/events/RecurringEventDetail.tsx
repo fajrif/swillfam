@@ -26,6 +26,7 @@ export function RecurringEventDetail({
   categoryName,
   phone,
   active,
+  recapHref,
 }: {
   name: string;
   slug: string;
@@ -42,6 +43,8 @@ export function RecurringEventDetail({
   categoryName: string | null;
   phone?: string | null;
   active: boolean;
+  /** Set by the caller when a past event has a recap to send people to. */
+  recapHref?: string | null;
 }) {
   return (
     <>
@@ -75,6 +78,7 @@ export function RecurringEventDetail({
                 venueName={venueName}
                 phone={phone}
                 active={active}
+                recapHref={recapHref}
               />
               <ShareButtons url={absoluteUrl(`/events/${slug}`)} title={name} />
             </div>
@@ -116,6 +120,7 @@ export function RecurringEventDetail({
               venueName={venueName}
               phone={phone}
               active={active}
+              recapHref={recapHref}
             />
           </div>
 

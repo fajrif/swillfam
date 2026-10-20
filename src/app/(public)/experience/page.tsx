@@ -1,7 +1,8 @@
 import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { publishedVenueScope } from "@/lib/venue-scope";
+import { upcomingEventWhere } from "@/lib/event-scope";
+import { livePromotionWhere } from "@/lib/promotion-scope";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
@@ -32,14 +33,16 @@ export default async function ExperiencePage() {
   const [settings, articles, promotions, events] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
+    // Feeds "Current Promotions" — expired ones 301 away.
     prisma.promotion.findMany({
-      where: publishedVenueScope,
+      where: livePromotionWhere(new Date()),
       orderBy: { startDate: "desc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },
     }),
+    // Feeds "Upcoming Events", so finished ones are out.
     prisma.event.findMany({
-      where: { active: true, ...publishedVenueScope },
+      where: upcomingEventWhere(new Date()),
       orderBy: { startDate: "asc" },
       take: 3,
       include: { venue: { select: { name: true, logo: true } } },

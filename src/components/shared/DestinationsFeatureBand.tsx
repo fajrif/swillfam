@@ -28,9 +28,9 @@ export function DestinationsFeatureBand({
           {/* Right column (Explore Events by default; Explore Promotions on promo pages) */}
           <div className="flex flex-col justify-between gap-4 p-4 lg:border-l lg:border-sf-border/40">
             <div className="flex flex-col gap-4">
-              <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
+              <h2 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 {rightTitle}
-              </h3>
+              </h2>
               <p className="font-inter leading-relaxed">{rightBody}</p>
             </div>
             <SpecularButton href={rightCtaHref} size="lg" radius={30} className="w-fit">

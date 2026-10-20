@@ -8,6 +8,7 @@ import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
+import { HeroTitle } from "@/components/shared/HeroTitle";
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 import {
   EventSectionWithImage,
@@ -19,6 +20,8 @@ import { FaqSection } from "@/components/shared/FaqSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
 import { formatEventSchedule } from "@/lib/event-calendar";
+import { upcomingEventWhere } from "@/lib/event-scope";
+import { livePromotionWhere } from "@/lib/promotion-scope";
 import { venueHoursText } from "@/lib/opening-hours";
 import { JsonLd, venueGraph } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -45,8 +48,16 @@ export const getVenueBySlug = cache((slug: string) =>
       hours: { orderBy: { sortOrder: "asc" } },
       segmentGalleries: { orderBy: { createdAt: "asc" } },
       talents: { where: { status: "RESIDENT" }, orderBy: { createdAt: "asc" } },
-      promotions: { orderBy: { startDate: "asc" } },
-      events: { where: { active: true }, orderBy: { startDate: "asc" } },
+      // "Current Offers" shows only offers that are actually current; an
+      // expired one 301s to /promotions, so a card here would be a link to a
+      // redirect.
+      promotions: { where: livePromotionWhere(new Date()), orderBy: { startDate: "asc" } },
+      // "What's Coming Next" has to mean it: finished events are excluded by
+      // the same rule the /events grid uses. `upcomingEventWhere` carries the
+      // venue scope too, which is redundant here (we are inside one published
+      // venue) but harmless, and spelling the rule out a second time is how
+      // the two lists would drift apart.
+      events: { where: upcomingEventWhere(new Date()), orderBy: { startDate: "asc" } },
     },
   }),
 );
@@ -121,9 +132,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
               {venue.category.name}
             </span>
           ) : null}
-          <h1 className="max-w-3xl font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] text-white">
-            {venue.heroTitle ?? venue.name}
-          </h1>
+          <HeroTitle name={venue.name} tagline={venue.heroTitle} />
           {venue.heroDescription ? (
             <p className="max-w-2xl font-inter text-base leading-relaxed text-white md:text-lg">
               {venue.heroDescription}

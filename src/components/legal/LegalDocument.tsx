@@ -56,13 +56,21 @@ export function LegalDocument({
         />
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 relative bg-sf-bg">
+      {/* A div, not <main>: `src/app/(public)/layout.tsx` already renders the
+          page's one <main>, and a nested second one is invalid HTML — it leaves
+          assistive tech and crawlers with two competing "main content"
+          landmarks on the legal pages. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 relative bg-sf-bg">
         <aside className="col-span-1 lg:col-span-4 relative order-2 lg:order-1 hidden md:block">
           <div className="sticky top-32 border border-sf-border bg-sf-surface p-8">
-            <h4 className="font-syne font-semibold text-sm uppercase tracking-widest text-white mb-6 flex items-center gap-2">
+            {/* h2, not h4: this is the label of a top-level landmark, and as
+                the first heading after the page's h1 it was the only reason the
+                legal pages skipped two levels. The size comes from the classes,
+                so the tag change is invisible. */}
+            <h2 className="font-syne font-semibold text-sm uppercase tracking-widest text-white mb-6 flex items-center gap-2">
               <i className="ph-fill ph-list-dashes text-sf-accent" /> Table of Contents
-            </h4>
-            <nav className="flex flex-col gap-4 text-sm font-inter text-sf-body/50">
+            </h2>
+            <nav aria-label="Table of contents" className="flex flex-col gap-4 text-sm font-inter text-sf-body/50">
               {sections.map((section) => (
                 <a
                   key={section.id}
@@ -114,7 +122,7 @@ export function LegalDocument({
             </button>
           </div>
         </div>
-      </main>
+      </div>
     </>
   );
 }

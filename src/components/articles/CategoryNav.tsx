@@ -35,7 +35,7 @@ export function CategoryNav({
       </div>
 
       {/* Desktop sidebar */}
-      <nav className="hidden flex-col gap-3 self-start lg:sticky lg:top-24 lg:flex">
+      <nav aria-label="Guide categories" className="hidden flex-col gap-3 self-start lg:sticky lg:top-24 lg:flex">
         <Link
           href="/guides"
           scroll={false}

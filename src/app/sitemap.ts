@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { absoluteUrl, siteUrl } from "@/lib/site-url";
 import { STATIC_PAGE_SEO_DEFS } from "@/lib/page-seo-registry";
 import { publishedVenueScope } from "@/lib/venue-scope";
+import { livePromotionWhere } from "@/lib/promotion-scope";
 
 /**
  * Regenerated on the same cadence as the pages it lists.
@@ -68,10 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         where: publishedVenueScope,
         select: { slug: true, updatedAt: true },
       }),
-      // TODO(Fase 7): expired promotions are to 301 to /promotions. Once they
-      // do, exclude them here — a redirected URL may not sit in a sitemap.
+      // Expired offers 301 to /promotions (src/proxy.ts), and a redirected
+      // URL may not sit in a sitemap.
       prisma.promotion.findMany({
-        where: publishedVenueScope,
+        where: livePromotionWhere(new Date()),
         select: { slug: true, updatedAt: true },
       }),
       prisma.talent.findMany({

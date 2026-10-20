@@ -26,9 +26,14 @@ export function DestinationsColumn({
       </div>
       <div className="flex flex-1 flex-col justify-between gap-4">
         <div className="flex flex-col gap-4">
-          <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
+          {/* h2: these promo bands are top-level sections wherever they
+              appear and have no heading of their own, so an h3 here had
+              no h2 to sit under — on /talents, /guides and /exclusive it
+              was the page's first heading after the h1. The size lives in
+              the classes, so the level change is invisible. */}
+          <h2 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
             Destinations with Distinct Personalities
-          </h3>
+          </h2>
           <p className="mb-5 font-inter leading-relaxed">
             Every SwillFam venue has its own concept and atmosphere. From dining and social spaces to
             nightlife and events, each offers a unique experience while reflecting the SwillFam

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
+import { upcomingEventWhere } from "@/lib/event-scope";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
 import { Reveal } from "@/components/Reveal";
@@ -77,7 +78,9 @@ export default async function TalentSlugPage({
   const [venueEvents, moreTalents, articles] = await Promise.all([
     talent.venueId
       ? prisma.event.findMany({
-          where: { venueId: talent.venueId },
+          // The section below is headed "Upcoming Events with …", and this
+          // query used to filter neither date nor `active`.
+          where: { venueId: talent.venueId, ...upcomingEventWhere(new Date()) },
           orderBy: { startDate: "asc" },
           take: 3,
           include: { venue: { select: { name: true, logo: true } } },

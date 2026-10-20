@@ -15,7 +15,7 @@ export function ExclusiveNav({
   onChange: (tab: ExclusiveTab) => void;
 }) {
   return (
-    <nav className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+    <nav aria-label="Exclusive content" className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
       {TABS.map((tab) => (
         <button
           key={tab}

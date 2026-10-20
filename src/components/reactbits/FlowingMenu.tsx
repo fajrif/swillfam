@@ -185,7 +185,12 @@ export function FlowingMenu({
 }: FlowingMenuProps) {
   return (
     <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
-      <nav className="menu">
+      {/* A div, not the upstream <nav>: the only use of this component is
+          /about's "What We Stand For", whose items are brand values pointing at
+          "#" — an animated list, not navigation. As a <nav> it added a third,
+          unnamed `navigation` landmark to that page. The CSS keys off `.menu`,
+          so nothing moves. */}
+      <div className="menu">
         {items.map((item, idx) => (
           <MenuItem
             key={idx}
@@ -197,7 +202,7 @@ export function FlowingMenu({
             borderColor={borderColor}
           />
         ))}
-      </nav>
+      </div>
     </div>
   );
 }

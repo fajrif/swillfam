@@ -73,7 +73,7 @@ export function TalentsBrowser({
     <section className="py-16 lg:py-24">
       <Container className="flex flex-col gap-10">
         {/* VENUES / CATEGORIES toggle */}
-        <nav className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
+        <nav aria-label="Group talents by" className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           {(["venues", "categories"] as Mode[]).map((m) => (
             <button
               key={m}
