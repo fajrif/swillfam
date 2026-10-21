@@ -10,17 +10,18 @@ export function OurStorySection() {
         <div className="flex flex-col gap-2">
           <p className="font-inter text-lg font-thin text-white">Our Story</p>
           <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white mr-2">
-            More Than a Hospitality Group
+            One Family, Many Rooms
           </h2>
         </div>
 
-        {/* Row 2: image + story text, "Not simply..." aligned to the image top */}
+        {/* Row 2: image + story text, lead line aligned to the image top */}
         <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-          <div className="relative aspect-[683/547] w-full overflow-hidden border border-sf-border/30">
+          {/* Portrait source (2:3) — 4:5 keeps it close to uncropped. */}
+          <div className="relative aspect-[4/5] w-full overflow-hidden border border-sf-border/30">
             <ParallaxImage>
               <Image
-                src="/about/our-story.png"
-                alt="A SwillFam venue at night"
+                src="/about/one-family-many-rooms.webp"
+                alt="Guests raising shots together across a SwillFam bar"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
@@ -30,26 +31,20 @@ export function OurStorySection() {
 
           <div className="flex flex-col gap-6 font-inter">
             <p className="font-syne text-[clamp(1.75rem,3vw,40px)] font-semibold leading-tight italic">
-              Not simply venues.
-              <br />
-              Not simply events.
+              It all started from a hip-hop bar in 2018.
             </p>
             <p className="leading-relaxed">
-              Every SwillFam venue started the same way, with a gap we noticed in Jakarta&apos;s
-              dining and nightlife scene. Too many spaces felt interchangeable, built to a formula
-              rather than a feeling. So we set out to do it differently, treating each new concept as
-              its own world, shaped by its own music, menu, and mood, rather than a copy-paste of what
-              came before.
+              SwillFam began with a single bar and a simple idea: build a place that we, and the
+              people around us, could call home. A place that&apos;s built to a feeling rather than
+              a formula.
             </p>
             <p className="leading-relaxed">
-              That approach took us from a single hip-hop bar to a growing group of restaurants,
-              cocktail bars, and clubs across Jakarta, each with a distinct identity but the same
-              underlying standard: nothing generic, nothing half-considered. Chefs, bartenders, and
-              designers were given room to push their own ideas, which is why no two SwillFam spaces
-              look or feel alike.
+              That first bar led to a second venue, then a third. Today the family spans
+              restaurants, cocktail bars and clubs across Jakarta, from a cafe to an underground
+              club. Each has its own identity, and none is a copy of the last.
             </p>
             <p className="leading-relaxed">
-              What hasn&apos;t changed is the reason people keep returning, spaces that feel made for
+              What hasn&apos;t changed is why people keep coming back: spaces that feel made for
               them, in a city that never runs out of reasons to go out.
             </p>
           </div>

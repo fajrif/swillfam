@@ -4,22 +4,22 @@ import type { ArticleRow } from "@/components/shared/ArticleListSection";
 
 export const PRINCIPLES: TrustedCard[] = [
   {
-    img: "/about/philosophy-1.png",
-    title: "Creativity First",
+    img: "/about/philosophy-room.webp",
+    title: "Every Room Has a Point of View",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "We don\u2019t open venues to fill a gap in the market. Each one begins with a clear idea, whether that\u2019s a cuisine, a sound or a mood, and commits to it completely, from the playlist to the glassware.",
   },
   {
-    img: "/about/phylosophy-2.png",
-    title: "Community Driven",
+    img: "/about/philosophy-place.webp",
+    title: "Every Detail Earns Its Place",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Every drink on the menu, every track in the set, every seat on the floor has to answer one question: does it earn its place in the room? If it doesn\u2019t, it doesn\u2019t stay.",
   },
   {
-    img: "/about/phylosophy-3.png",
-    title: "Excellence in Every Detail",
+    img: "/about/philosophy-people.webp",
+    title: "It\u2019s Always About the People",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "That means our regulars, our bartenders, our chefs, and our DJs. The best nights happen when everyone on both sides of the bar feels they belong. That\u2019s what we build for first.",
   },
 ];
 
@@ -66,4 +66,3 @@ export const PRESS_ITEMS: ArticleRow[] = [
 
 export const STAND_WORDS_TOP = ["Experience", "Innovation"];
 export const STAND_WORDS_BOTTOM = ["Quality", "Growth"];
-export const BRAND_RESOURCES = ["Logos Assets", "Brand Guideline", "Lorem Ipsum", "Lorem Ipsum"];

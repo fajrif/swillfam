@@ -1,6 +1,4 @@
 import { Container } from "@/components/shared/Container";
-import { SpecularButton } from "@/components/reactbits/SpecularButton";
-import { BRAND_RESOURCES } from "./data";
 
 export function BrandResourcesSection() {
   return (
@@ -10,25 +8,11 @@ export function BrandResourcesSection() {
           Brand Resources &amp; Media Downloads
         </h2>
 
-        <div className="flex flex-col">
-          <p className="mb-10 font-inter leading-relaxed">
-            Access official SwillFam brand assets for media, partners, collaborators, and event
-            organizers. Download approved logos, brand guidelines, venue imagery, press kits, and
-            other resources for editorial and promotional use.
-          </p>
-
-          {BRAND_RESOURCES.map((label, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between gap-4 border-t border-sf-border/50 py-6 last:border-b"
-            >
-              <span className="font-syne text-2xl text-white">{label}</span>
-              <SpecularButton href="#" size="lg" radius={30}>
-                Download Here
-              </SpecularButton>
-            </div>
-          ))}
-        </div>
+        <p className="font-inter leading-relaxed">
+          Access official SwillFam brand assets for media, partners, collaborators, and event
+          organizers. Download approved logos, brand guidelines, venue imagery, press kits, and
+          other resources for editorial and promotional use.
+        </p>
       </Container>
     </section>
   );

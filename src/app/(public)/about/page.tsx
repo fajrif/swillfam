@@ -2,7 +2,7 @@ import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
-import { GlassRefractionBackground } from "@/components/reactbits/GlassRefractionBackground";
+import Image from "next/image";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { SwillfamSpotlightSection } from "@/components/venues";
@@ -15,7 +15,6 @@ import {
   WhatWeStandForFlowingSection,
   StandForColumnsSection,
   CareersSection,
-  BrandResourcesSection,
   PRINCIPLES,
 } from "@/components/about";
 
@@ -32,7 +31,7 @@ export default async function About() {
   return (
     <StickyHero
       backdrop={
-        <GlassRefractionBackground className="absolute inset-0" />
+        <Image src="/about/hero.webp" alt="" fill className="object-cover" priority />
       }
       heroContent={
         <Container className="relative z-10 flex h-full flex-col justify-end pb-12">
@@ -54,8 +53,9 @@ export default async function About() {
       <Reveal>
         <CardImageInfoSection
           title="Our Philosophy"
-          lead="Rooted in a few core factors that shape every SwillFam venue, no matter how different they feel from one another."
+          lead="Every venue is different. These three things never change."
           align="center"
+          imageFit="cover"
           cards={PRINCIPLES}
         />
       </Reveal>
@@ -83,10 +83,6 @@ export default async function About() {
           articles={articles}
           ctaLabel={null}
         />
-      </Reveal>
-
-      <Reveal>
-        <BrandResourcesSection />
       </Reveal>
     </StickyHero>
   );

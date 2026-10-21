@@ -4,6 +4,7 @@ import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ShareButtons } from "@/components/shared/ShareButtons";
 import { formatDateRange } from "@/lib/date";
+import { formatHour } from "@/lib/event-calendar";
 import { whatsappHref } from "@/lib/whatsapp";
 import { venueHoursText } from "@/lib/opening-hours";
 import { absoluteUrl } from "@/lib/site-url";
@@ -56,6 +57,13 @@ export function PromotionDetailTop({
             <div className="flex gap-2">
               <dt className="font-semibold text-white">Valid:</dt>
               <dd>{formatDateRange(promotion.startDate, promotion.endDate)}</dd>
+            </div>
+            {/* The offer's own daily window — not the venue's opening hours below. */}
+            <div className="flex gap-2">
+              <dt className="font-semibold text-white">Time:</dt>
+              <dd>
+                {formatHour(promotion.startHour)} – {formatHour(promotion.endHour)}
+              </dd>
             </div>
           </dl>
 
