@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { TalentForm } from "@/components/admin/TalentForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
-import { EditHeader, Card } from "@/components/admin/PageHeader";
+import { EditHeader } from "@/components/admin/PageHeader";
 import { updateTalentAction, deleteTalentAction } from "../actions";
+import { EditPageTabs } from "@/components/admin/EditPageTabs";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { talentSeo } from "@/lib/seo/entities";
 import { getImageAltRecord } from "@/lib/image-alt";
@@ -28,30 +29,37 @@ export default async function EditTalentPage({ params }: { params: Promise<{ id:
   return (
     <div>
       <EditHeader title="Edit Talent" backHref="/admin/talents" />
-      <Card>
-        <TalentForm
-          altsByPath={altsByPath} action={updateTalentAction.bind(null, id)} talent={talent} venues={venues} categories={categories} />
-        <div className="mt-6 pt-6 border-t border-zinc-200">
-          <ConfirmDeleteButton action={deleteTalentAction.bind(null, id)} label="Delete talent" />
-        </div>
-      </Card>
-
-      <div className="mt-6">
-        <Card>
-          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
-          <SeoDetailsPanel
-            seo={talentSeo(talent)}
-            publicPath={`/talents/${talent.slug}`}
-            unavailableReason={
-              talent.status !== "RESIDENT"
-                ? "Only resident talents get a public page, so this one has none yet."
-                : talent.venue && !talent.venue.published
-                  ? "This talent's venue is unpublished, so the talent has no public page yet."
-                  : undefined
-            }
-          />
-        </Card>
-      </div>
+      <EditPageTabs
+        details={
+          <>
+            <TalentForm
+              altsByPath={altsByPath}
+              action={updateTalentAction.bind(null, id)}
+              talent={talent}
+              venues={venues}
+              categories={categories}
+            />
+            <div className="mt-6 pt-6 border-t border-zinc-200">
+              <ConfirmDeleteButton action={deleteTalentAction.bind(null, id)} label="Delete talent" />
+            </div>
+          </>
+        }
+        seo={
+          <>
+            <SeoDetailsPanel
+              seo={talentSeo(talent)}
+              publicPath={`/talents/${talent.slug}`}
+              unavailableReason={
+                talent.status !== "RESIDENT"
+                  ? "Only resident talents get a public page, so this one has none yet."
+                  : talent.venue && !talent.venue.published
+                    ? "This talent's venue is unpublished, so the talent has no public page yet."
+                    : undefined
+              }
+            />
+          </>
+        }
+      />
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import { cache } from "react";
+import { ReactLenis } from "lenis/react";
 import { prisma } from "@/lib/prisma";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { getSiteSettings } from "@/lib/site-settings";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { orgGraph } from "@/lib/schema";
+import { ScrollToTopOnNavigate } from "@/components/shared/ScrollToTopOnNavigate";
+import "lenis/dist/lenis.css";
 
 /**
  * Published venues, for `Organization.subOrganization`.
@@ -41,6 +44,12 @@ export default async function PublicLayout({ children }: { children: React.React
 
   return (
     <main className="min-h-dvh bg-sf-bg font-inter text-sf-body">
+      {/* Lenis owns scroll smoothing on the public site only — the admin is
+          plain scrolling, and Lenis's wheel hijack made its scrollable code
+          blocks unreachable. CSS scroll-behavior:smooth is deliberately not
+          used alongside it (the two fight each other). */}
+      <ReactLenis root options={{ anchors: true }} />
+      <ScrollToTopOnNavigate />
       <JsonLd data={orgGraph({ settings, venueSlugs })} />
       <div className="relative">
         <SiteHeader settings={settings} />

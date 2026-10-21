@@ -3,8 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin, assertVenueOwnership, lockedVenue } from "@/lib/admin-auth";
 import { EventForm } from "@/components/admin/EventForm";
 import { ConfirmDeleteButton } from "@/components/admin/ConfirmDeleteButton";
-import { EditHeader, Card } from "@/components/admin/PageHeader";
+import { EditHeader } from "@/components/admin/PageHeader";
 import { updateEventAction, deleteEventAction } from "../actions";
+import { EditPageTabs } from "@/components/admin/EditPageTabs";
 import { SeoDetailsPanel } from "@/components/admin/SeoDetailsPanel";
 import { eventSeo } from "@/lib/seo/entities";
 import { getImageAltRecord } from "@/lib/image-alt";
@@ -33,36 +34,38 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
   return (
     <div>
       <EditHeader title="Edit Event" backHref="/admin/events" />
-      <Card>
-        <EventForm
-          altsByPath={altsByPath}
-          action={updateEventAction.bind(null, id)}
-          event={event}
-          venues={venues}
-          categories={categories}
-          talents={talents}
-          selectedTalentIds={event.talents.map((t) => t.id)}
-          operatorVenue={lockedVenue(admin)}
-        />
-        <div className="mt-6 pt-6 border-t border-zinc-200">
-          <ConfirmDeleteButton action={deleteEventAction.bind(null, id)} label="Delete event" />
-        </div>
-      </Card>
-
-      <div className="mt-6">
-        <Card>
-          <h2 className="mb-4 text-sm font-semibold text-zinc-900">SEO Details</h2>
-          <SeoDetailsPanel
-            seo={eventSeo(event)}
-            publicPath={`/events/${event.slug}`}
-            unavailableReason={
-              event.venue && !event.venue.published
-                ? "This event's venue is unpublished, so the event has no public page yet."
-                : undefined
-            }
-          />
-        </Card>
-      </div>
+      <EditPageTabs
+        details={
+          <>
+            <EventForm
+              altsByPath={altsByPath}
+              action={updateEventAction.bind(null, id)}
+              event={event}
+              venues={venues}
+              categories={categories}
+              talents={talents}
+              selectedTalentIds={event.talents.map((t) => t.id)}
+              operatorVenue={lockedVenue(admin)}
+            />
+            <div className="mt-6 pt-6 border-t border-zinc-200">
+              <ConfirmDeleteButton action={deleteEventAction.bind(null, id)} label="Delete event" />
+            </div>
+          </>
+        }
+        seo={
+          <>
+            <SeoDetailsPanel
+              seo={eventSeo(event)}
+              publicPath={`/events/${event.slug}`}
+              unavailableReason={
+                event.venue && !event.venue.published
+                  ? "This event's venue is unpublished, so the event has no public page yet."
+                  : undefined
+              }
+            />
+          </>
+        }
+      />
     </div>
   );
 }
