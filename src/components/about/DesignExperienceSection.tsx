@@ -8,20 +8,20 @@ export function DesignExperienceSection() {
       <Container className="flex flex-col gap-12">
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="flex flex-col gap-2">
-            <p className="font-inter text-lg font-thin text-white">Philosophy &amp; Experience</p>
+            <p className="font-inter text-lg font-thin text-white">The Experience</p>
             <h2 className="font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
-              We Design Experiences, Not Just Venues
+              Every Night Feels Different
             </h2>
           </div>
-          <div className="flex items-center">
-            <p className="text-xl font-inter leading-relaxed">
-              At SwillFam, every venue is judged by one question: does it earn its place in the room?
-              That belief shapes everything from a menu&apos;s first draft to the last detail of a
-              room&apos;s lighting, nothing added just to fill space, nothing left generic because it
-              was easier. Concepts are built from the ground up rather than adapted from a template,
-              which is why a night at Atsumaru feels nothing like a night at Zoo, even though both
-              carry the same underlying standard, craft, character, and consistency in every room we
-              build.
+          <div className="flex flex-col justify-center gap-6 font-inter text-xl leading-relaxed">
+            <p>
+              A night at Kilo Cafe feels nothing like a night at Zoo, and it shouldn&apos;t. One is
+              unhurried plates and long conversations; the other is a packed floor that runs late.
+            </p>
+            <p>
+              What carries across every room is how it feels to walk in: a team that&apos;s glad
+              you&apos;re here, a space that&apos;s ready for you, and a night that&apos;s been
+              thought through before you arrived. Different venues, the same sense of coming home.
             </p>
           </div>
         </div>
@@ -29,8 +29,8 @@ export function DesignExperienceSection() {
         <div className="relative aspect-[1389/570] w-full overflow-hidden border border-sf-border/30">
           <ParallaxImage>
             <Image
-              src="/about/malachi-clark.png"
-              alt="A SwillFam night in motion"
+              src="/about/the-experience.webp"
+              alt="A DJ spraying champagne over a packed dance floor"
               fill
               sizes="(max-width: 1440px) 100vw, 1390px"
               className="object-cover"

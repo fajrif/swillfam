@@ -30,12 +30,19 @@ export function CardImageInfoSection({
   lead = DEFAULT_LEAD,
   cards = DEFAULT_CARDS,
   align = "center",
+  imageFit = "contain",
 }: {
   title?: string;
   /** Pass `null` to render the heading with no lead — omitting it uses the default copy. */
   lead?: string | null;
   cards?: TrustedCard[];
   align?: "left" | "center";
+  /**
+   * `contain` (default) is for the icon-style artwork the home page uses: shown
+   * whole, in a square. `cover` is for photographs, which crop to a 4:5 frame
+   * instead of letterboxing inside the card.
+   */
+  imageFit?: "contain" | "cover";
 }) {
   return (
     <section className="py-16 lg:py-24">
@@ -49,13 +56,19 @@ export function CardImageInfoSection({
               className="flex h-full flex-col items-center gap-6 border border-sf-border/50 bg-sf-surface p-8 text-center"
             >
               {card.img ? (
-                <div className="relative aspect-square w-full max-w-[260px]">
+                <div
+                  className={
+                    imageFit === "cover"
+                      ? "relative aspect-[4/5] w-full overflow-hidden"
+                      : "relative aspect-square w-full max-w-[260px]"
+                  }
+                >
                   <ContentImage
                     src={card.img}
                     alt={card.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-contain"
+                    className={imageFit === "cover" ? "object-cover" : "object-contain"}
                   />
                 </div>
               ) : null}
