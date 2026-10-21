@@ -371,6 +371,15 @@ with the files; a blank alt deletes the row rather than storing `""`, because "u
 - `altsByPath` reaches the forms from each `[id]/page.tsx`, never from the dashboard layout:
   layouts don't re-render on client navigation, so an alt saved a moment ago would come back stale.
 
+**Page-level galleries that aren't a record per photo** (currently only "Moments We've Hosted" on
+`/private-events`) are one JSON array of paths in a `SiteSetting` row, edited from a single admin
+page with a multi-image `ImageManager` (`/admin/private-event-moments`, administrator-only). A
+list that is one ordered set for the whole page doesn't earn a table, and a single uploader beats
+creating photos one form at a time. `src/lib/private-event-moments.ts` owns the key and
+`parseMoments()`, which degrades a malformed value to "no photos". An empty list hides the section.
+`prisma/seed-private-event-moments.ts` (in `seed:all`) seeds the original three photos and never
+touches the row once it exists — including when the admin has emptied it.
+
 ## Auth (`/admin`)
 
 Custom (not Auth.js): bcrypt password hash + a `jose`-signed httpOnly JWT cookie

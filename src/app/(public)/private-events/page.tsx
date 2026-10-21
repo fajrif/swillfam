@@ -15,6 +15,9 @@ import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 import { getFaqs } from "@/lib/faqs";
+import { getSiteSettings } from "@/lib/site-settings";
+import { withAlts } from "@/lib/image-alt";
+import { MOMENTS_SETTING_KEY, parseMoments } from "@/lib/private-event-moments";
 import { JsonLd, privateEventGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (FAQs, articles) — revalidate periodically
@@ -24,14 +27,20 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("private-events");
 
 export default async function PrivateEventsPage() {
-  const [privateEvents, faqs, articles] = await Promise.all([
+  const [privateEvents, faqs, articles, settings] = await Promise.all([
     prisma.privateEvent.findMany({
       where: { published: true },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     }),
     getFaqs("private_events"),
     getArticleRows(3),
+    getSiteSettings(),
   ]);
+
+  const moments = await withAlts(
+    parseMoments(settings[MOMENTS_SETTING_KEY]),
+    (_, i) => `Moment we've hosted (${i + 1})`,
+  );
 
   return (
     <StickyHero
@@ -61,9 +70,12 @@ export default async function PrivateEventsPage() {
         <EventTypesSection privateEvents={privateEvents} />
       </Reveal>
 
-      <Reveal>
-        <MomentsCarousel />
-      </Reveal>
+      {/* Managed in the admin; an empty list hides the section. */}
+      {moments.length > 0 ? (
+        <Reveal>
+          <MomentsCarousel images={moments} />
+        </Reveal>
+      ) : null}
 
       <Reveal>
         <StandForColumnsSection />
