@@ -173,6 +173,9 @@ function. `resolveDescription`/`resolveOgImage` no longer exist; `resolve.ts` is
 - Every model with `metaTitle`/`metaDescription` also has `ogImage`, edited through the shared
   `SeoFields` component. Its create/update actions call `reconcileSingleImage` for it and its
   delete passes `current.ogImage` to `collectImagePaths`, same as any other image field.
+- The panel's **Structured data** section is hidden unless `ADMIN_SHOW_STRUCTURED_DATA="true"`
+  (server-only, read per request, so a restart is enough — no rebuild). It only hides the preview;
+  the JSON-LD on the public pages is unaffected.
 - `src/app/admin/layout.tsx` exists only to mark the whole admin section `noindex, nofollow`.
 
 **`src/app/sitemap.ts` must stay in sync with the routes.** A new public route needs an entry

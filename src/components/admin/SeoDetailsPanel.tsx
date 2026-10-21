@@ -19,6 +19,14 @@ import { JsonLdPreview } from "./JsonLdPreview";
  * something different from what the page emits, because there is nothing else
  * for it to read.
  */
+/**
+ * The "Structured data" section (the live JSON-LD preview) is switched off
+ * unless `ADMIN_SHOW_STRUCTURED_DATA="true"`. It is server-only and read per
+ * request, so turning it on is an env edit and a restart, not a rebuild. The
+ * markup itself is unaffected: this only decides whether the admin can see it.
+ */
+const showStructuredData = () => process.env.ADMIN_SHOW_STRUCTURED_DATA === "true";
+
 export function SeoDetailsPanel({
   seo,
   publicPath,
@@ -55,17 +63,19 @@ export function SeoDetailsPanel({
         </div>
       </section>
 
-      <section className="space-y-3 border-t border-zinc-200 pt-6">
-        <Heading
-          title="Structured data"
-          hint="Fetched from the live page, so this is exactly what a crawler receives — not a simulation."
-        />
-        {unavailableReason ? (
-          <p className="text-sm text-zinc-500">{unavailableReason}</p>
-        ) : (
-          <JsonLdPreview path={publicPath} />
-        )}
-      </section>
+      {showStructuredData() && (
+        <section className="space-y-3 border-t border-zinc-200 pt-6">
+          <Heading
+            title="Structured data"
+            hint="Fetched from the live page, so this is exactly what a crawler receives — not a simulation."
+          />
+          {unavailableReason ? (
+            <p className="text-sm text-zinc-500">{unavailableReason}</p>
+          ) : (
+            <JsonLdPreview path={publicPath} />
+          )}
+        </section>
+      )}
     </div>
   );
 }
