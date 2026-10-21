@@ -15,6 +15,8 @@ import { StandForColumnsSection } from "@/components/about";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { getArticleRows } from "@/lib/articles";
 import { JsonLd, merchandiseGraph } from "@/lib/schema";
+import { notFound } from "next/navigation";
+import { isPageHidden } from "@/lib/page-seo-registry";
 
 export const generateMetadata = () => staticPageMetadata("merchandise");
 
@@ -25,6 +27,9 @@ export default async function MerchandisePage({
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
+  // Switched off for now — see HIDDEN_PAGE_KEYS in page-seo-registry.ts.
+  if (isPageHidden("merchandise")) notFound();
+
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 

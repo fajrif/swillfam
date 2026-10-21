@@ -14,13 +14,11 @@ const FOOTER_COLS: { label: string; href: string }[][] = [
     { label: "About", href: "/about" },
     { label: "Venues", href: "/venues" },
     { label: "Events", href: "/events" },
-    { label: "The Swillfam Experience", href: "/experience" },
     { label: "Private Events", href: "/private-events" },
   ],
   [
     { label: "Talents", href: "/talents" },
     { label: "Exclusive", href: "/exclusive" },
-    { label: "Merchandise", href: "/merchandise" },
     { label: "Guides/Journal", href: "/guides" },
     { label: "Contact", href: "/contact" },
   ],

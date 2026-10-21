@@ -147,3 +147,21 @@ export type StaticPageSeoKey = (typeof STATIC_PAGE_SEO_DEFS)[number]["key"];
 export const STATIC_PAGE_SEO_BY_KEY = Object.fromEntries(
   STATIC_PAGE_SEO_DEFS.map((def) => [def.key, def]),
 ) as Record<StaticPageSeoKey, (typeof STATIC_PAGE_SEO_DEFS)[number]>;
+
+/**
+ * Pages that exist in the codebase but are switched off for now.
+ *
+ * A hidden page returns 404 (its route calls `notFound()` through
+ * `isPageHidden`), is left out of the sitemap, and must have every link to it
+ * removed — a link to a 404 is what a crawl reports as broken. Bringing one back
+ * is: delete its key here, restore its links (nav-data.ts, SiteFooter.tsx and
+ * the CTAs listed in the Fase 8 notes in ROADMAP_PLAN.md), and add its line back
+ * to public/llms.txt. Nothing else changes; the page, its components, its
+ * schema builder and its PageSeo row are all still in place.
+ */
+const HIDDEN_PAGE_KEYS: ReadonlySet<StaticPageSeoKey> = new Set<StaticPageSeoKey>([
+  "experience",
+  "merchandise",
+]);
+
+export const isPageHidden = (key: StaticPageSeoKey) => HIDDEN_PAGE_KEYS.has(key);

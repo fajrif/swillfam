@@ -22,6 +22,8 @@ import { StandForColumnsSection } from "@/components/about";
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { JsonLd, experienceGraph } from "@/lib/schema";
+import { notFound } from "next/navigation";
+import { isPageHidden } from "@/lib/page-seo-registry";
 
 // Statically rendered but data-driven (articles) — revalidate periodically so
 // admin edits/seeds show up without a full rebuild.
@@ -30,6 +32,9 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("experience");
 
 export default async function ExperiencePage() {
+  // Switched off for now — see HIDDEN_PAGE_KEYS in page-seo-registry.ts.
+  if (isPageHidden("experience")) notFound();
+
   const [settings, articles, promotions, events] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
