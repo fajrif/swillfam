@@ -5,7 +5,6 @@ import { CategoryVenuesLogoSection, type CategoryVenuesTileData } from "@/compon
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { Experience } from "@/components/home/Experience";
-import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
 import { Hero } from "@/components/home/Hero";
@@ -93,9 +92,6 @@ export default async function Home() {
       ) : null}
       <Reveal>
         <Experience />
-      </Reveal>
-      <Reveal>
-        <CardImageInfoSection />
       </Reveal>
       <Reveal>
         <ArticleListSection articles={articles} />
