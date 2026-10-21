@@ -40,6 +40,7 @@ const ADMINISTRATOR_NAV: NavGroup[] = [
       { href: "/admin/event-types", label: "Event Types" },
       { href: "/admin/private-events", label: "Private Events" },
       { href: "/admin/private-event-occasions", label: "Private Event Occasions" },
+      { href: "/admin/private-event-moments", label: "Private Event Moments" },
       { href: "/admin/private-event-testimonials", label: "Private Event Testimonials" },
     ],
   },

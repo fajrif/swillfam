@@ -1,20 +1,19 @@
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 
-// Archive-page chrome, not per-event data — the DB-backed galleries live on
-// each PrivateEvent and render on its detail page instead.
-const GALLERY = [
-  { src: "/private-events/events-1.png", alt: "A private celebration at a SwillFam venue" },
-  { src: "/private-events/events-2.png", alt: "Guests at a SwillFam private event" },
-  { src: "/private-events/events-3.png", alt: "A corporate function hosted by SwillFam" },
-];
-
-/** "Moments We've Hosted" — preset of the shared GalleryCarousel. */
-export function MomentsCarousel() {
+/**
+ * "Moments We've Hosted" — preset of the shared GalleryCarousel.
+ *
+ * The photos are managed in the admin (Private Event Moments), so this takes
+ * them from the page instead of owning a list. `GalleryCarousel` is a Client
+ * Component and cannot look up stored alt text itself, which is why the page
+ * passes `{ src, alt }` pairs.
+ */
+export function MomentsCarousel({ images }: { images: { src: string; alt: string }[] }) {
   return (
     <GalleryCarousel
       title="Moments We've Hosted"
       description="Explore a selection of celebrations, corporate functions, launches, and special occasions hosted across the SwillFam family of venues."
-      images={GALLERY}
+      images={images}
     />
   );
 }
