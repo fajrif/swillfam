@@ -10,18 +10,93 @@
 #   sudo nginx -t && sudo systemctl reload nginx
 #
 # Reverse proxy for the Next.js app (PM2, listening on 127.0.0.1:3000).
+#
+# ---------------------------------------------------------------------------
+# THIS FILE IS THE PRE-PRODUCTION SHAPE (swillscbd.site).
+#
+# Everything marked [PRE-PROD ONLY] is there to keep an unreleased site out of
+# Google and away from the public, and must be removed on cutover day. The
+# cutover checklist is at the bottom of the file.
+# ---------------------------------------------------------------------------
 
+
+# ===========================================================================
+# 1. Anything that is not a known hostname  ->  nothing.
+#
+# This block catches a request to the bare IP (165.22.49.170) and to any domain
+# whose DNS is pointed here before it has a vhost of its own.
+#
+# It used to proxy the app, which meant the whole pre-production site was
+# readable over plain HTTP at the IP with no password, and served the same
+# pages under a second hostname. `444` closes the connection without a
+# response: no content, no duplicate host, nothing to index.
+# ===========================================================================
 server {
-    # IP-only / no domain yet: `default_server` + `server_name _;` catches any
-    # request that doesn't match another server_name on this box (e.g. a legacy
-    # vhost for a different, dormant app). Let's Encrypt can't issue certs for a
-    # bare IP, so there's no SSL step until a real domain points here.
     listen 80 default_server;
     listen [::]:80 default_server;
     server_name _;
 
+    # Certbot's HTTP-01 challenge has to stay reachable here, or issuing a
+    # certificate for a NEW domain (swillfam.com, on cutover day) fails before
+    # that domain has a server block of its own.
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/html;
+        allow all;
+    }
+
+    location / {
+        return 444;
+    }
+}
+
+
+# ===========================================================================
+# 2. The app, over HTTPS, on the temporary pre-production domain.
+# ===========================================================================
+server {
+    server_name swillscbd.site www.swillscbd.site; # managed by Certbot
+
+    # --- [PRE-PROD ONLY] Password gate -------------------------------------
+    #
+    # Create the password file once:
+    #   sudo apt install -y apache2-utils
+    #   sudo htpasswd -c /etc/nginx/.htpasswd swillfam     # prompts for a password
+    #   sudo htpasswd    /etc/nginx/.htpasswd client       # add more users without -c
+    #
+    # Why this and not just robots.txt: `Disallow:` asks a crawler not to FETCH
+    # a page, which is not the same as asking it not to INDEX one. Google can
+    # list a URL it was never allowed to read - it just shows it without a
+    # snippet - and because it is forbidden to fetch the page it can never see
+    # the `noindex` that would have told it otherwise. A 401 removes the
+    # question: no crawler, scraper or passer-by ever receives content.
+    #
+    # It matters more here than on a normal staging box. swillscbd.site has a
+    # real certificate, and every certificate issued is published to the public
+    # Certificate Transparency logs - which are searchable, and routinely
+    # scraped precisely to find unreleased sites.
+    auth_basic           "SwillFam pre-production";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+
+    # Belt and braces for anything that does get through (a link pasted into a
+    # tool, a share preview, a logged-in browser). `always` is required or nginx
+    # drops the header on 401s and redirects.
+    add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+
+    # Renewal must not need the password.
+    location ^~ /.well-known/acme-challenge/ {
+        auth_basic off;
+        allow all;
+        root /var/www/html;
+    }
+    # --- end [PRE-PROD ONLY] ----------------------------------------------
+
     # Match next.config.ts serverActions.bodySizeLimit (15mb) with headroom.
     client_max_body_size 20m;
+
+    # Do NOT add X-Content-Type-Options / Referrer-Policy / X-Frame-Options /
+    # Permissions-Policy here: since Fase 8 the app sets all four itself in
+    # next.config.ts `headers()`, and setting them again sends each twice.
+    # HSTS is the one header that belongs at this layer - see the cutover notes.
 
     # Static build assets are content-hashed -> browser caches them via this header
     # (nginx isn't running its own cache zone, so no proxy_cache_valid here - it'd be inert).
@@ -56,21 +131,114 @@ server {
         # come back truncated (ERR_CONTENT_LENGTH_MISMATCH on /_next/image, etc).
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        # Required, not optional: the contact form's rate limiter buckets by this
+        # header (3 submissions / 10 min). Without it every visitor shares one
+        # bucket and the fourth message of the day is rejected.
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # Headroom for slower requests (e.g. first-time image optimization runs).
+        # Headroom for slower requests. AVIF encoding (Fase 8) is slower than
+        # WebP on a first, uncached hit for a given image+size.
         proxy_read_timeout 60s;
         proxy_send_timeout 60s;
         proxy_connect_timeout 10s;
     }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/swillscbd.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/swillscbd.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
-# --- Once you have a real domain pointed at this server ---
-# 1. Replace `server_name _;` above with your real domain(s), e.g.:
-#      server_name example.com www.example.com;
-#    (keep or drop `default_server` - harmless either way once server_name matches)
-# 2. sudo apt install -y certbot python3-certbot-nginx
-# 3. sudo certbot --nginx -d example.com -d www.example.com
-#    Certbot rewrites this file in place to add the 443 server block + the
-#    HTTP -> HTTPS redirect. Nothing to do manually after that.
+
+# ===========================================================================
+# 3. http -> https for the pre-production domain (written by Certbot).
+# ===========================================================================
+server {
+    if ($host = www.swillscbd.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    if ($host = swillscbd.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80 ;
+    listen [::]:80 ;
+    server_name swillscbd.site www.swillscbd.site;
+    return 404; # managed by Certbot
+}
+
+
+# ===========================================================================
+# CUTOVER DAY - swillfam.com
+#
+# 1. Certificate for both the apex and www. The www block below cannot serve
+#    its redirect without one:
+#       sudo certbot --nginx -d swillfam.com -d www.swillfam.com
+#
+# 2. Add the blocks below, and delete the two swillscbd.site blocks (or keep
+#    them password-gated - do NOT leave them serving the same content
+#    unprotected, it is a duplicate of the live site).
+#
+# 3. Remove the [PRE-PROD ONLY] password gate and the X-Robots-Tag header.
+#
+# 4. In .env on the server: SITE_INDEXABLE="true".
+#
+# 5. REBUILD. NEXT_PUBLIC_SITE_URL is inlined into the bundle at build time -
+#    it is the base of every canonical, og:url, sitemap URL and JSON-LD @id.
+#    Changing it in .env and restarting does nothing; the old origin stays
+#    baked in. Set NEXT_PUBLIC_SITE_URL="https://swillfam.com", then
+#    `npm run build` and `pm2 restart swillfam`.
+#
+# 6. Verify with the curl block in the deploy guide, especially:
+#       curl -s https://swillfam.com/venues/zoo | grep -o '<link rel="canonical"[^>]*>'
+#    If that still says swillscbd.site, step 5 did not happen.
+#
+# ---------------------------------------------------------------------------
+# server {
+#     listen 80;
+#     listen [::]:80;
+#     server_name swillfam.com www.swillfam.com;
+#     location ^~ /.well-known/acme-challenge/ { root /var/www/html; allow all; }
+#     # One hop, straight to the apex over https - http://www must NOT go via
+#     # https://www first. The brief forbids redirect chains, and
+#     # www.swillfam.com carries 90 referring domains.
+#     location / { return 301 https://swillfam.com$request_uri; }
+# }
+#
+# server {
+#     listen 443 ssl;
+#     listen [::]:443 ssl;
+#     server_name www.swillfam.com;
+#     ssl_certificate     /etc/letsencrypt/live/swillfam.com/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/swillfam.com/privkey.pem;
+#     include /etc/letsencrypt/options-ssl-nginx.conf;
+#     return 301 https://swillfam.com$request_uri;
+# }
+#
+# server {
+#     listen 443 ssl;
+#     listen [::]:443 ssl;
+#     server_name swillfam.com;
+#     ssl_certificate     /etc/letsencrypt/live/swillfam.com/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/swillfam.com/privkey.pem;
+#     include /etc/letsencrypt/options-ssl-nginx.conf;
+#
+#     # The only security header nginx owns - the app sets the other four, and
+#     # only this layer can promise https for the whole host. Add it once the
+#     # certificate is confirmed working; it is hard to walk back.
+#     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+#
+#     client_max_body_size 20m;
+#
+#     # ... same three location blocks as the swillscbd.site server above ...
+# }
+#
+# DO NOT add a trailing-slash redirect at this layer. Fase 1 disabled Next's
+# built-in one and re-registered it as the LAST rule, specifically so
+# /brands/zoo/ reaches /venues/zoo in a single hop. An nginx-level one puts a
+# second hop in front of it, which is the chain the brief prohibits.
+# ===========================================================================
