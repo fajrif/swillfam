@@ -40,9 +40,6 @@ export function ContinueExperience() {
                   hour feels like the right one.
                 </p>
               </div>
-              <SpecularButton href="/experience" size="lg" radius={30} className="w-fit">
-                Discover Experiences
-              </SpecularButton>
             </div>
           </div>
 

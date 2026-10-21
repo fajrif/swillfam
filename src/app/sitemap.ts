@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { absoluteUrl, siteUrl } from "@/lib/site-url";
-import { STATIC_PAGE_SEO_DEFS } from "@/lib/page-seo-registry";
+import { STATIC_PAGE_SEO_DEFS, isPageHidden } from "@/lib/page-seo-registry";
 import { publishedVenueScope } from "@/lib/venue-scope";
 import { livePromotionWhere } from "@/lib/promotion-scope";
 
@@ -101,7 +101,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "private-events": newest(privateEvents),
   };
 
-  const staticPages: MetadataRoute.Sitemap = STATIC_PAGE_SEO_DEFS.map((def) => {
+  // A hidden page 404s, and a 404 may not sit in a sitemap.
+  const staticPages: MetadataRoute.Sitemap = STATIC_PAGE_SEO_DEFS.filter(
+    (def) => !isPageHidden(def.key),
+  ).map((def) => {
     const lastModified = archiveLastModified[def.key];
     return {
       url: pageUrl(def.path),
