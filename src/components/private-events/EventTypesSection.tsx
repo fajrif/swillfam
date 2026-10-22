@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { PrivateEvent } from "@/generated/prisma/client";
 import { Container } from "@/components/shared/Container";
 import { ContentImage } from "@/components/shared/ContentImage";
@@ -29,8 +28,8 @@ function EventTypeCard({ privateEvent }: { privateEvent: PrivateEvent }) {
   const { title, shortDescription } = privateEvent;
 
   return (
-    <Link
-      href={`/private-events/${privateEvent.slug}`}
+    // No link on purpose: one /private-events page at launch, no sub-pages (21 Okt meeting).
+    <div
       className="group relative block aspect-[683/520] w-full overflow-hidden border border-sf-border/40"
     >
       <ContentImage
@@ -57,6 +56,6 @@ function EventTypeCard({ privateEvent }: { privateEvent: PrivateEvent }) {
           <p className="font-inter text-medium leading-relaxed">{shortDescription}</p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

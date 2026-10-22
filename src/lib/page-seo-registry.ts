@@ -160,7 +160,8 @@ export const STATIC_PAGE_SEO_BY_KEY = Object.fromEntries(
  * schema builder and its PageSeo row are all still in place.
  */
 const HIDDEN_PAGE_KEYS: ReadonlySet<StaticPageSeoKey> = new Set<StaticPageSeoKey>([
-  "experience",
+  "exclusive",
+  "media-mentions",
   "merchandise",
 ]);
 

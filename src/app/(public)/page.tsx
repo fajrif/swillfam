@@ -6,10 +6,8 @@ import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { Experience } from "@/components/home/Experience";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
-import { ExclusiveRecap } from "@/components/home/ExclusiveRecap";
 import { Hero } from "@/components/home/Hero";
 import { Reveal } from "@/components/Reveal";
-import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatEventSchedule } from "@/lib/event-calendar";
 
@@ -22,8 +20,7 @@ export const generateMetadata = () => staticPageMetadata("home");
 export default async function Home() {
   const now = new Date();
 
-  const [settings, articles, events, categories] = await Promise.all([
-    getSiteSettings(),
+  const [articles, events, categories] = await Promise.all([
     getArticleRows(3),
     // "On the Calendar" — upcoming only, by the same rule as /events.
     prisma.event.findMany({
@@ -95,9 +92,6 @@ export default async function Home() {
       </Reveal>
       <Reveal>
         <ArticleListSection articles={articles} />
-      </Reveal>
-      <Reveal>
-        <ExclusiveRecap youtubeUrl={settings.socialYoutube} />
       </Reveal>
     </Hero>
   );

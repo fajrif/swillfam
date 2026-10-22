@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { isPageHidden } from "@/lib/page-seo-registry";
 import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
@@ -12,6 +14,9 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("media-mentions");
 
 export default async function MediaMentionsPage() {
+  // Switched off for now — see HIDDEN_PAGE_KEYS in page-seo-registry.ts.
+  if (isPageHidden("media-mentions")) notFound();
+
   const mentions = await prisma.mediaMention.findMany({
     orderBy: { publishedDate: "desc" },
   });

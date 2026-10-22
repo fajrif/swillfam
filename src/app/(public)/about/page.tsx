@@ -5,7 +5,6 @@ import { StickyHero } from "@/components/shared/StickyHero";
 import Image from "next/image";
 import { CardImageInfoSection } from "@/components/shared/CardImageInfoSection";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
-import { SwillfamSpotlightSection } from "@/components/venues";
 
 import { getArticleRows } from "@/lib/articles";
 import { JsonLd, aboutGraph } from "@/lib/schema";
@@ -62,10 +61,6 @@ export default async function About() {
 
       <Reveal>
         <WhatWeStandForFlowingSection />
-      </Reveal>
-
-      <Reveal>
-        <SwillfamSpotlightSection />
       </Reveal>
 
       <Reveal>

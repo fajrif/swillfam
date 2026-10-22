@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+import { isPageHidden } from "@/lib/page-seo-registry";
 import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
@@ -17,6 +19,9 @@ export const revalidate = 60;
 export const generateMetadata = () => staticPageMetadata("exclusive");
 
 export default async function ExclusivePage() {
+  // Switched off for now — see HIDDEN_PAGE_KEYS in page-seo-registry.ts.
+  if (isPageHidden("exclusive")) notFound();
+
   const [articles, editorialArticles] = await Promise.all([
     getArticleRows(3),
     getArticleRows(6),

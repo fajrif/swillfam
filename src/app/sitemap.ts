@@ -128,6 +128,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...detail("/promotions", promotions),
     ...detail("/talents", talents),
     ...detail("/guides", articles),
-    ...detail("/private-events", privateEvents),
+    // /private-events/{slug} is switched off at launch — see SUBPAGES_LIVE in that route.
   ];
 }

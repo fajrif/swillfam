@@ -26,6 +26,15 @@ import { withAlts } from "@/lib/image-alt";
 // and seeds show up without a full rebuild.
 export const revalidate = 60;
 
+/**
+ * One /private-events page at launch, no sub-pages (21 Okt meeting): the cards
+ * no longer link here, so the route 404s and the sitemap omits it rather than
+ * leaving a live page nothing points to. Flip to `true` — and restore the card
+ * link in `EventTypesSection` and the sitemap's `detail("/private-events", …)`
+ * line — to bring them back.
+ */
+const SUBPAGES_LIVE = false;
+
 // cache() so generateMetadata and the page share a single read.
 const getPrivateEventBySlug = cache(async (slug: string) =>
   prisma.privateEvent.findUnique({
@@ -40,6 +49,7 @@ const getPrivateEventBySlug = cache(async (slug: string) =>
 );
 
 export async function generateStaticParams() {
+  if (!SUBPAGES_LIVE) return [];
   const privateEvents = await prisma.privateEvent.findMany({
     where: { published: true },
     select: { slug: true },
@@ -69,6 +79,7 @@ export async function generateMetadata({
 }
 
 export default async function PrivateEventPage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!SUBPAGES_LIVE) notFound();
   const { slug } = await params;
   const privateEvent = await getPrivateEventBySlug(slug);
   if (!privateEvent || !privateEvent.published) notFound();
