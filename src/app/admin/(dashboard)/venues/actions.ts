@@ -58,7 +58,6 @@ function parse(formData: FormData) {
     instagramUrl: String(formData.get("instagramUrl") ?? "").trim() || null,
     spotifyEmbed: String(formData.get("spotifyEmbed") ?? "").trim() || null,
     youtubeEmbed: String(formData.get("youtubeEmbed") ?? "").trim() || null,
-    instagramEmbed: String(formData.get("instagramEmbed") ?? "").trim() || null,
     whatsapp: String(formData.get("whatsapp") ?? "").trim() || null,
     phone: String(formData.get("phone") ?? "").trim() || null,
     email: String(formData.get("email") ?? "").trim() || null,

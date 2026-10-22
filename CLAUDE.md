@@ -177,6 +177,9 @@ function. `resolveDescription`/`resolveOgImage` no longer exist; `resolve.ts` is
 - The panel's **Structured data** section is hidden unless `ADMIN_SHOW_STRUCTURED_DATA="true"`
   (server-only, read per request, so a restart is enough — no rebuild). It only hides the preview;
   the JSON-LD on the public pages is unaffected.
+- A venue's "Follow Us on Instagram" block is Instagram's profile embed, derived from `instagramUrl` by
+  `instagramProfile()` (`src/lib/instagram.ts`) and lazy-loaded; there is no pasted-embed field for
+  venues (talents keep theirs). The iframe is not page content and adds nothing to the JSON-LD.
 - `src/app/admin/layout.tsx` exists only to mark the whole admin section `noindex, nofollow`.
 
 **`src/app/sitemap.ts` must stay in sync with the routes.** A new public route needs an entry

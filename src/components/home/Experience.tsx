@@ -11,7 +11,7 @@ export function Experience() {
         <SectionHeading
           align="center"
           title="The Swillfam Experience"
-          lead="Morning padel at Kilo Cafe. A long lunch at Atsumaru. Cocktails at Dualism or Truce as the sun goes down. Then Zoo, Le Cirque, or Swillhouse when the night really starts. SwillFam is built for the full day: eight venues, one uninterrupted experience, entirely yours."
+          lead="Morning padel at Kilo Cafe. A long lunch at Kilo Kitchen. Cocktails at Dualism or Truce as the sun goes down. Then Zoo, Le Cirque, or Swillhouse when the night really starts. SwillFam is built for the full day: seven venues, one uninterrupted experience, entirely yours."
         />
 
         <div className="relative w-full overflow-hidden bg-sf-surface">

@@ -135,7 +135,7 @@ export function VenueForm({
           type="url"
           defaultValue={venue?.instagramUrl ?? ""}
           placeholder="https://www.instagram.com/…"
-          hint="The venue's own profile — tells search engines this page and that account are the same place."
+          hint="The venue's own profile, not a post. Tells search engines this page and that account are the same place, and drives the Follow Us on Instagram feed on this venue's page."
         />
         <Field
           label="Cuisine"
@@ -156,7 +156,6 @@ export function VenueForm({
 
       <TextareaField label="Spotify embed" name="spotifyEmbed" defaultValue={venue?.spotifyEmbed ?? ""} rows={2} />
       <TextareaField label="YouTube embed" name="youtubeEmbed" defaultValue={venue?.youtubeEmbed ?? ""} rows={2} />
-      <TextareaField label="Instagram embed" name="instagramEmbed" defaultValue={venue?.instagramEmbed ?? ""} rows={2} />
 
       {/* Publishing is a launch-level decision, so it sits with slug and
           category as administrator-only. Unpublishing is how Atsumaru stays off

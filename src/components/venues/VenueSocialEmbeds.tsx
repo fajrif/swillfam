@@ -1,5 +1,6 @@
 import { Container } from "@/components/shared/Container";
 import { SocialEmbed } from "@/components/shared/SocialEmbed";
+import { instagramProfile } from "@/lib/instagram";
 
 type EmbedBlock = {
   key: string;
@@ -10,21 +11,23 @@ type EmbedBlock = {
 };
 
 /**
- * Venue "Stay Connected" (Spotify + YouTube) and "Follow Us on Instagram"
- * embeds. Each block is conditional; the whole section renders nothing when the
- * venue has no embeds set.
+ * Venue "Stay Connected" (Spotify + YouTube) and "Follow Us on Instagram".
+ * Each block is conditional; the whole section renders nothing when the venue
+ * has none. The Instagram feed is Instagram's own profile embed, derived from
+ * the venue's `instagramUrl` — nothing is pasted by an admin.
  */
 export function VenueSocialEmbeds({
   spotifyEmbed,
   youtubeEmbed,
-  instagramEmbed,
+  instagramUrl,
   venueName,
 }: {
   spotifyEmbed: string | null;
   youtubeEmbed: string | null;
-  instagramEmbed: string | null;
+  instagramUrl: string | null;
   venueName: string;
 }) {
+  const instagram = instagramProfile(instagramUrl);
   const stayConnected: EmbedBlock[] = [];
   if (spotifyEmbed) {
     stayConnected.push({
@@ -44,7 +47,7 @@ export function VenueSocialEmbeds({
     });
   }
 
-  if (stayConnected.length === 0 && !instagramEmbed) return null;
+  if (stayConnected.length === 0 && !instagram) return null;
 
   return (
     <section className="py-16 lg:py-24">
@@ -71,12 +74,30 @@ export function VenueSocialEmbeds({
           </div>
         ) : null}
 
-        {instagramEmbed ? (
+        {instagram ? (
           <div className="flex flex-col gap-12">
             <h2 className="mx-auto max-w-[640px] text-center font-syne text-[clamp(2.25rem,5vw,64px)] leading-[1.05] text-white">
               Follow Us on Instagram
             </h2>
-            <SocialEmbed html={instagramEmbed} className="mx-auto max-w-[640px]" />
+            <div className="mx-auto flex w-full max-w-[640px] flex-col items-center gap-4">
+              {/* Lazy: the section is near the foot of the page, so the frame
+                  isn't fetched until the visitor scrolls close to it. */}
+              <iframe
+                src={instagram.embedUrl}
+                title={`${venueName} on Instagram`}
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="h-[700px] w-full border-0"
+              />
+              <a
+                href={instagramUrl ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-inter underline underline-offset-4 transition-colors hover:text-sf-accent"
+              >
+                Follow @{instagram.handle} on Instagram
+              </a>
+            </div>
           </div>
         ) : null}
       </Container>

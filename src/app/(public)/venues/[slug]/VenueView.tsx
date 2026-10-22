@@ -240,7 +240,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
         <VenueSocialEmbeds
           spotifyEmbed={venue.spotifyEmbed}
           youtubeEmbed={venue.youtubeEmbed}
-          instagramEmbed={venue.instagramEmbed}
+          instagramUrl={venue.instagramUrl}
           venueName={venue.name}
         />
       </Reveal>
