@@ -8,7 +8,7 @@ import { Container } from "@/components/shared/Container";
 import { StickyHero } from "@/components/shared/StickyHero";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { ContinueExperience } from "@/components/category";
-import { VenuesIntro, VenuesCategories, VenueLocator, SwillfamSpotlightSection } from "@/components/venues";
+import { VenuesIntro, VenuesCategories, VenueLocator } from "@/components/venues";
 import { venueHoursText } from "@/lib/opening-hours";
 import { JsonLd, archiveGraph } from "@/lib/schema";
 
@@ -93,10 +93,6 @@ export default async function VenuesPage() {
 
       <Reveal>
         <VenueLocator venues={locatorVenues} whatsapp={settings.mainWhatsapp} />
-      </Reveal>
-
-      <Reveal>
-        <SwillfamSpotlightSection />
       </Reveal>
 
       <Reveal>

@@ -1,4 +1,5 @@
 import { Container } from "@/components/shared/Container";
+import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { DestinationsColumn } from "@/components/shared/DestinationsColumn";
 
 export function StandForColumnsSection() {
@@ -23,6 +24,9 @@ export function StandForColumnsSection() {
                 designed to connect people and leave a lasting impression.
               </p>
             </div>
+            <SpecularButton href="/experience" size="lg" radius={30} className="w-fit">
+              See Experiences
+            </SpecularButton>
           </div>
         </div>
       </Container>

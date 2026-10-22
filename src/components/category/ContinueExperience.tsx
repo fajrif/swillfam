@@ -14,37 +14,10 @@ export function ContinueExperience() {
   return (
     <section className="py-8 lg:py-16">
       <Container className="flex flex-col gap-6">
-        {/* Row 1 — [8fr_4fr] */}
-        <div className="grid border border-sf-border/40 lg:grid-cols-[8fr_4fr]">
-          {/* Continue the Experience — image + text */}
-          <div className="flex flex-col gap-8 border-b border-sf-border/40 p-4 sm:flex-row lg:border-b-0">
-            <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden sm:w-[400px]">
-              <ParallaxImage>
-                <Image
-                  src="/image1.png"
-                  alt=""
-                  fill
-                  sizes="(max-width: 768px) 100vw, 400px"
-                  className="object-cover"
-                />
-              </ParallaxImage>
-            </div>
-            <div className="flex flex-1 flex-col justify-between gap-6">
-              <div className="flex flex-col gap-4">
-                <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
-                  Plan Your Swillfam Day
-                </h3>
-                <p className="mb-5 font-inter leading-relaxed">
-                  Morning coffee, an easy lunch, sundown drinks, or a night that runs late, every
-                  part of the day has a space made for it. Discover where to go, and when, so every
-                  hour feels like the right one.
-                </p>
-              </div>
-            </div>
-          </div>
-
+        {/* Row 1 — the "Plan Your Swillfam Day" card is switched off for now (21 Okt meeting), so Events stands alone */}
+        <div className="grid border border-sf-border/40">
           {/* Explore Events — text only */}
-          <div className="flex flex-col justify-between gap-6 p-4 lg:border-l lg:border-sf-border/40">
+          <div className="flex flex-col justify-between gap-6 p-4">
             <div className="flex flex-col gap-4">
               <h3 className="font-syne text-[clamp(1.75rem,3vw,40px)] leading-tight text-white">
                 See What&apos;s Happening
