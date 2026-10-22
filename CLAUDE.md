@@ -81,6 +81,7 @@ npx prisma migrate deploy         # apply existing migrations (e.g. the generate
 npx tsx prisma/seed-admin.ts      # create/update the administrator from ADMIN_EMAIL/ADMIN_PASSWORD
 npx tsx prisma/seed-admin-users.ts # one operator login per venue (OPERATOR_DEFAULT_PASSWORD)
 npm run seed:all                  # run all the seed scripts
+npx tsx prisma/seed-venue-data.ts [--dry-run] [--overwrite]  # venue fact sheet + org contacts from prisma/data/swillfam-venue-data.json
 npx tsx scripts/generate-icons.ts              # favicon / app icon / apple icon / manifest icons
 npx tsx --env-file=.env scripts/generate-og-images.ts   # 1200×630 share cards -> ogImage
 ```

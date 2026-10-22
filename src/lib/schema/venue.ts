@@ -31,6 +31,18 @@ import {
  */
 const DEFAULT_TYPE = "LocalBusiness";
 
+/**
+ * Short forms people actually search for (swillfam-schema-samples.md §4), next
+ * to the public `name`. Spelling variants, not data: they don't belong in a
+ * column. A venue not listed simply gets none.
+ */
+const ALTERNATE_NAMES: Record<string, string[]> = {
+  "kilo-jakarta": ["Kilo Kitchen", "Kilo Jakarta"],
+  "kilo-cafe": ["Kilo Cafe"],
+  zoo: ["Zoo"],
+  swillhouse: ["Swillhouse"],
+};
+
 /** schema.org wants full English day names. */
 const DAY_OF_WEEK: Record<string, string> = {
   MONDAY: "Monday",
@@ -90,6 +102,7 @@ export function venueNode(venue: VenueForSchema): JsonLdNode {
     "@type": types.length === 0 ? DEFAULT_TYPE : types.length === 1 ? types[0] : types,
     "@id": venueId(venue.slug),
     name: venue.name,
+    alternateName: ALTERNATE_NAMES[venue.slug],
     // The same resolution the page's meta description uses — one chain,
     // declared in seo/entities.ts.
     description: venueSeo(venue).description.value,

@@ -1,0 +1,295 @@
+{
+  "source": "Client information request, returned 22 Oct 2026. Coordinates from each venue's Google Maps pin.",
+  "organization": {
+    "name": "SwillFam",
+    "url": "https://swillfam.com/",
+    "email": "crm.group@swillmail.com",
+    "telephone": "+6281233524214",
+    "foundingDate": "2018",
+    "address": {
+      "streetAddress": "Fairgrounds, SCBD Lot 14, Jl. Jenderal Sudirman Kav. 52-53",
+      "addressLocality": "Jakarta Selatan",
+      "addressRegion": "DKI Jakarta",
+      "postalCode": "12190",
+      "addressCountry": "ID"
+    },
+    "sameAs": [
+      "https://www.instagram.com/swillfam",
+      "https://www.tiktok.com/@swillfam",
+      "https://www.youtube.com/@swillfam",
+      "https://www.linkedin.com/company/swillfam"
+    ],
+    "logo": "From the client's Drive folder: https://drive.google.com/drive/folders/1oWnAo3MBFcrQ2nbHh__mof48yqiQ0GFb"
+  },
+  "venues": [
+    {
+      "slug": "kilo-jakarta",
+      "name": "Kilo Kitchen Jakarta",
+      "schema_type": [
+        "Restaurant",
+        "BarOrPub"
+      ],
+      "category": "lifestyle",
+      "street": "Ashta District 8, Ground Floor, Senopati Lobby, Jl. Senopati No. 83, Senayan, Kebayoran Baru",
+      "area": "Senopati",
+      "postal": "12190",
+      "lat": -6.2300477,
+      "lng": 106.8070298,
+      "maps": "https://maps.app.goo.gl/DCUuC3dM8ebvX3G17",
+      "hours": [
+        {
+          "days": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+          ],
+          "opens": "10:00",
+          "closes": "00:00"
+        },
+        {
+          "days": [
+            "Friday"
+          ],
+          "opens": "10:00",
+          "closes": "02:00"
+        },
+        {
+          "days": [
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "09:00",
+          "closes": "00:00"
+        }
+      ],
+      "whatsapp": "+6282199001883",
+      "instagram": "https://www.instagram.com/kilo_jakarta",
+      "cuisine": "Latin & Asian",
+      "description": "Refined comfort food with Latin and Asian roots. A casual and vibrant dining experience where food, music and culture come together.",
+      "hours_note": null
+    },
+    {
+      "slug": "kilo-cafe",
+      "name": "Kilo Cafe Jakarta",
+      "schema_type": [
+        "CafeOrCoffeeShop"
+      ],
+      "category": "lifestyle",
+      "street": "Trinity Courts, 2nd Floor, Jl. Bakti I No. 19, SCBD",
+      "area": "SCBD",
+      "postal": "12180",
+      "lat": -6.2329672,
+      "lng": 106.8132388,
+      "maps": "https://maps.app.goo.gl/vxJgePDs3E45TneEA",
+      "hours": [
+        {
+          "days": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+          ],
+          "opens": "16:00",
+          "closes": "22:00"
+        },
+        {
+          "days": [
+            "Friday"
+          ],
+          "opens": "16:00",
+          "closes": "23:00"
+        },
+        {
+          "days": [
+            "Saturday"
+          ],
+          "opens": "16:00",
+          "closes": "22:00"
+        }
+      ],
+      "whatsapp": "+6282289998669",
+      "instagram": "https://www.instagram.com/kilocafe_jkt",
+      "cuisine": null,
+      "description": "Kilo Cafe brings Kilo's refined comfort food to Trinity Courts, a day-to-night hangout where the game winds down and the table comes alive.",
+      "hours_note": null
+    },
+    {
+      "slug": "dualism",
+      "name": "Dualism",
+      "schema_type": [
+        "BarOrPub"
+      ],
+      "category": "lifestyle",
+      "street": "SOL Collective Space, Jl. Jend. Sudirman Kav. 52-53 Lot 17A, SCBD, Kebayoran Baru",
+      "area": "SCBD",
+      "postal": "12190",
+      "lat": -6.2300502,
+      "lng": 106.8095258,
+      "maps": "https://maps.app.goo.gl/UkcGrvjCBhBR7eU46",
+      "hours": [
+        {
+          "days": [
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+          ],
+          "opens": "18:00",
+          "closes": "02:00"
+        },
+        {
+          "days": [
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "18:00",
+          "closes": "03:00"
+        }
+      ],
+      "whatsapp": "+6281252227022",
+      "instagram": "https://www.instagram.com/dualism.bar",
+      "cuisine": null,
+      "description": "Dualism is a stylish cocktail bar in SCBD where every signature drink comes in two expressions. Same ingredients, two different styles.",
+      "hours_note": null,
+      "coordinates_note": "Not in the client's file; read from the Maps pin (maps.app.goo.gl/UkcGrvjCBhBR7eU46) on 22 Oct 2026."
+    },
+    {
+      "slug": "truce",
+      "name": "Truce",
+      "schema_type": [
+        "BarOrPub"
+      ],
+      "category": "lifestyle",
+      "street": "Fairgrounds, Jl. Jend. Sudirman Kav. 52-53 Lot 14, Senayan, Kebayoran Baru",
+      "area": "SCBD",
+      "postal": "12190",
+      "lat": -6.2263718,
+      "lng": 106.8070301,
+      "maps": "https://maps.app.goo.gl/r66w83aDfeip7LAu5",
+      "hours": [
+        {
+          "days": [
+            "Sunday",
+            "Monday",
+            "Wednesday",
+            "Thursday"
+          ],
+          "opens": "17:00",
+          "closes": "01:00"
+        },
+        {
+          "days": [
+            "Friday"
+          ],
+          "opens": "18:00",
+          "closes": "02:00"
+        },
+        {
+          "days": [
+            "Saturday"
+          ],
+          "opens": "18:00",
+          "closes": "03:00"
+        }
+      ],
+      "whatsapp": "+6282289998829",
+      "instagram": "https://www.instagram.com/bartruce",
+      "cuisine": null,
+      "description": "Crafted cocktail bar serving high-level cocktails with unshakable calm. Drawing from Japanese bar philosophy, not as aesthetic, but as approach, Truce works with balance, restraint, and quiet precision.",
+      "hours_note": null
+    },
+    {
+      "slug": "zoo",
+      "name": "ZOO SCBD",
+      "schema_type": [
+        "NightClub"
+      ],
+      "category": "nightlife",
+      "street": "Fairgrounds SCBD Lot 14, Jl. Jend. Sudirman Kav. 52-53, Senayan, Kebayoran Baru",
+      "area": "SCBD",
+      "postal": "12190",
+      "lat": -6.2263982,
+      "lng": 106.8071555,
+      "maps": "https://maps.app.goo.gl/f2Cg5YtgcMpyVLij7",
+      "hours": [
+        {
+          "days": [
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "21:00",
+          "closes": "04:00"
+        }
+      ],
+      "hours_note": "Lounge hours used for schema. Private rooms: Mon-Sun 16:00-04:00 (show on page). Confirm which set the Google Business Profile shows.",
+      "whatsapp": "+628111651200",
+      "instagram": "https://www.instagram.com/zoo.scbd",
+      "cuisine": null,
+      "description": "ZOO SCBD is a stylish nightclub in Jakarta's SCBD, known for its safari-meets-futuristic interiors, intimate atmosphere, energetic DJs, Amapiano, Afrobeats, Global Electronic Sound, and premium nightlife experiences."
+    },
+    {
+      "slug": "le-cirque",
+      "name": "Le Cirque",
+      "schema_type": [
+        "NightClub"
+      ],
+      "category": "nightlife",
+      "street": "Fairgrounds SCBD Lot 14, Jl. Jend. Sudirman Kav. 52-53, Senayan, Kebayoran Baru",
+      "area": "SCBD",
+      "postal": "12190",
+      "lat": -6.2264235,
+      "lng": 106.8070638,
+      "maps": "https://maps.app.goo.gl/GXcokoFyezZ11MqX6",
+      "hours": [
+        {
+          "days": [
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "21:00",
+          "closes": "04:00"
+        }
+      ],
+      "whatsapp": "+6282289990869",
+      "instagram": "https://www.instagram.com/lecirque.jkt",
+      "cuisine": null,
+      "description": "Built as a playground of sound, style, and atmosphere, Le Cirque Jakarta brings together the city's growing community of music lovers, tastemakers, and creatives through immersive experiences, forward-thinking sounds, and a shared passion for club culture.",
+      "hours_note": null
+    },
+    {
+      "slug": "swillhouse",
+      "name": "The Swillhouse",
+      "schema_type": [
+        "NightClub"
+      ],
+      "category": "nightlife",
+      "street": "Fairgrounds SCBD Lot 14, Jl. Jend. Sudirman Kav. 52-53, Senayan, Kebayoran Baru",
+      "area": "SCBD",
+      "postal": "12190",
+      "lat": -6.226967,
+      "lng": 106.8072655,
+      "maps": "https://maps.app.goo.gl/QCoiqUwy6BVWUo5T9",
+      "hours": [
+        {
+          "days": [
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "21:00",
+          "closes": "04:00"
+        }
+      ],
+      "whatsapp": "+6287884288880",
+      "instagram": "https://www.instagram.com/theswillhouse",
+      "cuisine": null,
+      "description": "The Swillhouse is an urban creative space that has anchored Jakarta's hip-hop and R&B scene since 2018. Designed around a contemporary minimalist aesthetic: raw concrete, neon lighting, fluid sightlines, it is built for energy, not decoration.",
+      "hours_note": null
+    }
+  ]
+}
