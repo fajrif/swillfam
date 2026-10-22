@@ -114,7 +114,6 @@ export function VenueDetails({ venue }: { venue: VenueWithCategory }) {
       <Section title="Media embeds">
         <Info label="Spotify" value={venue.spotifyEmbed} code />
         <Info label="YouTube" value={venue.youtubeEmbed} code />
-        <Info label="Instagram" value={venue.instagramEmbed} code />
       </Section>
 
       <Section title="SEO">
