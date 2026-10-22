@@ -1,25 +1,25 @@
 # SwillFam
 
-> SwillFam is a Jakarta hospitality group running lifestyle and nightlife venues across South Jakarta — a restaurant and bar, a café, cocktail bars and clubs in SCBD, Senopati and Ashta District 8. Its venues are Kilo Jakarta, Kilo Cafe, Dualism, Truce, Zoo, Le Cirque and Swillhouse.
+> SwillFam is a Jakarta hospitality group founded in 2018, running seven lifestyle and nightlife venues in SCBD and Senopati, South Jakarta: Kilo Kitchen Jakarta, Kilo Cafe Jakarta, Dualism, Truce, ZOO SCBD, Le Cirque and The Swillhouse.
 
 Key facts:
-- Head office: Fairgrounds, SCBD Lot 14, Jl. Jenderal Sudirman, Senayan, Kebayoran Baru, Jakarta Selatan 12190
-- Reservations and private-event enquiries: WhatsApp [REAL NUMBER] — each venue page also lists its own reservation WhatsApp
-- Email: contact@swillfam.com
+- Head office: Fairgrounds, SCBD Lot 14, Jl. Jenderal Sudirman Kav. 52-53, Senayan, Kebayoran Baru, Jakarta Selatan 12190
+- Reservations and enquiries: WhatsApp +62 812 3352 4214 (each venue page also lists its own reservation WhatsApp)
+- Email: crm.group@swillmail.com
 - Instagram: https://www.instagram.com/swillfam
 
-## Lifestyle venues (restaurants, café & bars)
+## Lifestyle venues (restaurant, café and bars)
 
-- [Kilo Jakarta](https://swillfam.com/venues/kilo-jakarta): Restaurant and bar — [cuisine, area, what it's known for]
-- [Kilo Cafe](https://swillfam.com/venues/kilo-cafe): Café with padel — morning coffee and [what it's known for, area]
-- [Dualism](https://swillfam.com/venues/dualism): Bar — [concept, area]
-- [Truce](https://swillfam.com/venues/truce): Bar — [concept, area]
+- [Kilo Kitchen Jakarta](https://swillfam.com/venues/kilo-jakarta): Restaurant and bar at Ashta District 8, Senopati. Refined comfort food with Latin and Asian roots; casual and vibrant, where food, music and culture come together. Open daily from 09:00 or 10:00.
+- [Kilo Cafe Jakarta](https://swillfam.com/venues/kilo-cafe): Café at Trinity Courts, SCBD, serving Kilo's comfort food. A day-to-night hangout beside the courts, from 16:00.
+- [Dualism](https://swillfam.com/venues/dualism): Cocktail bar at SOL Collective Space, SCBD, where every signature drink comes in two expressions: same ingredients, two styles.
+- [Truce](https://swillfam.com/venues/truce): Craft cocktail bar at Fairgrounds, SCBD, drawing on Japanese bar philosophy: balance, restraint and quiet precision.
 
 ## Nightlife venues (clubs)
 
-- [Zoo](https://swillfam.com/venues/zoo): Club in SCBD known for house and hip hop nights.
-- [Le Cirque](https://swillfam.com/venues/le-cirque): Club — [concept, area]
-- [Swillhouse](https://swillfam.com/venues/swillhouse): Club — [concept, area]
+- [ZOO SCBD](https://swillfam.com/venues/zoo): Nightclub at Fairgrounds, SCBD, with safari-meets-futuristic interiors; Amapiano, Afrobeats and global electronic sounds. Private rooms open daily.
+- [Le Cirque](https://swillfam.com/venues/le-cirque): Club at Fairgrounds, SCBD, for music lovers, tastemakers and creatives; immersive experiences and forward-thinking sounds.
+- [The Swillhouse](https://swillfam.com/venues/swillhouse): Club at Fairgrounds, SCBD, anchoring Jakarta's hip-hop and R&B scene since 2018; raw concrete and neon minimalism.
 
 ## Plan a visit
 
@@ -38,6 +38,4 @@ Key facts:
 ## Optional
 
 - [About SwillFam](https://swillfam.com/about)
-- [Media mentions](https://swillfam.com/media-mentions)
 - [Talents](https://swillfam.com/talents): Resident DJs, chefs and bartenders
-- [Exclusive](https://swillfam.com/exclusive): Videos and behind-the-scenes content
