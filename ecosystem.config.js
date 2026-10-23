@@ -10,7 +10,10 @@ module.exports = {
       instances: 1,
       exec_mode: "fork",
       autorestart: true,
-      max_memory_restart: "500M",
+      // Next + sharp (AVIF encoding) legitimately peaks above 500M. A cap that low
+      // had PM2 killing the app mid-write, which left 0-byte files in
+      // .next/cache/images and then broke the image cache on every boot.
+      max_memory_restart: "1G",
       env: {
         NODE_ENV: "production",
       },

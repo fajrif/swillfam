@@ -12,6 +12,8 @@ export type OfferCardData = {
   meta: string | null;
   /** When set, the whole card becomes a link to this href. */
   href?: string;
+  /** Where the 4:3 crop is anchored. People photos are portraits: "top" keeps the head. */
+  imagePosition?: "top";
 };
 
 type OfferCardProps = { offer: OfferCardData };
@@ -35,7 +37,7 @@ export function OfferCard(props: OfferCardProps) {
               alt={offer.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className={`object-cover transition-transform duration-500 group-hover:scale-105${offer.imagePosition === "top" ? " object-top" : ""}`}
             />
           ) : (
             <div className="absolute inset-0 bg-sf-surface" />
@@ -59,7 +61,7 @@ export function OfferCard(props: OfferCardProps) {
           ) : (
             <span className="font-syne text-sm font-bold uppercase text-white">{offer.venueName}</span>
           )}
-          <span className="whitespace-nowrap font-inter text-sm text-white">{offer.meta}</span>
+          <span className="min-w-0 text-right font-inter text-sm text-white">{offer.meta}</span>
         </div>
 
         <h3 className="font-syne text-2xl font-bold leading-tight text-white">{offer.title}</h3>

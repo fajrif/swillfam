@@ -67,6 +67,7 @@ export function TalentsBrowser({
     venueLogo: t.venueLogo,
     meta: t.categoryName,
     href: `/talents/${t.slug}`,
+    imagePosition: "top",
   }));
 
   return (
