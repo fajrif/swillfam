@@ -1,3 +1,4 @@
+import { formatRecurringDays } from "@/lib/event-calendar";
 import { PublishedBadge } from "@/components/admin/PublishedBadge";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
@@ -10,16 +11,6 @@ import { Thumb } from "@/components/admin/Thumb";
 
 const fmtDate = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-
-const WEEKDAY_SHORT: Record<string, string> = {
-  MONDAY: "Mon",
-  TUESDAY: "Tue",
-  WEDNESDAY: "Wed",
-  THURSDAY: "Thu",
-  FRIDAY: "Fri",
-  SATURDAY: "Sat",
-  SUNDAY: "Sun",
-};
 
 export default async function EventsPage(props: { searchParams: Promise<{ q?: string; page?: string }> }) {
   const { q, page } = await props.searchParams;
@@ -70,9 +61,7 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
               header: "Schedule",
               cell: (e) =>
                 e.eventType === "RECURRING" ? (
-                  <span className="text-zinc-500">
-                    Every {e.recurringDays.map((d) => WEEKDAY_SHORT[d] ?? d).join(", ") || "—"}
-                  </span>
+                  <span className="text-zinc-500">{formatRecurringDays(e.recurringDays)}</span>
                 ) : (
                   <span className="text-zinc-500">{fmtDate(e.startDate)}</span>
                 ),
