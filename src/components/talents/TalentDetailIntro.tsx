@@ -9,18 +9,20 @@ export function TalentDetailIntro({ talent }: { talent: TalentWithVenue }) {
   return (
     <section className="pt-8 pb-16 lg:pt-12">
       <Container className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
+        {/* The whole photo, at its own proportions - no fixed box to crop it. */}
+        <div className="w-full self-start bg-sf-surface">
           {talent.image ? (
             <ContentImage
               src={talent.image}
               alt={talent.name}
-              fill
+              width={0}
+              height={0}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-top"
+              className="h-auto w-full"
               priority
             />
           ) : (
-            <div className="absolute inset-0 bg-sf-surface" />
+            <div className="aspect-[4/3] w-full bg-sf-surface" />
           )}
         </div>
 

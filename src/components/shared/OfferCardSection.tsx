@@ -34,7 +34,10 @@ export function OfferCardSection({
           ) : null}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        {/* w-full: the Container centres its children (items-center), so without it
+            this row shrinks to its content and the percentage widths below
+            resolve against that - a lone card collapsed to a sliver. */}
+        <div className="flex w-full flex-wrap justify-center gap-6">
           {offers.map((offer) => (
             <div key={offer.id} className="w-full sm:w-[calc(50%-12px)] md:w-[calc(33.33%-16px)]">
               <OfferCard offer={offer} />
