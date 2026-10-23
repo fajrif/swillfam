@@ -80,7 +80,8 @@ export type CalendarEvent = {
   endHour: string;
   recurringDays: string[];
   featured: boolean;
-  venueId: string | null;
+  /** Main venue first, then "Also at": the venue filter matches any of them. */
+  venueIds: string[];
   venueName: string | null;
   categoryName: string | null;
   waPhone: string | null;

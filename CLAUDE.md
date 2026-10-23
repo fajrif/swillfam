@@ -301,6 +301,20 @@ of its final day. Three rules, each stated in exactly one place:
   Offers", `/experience`, "More Offers To Explore" — filters expired rows out, because a link to a
   redirect is what a crawl reports.
 
+## Drafts, "Also at" venues, empty article lists
+
+- `Event`, `Promotion` and `Talent` each have `published` (default `true`). **Unpublished = 404, out of the
+  sitemap and out of every list**; it is stronger than an event's `active` (retired: page stays up as a "Past
+  Event"). The rule lives in the scope helpers - `upcomingEventWhere`/`pastEventWhere`
+  (`event-scope.ts`), `livePromotionWhere` (`promotion-scope.ts`), `publishedTalentWhere`
+  (`talent-scope.ts`) - and in the `findFirst`/`generateStaticParams`/sitemap queries of each detail route. A new
+  query over these models needs `published: true`. `src/proxy.ts` leaves a draft promotion to 404 rather than 301.
+- An event has one main venue (`venueId`: card logo, schema location, operator ownership) plus `extraVenues`
+  ("Also at"). Use `eventsAtVenue(s)` (`event-scope.ts`) for "events at this venue", and nest it under `AND`
+  next to the other scopes. The venue filters in `EventsBrowser`/`EventCalendarSection` match `venueIds`.
+  JSON-LD `location` is one `Place`, or an array when there are extras.
+- `ArticleListSection` renders nothing for an empty list - there is no placeholder fallback.
+
 ## Headings and landmarks
 
 - **One `<h1>` per page, naming the page's subject.** A venue's H1 is `venue.name`, not its

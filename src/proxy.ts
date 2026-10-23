@@ -53,11 +53,12 @@ async function expiredPromotionRedirect(request: NextRequest): Promise<NextRespo
 
   const promotion = await prisma.promotion.findUnique({
     where: { slug },
-    select: { endDate: true },
+    select: { endDate: true, published: true },
   });
   // Unknown slug: let the page 404 rather than redirecting a URL that never
   // existed — a 301 to /promotions would be a soft 404 for a typo.
-  if (!promotion || !isExpiredPromotion(promotion, new Date())) return null;
+  // A draft is left to 404 as well: redirecting it would announce it exists.
+  if (!promotion || !promotion.published || !isExpiredPromotion(promotion, new Date())) return null;
 
   return NextResponse.redirect(new URL("/promotions", request.url), 301);
 }

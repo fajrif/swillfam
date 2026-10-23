@@ -1,5 +1,5 @@
 import type { Talent } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, CheckboxField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { SeoFields } from "./SeoFields";
@@ -63,6 +63,13 @@ export function TalentForm({
         titleValue={talent?.metaTitle}
         descriptionValue={talent?.metaDescription}
         ogImageValue={talent?.ogImage}
+      />
+
+      <CheckboxField
+        label="Published"
+        name="published"
+        defaultChecked={talent?.published ?? true}
+        hint="Untick to keep it as a draft: the page returns 404 and it appears nowhere on the site."
       />
 
       <SaveButton>Save talent</SaveButton>

@@ -28,40 +28,27 @@ const SHORT_TITLE_MAX_LENGTH = 25;
 const DEFAULT_LEAD =
   "Guides, stories, and insider notes from the venues shaping the city, where to go, what to try, and what's worth knowing to help you experience the best.";
 
-const DEFAULT_EXCERPT =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
-
-const DEFAULT_ARTICLES: ArticleRow[] = [
-  { img: "/home/guide-1.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-  { img: "/home/guide-2.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-  { img: "/home/guide-3.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-  { img: "/home/guide-1.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-  { img: "/home/guide-2.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-  { img: "/home/guide-3.jpg", date: "22/06/2026", title: "Lorem Ipsum Dolor Sit Amet, Consectetur Eiusmod Magna", excerpt: DEFAULT_EXCERPT },
-];
-
 /**
  * Left intro column + right dated article list (Figma home 441:81).
- * Prop-driven so it can be reused — defaults reproduce the homepage "Guides &
- * Journals" section when rendered with no props. Pass `ctaLabel={null}` to hide
- * the button (e.g. the About "Press & Media" section has no CTA).
+ * Renders nothing when there are no published articles: there is no placeholder
+ * list to fall back on, so an empty site shows no section rather than fake ones.
+ * Pass `ctaLabel={null}` to hide the button (e.g. the About "Press & Media" section has no CTA).
  */
 export function ArticleListSection({
   title = DEFAULT_TITLE,
   lead = DEFAULT_LEAD,
   articles,
-  limit = 3,
   ctaLabel = "See all guides",
   ctaHref = "/guides",
 }: {
   title?: string;
   lead?: string;
   articles?: ArticleRow[];
-  limit?: number;
   ctaLabel?: string | null;
   ctaHref?: string;
 }) {
-  const rows = articles ?? DEFAULT_ARTICLES.slice(0, limit);
+  const rows = articles ?? [];
+  if (rows.length === 0) return null;
   const isLongTitle = title.length > SHORT_TITLE_MAX_LENGTH;
   return (
     <section className="py-16">

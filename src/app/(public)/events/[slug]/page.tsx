@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
+import { publishedTalentWhere } from "@/lib/talent-scope";
 import { getSiteSettings } from "@/lib/site-settings";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange, formatDay } from "@/lib/date";
@@ -14,7 +15,7 @@ import {
   nextOccurrence,
   occurrenceStart,
 } from "@/lib/event-calendar";
-import { pastEventWhere, upcomingEventWhere } from "@/lib/event-scope";
+import { eventsAtVenues, pastEventWhere, upcomingEventWhere } from "@/lib/event-scope";
 import { Reveal } from "@/components/Reveal";
 import { GalleryCarousel } from "@/components/shared/GalleryCarousel";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
@@ -49,15 +50,21 @@ export const revalidate = 60;
 const getEventBySlug = cache((slug: string) =>
   // findFirst, not findUnique: the venue scope is not part of the unique key.
   prisma.event.findFirst({
-    where: { slug, ...publishedVenueScope },
-    include: { venue: true, eventCategory: true, talents: { orderBy: { name: "asc" } } },
+    where: { slug, published: true, ...publishedVenueScope },
+    include: {
+      venue: true,
+      // A draft venue has no page to link to, so it is left out of "Also at".
+      extraVenues: { where: { published: true }, orderBy: { name: "asc" } },
+      eventCategory: true,
+      talents: { where: publishedTalentWhere, orderBy: { name: "asc" } },
+    },
   }),
 );
 
 export async function generateStaticParams() {
   // Deactivated events are included: they drop out of the calendar and listings
   // but keep a reachable detail page (and are linked from "Past Editions").
-  const rows = await prisma.event.findMany({ where: publishedVenueScope, select: { slug: true } });
+  const rows = await prisma.event.findMany({ where: { published: true, ...publishedVenueScope }, select: { slug: true } });
   return rows.map((e) => ({ slug: e.slug }));
 }
 
@@ -98,6 +105,9 @@ export default async function EventSlugPage({
   // so it resolves once per render/revalidation.
   const now = new Date();
 
+  // The main venue and every "Also at" one: "related" means any of them.
+  const venueIds = [...(event.venueId ? [event.venueId] : []), ...event.extraVenues.map((v) => v.id)];
+
   const [related, pastEditions, settings, articles] = await Promise.all([
     // "More events like this": upcoming events sharing this one's venue or
     // category. Both scopes own `AND`, and this query adds its own top-level
@@ -106,10 +116,10 @@ export default async function EventSlugPage({
       where: {
         id: { not: event.id },
         ...upcomingEventWhere(now),
-        ...(event.venueId || event.eventCategoryId
+        ...(venueIds.length > 0 || event.eventCategoryId
           ? {
               OR: [
-                ...(event.venueId ? [{ venueId: event.venueId }] : []),
+                ...(venueIds.length > 0 ? [eventsAtVenues(venueIds)] : []),
                 ...(event.eventCategoryId ? [{ eventCategoryId: event.eventCategoryId }] : []),
               ],
             }
@@ -125,8 +135,8 @@ export default async function EventSlugPage({
       ? prisma.event.findMany({
           where: {
             id: { not: event.id },
-            ...pastEventWhere(now),
-            ...(event.venueId ? { venueId: event.venueId } : {}),
+            // Both scopes own `AND`, so they are nested rather than spread.
+            AND: [pastEventWhere(now), ...(venueIds.length > 0 ? [eventsAtVenues(venueIds)] : [])],
             ...(event.eventCategoryId ? { eventCategoryId: event.eventCategoryId } : {}),
           },
           orderBy: { startDate: "desc" },
@@ -272,16 +282,18 @@ export default async function EventSlugPage({
         </Reveal>
       ) : null}
 
-      {!isRecurring && venue ? (
-        <Reveal>
-          <EventVenueSection
-            name={venue.name}
-            slug={venue.slug}
-            description={venue.description}
-            image={venue.image ?? venue.bannerImage}
-          />
-        </Reveal>
-      ) : null}
+      {!isRecurring
+        ? [venue, ...event.extraVenues].filter((v) => !!v).map((v) => (
+            <Reveal key={v.id}>
+              <EventVenueSection
+                name={v.name}
+                slug={v.slug}
+                description={v.description}
+                image={v.image ?? v.bannerImage}
+              />
+            </Reveal>
+          ))
+        : null}
 
       {!isRecurring && (event.ticketInfo || event.ticketLink) ? (
         <Reveal>

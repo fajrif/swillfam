@@ -19,6 +19,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
       where: { id },
       include: {
         talents: { select: { id: true } },
+        extraVenues: { select: { id: true } },
         // The venue is part of the event's resolved title, and its
         // published state decides whether this event has a public page.
         venue: { select: { name: true, published: true } },
@@ -45,6 +46,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
               categories={categories}
               talents={talents}
               selectedTalentIds={event.talents.map((t) => t.id)}
+              selectedExtraVenueIds={event.extraVenues.map((v) => v.id)}
               operatorVenue={lockedVenue(admin)}
             />
             <div className="mt-6 pt-6 border-t border-zinc-200">

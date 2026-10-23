@@ -42,6 +42,7 @@ export default async function EventsPage() {
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, logo: true } },
+        extraVenues: { select: { id: true } },
         eventCategory: { select: { id: true, name: true } },
       },
     }),
@@ -52,6 +53,11 @@ export default async function EventsPage() {
     }),
     prisma.eventCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
+
+  const venueIdsOf = (e: (typeof events)[number]) => [
+    ...(e.venueId ? [e.venueId] : []),
+    ...e.extraVenues.map((v) => v.id),
+  ];
 
   const featuredSource = events.find((e) => e.featured);
   const featured: FeaturedEventData | null = featuredSource
@@ -72,7 +78,7 @@ export default async function EventsPage() {
     name: e.name,
     shortDescription: e.shortDescription,
     image: e.image ?? e.posterImage,
-    venueId: e.venueId,
+    venueIds: venueIdsOf(e),
     eventCategoryId: e.eventCategoryId,
     venueName: e.venue?.name ?? null,
     venueLogo: e.venue?.logo ?? null,
@@ -91,7 +97,7 @@ export default async function EventsPage() {
     endHour: e.endHour,
     recurringDays: e.recurringDays,
     featured: e.featured,
-    venueId: e.venueId,
+    venueIds: venueIdsOf(e),
     venueName: e.venue?.name ?? null,
     categoryName: e.eventCategory?.name ?? null,
     waPhone: e.waPhone,

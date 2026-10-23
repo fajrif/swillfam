@@ -36,8 +36,9 @@ function notPastYet(now: Date): Prisma.EventWhereInput {
 }
 
 /** Events to show wherever the page says "upcoming", "next", or "current". */
+/** `published: true` is part of both helpers: a draft is in no list at all. */
 export function upcomingEventWhere(now: Date): Prisma.EventWhereInput {
-  return { active: true, AND: [publishedVenueScope, notPastYet(now)] };
+  return { active: true, published: true, AND: [publishedVenueScope, notPastYet(now)] };
 }
 
 /**
@@ -49,6 +50,23 @@ export function upcomingEventWhere(now: Date): Prisma.EventWhereInput {
  */
 export function pastEventWhere(now: Date): Prisma.EventWhereInput {
   return {
+    published: true,
     AND: [publishedVenueScope, { OR: [{ active: false }, { NOT: notPastYet(now) }] }],
+  };
+}
+
+/**
+ * Events at a venue: the ones it hosts as the main venue plus the ones that list
+ * it under "Also at". Wraps its `OR` in an object of its own so a caller can put
+ * it inside `AND` next to another `OR` without one replacing the other.
+ */
+export function eventsAtVenue(venueId: string): Prisma.EventWhereInput {
+  return eventsAtVenues([venueId]);
+}
+
+/** Same, for any of several venues (an event that is itself at more than one). */
+export function eventsAtVenues(venueIds: string[]): Prisma.EventWhereInput {
+  return {
+    OR: [{ venueId: { in: venueIds } }, { extraVenues: { some: { id: { in: venueIds } } } }],
   };
 }

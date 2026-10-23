@@ -264,9 +264,9 @@ model Category {
 }
 
 model Venue {
-  id                       String           @id @default(uuid())
+  id                       String            @id @default(uuid())
   name                     String
-  slug                     String           @unique
+  slug                     String            @unique
   heroTitle                String?
   heroDescription          String?
   talentSectionTitle       String?
@@ -282,7 +282,7 @@ model Venue {
   email                    String?
   placeId                  String?
   categoryId               String?
-  category                 Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category                 Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   // Free-text display hours ("Monday - Sunday: 12:00 - 03:00"). Kept as the
   // fallback for venues with no `hours` rows yet; once `hours` is populated the
   // public display string is *derived* from it (see src/lib/opening-hours.ts)
@@ -309,18 +309,20 @@ model Venue {
   segmentGalleries         SegmentGallery[]
   talents                  Talent[]
   promotions               Promotion[]
-  events                   Event[]
+  events                   Event[]           @relation("EventVenue")
+  /// Events that list this venue under "Also at" (the primary venue is `events`).
+  extraEvents              Event[]           @relation("EventExtraVenues")
   privateEvents            PrivateEvent[] // "Recommended Venues for …" — implicit m2m
   articles                 Article[] // "venues mentioned" in a guide — implicit m2m
   adminUsers               AdminUser[] // operators assigned to this venue
   // Unpublishing hides the venue from the public site and drops it from the
   // sitemap and Organization schema, without deleting its events/promotions.
-  published                Boolean          @default(true)
+  published                Boolean           @default(true)
   metaTitle                String?
   metaDescription          String?
   ogImage                  String?
-  createdAt                DateTime         @default(now())
-  updatedAt                DateTime         @updatedAt
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
 }
 
 /// One opening-hours group for a venue — maps 1:1 to an `OpeningHoursSpecification`.
@@ -388,6 +390,8 @@ model Talent {
   youtubeEmbed     String?
   instagramEmbed   String?
   events           Event[] // events this talent is performing at — implicit m2m
+  /// false = draft: 404 on the public site, out of the sitemap and every list.
+  published        Boolean         @default(true)
   metaTitle        String?
   metaDescription  String?
   ogImage          String?
@@ -426,6 +430,8 @@ model Promotion {
   endDate             DateTime
   startHour           String // "HH:mm"
   endHour             String // "HH:mm"
+  /// false = draft: 404 on the public site, out of the sitemap and every list.
+  published           Boolean            @default(true)
   metaTitle           String?
   metaDescription     String?
   ogImage             String?
@@ -446,21 +452,23 @@ model EventCategory {
 }
 
 model Event {
-  id                     String         @id @default(uuid())
+  id                     String          @id @default(uuid())
   image                  String?
   bannerImage            String?
   posterImage            String?
   name                   String
-  slug                   String         @unique
+  slug                   String          @unique
   shortDescription       String
   description            String
   caption                String
   eventCategoryId        String?
-  eventCategory          EventCategory? @relation(fields: [eventCategoryId], references: [id], onDelete: SetNull)
+  eventCategory          EventCategory?  @relation(fields: [eventCategoryId], references: [id], onDelete: SetNull)
   venueId                String?
-  venue                  Venue?         @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  venue                  Venue?          @relation("EventVenue", fields: [venueId], references: [id], onDelete: SetNull)
+  /// Further venues hosting the same event. `venue` stays the primary: its logo is on the card, its address is the schema location.
+  extraVenues            Venue[]         @relation("EventExtraVenues")
   talents                Talent[] // talents performing at this event — implicit m2m
-  eventType              EventType      @default(FIXED)
+  eventType              EventType       @default(FIXED)
   startDate              DateTime
   endDate                DateTime?
   startHour              String // "HH:mm"
@@ -473,11 +481,13 @@ model Event {
   // "Next Edition Event" paragraph on the public page, recurring events only —
   // replaces shortDescription there so the two can read differently.
   nextEditionDescription String?
-  featured               Boolean        @default(false)
+  featured               Boolean         @default(false)
   // false = retired: hidden from the public calendar + listings, but its detail
   // page still renders (stamped "Past Event", reservations disabled) and it
   // feeds the "Past Editions" grid on recurring event pages.
-  active                 Boolean        @default(true)
+  active                 Boolean         @default(true)
+  /// false = draft: 404 on the public site, out of the sitemap and every list. Stronger than `active`.
+  published              Boolean         @default(true)
   galleries              String[] // multiple uploaded image paths, ordered
   ticketInfo             String?
   waPhone                String?
@@ -492,8 +502,8 @@ model Event {
   metaTitle              String?
   metaDescription        String?
   ogImage                String?
-  createdAt              DateTime       @default(now())
-  updatedAt              DateTime       @updatedAt
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
 }
 
 // ---------------------------------------------------------------------------

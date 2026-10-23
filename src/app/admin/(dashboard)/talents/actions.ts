@@ -21,6 +21,7 @@ function parse(formData: FormData) {
     venueId: venueId || null,
     talentCategoryId: talentCategoryId || null,
     status: String(formData.get("status") ?? "RESIDENT") as TalentStatus,
+    published: formData.get("published") === "true",
     instagramUrl: String(formData.get("instagramUrl") ?? "").trim() || null,
     spotifyEmbed: String(formData.get("spotifyEmbed") ?? "").trim() || null,
     youtubeEmbed: String(formData.get("youtubeEmbed") ?? "").trim() || null,

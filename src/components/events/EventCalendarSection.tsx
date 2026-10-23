@@ -56,7 +56,7 @@ export function EventCalendarSection({
   const grid = buildMonthGrid(viewYear, viewMonth);
   const occurrences = buildOccurrenceMap(
     events.filter(
-      (e) => (venueId === null || e.venueId === venueId) && active.has(categoryOf(e)),
+      (e) => (venueId === null || e.venueIds.includes(venueId)) && active.has(categoryOf(e)),
     ),
     grid,
   );

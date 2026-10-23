@@ -1,3 +1,4 @@
+import { PublishedBadge } from "@/components/admin/PublishedBadge";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, venueWhere } from "@/lib/admin-auth";
@@ -36,7 +37,7 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
     skip,
     take: pageSize,
     orderBy: { startDate: "desc" },
-    include: { venue: { select: { name: true } }, eventCategory: { select: { name: true } } },
+    include: { venue: { select: { name: true } }, _count: { select: { extraVenues: true } }, eventCategory: { select: { name: true } } },
     })
   const total = await prisma.event.count({ where });
 
@@ -59,7 +60,11 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
                 </Link>
               ),
             },
-            { header: "Venue", cell: (e) => e.venue?.name ?? "—" },
+            {
+              header: "Venue",
+              cell: (e) =>
+                e.venue ? `${e.venue.name}${e._count.extraVenues ? ` +${e._count.extraVenues}` : ""}` : "—",
+            },
             { header: "Category", cell: (e) => e.eventCategory?.name ?? "—" },
             {
               header: "Schedule",
@@ -72,6 +77,7 @@ export default async function EventsPage(props: { searchParams: Promise<{ q?: st
                   <span className="text-zinc-500">{fmtDate(e.startDate)}</span>
                 ),
             },
+            { header: "Published", cell: (e) => <PublishedBadge published={e.published} /> },
             {
               header: "Flags",
               cell: (e) => (
