@@ -25,8 +25,9 @@ export function ArticleContent({
           ← Back to All Articles
         </Link>
 
-        {/* Intro: date, title, blurb stacked in a single column */}
-        <div className="flex flex-col gap-4">
+        {/* Intro: date, title, blurb stacked in a single column, as wide as the
+            body below so the whole article shares one left and right edge */}
+        <div className="flex max-w-[820px] flex-col gap-4">
           <span className="font-inter text-sm text-sf-body/50">
             {DATE_FMT.format(publishedDate)}
           </span>
