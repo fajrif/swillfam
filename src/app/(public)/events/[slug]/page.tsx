@@ -248,6 +248,31 @@ export default async function EventSlugPage({
         />
       ) : null}
 
+      {event.talents.length > 0 ? (
+        <Reveal>
+          <TalentSection
+            talents={event.talents}
+            title="Featured Talents"
+            description={`Meet the talents performing at ${event.name}.`}
+          />
+        </Reveal>
+      ) : null}
+
+      {!isRecurring && !isPast && (event.ticketInfo || event.ticketLink) ? (
+        <Reveal>
+          <EventTicketsSection
+            image={event.image ?? event.bannerImage}
+            ticketInfo={event.ticketInfo}
+            ticketLink={event.ticketLink}
+            eventName={event.name}
+            venueName={venue?.name ?? null}
+            phone={phone}
+            active={!isPast}
+            recapHref={recapHref}
+          />
+        </Reveal>
+      ) : null}
+
       {/* The recap, video first. One anchor wraps both blocks so the past-event
           CTA lands on whichever of them this event actually has. */}
       {hasRecap ? (
@@ -294,31 +319,6 @@ export default async function EventSlugPage({
             </Reveal>
           ))
         : null}
-
-      {!isRecurring && (event.ticketInfo || event.ticketLink) ? (
-        <Reveal>
-          <EventTicketsSection
-            image={event.image ?? event.bannerImage}
-            ticketInfo={event.ticketInfo}
-            ticketLink={event.ticketLink}
-            eventName={event.name}
-            venueName={venue?.name ?? null}
-            phone={phone}
-            active={!isPast}
-            recapHref={recapHref}
-          />
-        </Reveal>
-      ) : null}
-
-      {event.talents.length > 0 ? (
-        <Reveal>
-          <TalentSection
-            talents={event.talents}
-            title="Featured Talents"
-            description={`Meet the talents performing at ${event.name}.`}
-          />
-        </Reveal>
-      ) : null}
 
       {related.length > 0 ? (
         <Reveal>
