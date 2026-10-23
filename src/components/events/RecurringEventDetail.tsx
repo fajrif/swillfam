@@ -126,13 +126,13 @@ export async function RecurringEventDetail({
           </div>
 
           {image ? (
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
+            // The whole picture, at its own proportions - a fixed 4:3 box cropped it.
+            <div className="w-full self-start bg-sf-surface">
               <ZoomableImage
                 src={image}
                 alt={await altFor(image, name)}
-                fill
+                natural
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
               />
             </div>
           ) : null}

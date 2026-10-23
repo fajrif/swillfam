@@ -38,13 +38,15 @@ export function FeaturedEventSection({ event }: { event: FeaturedEventData | nul
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[7fr_4fr] lg:gap-12">
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-sf-surface">
+          {/* The whole picture at its own proportions: a fixed 16:10 box cropped posters. */}
+          <div className="w-full self-start bg-sf-surface">
             <ContentImage
               src={event.image ?? FALLBACK_IMAGE}
               alt={event.name}
-              fill
+              width={0}
+              height={0}
               sizes="(max-width: 1024px) 100vw, 60vw"
-              className="object-cover"
+              className="h-auto w-full"
             />
           </div>
 

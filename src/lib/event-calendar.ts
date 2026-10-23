@@ -312,6 +312,28 @@ export function formatOccurrenceDateTime(date: Date, startHour: string): string 
   return `${formatLongDate(date)} – ${formatHour(startHour)}`;
 }
 
+/**
+ * The days a one-off event runs, UTC-pinned like the rest of this file:
+ * `"October 30, 2026"` for one day, `"October 30 – 31, 2026"` within a month,
+ * `"October 30 – November 2, 2026"` across months, and both years across years.
+ */
+export function formatEventDays(start: Date, end: Date | null): string {
+  if (!end || dateKey(end) === dateKey(start)) return formatLongDate(start);
+  const sy = start.getUTCFullYear();
+  const ey = end.getUTCFullYear();
+  if (sy !== ey) return `${formatLongDate(start)} – ${formatLongDate(end)}`;
+  const month = (d: Date) => MONTH_NAMES[d.getUTCMonth()];
+  if (start.getUTCMonth() === end.getUTCMonth()) {
+    return `${month(start)} ${start.getUTCDate()} – ${end.getUTCDate()}, ${ey}`;
+  }
+  return `${month(start)} ${start.getUTCDate()} – ${month(end)} ${end.getUTCDate()}, ${ey}`;
+}
+
+/** `"9:00 PM – 4:00 AM"`; an end earlier than the start simply means the next morning. */
+export function formatHourRange(startHour: string, endHour: string): string {
+  return `${formatHour(startHour)} – ${formatHour(endHour)}`;
+}
+
 /** `"June 2026"`, the month-navigation label. */
 export function formatMonthYear(year: number, month: number): string {
   return `${MONTH_NAMES[month]} ${year}`;

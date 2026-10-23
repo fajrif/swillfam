@@ -5,7 +5,13 @@ import { WhatsappLogo } from "@phosphor-icons/react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { whatsappHref } from "@/lib/whatsapp";
-import { formatOccurrenceDateTime, type EventOccurrence } from "@/lib/event-calendar";
+import {
+  formatEventDays,
+  formatHourRange,
+  formatLongDate,
+  formatOccurrenceDateTime,
+  type EventOccurrence,
+} from "@/lib/event-calendar";
 import { cn } from "@/lib/utils";
 import { CATEGORY_STYLE } from "./category-style";
 
@@ -82,9 +88,14 @@ export function EventDetailDialog({
 
             <div className="mt-5">
               <p className="font-syne text-base font-bold text-white">Date &amp; Time</p>
+              {/* A one-off shows every day it runs; a recurring night shows the day that
+                  was clicked, since its own start date is only when the series began. */}
               <p className="mt-2 font-inter text-sm">
-                {formatOccurrenceDateTime(occurrence.date, event.startHour)}
+                {event.eventType === "RECURRING"
+                  ? formatLongDate(occurrence.date)
+                  : formatEventDays(event.startDate, event.endDate)}
               </p>
+              <p className="mt-1 font-inter text-sm">{formatHourRange(event.startHour, event.endHour)}</p>
             </div>
 
             <div className={cn("mt-6 gap-3", waHref ? "grid grid-cols-2" : "flex")}>

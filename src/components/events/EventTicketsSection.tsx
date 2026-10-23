@@ -35,13 +35,14 @@ export function EventTicketsSection({
     <section className="py-16 lg:py-24">
       <Container className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-14">
         {image ? (
-          <div className="relative aspect-[4/3] w-full overflow-hidden bg-sf-surface">
+          <div className="w-full bg-sf-surface">
             <ContentImage
               src={image}
               alt={eventName}
-              fill
+              width={0}
+              height={0}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
+              className="h-auto w-full"
             />
           </div>
         ) : null}
