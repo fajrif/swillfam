@@ -21,11 +21,14 @@ export function Hero({
   children,
   featuredEvents = [],
   bannerImage,
+  mobileBannerImage,
 }: {
   children: React.ReactNode;
   featuredEvents?: FeaturedEventData[];
   /** A static hero image (seasonal campaign) in place of the animated background. */
   bannerImage?: string;
+  /** Portrait artwork for tall screens, where the wide banner would be cropped. */
+  mobileBannerImage?: string;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
@@ -48,9 +51,10 @@ export function Hero({
       backdrop={
         bannerImage ? (
           // The banner is a 16:9 poster with its text spread edge to edge, so on a
-          // tall (portrait) screen `cover` would crop the title away. There it is
-          // shown whole, centred on a matching dark ground with its top and bottom
-          // edges faded into it; on landscape screens it still fills the hero.
+          // tall (portrait) screen it would lose its title. There the portrait
+          // artwork (the flyer) is shown instead, whole, centred on a matching dark
+          // ground with its top and bottom edges faded into it; on landscape screens
+          // the banner fills the hero.
           <div className="absolute inset-0 bg-[#120404]">
             <Image
               src={bannerImage}
@@ -58,8 +62,17 @@ export function Hero({
               fill
               priority
               sizes="100vw"
-              className="object-cover portrait:object-contain portrait:[mask-image:linear-gradient(to_bottom,transparent,black_14%,black_86%,transparent)]"
+              className={mobileBannerImage ? "object-cover portrait:hidden" : "object-cover"}
             />
+            {mobileBannerImage ? (
+              <Image
+                src={mobileBannerImage}
+                alt=""
+                fill
+                sizes="100vw"
+                className="hidden object-contain portrait:block [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
+              />
+            ) : null}
           </div>
         ) : (
           <MetaballsBackground
