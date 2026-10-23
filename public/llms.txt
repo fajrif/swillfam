@@ -27,7 +27,6 @@ Key facts:
 - [Lifestyle venues](https://swillfam.com/venues/lifestyle): Restaurant, café and bars
 - [Nightlife venues](https://swillfam.com/venues/nightlife): Clubs
 - [Events](https://swillfam.com/events): Upcoming regular and special events across all venues
-- [The SwillFam Experience](https://swillfam.com/experience): A day-to-night route across SwillFam venues
 - [Promotions](https://swillfam.com/promotions): Current offers and seasonal specials
 - [Private events](https://swillfam.com/private-events): Corporate events, birthdays, brand activations and celebrations at SwillFam venues
 - [Contact](https://swillfam.com/contact)

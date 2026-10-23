@@ -161,6 +161,7 @@ export const STATIC_PAGE_SEO_BY_KEY = Object.fromEntries(
  */
 const HIDDEN_PAGE_KEYS: ReadonlySet<StaticPageSeoKey> = new Set<StaticPageSeoKey>([
   "exclusive",
+  "experience",
   "media-mentions",
   "merchandise",
 ]);

@@ -4,7 +4,6 @@ import { upcomingEventWhere } from "@/lib/event-scope";
 import { CategoryVenuesLogoSection, type CategoryVenuesTileData } from "@/components/shared/CategoryVenuesLogoSection";
 import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
-import { Experience } from "@/components/home/Experience";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { Hero } from "@/components/home/Hero";
 import { Reveal } from "@/components/Reveal";
@@ -87,9 +86,6 @@ export default async function Home() {
           />
         </Reveal>
       ) : null}
-      <Reveal>
-        <Experience />
-      </Reveal>
       <Reveal>
         <ArticleListSection articles={articles} />
       </Reveal>
