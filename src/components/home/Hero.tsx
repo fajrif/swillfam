@@ -125,11 +125,14 @@ export function Hero({
               </>
             )}
 
-            <p className="font-inter text-base leading-relaxed text-white md:text-lg">
-              Check out what&rsquo;s drawing the city&rsquo;s attention right now. Immersive
-              spaces, unforgettable energy, and experiences built for those who want more than
-              just a night out.
-            </p>
+            {/* Part of the animated hero, like the headline: hidden with a campaign banner. */}
+            {bannerImage ? null : (
+              <p className="font-inter text-base leading-relaxed text-white md:text-lg">
+                Check out what&rsquo;s drawing the city&rsquo;s attention right now. Immersive
+                spaces, unforgettable energy, and experiences built for those who want more than
+                just a night out.
+              </p>
+            )}
           </div>
         </Container>
       }
