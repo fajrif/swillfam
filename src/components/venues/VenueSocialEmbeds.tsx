@@ -86,13 +86,19 @@ export async function VenueSocialEmbeds({
               {/* Lazy: the section is near the foot of the page, so the frame
                   isn't fetched until the visitor scrolls close to it. */}
               {showFrame ? (
-                <iframe
-                  src={instagram.embedUrl}
-                  title={`${venueName} on Instagram`}
-                  loading="lazy"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  className="h-[700px] w-full border-0"
-                />
+                <div className="@container w-full">
+                  <iframe
+                    src={instagram.embedUrl}
+                    title={`${venueName} on Instagram`}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    // The profile embed is a header (a fixed ~100px on phones, ~130px
+                    // wider) over two rows of three square thumbnails, so its height is
+                    // two thirds of its width plus the header. A fixed height left a
+                    // white band, and a plain aspect ratio could not fit both sizes.
+                    className="h-[calc(100cqw*2/3+104px)] w-full border-0 sm:h-[calc(100cqw*2/3+134px)]"
+                  />
+                </div>
               ) : null}
               <a
                 href={instagramUrl ?? undefined}

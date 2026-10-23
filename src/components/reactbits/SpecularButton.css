@@ -109,6 +109,7 @@
 
 .specular-button__label {
   position: relative;
+  text-align: center;
   z-index: 2;
   text-transform: uppercase;
   letter-spacing: 0.06em;
