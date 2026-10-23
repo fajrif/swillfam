@@ -72,20 +72,16 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
-    // AVIF first, WebP for browsers that don't take it, original last. Next
-    // ships `['image/webp']` only.
-    //
-    // AVIF is not universally smaller — measured at w=1920 against the real
-    // art: the Le Cirque banner is 115 KB as AVIF vs 151 KB as WebP, the
-    // lifestyle banner 114 vs 125, but Zoo's venue photo goes the other way
-    // (99 vs 77), and small flat logos come out larger than the source PNG.
-    // Next serves the first format the browser accepts rather than the
-    // smallest, so this is a bet, and the bet is on the hero photographs:
-    // every page's LCP element is one, they are where AVIF wins by the widest
-    // margin, and the few KB it costs a logo are not on the critical path.
-    // The encode is slower, but happens once per (image, size) given the TTL
-    // below.
-    formats: ["image/avif", "image/webp"],
+    // WebP only. This used to be AVIF first, and AVIF can be smaller — measured
+    // at w=1920 the Le Cirque banner was 115 KB as AVIF vs 151 KB as WebP — but
+    // it was not a clear win (Zoo's venue photo went the other way, 99 vs 77, and
+    // small flat logos came out larger than the source), and the art the team
+    // supplies is WebP already, so AVIF meant a WebP -> AVIF re-encode. That
+    // encode is slow and memory-hungry in `sharp`; on a cold image cache it
+    // pushed the Node process past its PM2 memory cap. The brief (T13) accepts
+    // "WebP/AVIF". If a hero ever needs the extra ~25%, put "image/avif" back
+    // in front and watch `pm2 status` while the cache warms.
+    formats: ["image/webp"],
     // 30 days instead of the 4-hour default. Safe because the paths are
     // immutable in practice: `reconcileSingleImage` writes a fresh UUID
     // filename on every replace, so a changed image is a changed URL. Only the
