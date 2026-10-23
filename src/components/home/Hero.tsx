@@ -52,8 +52,8 @@ export function Hero({
         bannerImage ? (
           // The banner is a 16:9 poster with its text spread edge to edge, so on a
           // tall (portrait) screen it would lose its title. There the portrait
-          // artwork (the flyer) is shown instead, whole, centred on a matching dark
-          // ground with its top and bottom edges faded into it; on landscape screens
+          // banner made for it is shown instead, whole, over a blurred copy of itself that
+          // fills the screen, its top and bottom edges faded into it; on landscape screens
           // the banner fills the hero.
           <div className="absolute inset-0 bg-[#120404]">
             <Image
@@ -65,13 +65,27 @@ export function Hero({
               className={mobileBannerImage ? "object-cover portrait:hidden" : "object-cover"}
             />
             {mobileBannerImage ? (
-              <Image
-                src={mobileBannerImage}
-                alt=""
-                fill
-                sizes="100vw"
-                className="hidden object-contain portrait:block [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]"
-              />
+              <>
+                {/* The banner is 4:5 and a phone is taller, so `cover` would cut the
+                    title off its sides. Instead the whole banner sits on top of a
+                    blurred, darkened copy of itself that fills the screen: no bars,
+                    nothing cropped, and the edges melt into the same colours. */}
+                <Image
+                  src={mobileBannerImage}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  aria-hidden
+                  className="hidden scale-110 object-cover opacity-70 blur-2xl portrait:block"
+                />
+                <Image
+                  src={mobileBannerImage}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="hidden object-contain portrait:block [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]"
+                />
+              </>
             ) : null}
           </div>
         ) : (
