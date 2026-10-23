@@ -90,18 +90,23 @@ export function VenueLocationHours({
           </div>
 
           {/* Map */}
-          <div className="relative h-[360px] w-full lg:h-[460px]">
+          {/* The row is as tall as the info panel, so the map fills that height (the
+              frame is absolute, so its own height cannot stretch the row) and never
+              drops below 460px. */}
+          <div className="relative h-[360px] w-full lg:h-auto lg:min-h-[460px]">
             {TOKEN ? (
-              <Map
-                mapboxAccessToken={TOKEN}
-                initialViewState={{ longitude, latitude, zoom: hasCoords ? 16 : 13 }}
-                mapStyle="mapbox://styles/mapbox/dark-v11"
-                style={{ width: "100%", height: "100%" }}
-              >
-                {hasCoords ? (
-                  <Marker longitude={longitude} latitude={latitude} color="#c6387f" />
-                ) : null}
-              </Map>
+              <div className="absolute inset-0">
+                <Map
+                  mapboxAccessToken={TOKEN}
+                  initialViewState={{ longitude, latitude, zoom: hasCoords ? 16 : 13 }}
+                  mapStyle="mapbox://styles/mapbox/dark-v11"
+                  style={{ width: "100%", height: "100%" }}
+                >
+                  {hasCoords ? (
+                    <Marker longitude={longitude} latitude={latitude} color="#c6387f" />
+                  ) : null}
+                </Map>
+              </div>
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-sf-surface p-8 text-center">
                 <p className="font-inter text-sm">
