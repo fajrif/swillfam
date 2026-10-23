@@ -54,6 +54,7 @@ function parse(formData: FormData, admin: CurrentAdmin, currentFeatured = false)
     // Featured drives site-wide slots (home, the /events hero), so only administrators set it.
     featured: isAdministrator(admin) ? formData.get("featured") === "true" : currentFeatured,
     active: formData.get("active") === "true",
+    published: formData.get("published") === "true",
     schemaEventType: schemaEventType as EventSchemaType,
     eventStatus: eventStatus as EventStatus,
     ticketInfo: String(formData.get("ticketInfo") ?? "").trim() || null,
@@ -66,6 +67,19 @@ function parse(formData: FormData, admin: CurrentAdmin, currentFeatured = false)
     metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
     metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };
+}
+
+/**
+ * "Also at" venues. The primary venue is `venueId`, so it is dropped here even
+ * if it was ticked too - it would otherwise appear twice on the event page.
+ */
+function extraVenueIds(formData: FormData) {
+  const primary = String(formData.get("venueId") ?? "").trim();
+  return formData
+    .getAll("extraVenueIds")
+    .map(String)
+    .filter((id) => id && id !== primary)
+    .map((id) => ({ id }));
 }
 
 /** The talent checkbox group posts one `talentIds` entry per ticked box. */
@@ -101,6 +115,7 @@ export async function createEventAction(formData: FormData) {
       recapThumbnail,
       galleries,
       talents: { connect: talentIds(formData) },
+      extraVenues: { connect: extraVenueIds(formData) },
     },
   });
   revalidatePath(BASE);
@@ -135,6 +150,7 @@ export async function updateEventAction(id: string, formData: FormData) {
       galleries,
       // `set` replaces the whole selection, so unticking a box unlinks it.
       talents: { set: talentIds(formData) },
+      extraVenues: { set: extraVenueIds(formData) },
     },
   });
   revalidatePath(BASE);

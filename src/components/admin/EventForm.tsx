@@ -18,6 +18,7 @@ export function EventForm({
   categories,
   talents,
   selectedTalentIds = [],
+  selectedExtraVenueIds = [],
   operatorVenue,
   altsByPath,
 }: {
@@ -27,6 +28,7 @@ export function EventForm({
   categories: { id: string; name: string }[];
   talents: { id: string; name: string; status: TalentStatus }[];
   selectedTalentIds?: string[];
+  selectedExtraVenueIds?: string[];
   /** Set for operators: the venue is fixed to theirs and Featured is hidden. */
   operatorVenue?: { id: string; name: string };
   /** Stored alt text by image path, from `getImageAltRecord()`. */
@@ -76,6 +78,15 @@ export function EventForm({
       </div>
 
       <MultiSelectField
+        label="Also at"
+        name="extraVenueIds"
+        options={venues.map((v) => ({ value: v.id, label: v.name }))}
+        defaultValues={selectedExtraVenueIds}
+        placeholder="Search venues…"
+        hint="Other venues hosting this event. The venue above stays the main one (its logo is on the card); this event also appears on these venues' pages and filters."
+      />
+
+      <MultiSelectField
         label="Talents"
         name="talentIds"
         options={talents.map((t) => ({ value: t.id, label: `${t.name} (${talentStatusLabel(t.status)})` }))}
@@ -110,7 +121,9 @@ export function EventForm({
         {!operatorVenue && <CheckboxField label="Featured" name="featured" defaultChecked={event?.featured} />}
         {/* Uncheck to retire: hidden from the public calendar and listings, but
             the detail page still renders as a "Past Event". New events default on. */}
-        <CheckboxField label="Active" name="active" defaultChecked={event?.active ?? true} />
+        <CheckboxField label="Active" name="active" defaultChecked={event?.active ?? true} hint="Untick to retire a finished event: it leaves the calendar and listings but its page stays up as a Past Event." />
+        {/* Stronger than Active: a draft has no public page at all. */}
+        <CheckboxField label="Published" name="published" defaultChecked={event?.published ?? true} hint="Untick to keep it as a draft: the page returns 404 and it appears nowhere on the site." />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

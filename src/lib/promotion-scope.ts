@@ -29,6 +29,7 @@ export function isExpiredPromotion(promotion: { endDate: Date }, now: Date): boo
  */
 export function livePromotionWhere(now: Date): Prisma.PromotionWhereInput {
   return {
+    published: true,
     AND: [publishedVenueScope, { endDate: { gte: startOfUtcDay(now) } }],
   };
 }

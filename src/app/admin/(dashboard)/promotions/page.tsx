@@ -1,3 +1,4 @@
+import { PublishedBadge } from "@/components/admin/PublishedBadge";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, venueWhere } from "@/lib/admin-auth";
@@ -51,6 +52,7 @@ export default async function PromotionsPage(props: { searchParams: Promise<{ q?
             },
             { header: "Venue", cell: (p) => p.venue?.name ?? "—" },
             { header: "Category", cell: (p) => p.promotionCategory?.name ?? "—" },
+            { header: "Published", cell: (p) => <PublishedBadge published={p.published} /> },
             {
               header: "Runs",
               cell: (p) => (

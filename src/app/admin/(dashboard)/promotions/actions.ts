@@ -26,6 +26,7 @@ function parse(formData: FormData, admin: CurrentAdmin) {
     endDate: new Date(String(formData.get("endDate"))),
     startHour: String(formData.get("startHour") ?? "").trim(),
     endHour: String(formData.get("endHour") ?? "").trim(),
+    published: formData.get("published") === "true",
     metaTitle: String(formData.get("metaTitle") ?? "").trim() || null,
     metaDescription: String(formData.get("metaDescription") ?? "").trim() || null,
   };

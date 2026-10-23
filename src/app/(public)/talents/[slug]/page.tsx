@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { publishedVenueScope } from "@/lib/venue-scope";
-import { upcomingEventWhere } from "@/lib/event-scope";
+import { eventsAtVenue, upcomingEventWhere } from "@/lib/event-scope";
 import { getArticleRows } from "@/lib/articles";
 import { formatDateRange } from "@/lib/date";
 import { Reveal } from "@/components/Reveal";
@@ -32,14 +32,14 @@ export const revalidate = 60;
 /** Cached so generateMetadata and the page share a single DB read per request. */
 const getTalentBySlug = cache((slug: string) =>
   prisma.talent.findFirst({
-    where: { slug, status: "RESIDENT", ...publishedVenueScope },
+    where: { slug, status: "RESIDENT", published: true, ...publishedVenueScope },
     include: { venue: true, talentCategory: true },
   }),
 );
 
 export async function generateStaticParams() {
   const rows = await prisma.talent.findMany({
-    where: { status: "RESIDENT", ...publishedVenueScope },
+    where: { status: "RESIDENT", published: true, ...publishedVenueScope },
     select: { slug: true },
   });
   return rows.map((t) => ({ slug: t.slug }));
@@ -80,14 +80,14 @@ export default async function TalentSlugPage({
       ? prisma.event.findMany({
           // The section below is headed "Upcoming Events with …", and this
           // query used to filter neither date nor `active`.
-          where: { venueId: talent.venueId, ...upcomingEventWhere(new Date()) },
+          where: { AND: [eventsAtVenue(talent.venueId), upcomingEventWhere(new Date())] },
           orderBy: { startDate: "asc" },
           take: 3,
           include: { venue: { select: { name: true, logo: true } } },
         })
       : Promise.resolve([]),
     prisma.talent.findMany({
-      where: { id: { not: talent.id }, status: "RESIDENT", ...publishedVenueScope },
+      where: { id: { not: talent.id }, status: "RESIDENT", published: true, ...publishedVenueScope },
       orderBy: { name: "asc" },
       take: 3,
       include: {

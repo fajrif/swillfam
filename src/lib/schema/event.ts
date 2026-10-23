@@ -30,6 +30,8 @@ const RECURRING_OCCURRENCES = 5;
 
 export type EventForSchema = Event & {
   venue?: Venue | null;
+  /** Published "Also at" venues; the main `venue` is listed first in `location`. */
+  extraVenues?: Venue[];
   talents?: Pick<Talent, "name" | "slug">[];
 };
 
@@ -48,6 +50,17 @@ function eventLocation(venue: Venue): JsonLdNode {
     name: venue.name,
     address: postalAddress(venue),
   };
+}
+
+/**
+ * The main venue, then each "Also at" venue. One place stays an object (what
+ * the Event check expects for a single venue); several become an array.
+ */
+function eventLocations(event: EventForSchema): JsonLdNode | JsonLdNode[] | undefined {
+  const venues = [event.venue, ...(event.extraVenues ?? [])].filter((v): v is Venue => !!v);
+  if (venues.length === 0) return undefined;
+  const places = venues.map(eventLocation);
+  return places.length === 1 ? places[0] : places;
 }
 
 /** `https://schema.org/EventScheduled` — the column already holds the token. */
@@ -95,7 +108,7 @@ function eventNode(event: EventForSchema, occurrence?: Date): JsonLdNode {
     endDate: jakartaDateTime(endDay, event.endHour, endOffset),
     eventStatus: statusUrl(event.eventStatus),
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    location: event.venue ? eventLocation(event.venue) : undefined,
+    location: eventLocations(event),
     performer: (event.talents ?? []).map((talent) => ({
       "@type": "Person",
       "@id": talentId(talent.slug),

@@ -1,3 +1,4 @@
+import { PublishedBadge } from "@/components/admin/PublishedBadge";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { AdminTable } from "@/components/admin/AdminTable";
@@ -46,6 +47,7 @@ export default async function TalentsPage(props: { searchParams: Promise<{ q?: s
             },
             { header: "Venue", cell: (t) => t.venue?.name ?? "—" },
             { header: "Category", cell: (t) => t.talentCategory?.name ?? "—" },
+            { header: "Published", cell: (t) => <PublishedBadge published={t.published} /> },
             {
               header: "Status",
               cell: (t) =>

@@ -48,7 +48,7 @@ export const getVenueBySlug = cache((slug: string) =>
       category: true,
       hours: { orderBy: { sortOrder: "asc" } },
       segmentGalleries: { orderBy: { createdAt: "asc" } },
-      talents: { where: { status: "RESIDENT" }, orderBy: { createdAt: "asc" } },
+      talents: { where: { status: "RESIDENT", published: true }, orderBy: { createdAt: "asc" } },
       // "Current Offers" shows only offers that are actually current; an
       // expired one 301s to /promotions, so a card here would be a link to a
       // redirect.
@@ -58,7 +58,17 @@ export const getVenueBySlug = cache((slug: string) =>
       // venue scope too, which is redundant here (we are inside one published
       // venue) but harmless, and spelling the rule out a second time is how
       // the two lists would drift apart.
-      events: { where: upcomingEventWhere(new Date()), orderBy: { startDate: "asc" } },
+      events: {
+        where: upcomingEventWhere(new Date()),
+        orderBy: { startDate: "asc" },
+        include: { venue: { select: { name: true, logo: true } } },
+      },
+      // Events that list this venue under "Also at"; merged with `events` below.
+      extraEvents: {
+        where: upcomingEventWhere(new Date()),
+        orderBy: { startDate: "asc" },
+        include: { venue: { select: { name: true, logo: true } } },
+      },
     },
   }),
 );
@@ -112,13 +122,17 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
       })),
   );
 
-  const eventItems: OfferCardData[] = venue.events.map((e) => ({
+  const hostedEvents = [...venue.events, ...venue.extraEvents].sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+  );
+  const eventItems: OfferCardData[] = hostedEvents.map((e) => ({
     id: e.id,
     image: e.image ?? e.posterImage,
     title: e.name,
     description: e.shortDescription,
-    venueName: venue.name,
-    venueLogo: venue.logo,
+    // The card names the event's main venue, which for an "Also at" event is another one.
+    venueName: e.venue?.name ?? venue.name,
+    venueLogo: e.venue?.logo ?? venue.logo,
     meta: formatEventSchedule(e),
     href: `/events/${e.slug}`,
   }));

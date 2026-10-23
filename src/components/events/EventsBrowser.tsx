@@ -12,7 +12,8 @@ export type EventCard = {
   name: string;
   shortDescription: string;
   image: string | null;
-  venueId: string | null;
+  /** Main venue first, then "Also at": the venue filter matches any of them. */
+  venueIds: string[];
   eventCategoryId: string | null;
   venueName: string | null;
   venueLogo: string | null;
@@ -57,7 +58,7 @@ export function EventsBrowser({
   const items = mode === "venues" ? venues : categories;
   const filtered = events.filter((e) => {
     if (selectedId === null) return true;
-    return mode === "venues" ? e.venueId === selectedId : e.eventCategoryId === selectedId;
+    return mode === "venues" ? e.venueIds.includes(selectedId) : e.eventCategoryId === selectedId;
   });
   const shown: OfferCardData[] = filtered.slice(0, visible).map((e) => ({
     id: e.id,

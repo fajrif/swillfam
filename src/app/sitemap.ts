@@ -64,9 +64,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // same [slug] dispatcher as venues, and unfiltered because the page is.
       prisma.category.findMany({ select: { slug: true, updatedAt: true } }),
       // Retired events keep a reachable 200 detail page on purpose (they are
-      // linked from "Past Editions"), so `active` is deliberately not filtered.
+      // linked from "Past Editions"), so `active` is deliberately not filtered (`published` is: a draft 404s).
       prisma.event.findMany({
-        where: publishedVenueScope,
+        where: { published: true, ...publishedVenueScope },
         select: { slug: true, updatedAt: true },
       }),
       // Expired offers 301 to /promotions (src/proxy.ts), and a redirected
@@ -76,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         select: { slug: true, updatedAt: true },
       }),
       prisma.talent.findMany({
-        where: { status: "RESIDENT", ...publishedVenueScope },
+        where: { status: "RESIDENT", published: true, ...publishedVenueScope },
         select: { slug: true, updatedAt: true },
       }),
       // status 1 = Published; drafts notFound().

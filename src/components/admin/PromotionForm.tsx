@@ -1,5 +1,5 @@
 import type { Promotion } from "@/generated/prisma/client";
-import { Field, TextareaField, SelectField, ReadOnlyField, SaveButton } from "./form-fields";
+import { Field, TextareaField, SelectField, ReadOnlyField, CheckboxField, SaveButton } from "./form-fields";
 import { ImageManager } from "./ImageManager";
 import { SlugField } from "./SlugField";
 import { RichTextEditor } from "./RichTextEditor";
@@ -77,6 +77,13 @@ export function PromotionForm({
         titleValue={promotion?.metaTitle}
         descriptionValue={promotion?.metaDescription}
         ogImageValue={promotion?.ogImage}
+      />
+
+      <CheckboxField
+        label="Published"
+        name="published"
+        defaultChecked={promotion?.published ?? true}
+        hint="Untick to keep it as a draft: the page returns 404 and it appears nowhere on the site."
       />
 
       <SaveButton>Save promotion</SaveButton>

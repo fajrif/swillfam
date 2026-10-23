@@ -28,7 +28,7 @@ export const revalidate = 60;
 const getPromotionBySlug = cache((slug: string) =>
   // findFirst, not findUnique: the venue scope is not part of the unique key.
   prisma.promotion.findFirst({
-    where: { slug, ...publishedVenueScope },
+    where: { slug, published: true, ...publishedVenueScope },
     include: {
       venue: { include: { hours: { orderBy: { sortOrder: "asc" } } } },
       promotionCategory: true,
