@@ -47,7 +47,20 @@ export function Hero({
     <StickyHero
       backdrop={
         bannerImage ? (
-          <Image src={bannerImage} alt="" fill priority sizes="100vw" className="object-cover" />
+          // The banner is a 16:9 poster with its text spread edge to edge, so on a
+          // tall (portrait) screen `cover` would crop the title away. There it is
+          // shown whole, centred on a matching dark ground with its top and bottom
+          // edges faded into it; on landscape screens it still fills the hero.
+          <div className="absolute inset-0 bg-[#120404]">
+            <Image
+              src={bannerImage}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover portrait:object-contain portrait:[mask-image:linear-gradient(to_bottom,transparent,black_14%,black_86%,transparent)]"
+            />
+          </div>
         ) : (
           <MetaballsBackground
             className="absolute inset-0"
