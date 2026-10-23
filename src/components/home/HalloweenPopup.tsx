@@ -19,7 +19,11 @@ export function HalloweenPopup() {
       <DialogContent
         showCloseButton={false}
         overlayClassName="bg-black/80"
-        className="w-fit max-w-[calc(100%-2rem)] gap-3 rounded-none border-0 bg-transparent p-0 shadow-none sm:max-w-[560px]"
+        // A definite width, not `w-fit`: with a fit-to-content box the image's own
+        // `max-w-full` resolves against itself and the flyer collapses to a thumbnail.
+        // 92vw on a phone, 560px on a desktop, and never so wide that the 4:5 flyer
+        // (plus the close button) outgrows the screen height.
+        className="w-[min(92vw,560px,calc((100dvh_-_6rem)_*_0.8))] max-w-none gap-3 rounded-none border-0 bg-transparent p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">Halloween event: The Further</DialogTitle>
         <DialogDescription className="sr-only">
@@ -43,7 +47,7 @@ export function HalloweenPopup() {
             height={1750}
             sizes="(max-width: 640px) 92vw, 560px"
             priority
-            className="mx-auto h-auto max-h-[78dvh] w-auto max-w-full object-contain"
+            className="h-auto w-full"
           />
         </a>
       </DialogContent>
