@@ -62,6 +62,44 @@ export async function saveUploadedFile(
   return `/uploads/${category}/${filename}`;
 }
 
+/** Longest edge an image placed inside a rich-text body is kept at. */
+const BODY_IMAGE_MAX_WIDTH = 1600;
+
+/**
+ * Persist one picture for a rich-text body: shrunk to at most 1600px wide and
+ * re-encoded as WebP (the site's only delivery format), then written under
+ * public/uploads/<category>/. Returns the public path and the stored size, so the
+ * editor can write width/height and the page doesn't shift while it loads.
+ */
+export async function saveBodyImage(
+  file: File,
+  category: string,
+): Promise<{ src: string; width: number; height: number }> {
+  if (!IMAGE_MIME_TYPES.includes(file.type)) {
+    throw new Error(`Unsupported file type: ${file.type || "unknown"}`);
+  }
+  if (file.size > MAX_IMAGE_BYTES) {
+    throw new Error(`File too large (max ${Math.round(MAX_IMAGE_BYTES / 1024 / 1024)} MB).`);
+  }
+  const { default: sharp } = await import("sharp");
+  const { data, info } = await sharp(Buffer.from(await file.arrayBuffer()))
+    .rotate()
+    .resize({ width: BODY_IMAGE_MAX_WIDTH, withoutEnlargement: true })
+    .webp({ quality: 82 })
+    .toBuffer({ resolveWithObject: true });
+  const dir = path.join(UPLOAD_ROOT, category);
+  await mkdir(dir, { recursive: true });
+  const filename = `${randomUUID()}.webp`;
+  await writeFile(path.join(dir, filename), data);
+  return { src: `/uploads/${category}/${filename}`, width: info.width, height: info.height };
+}
+
+/** Every `/uploads/...` path used as an <img src> inside a rich-text HTML string. */
+export function inlineImagePaths(html: string | null | undefined): string[] {
+  if (!html) return [];
+  return [...html.matchAll(/<img\b[^>]*?\bsrc="(\/uploads\/[^"]+)"/g)].map((m) => m[1]);
+}
+
 /** Best-effort delete of a file by its public path. Guards against path traversal; never throws. */
 export async function deleteUploadedFile(publicPath: string | null | undefined): Promise<void> {
   if (!publicPath || !publicPath.startsWith("/uploads/")) return;

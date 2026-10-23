@@ -86,7 +86,12 @@ export function ArticleForm({
         required
       />
 
-      <RichTextEditor name="description" label="Content" defaultValue={article?.description ?? ""} />
+      <RichTextEditor
+        name="description"
+        label="Content"
+        defaultValue={article?.description ?? ""}
+        imageUploadUrl="/api/admin/editor-image"
+      />
 
       <SeoFields
         titleValue={article?.metaTitle}

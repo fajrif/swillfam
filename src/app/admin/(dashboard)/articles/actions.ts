@@ -3,7 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { reconcileSingleImage, deleteUploadedFiles, collectImagePaths } from "@/lib/upload";
+import {
+  reconcileSingleImage,
+  deleteUploadedFiles,
+  collectImagePaths,
+  inlineImagePaths,
+} from "@/lib/upload";
 import { ensureUniqueSlug } from "@/lib/slug";
 import { requireAdministrator } from "@/lib/admin-auth";
 
@@ -59,10 +64,15 @@ export async function updateArticleAction(id: string, formData: FormData) {
   const image = await reconcileSingleImage({ formData, field: "image", category: CATEGORY, previousPath: current.image });
   const slug = await uniqueSlug(formData, id);
   const ogImage = await reconcileSingleImage({ formData, field: "ogImage", category: CATEGORY, previousPath: current.ogImage });
+  const data = parse(formData);
+  // Pictures placed in the body live inside the HTML, so a removed one is found by
+  // comparing the old and new text.
+  const kept = new Set(inlineImagePaths(data.description));
+  await deleteUploadedFiles(inlineImagePaths(current.description).filter((p) => !kept.has(p)));
   await prisma.article.update({
     where: { id },
     data: {
-      ...parse(formData),
+      ...data,
       slug,
       image,
       ogImage,
@@ -82,7 +92,7 @@ export async function deleteArticleAction(id: string) {
   const current = await prisma.article.findUnique({ where: { id } });
   if (current) {
     await prisma.article.delete({ where: { id } });
-    await deleteUploadedFiles(collectImagePaths(current.image, current.ogImage));
+    await deleteUploadedFiles(collectImagePaths(current.image, current.ogImage, inlineImagePaths(current.description)));
     revalidatePath("/guides");
     revalidatePath(`/guides/${current.slug}`);
   }
