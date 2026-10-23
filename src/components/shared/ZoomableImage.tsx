@@ -15,8 +15,18 @@ export function ZoomableImage({
   src,
   alt,
   className,
+  natural = false,
   ...rest
-}: { src: string; alt: string } & Omit<
+}: {
+  src: string;
+  alt: string;
+  /**
+   * Show the picture whole, at its own proportions, instead of filling a
+   * box the caller sized (which crops it with `object-cover`). The caller then
+   * passes no `fill`; the width comes from the column it sits in.
+   */
+  natural?: boolean;
+} & Omit<
   React.ComponentProps<typeof Image>,
   "src" | "alt"
 >) {
@@ -27,13 +37,14 @@ export function ZoomableImage({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="absolute inset-0 cursor-zoom-in"
+        className={natural ? "block w-full cursor-zoom-in" : "absolute inset-0 cursor-zoom-in"}
         aria-label={`View ${alt}`}
       >
         <Image
           src={src}
           alt={alt}
-          className={cn("pointer-events-none", className)}
+          className={cn("pointer-events-none", natural && "h-auto w-full", className)}
+          {...(natural ? { width: 0, height: 0 } : {})}
           {...rest}
         />
       </button>

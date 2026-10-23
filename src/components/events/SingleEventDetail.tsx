@@ -51,16 +51,16 @@ export async function SingleEventDetail({
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
           {poster ? (
-            <div className="relative aspect-[4/4] w-full overflow-hidden bg-sf-surface">
+            // The whole poster, at its own proportions - a fixed square box cropped it.
+            <div className="w-full self-start bg-sf-surface">
               {/* No `priority`: `EventDetailBanner` above is the hero and
                   already fills the first screen, so this poster is below the
                   fold and was competing with it. */}
               <ZoomableImage
                 src={poster}
                 alt={await altFor(poster, name)}
-                fill
+                natural
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
               />
             </div>
           ) : null}
