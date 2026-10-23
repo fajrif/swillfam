@@ -20,9 +20,12 @@ export type FeaturedEventData = {
 export function Hero({
   children,
   featuredEvents = [],
+  bannerImage,
 }: {
   children: React.ReactNode;
   featuredEvents?: FeaturedEventData[];
+  /** A static hero image (seasonal campaign) in place of the animated background. */
+  bannerImage?: string;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
@@ -43,14 +46,18 @@ export function Hero({
   return (
     <StickyHero
       backdrop={
-        <MetaballsBackground
-          className="absolute inset-0"
-          speed={0.5}
-          direction="forward"
-          scale={1.8}
-          scaleMobile={0.8}
-          opacity={0.8}
-        />
+        bannerImage ? (
+          <Image src={bannerImage} alt="" fill priority sizes="100vw" className="object-cover" />
+        ) : (
+          <MetaballsBackground
+            className="absolute inset-0"
+            speed={0.5}
+            direction="forward"
+            scale={1.8}
+            scaleMobile={0.8}
+            opacity={0.8}
+          />
+        )
       }
       heroContent={
         <Container className="relative z-10 grid h-full w-full grid-cols-1 items-end gap-8 pb-12 lg:grid-cols-[1fr_auto] lg:pb-16">

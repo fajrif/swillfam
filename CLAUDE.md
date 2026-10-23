@@ -315,6 +315,13 @@ of its final day. Three rules, each stated in exactly one place:
   JSON-LD `location` is one `Place`, or an array when there are extras.
 - `ArticleListSection` renders nothing for an empty list - there is no placeholder fallback.
 
+## Seasonal campaign (`HALLOWEEN_MODE`)
+
+`HALLOWEEN_MODE="true"` (server-only, read per request through `halloweenOn()` in `src/lib/campaign.ts`; a
+restart is enough, no rebuild) swaps the home hero's animated background for `public/halloween/banner.webp`
+and opens `HalloweenPopup` on the home page only. The WebP art is made by `scripts/generate-halloween-images.ts`
+from the print-sized PNGs (kept out of git: decoding 25-36 MP in `sharp` is what blew the PM2 memory cap).
+
 ## Headings and landmarks
 
 - **One `<h1>` per page, naming the page's subject.** A venue's H1 is `venue.name`, not its

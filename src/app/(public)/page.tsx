@@ -6,6 +6,8 @@ import { OfferCardSection } from "@/components/shared/OfferCardSection";
 import { type OfferCardData } from "@/components/shared/OfferCard";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { Hero } from "@/components/home/Hero";
+import { HalloweenPopup } from "@/components/home/HalloweenPopup";
+import { HALLOWEEN_BANNER, halloweenOn } from "@/lib/campaign";
 import { Reveal } from "@/components/Reveal";
 import { getArticleRows } from "@/lib/articles";
 import { formatEventSchedule } from "@/lib/event-calendar";
@@ -18,6 +20,7 @@ export const generateMetadata = () => staticPageMetadata("home");
 
 export default async function Home() {
   const now = new Date();
+  const halloween = halloweenOn();
 
   const [articles, events, categories] = await Promise.all([
     getArticleRows(3),
@@ -68,7 +71,8 @@ export default async function Home() {
   }));
 
   return (
-    <Hero featuredEvents={featuredEvents}>
+    <Hero featuredEvents={featuredEvents} bannerImage={halloween ? HALLOWEEN_BANNER : undefined}>
+      {halloween ? <HalloweenPopup /> : null}
       <Reveal>
         <CategoryVenuesLogoSection
           parallax
