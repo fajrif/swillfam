@@ -47,7 +47,10 @@ export function EventDetailDialog({
     <Dialog open={occurrence !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         overlayClassName="backdrop-blur-sm"
-        className="max-h-[85dvh] gap-0 overflow-y-auto overflow-x-hidden border-sf-border/60 bg-sf-deep p-6 shadow-[0_0_20px_rgba(255,255,255,0.16)] sm:max-w-[560px]"
+        // The dialog is portalled to <body>, outside the `<main>` that sets the site's
+        // text colour, so without `text-sf-body` it inherits the near-black admin
+        // `--foreground` and the date line is unreadable on this dark panel.
+        className="max-h-[85dvh] gap-0 overflow-y-auto overflow-x-hidden border-sf-border/60 bg-sf-deep p-6 text-sf-body shadow-[0_0_20px_rgba(255,255,255,0.16)] sm:max-w-[560px]"
       >
         {occurrence && event && style && (
           <>
@@ -72,7 +75,7 @@ export function EventDetailDialog({
             <div className="mt-5">
               <p className="font-syne text-base font-bold text-white">Description</p>
               {/* Doubles as the dialog's accessible description for Radix. */}
-              <DialogDescription className="mt-2 font-inter text-sm leading-relaxed">
+              <DialogDescription className="mt-2 font-inter text-sm leading-relaxed text-sf-body">
                 {event.shortDescription}
               </DialogDescription>
             </div>
