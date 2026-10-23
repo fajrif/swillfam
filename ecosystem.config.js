@@ -10,15 +10,22 @@ module.exports = {
       instances: 1,
       exec_mode: "fork",
       autorestart: true,
-      // Next + sharp (AVIF encoding) legitimately peaks above 500M. A cap that low
-      // had PM2 killing the app mid-write, which left 0-byte files in
-      // .next/cache/images and then broke the image cache on every boot.
-      max_memory_restart: "1G",
+      // Timestamp every log line, so an old error can be told from a new one.
+      time: true,
+      // Next + sharp legitimately peak above 500M while the image cache warms. A
+      // cap that low had PM2 killing the app mid-write, which left 0-byte files
+      // in .next/cache/images and then broke the image cache on every boot. The
+      // host has ~3.8 GB.
+      max_memory_restart: "1500M",
       env: {
         NODE_ENV: "production",
+        // glibc hands each thread its own malloc arena; libvips (sharp) threads
+        // fragment them and RSS only ever grows. Two arenas is the standard fix.
+        MALLOC_ARENA_MAX: "2",
       },
       env_production: {
         NODE_ENV: "production",
+        MALLOC_ARENA_MAX: "2",
       },
     },
   ],

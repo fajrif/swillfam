@@ -324,13 +324,14 @@ of its final day. Three rules, each stated in exactly one place:
 
 ## Images
 
-**Delivery** (`next.config.ts` `images`): AVIF first, WebP second, original last, with a 30-day
-`minimumCacheTTL`. The long TTL is safe because `reconcileSingleImage` writes a fresh UUID filename
-on every replace — a changed image is a changed URL. Only the committed `public/**` art is
-overwritable in place; swapping one of those needs a rename or a cache purge. AVIF is not always
-smaller (it loses to WebP on some flat PNGs and to the source on small logos) and Next serves the
-first format the browser accepts, not the smallest — the bet is on the hero photographs, which are
-every page's LCP element and where it wins widest.
+**Delivery** (`next.config.ts` `images`): WebP, with a 30-day `minimumCacheTTL`. The long TTL is
+safe because `reconcileSingleImage` writes a fresh UUID filename on every replace — a changed image
+is a changed URL. Only the committed `public/**` art is overwritable in place; swapping one of
+those needs a rename or a cache purge. AVIF was dropped: the team supplies WebP, so AVIF meant a
+slow, memory-hungry WebP → AVIF re-encode that pushed the Node process past its PM2 cap on a cold
+cache (see the comment in `next.config.ts` for the numbers and how to bring it back). If
+`Failed to write image to cache` ever floods the error log, `.next/cache/images` holds a zero-byte
+file — stop the app and delete that folder.
 
 **`priority` belongs to the hero and nothing else.** A preloaded image below the fold competes with
 the real LCP element for first-paint bandwidth. Carousels, grids and tab panels are always below a

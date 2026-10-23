@@ -195,8 +195,12 @@ cd /home/deployer/swillfam
 git pull
 npm ci                        # postinstall regenerates the Prisma client automatically
 npx prisma migrate deploy
+pm2 stop swillfam             # BEFORE building: `next build` rewrites .next in place, and a
+                              # running (or PM2-restarting) app trips over the half-written
+                              # manifests (ENOENT prerender-manifest.json) in a restart loop
 npm run build                 # also regenerates the Prisma client, as a second safety net
-pm2 restart swillfam
+pm2 start ecosystem.config.js --env production   # re-reads the file; `restart` does not pick up changed options
+pm2 save
 ```
 
 A data-only change (an admin edit, or a seed script below) does **not** need this full
