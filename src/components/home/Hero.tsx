@@ -61,7 +61,15 @@ export function Hero({
       }
       heroContent={
         <Container className="relative z-10 grid h-full w-full grid-cols-1 items-end gap-8 pb-12 lg:grid-cols-[1fr_auto] lg:pb-16">
-          <h1 className="font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] tracking-tight text-white">
+          {/* With a campaign banner the headline is part of the artwork, so it is
+              hidden from view but stays in the page as its one <h1>. */}
+          <h1
+            className={
+              bannerImage
+                ? "sr-only"
+                : "font-syne text-[clamp(2.5rem,6vw,60px)] font-semibold uppercase leading-[1.05] tracking-tight text-white"
+            }
+          >
             What&rsquo;s on the Radar
           </h1>
 
