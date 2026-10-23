@@ -1,6 +1,6 @@
 import { Container } from "@/components/shared/Container";
 import { SocialEmbed } from "@/components/shared/SocialEmbed";
-import { instagramProfile } from "@/lib/instagram";
+import { instagramEmbedWorks, instagramProfile } from "@/lib/instagram";
 
 type EmbedBlock = {
   key: string;
@@ -14,9 +14,11 @@ type EmbedBlock = {
  * Venue "Stay Connected" (Spotify + YouTube) and "Follow Us on Instagram".
  * Each block is conditional; the whole section renders nothing when the venue
  * has none. The Instagram feed is Instagram's own profile embed, derived from
- * the venue's `instagramUrl` — nothing is pasted by an admin.
+ * the venue's `instagramUrl` — nothing is pasted by an admin. Instagram refuses
+ * the embed for some accounts, so the frame is only rendered when a server-side
+ * check says it works; the Follow link is always shown.
  */
-export function VenueSocialEmbeds({
+export async function VenueSocialEmbeds({
   spotifyEmbed,
   youtubeEmbed,
   instagramUrl,
@@ -28,6 +30,7 @@ export function VenueSocialEmbeds({
   venueName: string;
 }) {
   const instagram = instagramProfile(instagramUrl);
+  const showFrame = instagram ? await instagramEmbedWorks(instagram.embedUrl) : false;
   const stayConnected: EmbedBlock[] = [];
   if (spotifyEmbed) {
     stayConnected.push({
@@ -82,13 +85,15 @@ export function VenueSocialEmbeds({
             <div className="mx-auto flex w-full max-w-[640px] flex-col items-center gap-4">
               {/* Lazy: the section is near the foot of the page, so the frame
                   isn't fetched until the visitor scrolls close to it. */}
-              <iframe
-                src={instagram.embedUrl}
-                title={`${venueName} on Instagram`}
-                loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
-                className="h-[700px] w-full border-0"
-              />
+              {showFrame ? (
+                <iframe
+                  src={instagram.embedUrl}
+                  title={`${venueName} on Instagram`}
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  className="h-[700px] w-full border-0"
+                />
+              ) : null}
               <a
                 href={instagramUrl ?? undefined}
                 target="_blank"

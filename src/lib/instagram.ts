@@ -27,3 +27,26 @@ export function instagramProfile(url: string | null | undefined): InstagramProfi
     return null;
   }
 }
+
+/**
+ * Whether Instagram will actually serve this profile's embed. It answers 200
+ * either way - a refused account gets a "link may be broken" page inside the
+ * frame, which the browser can't see across origins - so the check has to read
+ * the body, here on the server. The result sits in Next's data cache for an
+ * hour, so a venue page costs one request an hour, not one per revalidation.
+ *
+ * Anything uncertain (timeout, network error, non-200) counts as "no": a missing
+ * frame is better than a blank white box, and the Follow link stays either way.
+ */
+export async function instagramEmbedWorks(embedUrl: string): Promise<boolean> {
+  try {
+    const res = await fetch(embedUrl, {
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return false;
+    return !(await res.text()).includes("may be broken");
+  } catch {
+    return false;
+  }
+}
