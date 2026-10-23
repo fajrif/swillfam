@@ -33,15 +33,10 @@ export function TalentSection({
       <Container className="flex flex-col gap-8 lg:gap-12">
         <SectionHeading title={title} lead={description} align="center" />
 
-        <div
-          className={
-            talents.length === 1
-              ? "mx-auto grid max-w-sm grid-cols-1 gap-6 sm:gap-8"
-              : talents.length === 2
-                ? "mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
-                : "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
-          }
-        >
+        {/* Every card is one third of the row (half on tablet) whatever the count,
+            so a venue with two talents gets the same card as one with three; the
+            leftovers centre. Sizing the grid by count made two cards much smaller. */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
           {talents.map((talent) => {
             const instagramHandle = talent.instagramUrl
               ? getInstagramHandle(talent.instagramUrl)
@@ -50,7 +45,7 @@ export function TalentSection({
             return (
               <div
                 key={talent.id}
-                className="group flex h-full flex-col gap-4 border border-sf-border/40 bg-sf-surface/20 p-4"
+                className="group flex w-full flex-col gap-4 border border-sf-border/40 bg-sf-surface/20 p-4 sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-22px)]"
               >
                 <Link
                   href={`/talents/${talent.slug}`}
