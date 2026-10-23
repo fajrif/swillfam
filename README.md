@@ -122,6 +122,10 @@ pm2 startup   # run the systemd command it prints, once
 
 `pm2 logs swillfam` to tail logs, `pm2 restart swillfam` after future deploys.
 
+If the error log fills with `Failed to write image to cache … LRUCache: calculateSize returned 0`,
+the image cache holds a zero-byte file (usually from the process being killed mid-write). It is
+only a cache — stop the app, `rm -rf .next/cache/images`, start it again.
+
 ### 7. Nginx (sites-available/sites-enabled)
 
 If `/etc/nginx/nginx.conf` is a stock install, it already has `include /etc/nginx/sites-enabled/*;`

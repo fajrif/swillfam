@@ -148,7 +148,7 @@ export default async function EventSlugPage({
     startDate: Date;
     endDate: Date | null;
   }) => {
-    if (e.eventType === "RECURRING") return formatRecurringDays(e.recurringDays);
+    if (e.eventType === "RECURRING") return formatRecurringDays(e.recurringDays, { long: true });
     if (!e.endDate || e.endDate.getTime() === e.startDate.getTime()) return formatDay(e.startDate);
     return formatDateRange(e.startDate, e.endDate);
   };
@@ -204,7 +204,7 @@ export default async function EventSlugPage({
           nextEditionDescription={event.nextEditionDescription || event.shortDescription}
           description={event.description}
           image={event.image}
-          dayLabel={formatRecurringDays(event.recurringDays)}
+          dayLabel={formatRecurringDays(event.recurringDays, { long: true })}
           nextDateLabel={next ? `${formatLongDate(next)} – ${formatHour(event.startHour)}` : null}
           venueName={venue?.name ?? null}
           categoryName={event.eventCategory?.name ?? null}

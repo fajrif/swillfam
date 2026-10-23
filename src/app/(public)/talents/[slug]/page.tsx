@@ -118,6 +118,7 @@ export default async function TalentSlugPage({
     venueLogo: t.venue?.logo ?? null,
     meta: t.talentCategory?.name ?? null,
     href: `/talents/${t.slug}`,
+    imagePosition: "top",
   }));
 
   return (

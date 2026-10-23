@@ -316,10 +316,28 @@ export function formatMonthYear(year: number, month: number): string {
   return `${MONTH_NAMES[month]} ${year}`;
 }
 
-/** `["FRIDAY", "SATURDAY"]` → `"Every Fri, Sat"`. */
-export function formatRecurringDays(days: string[]): string {
-  const labels = WEEKDAY_ORDER.filter((d) => days.includes(d)).map((d) => WEEKDAY_LABEL[d]);
-  return labels.length > 0 ? `Every ${labels.join(", ")}` : "Recurring";
+/**
+ * `["FRIDAY", "SATURDAY"]` → `"Every Fri, Sat"`; all seven → `"Every day"`.
+ *
+ * Runs of three or more consecutive days collapse to a range
+ * (`"Every Mon – Thu, Sat"`), so a nightly event doesn't print a label longer
+ * than the card it sits on. `long` spells the names out for the detail pages.
+ */
+export function formatRecurringDays(days: string[], { long = false } = {}): string {
+  const picked = WEEKDAY_ORDER.filter((d) => days.includes(d));
+  if (picked.length === 0) return "Recurring";
+  if (picked.length === WEEKDAY_ORDER.length) return "Every day";
+
+  const label = (d: string) => (long ? WEEKDAY_LABEL[d] : WEEKDAY_LABEL[d].slice(0, 3));
+  const parts: string[] = [];
+  for (let i = 0; i < picked.length; ) {
+    let j = i;
+    while (j + 1 < picked.length && WEEKDAY_ORDER.indexOf(picked[j + 1]) === WEEKDAY_ORDER.indexOf(picked[j]) + 1) j++;
+    if (j - i >= 2) parts.push(`${label(picked[i])} – ${label(picked[j])}`);
+    else for (let k = i; k <= j; k++) parts.push(label(picked[k]));
+    i = j + 1;
+  }
+  return `Every ${parts.join(", ")}`;
 }
 
 /**
