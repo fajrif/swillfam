@@ -8,5 +8,7 @@
 export const halloweenOn = () => process.env.HALLOWEEN_MODE === "true";
 
 export const HALLOWEEN_BANNER = "/halloween/banner.webp";
+/** Portrait hero art for tall screens (supplied at 1080x1350, used as is). */
+export const HALLOWEEN_MOBILE_BANNER = "/halloween/mobile-banner.jpeg";
 export const HALLOWEEN_FLYER = "/halloween/flyer.webp";
 export const HALLOWEEN_LINK = "https://adecadeofpoppin.com/event/the-further";

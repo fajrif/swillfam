@@ -7,7 +7,7 @@ import { type OfferCardData } from "@/components/shared/OfferCard";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { Hero } from "@/components/home/Hero";
 import { HalloweenPopup } from "@/components/home/HalloweenPopup";
-import { HALLOWEEN_BANNER, HALLOWEEN_FLYER, halloweenOn } from "@/lib/campaign";
+import { HALLOWEEN_BANNER, HALLOWEEN_MOBILE_BANNER, halloweenOn } from "@/lib/campaign";
 import { Reveal } from "@/components/Reveal";
 import { getArticleRows } from "@/lib/articles";
 import { formatEventSchedule } from "@/lib/event-calendar";
@@ -72,7 +72,7 @@ export default async function Home() {
 
   return (
     <Hero featuredEvents={featuredEvents} bannerImage={halloween ? HALLOWEEN_BANNER : undefined}
-      mobileBannerImage={halloween ? HALLOWEEN_FLYER : undefined}
+      mobileBannerImage={halloween ? HALLOWEEN_MOBILE_BANNER : undefined}
     >
       {halloween ? <HalloweenPopup /> : null}
       <Reveal>
