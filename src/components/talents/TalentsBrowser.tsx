@@ -5,13 +5,15 @@ import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { DropdownIcons } from "@/components/shared/DropdownIcons";
 import { cn } from "@/lib/utils";
-import { OfferCard, type OfferCardData } from "@/components/shared/OfferCard";
+import Image from "next/image";
+import Link from "next/link";
 
 export type TalentCardData = {
   id: string;
   slug: string;
   name: string;
   description: string;
+  speciality: string;
   image: string | null;
   venueId: string | null;
   talentCategoryId: string | null;
@@ -58,17 +60,7 @@ export function TalentsBrowser({
     if (selectedId === null) return true;
     return mode === "venues" ? t.venueId === selectedId : t.talentCategoryId === selectedId;
   });
-  const shown: OfferCardData[] = filtered.slice(0, visible).map((t) => ({
-    id: t.id,
-    image: t.image,
-    title: t.name,
-    description: t.description,
-    venueName: t.venueName,
-    venueLogo: t.venueLogo,
-    meta: t.categoryName,
-    href: `/talents/${t.slug}`,
-    imagePosition: "top",
-  }));
+  const shown = filtered.slice(0, visible);
 
   return (
     <section className="py-16 lg:py-24">
@@ -123,13 +115,13 @@ export function TalentsBrowser({
                 key={`${mode}-${selectedId}`}
                 className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2"
               >
-                {shown.map((offer, i) => (
+                {shown.map((talent, i) => (
                   <div
-                    key={offer.id}
+                    key={talent.id}
                     className="animate-fade-up"
                     style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
                   >
-                    <OfferCard offer={offer} />
+                    <TalentCard talent={talent} />
                   </div>
                 ))}
               </div>
@@ -169,5 +161,36 @@ function SidebarItem({
     >
       {label}
     </button>
+  );
+}
+
+/** Same card as a venue page's "Meet Our Talents": the photo at 4:5, head kept. */
+function TalentCard({ talent }: { talent: TalentCardData }) {
+  return (
+    <div className="group flex h-full flex-col gap-4 border border-sf-border/40 bg-sf-surface/20 p-4">
+      <Link
+        href={`/talents/${talent.slug}`}
+        className="relative aspect-[4/5] w-full overflow-hidden bg-sf-surface"
+      >
+        {talent.image ? (
+          <Image
+            src={talent.image}
+            alt={talent.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : null}
+      </Link>
+      <div className="flex flex-col gap-2">
+        <Link href={`/talents/${talent.slug}`}>
+          <h3 className="font-syne text-xl font-bold leading-tight text-white transition-colors group-hover:text-sf-accent">
+            {talent.name}
+          </h3>
+        </Link>
+        <p className="font-archivo text-xs uppercase tracking-[0.14em] text-white">{talent.speciality}</p>
+        <p className="line-clamp-3 font-inter text-sm leading-relaxed">{talent.description}</p>
+      </div>
+    </div>
   );
 }

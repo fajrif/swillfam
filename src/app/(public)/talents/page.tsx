@@ -42,6 +42,7 @@ export default async function TalentsPage() {
     slug: t.slug,
     name: t.name,
     description: t.description,
+    speciality: t.speciality,
     image: t.image,
     venueId: t.venueId,
     talentCategoryId: t.talentCategoryId,
