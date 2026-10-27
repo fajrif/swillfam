@@ -7,7 +7,7 @@
 /** Halloween: static home banner + the flyer pop-up on the home page. */
 export const halloweenOn = () => process.env.HALLOWEEN_MODE === "true";
 
-export const HALLOWEEN_BANNER = "/halloween/banner.webp";
+export const HALLOWEEN_BANNER = "/halloween/the-further-banner-swillfam.webp";
 /** Portrait hero art for tall screens (supplied at 1080x1350, used as is). */
 export const HALLOWEEN_MOBILE_BANNER = "/halloween/mobile-banner.jpeg";
 export const HALLOWEEN_FLYER = "/halloween/flyer.webp";
