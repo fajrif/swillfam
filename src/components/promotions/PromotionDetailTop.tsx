@@ -3,6 +3,7 @@ import type { SiteSettings } from "@/lib/site-settings";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ShareButtons } from "@/components/shared/ShareButtons";
+import { GtmClick } from "@/components/shared/GtmClick";
 import { formatDateRange } from "@/lib/date";
 import { formatHour } from "@/lib/event-calendar";
 import { whatsappHref } from "@/lib/whatsapp";
@@ -88,19 +89,21 @@ export function PromotionDetailTop({
 
           <div className="mt-2 flex flex-wrap items-center gap-4">
             {whatsapp ? (
-              <SpecularButton
-                href={whatsappHref(
-                  whatsapp,
-                  `Hi SwillFam, I'm interested in the "${promotion.name}"${venue ? ` promotion at ${venue.name}` : " promotion"}.`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                size="lg"
-                radius={30}
-                className="w-fit"
-              >
-                Reserve via WhatsApp
-              </SpecularButton>
+              <GtmClick event="whatsapp_click" venue={venue?.slug ?? "swillfam"}>
+                <SpecularButton
+                  href={whatsappHref(
+                    whatsapp,
+                    `Hi SwillFam, I'm interested in the "${promotion.name}"${venue ? ` promotion at ${venue.name}` : " promotion"}.`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                  radius={30}
+                  className="w-fit"
+                >
+                  Reserve via WhatsApp
+                </SpecularButton>
+              </GtmClick>
             ) : (
               <span />
             )}

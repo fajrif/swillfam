@@ -17,6 +17,7 @@ export function EventTicketsSection({
   ticketLink,
   eventName,
   venueName,
+  venueSlug,
   phone,
   active,
   recapHref,
@@ -26,6 +27,7 @@ export function EventTicketsSection({
   ticketLink: string | null;
   eventName: string;
   venueName?: string | null;
+  venueSlug?: string | null;
   phone?: string | null;
   active: boolean;
   /** Set by the caller when a past event has a recap to send people to. */
@@ -59,6 +61,7 @@ export function EventTicketsSection({
             <ReserveButton
               eventName={eventName}
               venueName={venueName}
+              venueSlug={venueSlug}
               phone={phone}
               active={active}
               recapHref={recapHref}

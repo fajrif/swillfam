@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { WhatsappLogo } from "@phosphor-icons/react";
+import { sendGTMEvent } from "@next/third-parties/google";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { whatsappHref } from "@/lib/whatsapp";
@@ -106,7 +107,17 @@ export function EventDetailDialog({
                     size="pill"
                     className="w-full gap-2 font-inter"
                   >
-                    <a href={waHref} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={waHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        sendGTMEvent({
+                          event: "whatsapp_click",
+                          venue: event.venueSlug ?? "swillfam",
+                        })
+                      }
+                    >
                       Inquiry
                       <WhatsappLogo weight="regular" className="size-5" />
                     </a>

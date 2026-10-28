@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, Archivo, Inter } from "next/font/google";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 import NextTopLoader from "nextjs-toploader";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteUrl } from "@/lib/site-url";
@@ -65,15 +66,8 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${archivo.variable} ${inter.variable}`}
     >
-      <head>
-        <Script id="gtm" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_ID}');`}
-        </Script>
-      </head>
+      {/* sendGTMEvent only works while this component is mounted. */}
+      <GoogleTagManager gtmId={GTM_ID} />
       <body className="font-inter antialiased selection:bg-sf-accent selection:text-white">
         <noscript>
           <iframe

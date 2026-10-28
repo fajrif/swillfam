@@ -5,6 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { GtmClick } from "@/components/shared/GtmClick";
 import { whatsappHref } from "@/lib/whatsapp";
 import { googleMapsUrl } from "@/lib/maps";
 
@@ -14,6 +15,7 @@ const DEFAULT_CENTER = { longitude: 106.809, latitude: -6.2249 }; // SCBD, Jakar
 /** "Location Map & Operating Hours" — info panel + single-venue Mapbox map. */
 export function VenueLocationHours({
   name,
+  slug,
   location,
   operatingHours,
   lat,
@@ -22,6 +24,8 @@ export function VenueLocationHours({
   placeId,
 }: {
   name: string;
+  /** Sent as the `venue` on the Maps / WhatsApp click events. */
+  slug: string;
   location: string;
   operatingHours: string;
   lat: number | null;
@@ -63,28 +67,32 @@ export function VenueLocationHours({
               </p>
             </div>
             <div className="flex flex-wrap gap-3 pt-2">
-              <SpecularButton
-                href={googleMapsHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                size="lg"
-                radius={30}
-              >
-                Open in Google Maps
-              </SpecularButton>
-              {whatsapp ? (
+              <GtmClick event="maps_click" venue={slug}>
                 <SpecularButton
-                  href={whatsappHref(
-                    whatsapp,
-                    `Hi SwillFam, I would like to reserve a table at ${name}.`,
-                  )}
+                  href={googleMapsHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   size="lg"
                   radius={30}
                 >
-                  Reserve via WhatsApp
+                  Open in Google Maps
                 </SpecularButton>
+              </GtmClick>
+              {whatsapp ? (
+                <GtmClick event="whatsapp_click" venue={slug}>
+                  <SpecularButton
+                    href={whatsappHref(
+                      whatsapp,
+                      `Hi SwillFam, I would like to reserve a table at ${name}.`,
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="lg"
+                    radius={30}
+                  >
+                    Reserve via WhatsApp
+                  </SpecularButton>
+                </GtmClick>
               ) : null}
             </div>
           </div>

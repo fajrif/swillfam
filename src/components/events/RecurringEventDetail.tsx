@@ -24,6 +24,7 @@ export async function RecurringEventDetail({
   dayLabel,
   nextDateLabel,
   venueName,
+  venueSlug,
   categoryName,
   phone,
   active,
@@ -41,6 +42,7 @@ export async function RecurringEventDetail({
   /** e.g. "Saturday, 1 August 2026 – 7:00 PM"; null when no weekday is set. */
   nextDateLabel: string | null;
   venueName: string | null;
+  venueSlug?: string | null;
   categoryName: string | null;
   phone?: string | null;
   active: boolean;
@@ -77,6 +79,7 @@ export async function RecurringEventDetail({
               <ReserveButton
                 eventName={name}
                 venueName={venueName}
+                venueSlug={venueSlug}
                 phone={phone}
                 active={active}
                 recapHref={recapHref}
@@ -119,6 +122,7 @@ export async function RecurringEventDetail({
             <ReserveButton
               eventName={name}
               venueName={venueName}
+              venueSlug={venueSlug}
               phone={phone}
               active={active}
               recapHref={recapHref}

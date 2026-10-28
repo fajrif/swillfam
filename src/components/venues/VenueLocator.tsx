@@ -12,6 +12,7 @@ import {
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { GtmClick } from "@/components/shared/GtmClick";
 import { whatsappHref } from "@/lib/whatsapp";
 
 export type VenuePin = {
@@ -126,16 +127,18 @@ export function VenueLocator({ venues, whatsapp }: { venues: VenuePin[]; whatsap
                       See Venue
                     </SpecularButton>
                     {venue.whatsapp ?? whatsapp ? (
-                      <SpecularButton
-                        href={whatsappHref(venue.whatsapp ?? whatsapp!, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        size="lg"
-                        radius={30}
-                        className="w-full"
-                      >
-                        Reserve via WhatsApp
-                      </SpecularButton>
+                      <GtmClick event="whatsapp_click" venue={venue.slug}>
+                        <SpecularButton
+                          href={whatsappHref(venue.whatsapp ?? whatsapp!, `Hi SwillFam, I would like to reserve a table at ${venue.name}.`)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          size="lg"
+                          radius={30}
+                          className="w-full"
+                        >
+                          Reserve via WhatsApp
+                        </SpecularButton>
+                      </GtmClick>
                     ) : null}
                   </div>
                 </div>

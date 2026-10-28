@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { GtmClick } from "@/components/shared/GtmClick";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
@@ -26,9 +27,11 @@ export function WantUsToPlanSection({ settings }: { settings: SiteSettings }) {
                 can help you plan a route that fits your mood.
               </p>
             </div>
-            <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30} className="w-fit">
-              Plan via WhatsApp
-            </SpecularButton>
+            <GtmClick event="whatsapp_click" venue="swillfam">
+              <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30} className="w-fit">
+                Plan via WhatsApp
+              </SpecularButton>
+            </GtmClick>
           </div>
 
           <div className="order-1 relative aspect-[680/581] w-full overflow-hidden border border-sf-border/30 lg:order-2">

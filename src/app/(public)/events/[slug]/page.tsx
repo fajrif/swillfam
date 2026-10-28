@@ -217,6 +217,7 @@ export default async function EventSlugPage({
           dayLabel={formatRecurringDays(event.recurringDays, { long: true })}
           nextDateLabel={next ? `${formatLongDate(next)} – ${formatHour(event.startHour)}` : null}
           venueName={venue?.name ?? null}
+          venueSlug={venue?.slug}
           categoryName={event.eventCategory?.name ?? null}
           phone={phone}
           active={!isPast}
@@ -230,6 +231,7 @@ export default async function EventSlugPage({
           poster={event.posterImage}
           categoryName={event.eventCategory?.name ?? null}
           venueName={venue?.name ?? null}
+          venueSlug={venue?.slug}
           dateLabel={scheduleLabel(event)}
           timeLabel={timeLabel}
           phone={phone}
@@ -243,6 +245,7 @@ export default async function EventSlugPage({
           targetIso={startsAt.toISOString()}
           eventName={event.name}
           venueName={venue?.name ?? null}
+          venueSlug={venue?.slug}
           phone={phone}
           active={!isPast}
         />
@@ -266,6 +269,7 @@ export default async function EventSlugPage({
             ticketLink={event.ticketLink}
             eventName={event.name}
             venueName={venue?.name ?? null}
+            venueSlug={venue?.slug}
             phone={phone}
             active={!isPast}
             recapHref={recapHref}

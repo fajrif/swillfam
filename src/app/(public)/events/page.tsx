@@ -41,7 +41,7 @@ export default async function EventsPage() {
       where: upcomingEventWhere(now),
       orderBy: { startDate: "desc" },
       include: {
-        venue: { select: { name: true, logo: true } },
+        venue: { select: { name: true, slug: true, logo: true } },
         extraVenues: { select: { id: true } },
         eventCategory: { select: { id: true, name: true } },
       },
@@ -99,6 +99,7 @@ export default async function EventsPage() {
     featured: e.featured,
     venueIds: venueIdsOf(e),
     venueName: e.venue?.name ?? null,
+    venueSlug: e.venue?.slug ?? null,
     categoryName: e.eventCategory?.name ?? null,
     waPhone: e.waPhone,
   }));

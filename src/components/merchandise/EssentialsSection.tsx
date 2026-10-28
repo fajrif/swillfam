@@ -1,5 +1,6 @@
 import { Container } from "@/components/shared/Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { GtmClick } from "@/components/shared/GtmClick";
 import type { SiteSettings } from "@/lib/site-settings";
 
 export function EssentialsSection({ settings }: { settings: SiteSettings }) {
@@ -21,9 +22,11 @@ export function EssentialsSection({ settings }: { settings: SiteSettings }) {
           <SpecularButton href={ig} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
             DM on Instagram
           </SpecularButton>
-          <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
-            Inquire via WhatsApp
-          </SpecularButton>
+          <GtmClick event="whatsapp_click" venue="swillfam">
+            <SpecularButton href={wa} target="_blank" rel="noopener noreferrer" size="lg" radius={30}>
+              Inquire via WhatsApp
+            </SpecularButton>
+          </GtmClick>
         </div>
       </Container>
     </section>

@@ -3,6 +3,7 @@ import { Container } from "@/components/shared/Container";
 import { whatsappHref, formatPhone } from "@/lib/whatsapp";
 import { googleMapsUrl } from "@/lib/maps";
 import { ContentImage } from "@/components/shared/ContentImage";
+import { GtmClick } from "@/components/shared/GtmClick";
 
 export type VenueContactRow = {
   name: string;
@@ -61,14 +62,16 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                 <p className="font-inter text-sm">
                   WhatsApp:{" "}
                   {venue.whatsapp ? (
-                    <a
-                      href={whatsappHref(venue.whatsapp)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="transition-colors hover:text-sf-accent"
-                    >
-                    {formatPhone(venue.whatsapp)}
-                  </a>
+                    <GtmClick event="whatsapp_click" venue={venue.slug}>
+                      <a
+                        href={whatsappHref(venue.whatsapp)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:text-sf-accent"
+                      >
+                        {formatPhone(venue.whatsapp)}
+                      </a>
+                    </GtmClick>
                 ) : (
                   <span>-</span>
                 )}
@@ -76,14 +79,16 @@ export function ContactVenuesSection({ venues }: { venues: VenueContactRow[] }) 
                 {venue.placeId && (
                   <p className="font-inter text-sm">
                     Location:{" "}
-                    <a
-                      href={googleMapsUrl(venue)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="transition-colors text-sf-body/50 hover:text-sf-accent"
-                    >
-                      View on Map
-                    </a>
+                    <GtmClick event="maps_click" venue={venue.slug}>
+                      <a
+                        href={googleMapsUrl(venue)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors text-sf-body/50 hover:text-sf-accent"
+                      >
+                        View on Map
+                      </a>
+                    </GtmClick>
                   </p>
                 )}
               </div>

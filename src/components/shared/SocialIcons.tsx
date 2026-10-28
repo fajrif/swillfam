@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { SiteSettings } from "@/lib/site-settings";
 import { cn } from "@/lib/utils";
+import { GtmClick } from "@/components/shared/GtmClick";
 
 const SOCIALS = [
   { icon: "ph-linkedin-logo", label: "LinkedIn", key: "socialLinkedin" },
@@ -28,7 +29,7 @@ export function SocialIcons({
           } else {
             href = settings[key] || "#";
           }
-          return (
+          const link = (
             <Link
               key={label}
               href={href}
@@ -39,6 +40,13 @@ export function SocialIcons({
             >
               <i className={`ph ${icon} text-xl`} aria-hidden />
             </Link>
+          );
+          return whatsapp ? (
+            <GtmClick key={label} event="whatsapp_click" venue="swillfam">
+              {link}
+            </GtmClick>
+          ) : (
+            link
           );
         })}
       </div>

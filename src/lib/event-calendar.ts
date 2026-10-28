@@ -83,6 +83,8 @@ export type CalendarEvent = {
   /** Main venue first, then "Also at": the venue filter matches any of them. */
   venueIds: string[];
   venueName: string | null;
+  /** Main venue's slug, for the WhatsApp click event; absent where a page doesn't select it. */
+  venueSlug?: string | null;
   categoryName: string | null;
   waPhone: string | null;
 };

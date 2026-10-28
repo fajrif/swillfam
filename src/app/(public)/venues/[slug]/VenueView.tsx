@@ -241,6 +241,7 @@ export async function VenueView({ venue }: { venue: VenueDetail }) {
       <Reveal>
         <VenueLocationHours
           name={venue.name}
+          slug={venue.slug}
           location={venue.location}
           operatingHours={venueHoursText(venue.hours, venue.operatingHours)}
           lat={venue.lat}

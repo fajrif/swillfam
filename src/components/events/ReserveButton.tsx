@@ -1,4 +1,5 @@
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
+import { GtmClick } from "@/components/shared/GtmClick";
 import { whatsappHref } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 export function ReserveButton({
   eventName,
   venueName,
+  venueSlug,
   phone,
   active,
   recapHref,
@@ -30,6 +32,8 @@ export function ReserveButton({
 }: {
   eventName: string;
   venueName?: string | null;
+  /** Sent as the `venue` on the click event; falls back to "swillfam". */
+  venueSlug?: string | null;
   /** The event's own `waPhone`, falling back to the site-wide number. */
   phone?: string | null;
   active: boolean;
@@ -69,18 +73,20 @@ export function ReserveButton({
   }
 
   return (
-    <SpecularButton
-      href={whatsappHref(
-        phone,
-        `Hi SwillFam, I'd like to reserve a spot for "${eventName}"${venueName ? ` at ${venueName}` : ""}.`,
-      )}
-      target="_blank"
-      rel="noopener noreferrer"
-      size="lg"
-      radius={30}
-      className={cn("w-fit", className)}
-    >
-      {label}
-    </SpecularButton>
+    <GtmClick event="whatsapp_click" venue={venueSlug ?? "swillfam"}>
+      <SpecularButton
+        href={whatsappHref(
+          phone,
+          `Hi SwillFam, I'd like to reserve a spot for "${eventName}"${venueName ? ` at ${venueName}` : ""}.`,
+        )}
+        target="_blank"
+        rel="noopener noreferrer"
+        size="lg"
+        radius={30}
+        className={cn("w-fit", className)}
+      >
+        {label}
+      </SpecularButton>
+    </GtmClick>
   );
 }

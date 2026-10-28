@@ -8,6 +8,8 @@ import { Container } from "./Container";
 import { SpecularButton } from "@/components/reactbits/SpecularButton";
 import type { SiteSettings } from "@/lib/site-settings";
 import { SocialIcons } from "@/components/shared/SocialIcons";
+import { GtmClick } from "@/components/shared/GtmClick";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const FOOTER_COLS: { label: string; href: string }[][] = [
   [
@@ -42,6 +44,10 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              // The form is not wired to a mailing list yet, so this fires on a
+              // valid submit rather than a confirmed sign-up. Move it to the
+              // success branch once a backend exists.
+              sendGTMEvent({ event: "newsletter_signup" });
               setEmail("");
             }}
             className="flex w-full max-w-[680px] flex-col items-center gap-4"
@@ -86,9 +92,11 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             {settings.mainEmail && (
               <p className="font-inter text-base">
                 Email:{" "}
-                <a href={`mailto:${settings.mainEmail}`} className="hover:text-sf-accent">
-                  {settings.mainEmail}
-                </a>
+                <GtmClick event="email_click">
+                  <a href={`mailto:${settings.mainEmail}`} className="hover:text-sf-accent">
+                    {settings.mainEmail}
+                  </a>
+                </GtmClick>
               </p>
             )}
             <div className="font-inter text-sm leading-relaxed">
@@ -146,22 +154,24 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
       </div>
 
       {settings.mainWhatsapp && (
-        <Link
-          href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="WhatsApp"
-          className="fixed right-4 md:right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
-        >
-          <Image
-            src="/whatsapp.png"
-            alt="WhatsApp"
-            width={60}
-            height={60}
-            loading="eager"
-            className="h-[60px] w-[60px] rounded-full border-[2.5px] border-white object-cover"
-          />
-        </Link>
+        <GtmClick event="whatsapp_click" venue="swillfam">
+          <Link
+            href={`https://wa.me/${settings.mainWhatsapp.replace(/[^0-9]/g, "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="fixed right-4 md:right-[calc(var(--spacing)*13)] bottom-10 z-[9811] flex items-center justify-center rounded-full bg-white shadow-[1px_1px_10px_1px_#fff]"
+          >
+            <Image
+              src="/whatsapp.png"
+              alt="WhatsApp"
+              width={60}
+              height={60}
+              loading="eager"
+              className="h-[60px] w-[60px] rounded-full border-[2.5px] border-white object-cover"
+            />
+          </Link>
+        </GtmClick>
       )}
     </>
   );

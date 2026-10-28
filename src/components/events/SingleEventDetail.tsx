@@ -19,6 +19,7 @@ export async function SingleEventDetail({
   poster,
   categoryName,
   venueName,
+  venueSlug,
   dateLabel,
   timeLabel,
   phone,
@@ -32,6 +33,7 @@ export async function SingleEventDetail({
   poster: string | null;
   categoryName: string | null;
   venueName: string | null;
+  venueSlug?: string | null;
   dateLabel: string;
   timeLabel: string;
   phone?: string | null;
@@ -98,6 +100,7 @@ export async function SingleEventDetail({
               <ReserveButton
                 eventName={name}
                 venueName={venueName}
+                venueSlug={venueSlug}
                 phone={phone}
                 active={active}
                 recapHref={recapHref}

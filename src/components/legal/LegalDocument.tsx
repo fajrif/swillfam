@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GtmClick } from "@/components/shared/GtmClick";
 
 export type LegalSection = {
   id: string;
@@ -92,9 +93,11 @@ export function LegalDocument({
             {noticeBody}
             <p className="mt-4 font-inter text-sm">
               Questions? Contact us at{" "}
-              <a href={`mailto:${contactEmail}`} className="underline">
-                {contactEmail}
-              </a>
+              <GtmClick event="email_click">
+                <a href={`mailto:${contactEmail}`} className="underline">
+                  {contactEmail}
+                </a>
+              </GtmClick>
               .
             </p>
           </div>

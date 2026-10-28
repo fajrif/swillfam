@@ -1,4 +1,5 @@
 import { Container } from "@/components/shared/Container";
+import { GtmClick } from "@/components/shared/GtmClick";
 import { whatsappHref } from "@/lib/whatsapp";
 import type { SiteSettings } from "@/lib/site-settings";
 
@@ -20,14 +21,16 @@ export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
             {settings.mainWhatsapp && (
               <p>
                 WhatsApp:{" "}
-                <a
-                  href={whatsappHref(settings.mainWhatsapp)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors hover:text-sf-accent"
-                >
-                  {settings.mainWhatsapp}
-                </a>
+                <GtmClick event="whatsapp_click" venue="swillfam">
+                  <a
+                    href={whatsappHref(settings.mainWhatsapp)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-sf-accent"
+                  >
+                    {settings.mainWhatsapp}
+                  </a>
+                </GtmClick>
               </p>
             )}
             {settings.mainPhone && (
@@ -44,12 +47,14 @@ export function GetInTouchSection({ settings }: { settings: SiteSettings }) {
             {settings.mainEmail && (
               <p>
                 Email:{" "}
-                <a
-                  href={`mailto:${settings.mainEmail}`}
-                  className="transition-colors hover:text-sf-accent"
-                >
-                  {settings.mainEmail}
-                </a>
+                <GtmClick event="email_click">
+                  <a
+                    href={`mailto:${settings.mainEmail}`}
+                    className="transition-colors hover:text-sf-accent"
+                  >
+                    {settings.mainEmail}
+                  </a>
+                </GtmClick>
               </p>
             )}
           </div>

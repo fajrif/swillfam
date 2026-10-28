@@ -51,6 +51,7 @@ export function EventCountdown({
   targetIso,
   eventName,
   venueName,
+  venueSlug,
   phone,
   active,
 }: {
@@ -58,6 +59,7 @@ export function EventCountdown({
   targetIso: string;
   eventName: string;
   venueName?: string | null;
+  venueSlug?: string | null;
   phone?: string | null;
   active: boolean;
 }) {
@@ -104,6 +106,7 @@ export function EventCountdown({
         <ReserveButton
           eventName={eventName}
           venueName={venueName}
+          venueSlug={venueSlug}
           phone={phone}
           active={active}
           className="items-center"
