@@ -11,6 +11,7 @@ import {
   formatHourRange,
   formatLongDate,
   formatOccurrenceDateTime,
+  isPastEvent,
   type EventOccurrence,
 } from "@/lib/event-calendar";
 import { cn } from "@/lib/utils";
@@ -70,7 +71,14 @@ export function EventDetailDialog({
               className="mt-5 border-l-[3px] bg-white/[0.07] px-4 py-3"
               style={{ borderLeftColor: style.color }}
             >
-              <span className="font-inter text-sm text-white">{style.badgeLabel}</span>
+              <span className="font-inter text-sm text-white">
+                {/* Read at click time, so the server render never has to agree with it. */}
+                {isPastEvent(event, new Date())
+                  ? "Past Event"
+                  : event.eventType === "RECURRING"
+                    ? "Recurring Event"
+                    : "Upcoming Event"}
+              </span>
             </div>
 
             {categoryAndVenue && (

@@ -283,11 +283,14 @@ of its final day. Three rules, each stated in exactly one place:
 
 - **An event is over when an administrator retired it *or* its last day has gone by.** The date
   half is not optional: both seeded one-off events were still flagged `active` months after they
-  ran, which left them sitting in "Upcoming" and on the calendar. `RECURRING` nights have no last
-  day and end only by hand. Use `upcomingEventWhere(now)` in any query feeding a list that says
+  ran, which left them sitting in "Upcoming" and on the calendar. A `RECURRING` night has no last
+  day unless "Recurrence ends" is set, and otherwise ends only by hand. Use `upcomingEventWhere(now)` in any query feeding a list that says
   upcoming / next / current (`/events`, the home calendar, `/experience`, a venue's "What's Coming
   Next", a talent's "Upcoming Events", related events), `pastEventWhere(now)` for "Past Editions",
   and `isPastEvent(event, now)` for a row already fetched.
+- **The `/events` calendar also draws finished events** (it is the one place a past night can be found); its
+  Upcoming grid and featured slot do not. A recurring night with a "Recurrence ends" day is over after it, and a
+  retired recurring night with none is not drawn on the calendar at all.
 - **A finished event keeps its page.** It stays a 200 with a "Past Event" stamp, and its reserve CTA
   becomes "Watch the Recap" when there is a recap to point at — never a redirect, never a 404.
   `generateStaticParams` and `sitemap.ts` therefore do *not* filter events by date.

@@ -80,6 +80,8 @@ export type CalendarEvent = {
   endHour: string;
   recurringDays: string[];
   featured: boolean;
+  /** False once an administrator retired it; see `isPastEvent`. */
+  active: boolean;
   /** Main venue first, then "Also at": the venue filter matches any of them. */
   venueIds: string[];
   venueName: string | null;
@@ -114,8 +116,8 @@ export function dateKey(date: Date): string {
  * last day has gone by. The date half matters because nobody remembers to tick
  * the box: both seeded one-off events were still flagged active months after
  * they ran, which would have left them sitting in "Upcoming" and on the
- * calendar. `RECURRING` nights have no last day and never expire this way; they
- * end only when an administrator says so.
+ * calendar. `RECURRING` nights have no last day unless "Recurrence ends" is set;
+ * without one they end only when an administrator says so.
  *
  * Day-granular and UTC, the same contract as the rest of this file: the dates
  * are admin-typed calendar days stored at UTC midnight, so an event stays
@@ -132,7 +134,11 @@ export function isPastEvent(
   now: Date,
 ): boolean {
   if (!event.active) return true;
-  if (event.eventType === "RECURRING") return false;
+  // A recurring night ends on its "Recurrence ends" day when it has one,
+  // otherwise only by hand.
+  if (event.eventType === "RECURRING") {
+    return event.endDate !== null && startOfUtcDay(event.endDate) < startOfUtcDay(now);
+  }
   return startOfUtcDay(event.endDate ?? event.startDate) < startOfUtcDay(now);
 }
 
@@ -196,9 +202,13 @@ export function buildOccurrenceMap(
 
     if (event.eventType === "RECURRING") {
       if (event.recurringDays.length === 0) continue;
+      // A retired night with no "Recurrence ends" day has no known last night, so
+      // it is not drawn at all rather than on every matching day forever.
+      if (!event.active && !event.endDate) continue;
+      const last = event.endDate ? startOfUtcDay(event.endDate).getTime() : Infinity;
       const days = new Set(event.recurringDays);
       for (const day of grid) {
-        if (days.has(WEEKDAY_BY_UTC_DAY[day.getUTCDay()])) add(event, day, category);
+        if (day.getTime() <= last && days.has(WEEKDAY_BY_UTC_DAY[day.getUTCDay()])) add(event, day, category);
       }
       continue;
     }

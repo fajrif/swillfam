@@ -18,16 +18,17 @@ import { startOfUtcDay } from "./date";
 import { publishedVenueScope } from "./venue-scope";
 
 /**
- * Matches an event whose last day is still ahead, plus every recurring night.
+ * Matches an event whose last day is still ahead, plus every recurring night
+ * that has no "Recurrence ends" day or whose end day is still ahead.
  *
- * A recurring event has no end date, so it can only be retired by hand; a
+ * A recurring event without an end date can only be retired by hand; a
  * one-off is current through the whole of its final day.
  */
 function notPastYet(now: Date): Prisma.EventWhereInput {
   const today = startOfUtcDay(now);
   return {
     OR: [
-      { eventType: "RECURRING" },
+      { eventType: "RECURRING", OR: [{ endDate: null }, { endDate: { gte: today } }] },
       { endDate: { gte: today } },
       // A single-day event stores no endDate.
       { endDate: null, startDate: { gte: today } },

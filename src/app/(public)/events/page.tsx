@@ -1,7 +1,7 @@
 import { staticPageMetadata, staticPageSeo } from "@/lib/seo/static-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { upcomingEventWhere } from "@/lib/event-scope";
+import { publishedVenueScope } from "@/lib/venue-scope";
 import { getArticleRows } from "@/lib/articles";
 import { getSiteSettings } from "@/lib/site-settings";
 import { Reveal } from "@/components/Reveal";
@@ -17,7 +17,13 @@ import {
 import { PrivateEventsSection } from "@/components/merchandise";
 import { ArticleListSection } from "@/components/shared/ArticleListSection";
 import { DestinationsFeatureBand } from "@/components/shared/DestinationsFeatureBand";
-import { dateKey, formatEventSchedule, formatHour, type CalendarEvent } from "@/lib/event-calendar";
+import {
+  dateKey,
+  formatEventSchedule,
+  formatHour,
+  isPastEvent,
+  type CalendarEvent,
+} from "@/lib/event-calendar";
 import { JsonLd, archiveGraph } from "@/lib/schema";
 
 // Statically rendered but data-driven (events, venues, categories, articles) —
@@ -31,14 +37,14 @@ export default async function EventsPage() {
   // opposite sides of a midnight.
   const now = new Date();
 
-  const [settings, articles, events, venues, categories] = await Promise.all([
+  const [settings, articles, allEvents, venues, categories] = await Promise.all([
     getSiteSettings(),
     getArticleRows(3),
-    // Finished events — retired by hand, or past their last day — drop out of
-    // the calendar, the Upcoming grid, and the featured slot, but keep a
-    // reachable detail page.
+    // Every published event, finished ones included: the calendar keeps them so a
+    // past night can still be found, while the Upcoming grid and the featured
+    // slot below take only the ones that are not over.
     prisma.event.findMany({
-      where: upcomingEventWhere(now),
+      where: { published: true, AND: [publishedVenueScope] },
       orderBy: { startDate: "desc" },
       include: {
         venue: { select: { name: true, slug: true, logo: true } },
@@ -53,6 +59,8 @@ export default async function EventsPage() {
     }),
     prisma.eventCategory.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
+
+  const events = allEvents.filter((e) => !isPastEvent(e, now));
 
   const venueIdsOf = (e: (typeof events)[number]) => [
     ...(e.venueId ? [e.venueId] : []),
@@ -85,7 +93,7 @@ export default async function EventsPage() {
     meta: formatEventSchedule(e),
   }));
 
-  const calendarEvents: CalendarEvent[] = events.map((e) => ({
+  const calendarEvents: CalendarEvent[] = allEvents.map((e) => ({
     id: e.id,
     slug: e.slug,
     name: e.name,
@@ -97,6 +105,7 @@ export default async function EventsPage() {
     endHour: e.endHour,
     recurringDays: e.recurringDays,
     featured: e.featured,
+    active: e.active,
     venueIds: venueIdsOf(e),
     venueName: e.venue?.name ?? null,
     venueSlug: e.venue?.slug ?? null,
